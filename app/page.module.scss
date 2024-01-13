@@ -1,0 +1,23 @@
+.horizontal {
+    display:flex;
+    flex-direction:row;
+}
+
+.even {
+    display:flex;
+    flex-direction:row;
+    justify-content: space-between;
+}
+
+.zip {
+    width: 48%;
+}
+
+.formSection {
+    padding: 25px 100px 25px 100px;
+}
+
+.centerIGuess {
+    display: flex;
+    justify-content: center;
+}
