@@ -37,6 +37,11 @@ export function AddForm() {
       <input type="text" name="last_name" placeholder="Last Name" required />
 
       <Select name="flavour" options={options} />
+
+      <label>
+        <input type="checkbox" name="roof_access"/>
+        Do you have roof access?
+      </label>
       
       <button type="submit">Submit</button>
     </form>
