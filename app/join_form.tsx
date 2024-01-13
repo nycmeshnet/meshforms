@@ -1,6 +1,8 @@
 import React from "react";
 import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button, Checkbox, Input} from "@nextui-org/react";
 import styles from './page.module.scss'
+import { title } from "@/components/primitives";
+
 
 	/*
     "first_name": "John",
@@ -24,7 +26,10 @@ const JoinForm = () => {
 	  [selectedKeys]
 	);
 
-    return (
+    return <>
+		<div>
+			<h1 className={title()}>Join NYC Mesh</h1>
+		</div>
 		<form>
             <div className={styles.formSection}>
                 <h2>Personal Info</h2>
@@ -85,7 +90,7 @@ const JoinForm = () => {
                 </div>
             </div>
         </form>
-    )
+    </>
 }
 
 export default JoinForm
