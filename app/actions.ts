@@ -1,17 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import postgres from "postgres";
 import { z } from "zod";
-
-let sql = postgres(process.env.DATABASE_URL || process.env.POSTGRES_URL!, {
-  ssl: "allow",
-});
-
-// CREATE TABLE todos (
-//   id SERIAL PRIMARY KEY,
-//   text TEXT NOT NULL
-// );
+import { submitJoinForm } from "@/app/api";
 
 export async function createTodo(
   prevState: {
@@ -19,56 +10,27 @@ export async function createTodo(
   },
   formData: FormData,
 ) {
-  const schema = z.object({
-    todo: z.string().min(1),
-  });
-  const parse = schema.safeParse({
-    todo: formData.get("todo"),
-  });
 
-  if (!parse.success) {
-    return { message: "Failed to create todo" };
+  let fname = formData.get('first_name')
+
+  console.log("HEY HERE IT IS: " + fname)
+
+  const skz = {
+    first_name: fname,
   }
 
-  const data = parse.data;
+  try {
+    submitJoinForm(skz)
+  } catch (e) {
+    console.log("What the hell my catch isn't working")
+    return { message: "Argh" };
+  }
 
   try {
-    await sql`
-      INSERT INTO todos (text)
-      VALUES (${data.todo})
-    `;
-
     revalidatePath("/");
-    return { message: `Added todo ${data.todo}` };
+    return { message: `Added todo ${fname}` };
   } catch (e) {
     return { message: "Failed to create todo" };
   }
 }
 
-export async function deleteTodo(
-  prevState: {
-    message: string;
-  },
-  formData: FormData,
-) {
-  const schema = z.object({
-    id: z.string().min(1),
-    todo: z.string().min(1),
-  });
-  const data = schema.parse({
-    id: formData.get("id"),
-    todo: formData.get("todo"),
-  });
-
-  try {
-    await sql`
-      DELETE FROM todos
-      WHERE id = ${data.id};
-    `;
-
-    revalidatePath("/");
-    return { message: `Deleted todo ${data.todo}` };
-  } catch (e) {
-    return { message: "Failed to delete todo" };
-  }
-}

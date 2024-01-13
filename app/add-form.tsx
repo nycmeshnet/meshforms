@@ -8,6 +8,10 @@ const initialState = {
   message: "",
 };
 
+interface Fields {
+  first_name: string
+}
+
 function SubmitButton() {
   const { pending } = useFormStatus();
 
@@ -23,8 +27,8 @@ export function AddForm() {
 
   return (
     <form action={formAction}>
-      <label htmlFor="todo">Enter Task</label>
-      <input type="text" id="todo" name="todo" required />
+      <h2>Join NYC Mesh</h2>
+      <input type="text" name="first_name" placeholder="First Name" required />
       <SubmitButton />
       <p aria-live="polite" className="sr-only" role="status">
         {state?.message}
