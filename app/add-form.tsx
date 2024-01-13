@@ -10,29 +10,23 @@ const initialState = {
 
 interface Fields {
   first_name: string
-}
-
-function SubmitButton() {
-  const { pending } = useFormStatus();
-
-  return (
-    <button type="submit" aria-disabled={pending}>
-      Add
-    </button>
-  );
+  last_name: string
 }
 
 export function AddForm() {
   const [state, formAction] = useFormState(createTodo, initialState);
 
   return (
-    <form action={formAction}>
+    <form action={
+      (event) => {
+        console.log(event)
+      }
+    }>
       <h2>Join NYC Mesh</h2>
       <input type="text" name="first_name" placeholder="First Name" required />
-      <SubmitButton />
-      <p aria-live="polite" className="sr-only" role="status">
-        {state?.message}
-      </p>
+      <input type="text" name="last_name" placeholder="Last Name" required />
+      
+      <button type="submit">Submit</button>
     </form>
   );
 }
