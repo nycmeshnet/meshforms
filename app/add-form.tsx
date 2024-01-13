@@ -4,24 +4,25 @@ import { useFormState } from "react-dom";
 import { useFormStatus } from "react-dom";
 import { createTodo } from "@/app/actions";
 
-import Select from 'react-select'
+import {submitJoinForm } from "@/app/api";
 
+import Select from 'react-select'
 
 const initialState = {
   message: "",
 };
 
-
 const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
+  { value: 'NY', label: 'New York' },
+  { value: 'NJ', label: 'New Jersey' },
 ]
 
-interface Fields {
-  first_name: string
-  last_name: string
-}
+// FIXME: I have no idea how this works. I think this is some
+// handleSubmit meme
+// interface Fields {
+//   first_name: string
+//   last_name: string
+// }
 
 export function AddForm() {
   const [state, formAction] = useFormState(createTodo, initialState);
@@ -30,19 +31,41 @@ export function AddForm() {
     <form action={
       (event) => {
         console.log(event)
+
+        try {
+          submitJoinForm(event)
+        } catch (e) {
+          console.log("Well shit: " + e)
+          return { message: "Argh" };
+        }
       }
     }>
       <h2>Join NYC Mesh</h2>
-      <input type="text" name="first_name" placeholder="First Name" required />
-      <input type="text" name="last_name" placeholder="Last Name" required />
+      <div>
+      <h3>Personal Info</h3>
+        <div className="horizontal">
+          <input type="text" name="first_name" placeholder="First Name" required />
+          <input type="text" name="last_name" placeholder="Last Name" required />
+        </div>
 
-      <Select name="flavour" options={options} />
+        <input type="email" name="email" placeholder="Email Address" required />
+        <input type="tel" name="phone" placeholder="Phone Number" required />
+      </div>
 
-      <label>
-        <input type="checkbox" name="roof_access"/>
-        Do you have roof access?
-      </label>
-      
+      <div className="block">
+        <h3>Address Info</h3>
+        <input type="text" name="street_address" placeholder="Street Address" required />
+        <input type="text" name="apartment" placeholder="Unit #" required />
+        <input type="text" name="city" placeholder="City" required />
+        <Select name="state" placeholder="State" options={options} className="drop" />
+        <input type="text" name="zip" placeholder="Zip Code" required />
+        <label>
+          <input type="checkbox" name="roof_access"/>
+          Do you have roof access?
+        </label>
+      </div>
+      <br/>
+      <input type="text" name="referral" placeholder="How did you hear about us?" required />
       <button type="submit">Submit</button>
     </form>
   );

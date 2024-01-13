@@ -2,6 +2,8 @@ import { z } from "zod";
 
 export const JoinFormInput = z.object({
   first_name: z.string(),
+  last_name: z.string(),
+  state: z.string(),
 })
 export type JoinFormInput = z.infer<typeof JoinFormInput>
 
@@ -29,7 +31,7 @@ const post = async <S extends z.Schema>(url: string, schema: S, input: unknown, 
 }
 
 // const API_BASE = new URL(process.env.NEXT_PUBLIC_API_URL)
-const API_BASE = new URL("http://127.0.0.1:8080") // TODO: Env var
+const API_BASE = new URL("http://127.0.0.1:8000") // TODO: Env var
 
 // TODO: Env var for api token
-export const submitJoinForm = (formInput: JoinFormInput) => post(`/join`, JoinFormResponse, undefined)
+export const submitJoinForm = (formInput: JoinFormInput) => post(`/api/v1/join/`, JoinFormResponse, undefined)
