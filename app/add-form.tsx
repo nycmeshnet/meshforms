@@ -6,6 +6,8 @@ import { createTodo } from "@/app/actions";
 
 import { JoinFormInput, submitJoinForm } from "@/app/api";
 
+import { useRouter } from 'next/navigation'
+
 // import { SubmitHandler, useForm } from 'react-hook-form'
 import Select from 'react-select'
 
@@ -36,30 +38,7 @@ const options = [
 export function AddForm() {
   const [state, formAction] = useFormState(createTodo, initialState);
 
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   control,
-  // } = useForm({ defaultValues })
-
-
-  // const onSubmit: SubmitHandler<Fields> = async values => {
-  //   const { first_name, last_name, email, phone, street_address, apartment, city, state, roof_access, referral} = values
-
-  //   const join: JoinFormInput = {
-  //     first_name, last_name, email, phone, street_address, apartment, city, state, roof_access, referral
-  //   }
-
-
-  //   try {
-  //     submitJoinForm(join)
-  //   } catch (e) {
-  //     console.log("Well shit: " + e)
-  //     return { message: "Argh" };
-  //   }
-
-  // }
+  const router = useRouter()
 
   return <>
     <form action={
@@ -81,12 +60,13 @@ export function AddForm() {
 
         const j = JoinFormInput.parse(data);
 
-        try {
-          submitJoinForm(j)
-        } catch (e) {
-          console.log("Well shit: " + e)
-          return { message: "Argh" };
-        }
+        // try {
+        //   submitJoinForm(j)
+        // } catch (e) {
+        //   console.log("Well shit: " + e)
+        //   return { message: "Argh" };
+        // }
+        router.replace('/thanks')
       }
     }>
       <h2>Join NYC Mesh</h2>
