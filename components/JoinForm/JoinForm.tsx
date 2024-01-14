@@ -3,15 +3,16 @@
 import { useFormState } from "react-dom";
 import { useFormStatus } from "react-dom";
 import { createTodo } from "@/app/actions";
-
 import { JoinFormInput, submitJoinForm } from "@/app/api";
-
 import { useRouter } from 'next/navigation'
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input'
 
 import './JoinForm.css'
 
 // import { SubmitHandler, useForm } from 'react-hook-form'
 import Select from 'react-select'
+import { useState } from "react";
 
 const initialState = {
   message: "",
@@ -39,6 +40,7 @@ const options = [
 
 export function JoinForm() {
   const [state, formAction] = useFormState(createTodo, initialState);
+  const [value, setValue] = useState()
 
   const router = useRouter()
 
@@ -81,7 +83,12 @@ export function JoinForm() {
         </div>
 
         <input type="email" name="email" placeholder="Email Address" required />
-        <input type="tel" name="phone" placeholder="Phone Number" required />
+        {/* <input type="tel" name="phone" placeholder="Phone Number" required /> */}
+
+        <PhoneInput
+          placeholder="Phone Number"
+          value={value}
+          onChange={setValue}/>
       </div>
 
       <div className="block">
