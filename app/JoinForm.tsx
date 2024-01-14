@@ -35,7 +35,7 @@ const options = [
    referral: string
  }
 
-export function AddForm() {
+export function JoinForm() {
   const [state, formAction] = useFormState(createTodo, initialState);
 
   const router = useRouter()
