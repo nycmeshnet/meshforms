@@ -1,0 +1,12 @@
+.top {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.logo {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-right: 16px;
+}

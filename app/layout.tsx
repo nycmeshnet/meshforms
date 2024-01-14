@@ -1,8 +1,8 @@
 import "./global.css";
 
 export const metadata = {
-  title: "Next.js Forms Example",
-  description: "Example application with forms and Postgres.",
+  title: "meshdb-forms by NYC Mesh",
+  description: "A tool for members and volunteers to interact with MeshDB",
 };
 
 export default function RootLayout({

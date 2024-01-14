@@ -8,6 +8,8 @@ import { JoinFormInput, submitJoinForm } from "@/app/api";
 
 import { useRouter } from 'next/navigation'
 
+import './JoinForm.css'
+
 // import { SubmitHandler, useForm } from 'react-hook-form'
 import Select from 'react-select'
 
