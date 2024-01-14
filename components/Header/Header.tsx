@@ -7,10 +7,14 @@ import logo from '@/res/logo.svg'
 export function Header() {
     return <>
       <div className="top">
-      <img className="logo" src={logo.src} height={512} width={512} alt="" />
-        <h1>
-            NYC Mesh
-        </h1>
+        <div className="logoAndText">
+          <img className="logo" src={logo.src} height={512} width={512} alt="" />
+          <strong>
+              NYC Mesh&nbsp;
+          </strong>
+          <p className="separator">|</p>
+          <p>&nbsp;Forms</p>
+        </div>
       </div>
     </>
   }

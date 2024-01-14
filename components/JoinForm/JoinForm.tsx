@@ -62,11 +62,12 @@ export function JoinForm() {
 
         const j = JoinFormInput.parse(data);
 
+        // FIXME: Need to uncomment this (and show the error)
         // try {
         //   submitJoinForm(j)
         // } catch (e) {
-        //   console.log("Well shit: " + e)
-        //   return { message: "Argh" };
+        //   console.log("Could not submit Join Form: " + e)
+        //   return { message: "Could not submit Join Form" };
         // }
         router.replace('/thanks')
       }
