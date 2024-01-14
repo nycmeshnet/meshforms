@@ -19,7 +19,8 @@ label {
 
 input[type="text"],
 input[type="email"],
-input[type="tel"] {
+input[type="tel"],
+input[type="number"] {
   border: 1px solid #ccc;
   padding: 10px;
   font-size: 16px;

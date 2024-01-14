@@ -4,8 +4,9 @@ import { useFormState } from "react-dom";
 import { useFormStatus } from "react-dom";
 import { createTodo } from "@/app/actions";
 
-import {submitJoinForm } from "@/app/api";
+import { JoinFormInput, submitJoinForm } from "@/app/api";
 
+// import { SubmitHandler, useForm } from 'react-hook-form'
 import Select from 'react-select'
 
 const initialState = {
@@ -19,21 +20,69 @@ const options = [
 
 // FIXME: I have no idea how this works. I think this is some
 // handleSubmit meme
-// interface Fields {
-//   first_name: string
-//   last_name: string
-// }
+ interface Fields {
+   first_name: string
+   last_name: string
+   email: string
+   phone: string
+   street_address: string
+   apartment: string
+   city: string
+   state: string
+   roof_access: boolean
+   referral: string
+ }
 
 export function AddForm() {
   const [state, formAction] = useFormState(createTodo, initialState);
 
-  return (
+
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   control,
+  // } = useForm({ defaultValues })
+
+
+  // const onSubmit: SubmitHandler<Fields> = async values => {
+  //   const { first_name, last_name, email, phone, street_address, apartment, city, state, roof_access, referral} = values
+
+  //   const join: JoinFormInput = {
+  //     first_name, last_name, email, phone, street_address, apartment, city, state, roof_access, referral
+  //   }
+
+
+  //   try {
+  //     submitJoinForm(join)
+  //   } catch (e) {
+  //     console.log("Well shit: " + e)
+  //     return { message: "Argh" };
+  //   }
+
+  // }
+
+  return <>
     <form action={
       (event) => {
         console.log(event)
 
+        const data: Record<string, string | Blob | boolean | Number > = {};
+
+        event.forEach((value, key) => {
+          if (key === 'roof_access') {
+            // Special case for the checkbox
+            data[key] = value === 'on' ? true : false;
+          } else if (key === 'zip') {
+            data[key] = Number(value);
+          } else {
+            data[key] = value;
+          }
+        });
+
+        const j = JoinFormInput.parse(data);
+
         try {
-          submitJoinForm(event)
+          submitJoinForm(j)
         } catch (e) {
           console.log("Well shit: " + e)
           return { message: "Argh" };
@@ -58,7 +107,7 @@ export function AddForm() {
         <input type="text" name="apartment" placeholder="Unit #" required />
         <input type="text" name="city" placeholder="City" required />
         <Select name="state" placeholder="State" options={options} className="drop" />
-        <input type="text" name="zip" placeholder="Zip Code" required />
+        <input type="number" name="zip" placeholder="Zip Code" required />
         <label>
           <input type="checkbox" name="roof_access"/>
           Do you have roof access?
@@ -68,5 +117,5 @@ export function AddForm() {
       <input type="text" name="referral" placeholder="How did you hear about us?" required />
       <button type="submit">Submit</button>
     </form>
-  );
+  </>
 }
