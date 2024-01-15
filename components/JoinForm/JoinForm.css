@@ -1,6 +1,7 @@
-body {
+.formBody {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 
@@ -18,7 +19,7 @@ input[type="number"] {
   outline-offset: 4px;
 }
 
-button {
+.submitButton {
   background-color: black;
   border-radius: 4px;
   color: white;
