@@ -58,12 +58,12 @@ function parseForm(event: FormData) {
   return JoinFormInput.parse(data);
  }
 
-function sendForm(event: FormData) {
+async function sendForm(event: FormData) {
   console.log(event); 
 
   try {
     let j: JoinFormInput = parseForm(event);
-    submitJoinForm(j);
+    await submitJoinForm(j);
     toast.success('Thanks! You will receive an email shortly :)', {
       hideProgressBar: true,
       theme: "colored",

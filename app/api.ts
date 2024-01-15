@@ -16,9 +16,9 @@ export const JoinFormInput = z.object({
 export type JoinFormInput = z.infer<typeof JoinFormInput>
 
 export const JoinFormResponse = z.object({
-  building_id: z.string(),
-  member_id: z.string(),
-  install_number: z.string(),
+  building_id: z.number(),
+  member_id: z.number(),
+  install_number: z.number(),
   member_exists: z.boolean(),
 })
 export type JoinFormResponse = z.infer<typeof JoinFormResponse>
