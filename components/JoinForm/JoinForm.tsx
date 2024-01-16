@@ -26,8 +26,6 @@ const options = [
   { value: 'NJ', label: 'New Jersey' },
 ]
 
-let formSubmitted = false;
-
 // FIXME: I have no idea how this works. I think this is some
 // handleSubmit meme
  interface Fields {
@@ -43,46 +41,51 @@ let formSubmitted = false;
    referral: string
  }
 
-function parseForm(event: FormData) {
-  const data: Record<string, string | Blob | boolean | Number > = {};
-  event.forEach((value, key) => {
-    if (key === 'roof_access') {
-      // Special case for the checkbox
-      data[key] = value === 'on' ? true : false;
-    } else if (key === 'zip') {
-      data[key] = Number(value);
-    } else {
-      data[key] = value;
-    }
-  });
-  return JoinFormInput.parse(data);
- }
-
-async function sendForm(event: FormData) {
-  console.log(event); 
-
-  try {
-    let j: JoinFormInput = parseForm(event);
-    await submitJoinForm(j);
-    toast.success('Thanks! You will receive an email shortly :)', {
-      hideProgressBar: true,
-      theme: "colored",
-    });
-    formSubmitted = true;
-  } catch (e) {
-    console.log("Could not submit Join Form: " + e);
-    toast.error('Sorry, an error occurred.', {
-      hideProgressBar: true,
-      theme: "colored",
-    });
-    return;
-  }
-}
-
 export function JoinForm() {
+  function parseForm(event: FormData) {
+    const data: Record<string, string | Blob | boolean | Number > = {};
+    event.forEach((value, key) => {
+      if (key === 'roof_access') {
+        // Special case for the checkbox
+        data[key] = value === 'on' ? true : false;
+      } else if (key === 'zip') {
+        data[key] = Number(value);
+      } else {
+        data[key] = value;
+      }
+    });
+    return JoinFormInput.parse(data);
+  }
+
+  async function sendForm(event: FormData) {
+    console.log(event); 
+
+    try {
+      setDisableSubmitButton(true);
+      let j: JoinFormInput = parseForm(event);
+      await submitJoinForm(j);
+      toast.success('Thanks! You will receive an email shortly :)', {
+        hideProgressBar: true,
+        theme: "colored",
+      });
+    } catch (e) {
+      console.log("Could not submit Join Form: " + e);
+      toast.error('Sorry, an error occurred.', {
+        hideProgressBar: true,
+        theme: "colored",
+      });
+      setDisableSubmitButton(false);
+      return;
+    }
+  }
+
+
+
   const [state, formAction] = useFormState(createTodo, initialState);
   const [value, setValue] = useState()
   const router = useRouter()
+  const [disableSubmitButton, setDisableSubmitButton] = useState(false);
+
 
   return <>
     <div className="formBody">
@@ -119,7 +122,7 @@ export function JoinForm() {
         </div>
         <br/>
         <input type="text" name="referral" placeholder="How did you hear about us?" required />
-        <button className="submitButton" type="submit" disabled={formSubmitted}>Submit</button>
+        <button className="submitButton" type="submit" disabled={disableSubmitButton}>Submit</button>
       </form>
     </div>
     <ToastContainer />

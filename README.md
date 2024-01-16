@@ -1,4 +1,4 @@
-# meshdb-forms
+# meshforms
 
 Forms for [meshdb](https://github.com/andybaumgar/meshdb)
 
