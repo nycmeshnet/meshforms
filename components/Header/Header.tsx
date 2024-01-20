@@ -13,6 +13,36 @@ export function Header() {
           <p className="separator">|</p>
           <p>&nbsp;Forms</p>
         </div>
+
+        <div >
+          <ul className={styles.navBarItems}>
+            <li className="nav-item">
+              <a className="nav-link" href="https://nycmesh.net/map">Map</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="https://nycmesh.net/faq">FAQ</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="https://nycmesh.net/docs">Docs</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="https://nycmesh.net/blog">Blog</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="https://nycmesh.net/support"
+                >Get Support</a
+              >
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="https://nycmesh.net/donate">Donate</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="https://nycmesh.net/join"
+                >Get Connected</a
+              >
+            </li>
+          </ul>
+        </div>
       </div>
     </>
   }
