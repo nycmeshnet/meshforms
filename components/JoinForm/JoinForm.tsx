@@ -91,6 +91,7 @@ export function JoinForm() {
     <div className={styles.formBody}>
       <form action={sendForm}>
         <h2>Join NYC Mesh</h2>
+        <p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>
         <div>
         <h3>Personal Info</h3>
           <div className={styles.horizontal}>
@@ -124,7 +125,7 @@ export function JoinForm() {
         <input type="text" name="referral" placeholder="How did you hear about us?" required />
         <label>
             <input type="checkbox" name="ncl" required/>
-            I agree to the Network Commons Liscense
+            I agree to the Network Commons License
           </label>
         <button className={styles.submitButton} type="submit" disabled={disableSubmitButton}>Submit</button>
       </form>
