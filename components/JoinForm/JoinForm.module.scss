@@ -23,6 +23,7 @@ input[type="number"] {
   background-color: black;
   border-radius: 4px;
   color: white;
+  margin: 30px 0px 30px 0px;
   padding: 10px 24px;
   border: none;
   cursor: pointer;
@@ -40,12 +41,13 @@ button[aria-disabled="true"] {
   cursor: not-allowed;
 }
 
-ul {
+// TODO: Why do I have to do this? Shouldn't this be localized to this module?
+.formBody ul {
   padding: 0;
   margin: auto;
 }
 
-li {
+.formBody li {
   background: #f9f9f9;
   padding: 10px;
   margin-bottom: 10px;

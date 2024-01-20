@@ -11,7 +11,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import './JoinForm.css'
+import styles from './JoinForm.module.scss'
 
 // import { SubmitHandler, useForm } from 'react-hook-form'
 import Select from 'react-select'
@@ -88,12 +88,12 @@ export function JoinForm() {
 
 
   return <>
-    <div className="formBody">
+    <div className={styles.formBody}>
       <form action={sendForm}>
         <h2>Join NYC Mesh</h2>
         <div>
         <h3>Personal Info</h3>
-          <div className="horizontal">
+          <div className={styles.horizontal}>
             <input type="text" name="first_name" placeholder="First Name" required />
             <input type="text" name="last_name" placeholder="Last Name" required />
           </div>
@@ -108,12 +108,12 @@ export function JoinForm() {
             onChange={setValue}/>
         </div>
 
-        <div className="block">
+        <div className={styles.block}>
           <h3>Address Info</h3>
           <input type="text" name="street_address" placeholder="Street Address" required />
           <input type="text" name="apartment" placeholder="Unit #" required />
           <input type="text" name="city" placeholder="City" required />
-          <Select name="state" placeholder="State" options={options} className="drop" />
+          <Select name="state" placeholder="State" options={options} className={styles.drop} />
           <input type="number" name="zip" placeholder="Zip Code" required />
           <label>
             <input type="checkbox" name="roof_access"/>
@@ -122,7 +122,11 @@ export function JoinForm() {
         </div>
         <br/>
         <input type="text" name="referral" placeholder="How did you hear about us?" required />
-        <button className="submitButton" type="submit" disabled={disableSubmitButton}>Submit</button>
+        <label>
+            <input type="checkbox" name="ncl" required/>
+            I agree to the Network Commons Liscense
+          </label>
+        <button className={styles.submitButton} type="submit" disabled={disableSubmitButton}>Submit</button>
       </form>
     </div>
     <ToastContainer />
