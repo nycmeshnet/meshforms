@@ -1,0 +1,99 @@
+.formBody {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="number"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  outline-offset: 4px;
+}
+
+.submitButton {
+  background-color: black;
+  border-radius: 4px;
+  color: white;
+  margin: 30px 0px 30px 0px;
+  padding: 10px 24px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  outline-offset: 4px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+button[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+// TODO: Why do I have to do this? Shouldn't this be localized to this module?
+.formBody ul {
+  padding: 0;
+  margin: auto;
+}
+
+.formBody li {
+  background: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.drop {
+  /* border: 1px solid #ccc; */
+  /* padding: 10px; */
+  font-size: 16px;
+  width: 100%;
+  /* box-sizing: border-box; */
+  margin-bottom: 10px;
+  border-radius: 4px;
+  outline-offset: 4px;
+}
+
+.nnLabel {
+  color: #666;
+}

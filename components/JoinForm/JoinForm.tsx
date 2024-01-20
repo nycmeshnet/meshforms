@@ -17,10 +17,6 @@ import styles from './JoinForm.module.scss'
 import Select from 'react-select'
 import { useState } from "react";
 
-const initialState = {
-  message: "",
-};
-
 const options = [
   { value: 'NY', label: 'New York' },
   { value: 'NJ', label: 'New Jersey' },
@@ -99,6 +95,7 @@ export function JoinForm() {
 
 
 
+  const initialState = {};
   const [state, formAction] = useFormState(createTodo, initialState);
   const [value, setValue] = useState()
   const router = useRouter()
