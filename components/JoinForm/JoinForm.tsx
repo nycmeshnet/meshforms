@@ -45,8 +45,9 @@ export function JoinForm() {
   function parseForm(event: FormData) {
     const data: Record<string, string | Blob | boolean | Number > = {};
     event.forEach((value, key) => {
-      if (key === 'roof_access') {
+      if (key === 'roof_access' || key === 'ncl') {
         // Special case for the checkbox
+        // This won't work for unchecked boxes because JS good language
         data[key] = value === 'on' ? true : false;
       } else if (key === 'zip') {
         data[key] = Number(value);
@@ -54,6 +55,22 @@ export function JoinForm() {
         data[key] = value;
       }
     });
+
+    // Special cases for the checkboxes
+    // Bail if no NCL
+    if (data['ncl'] !== true) {
+      toast.error('You must accept the Network Commons License!', {
+        hideProgressBar: true,
+        theme: "colored",
+      });
+      return
+    }
+
+    // Set roof_access to false if necessary
+    if (data['roof_access'] === undefined) {
+      data['roof_access'] = false;
+    }
+
     return JoinFormInput.parse(data);
   }
 
@@ -63,6 +80,7 @@ export function JoinForm() {
     try {
       setDisableSubmitButton(true);
       let j: JoinFormInput = parseForm(event);
+      console.log(j);
       await submitJoinForm(j);
       toast.success('Thanks! You will receive an email shortly :)', {
         hideProgressBar: true,
@@ -122,9 +140,9 @@ export function JoinForm() {
           </label>
         </div>
         <br/>
-        <input type="text" name="referral" placeholder="How did you hear about us?" required />
+        <input type="text" name="referral" placeholder="How did you hear about us?" />
         <label>
-            <input type="checkbox" name="ncl" required/>
+            <input type="checkbox" name="ncl"/>
             I agree to the Network Commons License
           </label>
         <button className={styles.submitButton} type="submit" disabled={disableSubmitButton}>Submit</button>

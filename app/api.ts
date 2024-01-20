@@ -12,6 +12,7 @@ export const JoinFormInput = z.object({
   zip: z.number(),
   roof_access: z.boolean(),
   referral: z.string(),
+  ncl: z.boolean(),
 })
 export type JoinFormInput = z.infer<typeof JoinFormInput>
 
