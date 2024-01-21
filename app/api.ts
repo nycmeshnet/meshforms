@@ -53,7 +53,7 @@ const post = async <S extends z.Schema>(url: string, schema: S, input: unknown, 
   return schema.parse(await res.json())
 }
 
-const API_BASE = new URL("http://127.0.0.1:8000") // TODO: Env var
+const API_BASE = new URL(process.env.NEXT_PUBLIC_MESHDB_URL as string)
 
 // TODO: Env var for api token
 export const submitJoinForm = (input: JoinFormInput) => post(`/api/v1/join/`, JoinFormResponse, JoinFormInput.parse(input))

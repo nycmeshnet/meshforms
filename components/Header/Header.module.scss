@@ -22,7 +22,7 @@
     white-space: nowrap;
 }
 
-p {
+.top p {
     margin: 0px;
 }
 
@@ -39,3 +39,29 @@ p {
 .navBarItems li {
     padding: 0px 10px 0px 10px;
 }
+
+
+/* unvisited link */
+.navBarItems a:link {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  /* visited link */
+  .navBarItems a:visited {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  /* mouse over link */
+  .navBarItems a:hover {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  /* selected link */
+  .navBarItems a:active {
+    color: #333;
+    text-decoration: none;
+  } 
+  
