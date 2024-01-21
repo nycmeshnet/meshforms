@@ -1,21 +1,27 @@
 version: '3'
 services:
-  mesh-fit-ui:
+  meshforms:
     healthcheck:
-      test: curl --fail http://127.0.0.1:3000 || exit 1
+      test: curl --fail http://127.0.0.1:80/join || exit 1
       interval: 1s
       timeout: 1s
       retries: 3
       start_period: 1s
     networks:
       - ui
-    ports:
-      - 80:3000
+    expose:
+      - 80
+    labels:
+      - "traefik.http.routers.meshforms.rule=Host(`meshforms.meshsvc-grand.mesh.nycmesh.net`)"
+      - traefik.enable=true
+      - traefik.port=80
+    env_file:
+      - .env
     build:
       context: .
       dockerfile: Dockerfile
-    env_file:
-      - .env
 
 networks:
   ui:
+    external: true
+    name: traefik-net
