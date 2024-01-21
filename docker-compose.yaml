@@ -10,12 +10,12 @@ services:
     networks:
       - ui
     ports:
-      - 3000:3000
+      - 80:3000
     build:
       context: .
       dockerfile: Dockerfile
-        #env_file:
-        #  - .env
+    env_file:
+      - .env
 
 networks:
   ui:
