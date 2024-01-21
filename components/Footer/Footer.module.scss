@@ -36,29 +36,29 @@
     padding: 10px;
     margin: 10px;
 }
- /* unvisited link */
- a:link {
-    color: #333;
-    text-decoration: none;
-  }
-  
-  /* visited link */
-  a:visited {
-    color: #333;
-    text-decoration: none;
-  }
-  
-  /* mouse over link */
-  a:hover {
-    color: #333;
-    text-decoration: none;
-  }
-  
-  /* selected link */
-  a:active {
-    color: #333;
-    text-decoration: none;
-  } 
+/* unvisited link */
+.footer a:link {
+  color: #333;
+  text-decoration: none;
+}
+
+/* visited link */
+.footer a:visited {
+  color: #333;
+  text-decoration: none;
+}
+
+/* mouse over link */
+.footer a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+/* selected link */
+.footer a:active {
+  color: #333;
+  text-decoration: none;
+} 
 
 .footer ul {
   margin: 0;

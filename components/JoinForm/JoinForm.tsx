@@ -2,11 +2,11 @@
 
 import { useFormState } from "react-dom";
 import { useFormStatus } from "react-dom";
-import { createTodo } from "@/app/actions";
 import { JoinFormInput, submitJoinForm } from "@/app/api";
-import { useRouter } from 'next/navigation'
-import 'react-phone-number-input/style.css'
-import PhoneInput from 'react-phone-number-input'
+import { useRouter } from 'next/navigation';
+import 'react-phone-number-input/style.css';
+import PhoneInput from 'react-phone-number-input';
+import { E164Number } from 'libphonenumber-js/core';
 import { ErrorBoundary } from "react-error-boundary";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -37,7 +37,7 @@ const options = [
    referral: string
  }
 
-export function JoinForm() {
+const JoinForm = () => {
   function parseForm(event: FormData) {
     const data: Record<string, string | Blob | boolean | Number > = {};
     event.forEach((value, key) => {
@@ -75,7 +75,9 @@ export function JoinForm() {
 
     try {
       setDisableSubmitButton(true);
-      let j: JoinFormInput = parseForm(event);
+      let parsedForm = parseForm(event);
+      if (parsedForm === undefined) return;
+      let j: JoinFormInput = parsedForm;
       console.log(j);
       await submitJoinForm(j);
       toast.success('Thanks! You will receive an email shortly :)', {
@@ -96,8 +98,9 @@ export function JoinForm() {
 
 
   const initialState = {};
-  const [state, formAction] = useFormState(createTodo, initialState);
-  const [value, setValue] = useState()
+  // const [state, formAction] = useFormState(createTodo, initialState);
+  const [phoneNumber, setPhoneNumber] = useState<E164Number | undefined>()
+  
   const router = useRouter()
   const [disableSubmitButton, setDisableSubmitButton] = useState(false);
 
@@ -120,8 +123,8 @@ export function JoinForm() {
           <PhoneInput
             name="phone"
             placeholder="Phone Number"
-            value={value}
-            onChange={setValue}/>
+            value={phoneNumber}
+            onChange={setPhoneNumber}/>
         </div>
 
         <div className={styles.block}>
@@ -149,3 +152,5 @@ export function JoinForm() {
     
   </>
 }
+
+export default JoinForm

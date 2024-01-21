@@ -1,0 +1,21 @@
+version: '3'
+services:
+  mesh-fit-ui:
+    healthcheck:
+      test: curl --fail http://127.0.0.1:3000 || exit 1
+      interval: 1s
+      timeout: 1s
+      retries: 3
+      start_period: 1s
+    networks:
+      - ui
+    ports:
+      - 3000:3000
+    build:
+      context: .
+      dockerfile: Dockerfile
+        #env_file:
+        #  - .env
+
+networks:
+  ui:

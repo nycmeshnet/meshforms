@@ -5,10 +5,10 @@
 }
 
 
-input[type="text"],
-input[type="email"],
-input[type="tel"],
-input[type="number"] {
+.formBody input[type="text"],
+.formBody input[type="email"],
+.formBody input[type="tel"],
+.formBody input[type="number"] {
   border: 1px solid #ccc;
   padding: 10px;
   font-size: 16px;
@@ -32,11 +32,11 @@ input[type="number"] {
   outline-offset: 4px;
 }
 
-button:hover {
+.formBody button:hover {
   opacity: 0.8;
 }
 
-button[aria-disabled="true"] {
+.formBody button[aria-disabled="true"] {
   opacity: 0.5;
   cursor: not-allowed;
 }
