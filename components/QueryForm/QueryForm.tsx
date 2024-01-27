@@ -75,8 +75,8 @@ export function QueryForm() {
   const [queryType, setQueryType] = useState('select_query_type');
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
 
-  const [queryResult, setQueryResult] = useState(
-[
+  const [queryResult, setQueryResult] = useState([]);
+/*[
     {
       "install_number": -1,
       "street_address": "",
@@ -92,7 +92,7 @@ export function QueryForm() {
     }
   ]
     );
-
+*/
   // Column Definitions: Defines & controls grid columns.
   const [colDefs, setColDefs] = useState([
     { field: "install_number" },
@@ -131,6 +131,9 @@ export function QueryForm() {
         <button className={styles.submitButton} type="submit">Submit</button>
       </form>
     </div>
+    <strong>Scroll for more!</strong>
+    <br/>
+    <br/>
     <div className={styles.queryResultTable}>
       <div className={styles.agThemeMesh + "ag-theme-quartz"} style={{height: '500px', width: '100%', overflow: 'auto'}}>
         <AgGridReact rowData={queryResult} columnDefs={colDefs} />
