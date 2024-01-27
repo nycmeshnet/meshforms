@@ -32,6 +32,7 @@ export function QueryForm() {
     try {
       setQueryComplete(true);
       let query_type = event.get('query_type');
+      let password = event.get('password');
       let data = event.get(query_type);
       let route;
       switch(query_type) {
@@ -50,7 +51,7 @@ export function QueryForm() {
       console.log(route);
       console.log(query_type);
       console.log(data);
-      let resp = await submitQueryForm(route, query_type, data);
+      let resp = await submitQueryForm(route, query_type, data, password);
       toast.success('Success!', {
         hideProgressBar: true,
       });
@@ -59,10 +60,17 @@ export function QueryForm() {
     } catch (e) {
       console.log("Could not submit Query Form: ");
       console.log(e);
-      toast.error('Sorry, an error occurred.', {
-        hideProgressBar: true,
-        theme: "colored",
-      });
+      if (e.status === 401) {
+        toast.error('Invalid Password', {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      } else {
+        toast.error('Sorry, an error occurred.', {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      }
       setQueryComplete(false);
       return;
     }
@@ -126,7 +134,7 @@ export function QueryForm() {
           />
           <div className={styles.horizontal}>
             <input type="text" name={queryType} placeholder={queryLabel} required />
-            {/* TODO: <input type="password" name="password" placeholder="Password" required />*/}
+            <input type="password" name="password" placeholder="Password" required />
           </div>
         <button className={styles.submitButton} type="submit">Submit</button>
       </form>
