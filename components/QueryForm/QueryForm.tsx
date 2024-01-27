@@ -2,7 +2,7 @@
 
 import { useFormState } from "react-dom";
 import { useFormStatus } from "react-dom";
-import { submitQueryMemberForm } from "@/app/api";
+import { submitQueryForm } from "@/app/api";
 import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from "react-error-boundary";
 import { ToastContainer, toast } from 'react-toastify';
@@ -29,20 +29,33 @@ import { useState } from "react";
 
 export function QueryForm() {
   async function sendForm(event: FormData) {
-    let query_type = event.get('query_type');
-    let email_address = event.get('email_address');
-    console.log(query_type);
-    console.log(email_address);
     try {
       setQueryComplete(true);
-      if (query_type === 'email_address') {
-        let resp = await submitQueryMemberForm(email_address);
-        toast.success('Success!', {
-          hideProgressBar: true,
-        });
-        console.log(resp);
-        setQueryResult(resp);
+      let query_type = event.get('query_type');
+      let data = event.get(query_type);
+      let route;
+      switch(query_type) {
+        case 'email_address':
+          route = 'member';
+          break;
+        case 'street_address':
+        case 'bin':
+          route = 'building';
+          break;
+        case 'install_number':
+        case 'network_number':
+          route = 'install';
+          break;
       }
+      console.log(route);
+      console.log(query_type);
+      console.log(data);
+      let resp = await submitQueryForm(route, query_type, data);
+      toast.success('Success!', {
+        hideProgressBar: true,
+      });
+      console.log(resp);
+      setQueryResult(resp);
     } catch (e) {
       console.log("Could not submit Query Form: ");
       console.log(e);
