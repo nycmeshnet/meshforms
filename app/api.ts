@@ -86,4 +86,4 @@ const API_BASE = new URL(process.env.NEXT_PUBLIC_MESHDB_URL as string)
 export const submitJoinForm = (input: JoinFormInput) => post(`/api/v1/join/`, JoinFormResponse, JoinFormInput.parse(input))
 export const submitNNAssignForm = (input: NNAssignFormInput) => post(`/api/v1/nn-assign/`, NNAssignFormResponse, NNAssignFormInput.parse(input))
 
-export const submitQueryForm = (route: str, input_type: str, input: str) => get(`/api/v1/query/${route}/?${input_type}=${input}`, QueryFormResponse)
+export const submitQueryForm = (route: str, input_type: str, input: str, password: str) => get(`/api/v1/query/${route}/?${input_type}=${input}&password=${password}`, QueryFormResponse)
