@@ -119,7 +119,7 @@ export function QueryForm() {
       </form>
     </div>
     <div className={styles.queryResultTable}>
-      <div className={"ag-theme-quartz"} style={{height: '400px', width: '600px'}}>
+      <div className={styles.agThemeMesh + "ag-theme-quartz"} style={{height: '500px', width: '100%', overflow: 'auto'}}>
         <AgGridReact rowData={queryResult} columnDefs={colDefs} />
       </div>
     </div>
