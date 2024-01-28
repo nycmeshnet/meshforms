@@ -17,6 +17,8 @@ import styles from './JoinForm.module.scss'
 import Select from 'react-select'
 import { useState } from "react";
 
+import Button from '@/components/Button/Button';
+
 const options = [
   { value: 'NY', label: 'New York' },
   { value: 'NJ', label: 'New Jersey' },
@@ -145,7 +147,7 @@ const JoinForm = () => {
             <input type="checkbox" name="ncl"/>
             I agree to the Network Commons License
           </label>
-        <button className={styles.submitButton} type="submit" disabled={disableSubmitButton}>Submit</button>
+        <Button type="submit" disabled={disableSubmitButton}>Submit</Button>
       </form>
     </div>
     <ToastContainer />
