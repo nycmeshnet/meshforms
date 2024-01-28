@@ -13,3 +13,45 @@ label {
   display: block;
   margin-bottom: 5px;
 }
+
+.speal {
+  display: flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content: center;
+  font-size:36px;
+  margin:0 20% 0 20%;
+  text-align:justify;
+  text-justify:inter-word;
+}
+
+.bigLink {
+  font-size: 36px;
+  display: flex;
+  justify-content: center;
+  margin:20px;
+}
+
+/* unvisited link */
+.bigLink a:link {
+  color: #333;
+  text-decoration: none;
+}
+
+/* visited link */
+.bigLink a:visited {
+  color: #333;
+  text-decoration: none;
+}
+
+/* mouse over link */
+.bigLink a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+/* selected link */
+.bigLink a:active {
+  color: #333;
+  text-decoration: none;
+} 
