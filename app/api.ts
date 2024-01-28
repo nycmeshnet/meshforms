@@ -38,6 +38,14 @@ export const NNAssignFormResponse = z.object({
 })
 export type NNAssignFormResponse = z.infer<typeof NNAssignFormResponse>
 
+export const QueryFormInput = z.object({
+  //route: z.string(),
+  query_type: z.string(),
+  data: z.string(),
+  password: z.string(), // TODO: Salt/hash/whatever this
+})
+export type QueryFormInput = z.infer<typeof QueryFormInput>
+
 export const QueryFormResponse = z.array(z.object({
     install_number: z.number(),
     street_address: z.string(),
@@ -49,7 +57,7 @@ export const QueryFormResponse = z.array(z.object({
     email_address: z.string(),
     notes: z.string(),
     network_number: z.number().nullable(),
-    install_status: z.number(),
+    install_status: z.string(),
 }))
 export type QueryFormResponse = z.infer<typeof QueryFormResponse>
 
@@ -86,4 +94,4 @@ const API_BASE = new URL(process.env.NEXT_PUBLIC_MESHDB_URL as string)
 export const submitJoinForm = (input: JoinFormInput) => post(`/api/v1/join/`, JoinFormResponse, JoinFormInput.parse(input))
 export const submitNNAssignForm = (input: NNAssignFormInput) => post(`/api/v1/nn-assign/`, NNAssignFormResponse, NNAssignFormInput.parse(input))
 
-export const submitQueryForm = (route: str, input_type: str, input: str, password: str) => get(`/api/v1/query/${route}/?${input_type}=${input}&password=${password}`, QueryFormResponse)
+export const submitQueryForm = (route: string, input_type: string, input: string, password: string) => get(`/api/v1/query/${route}/?${input_type}=${input}&password=${password}`, QueryFormResponse)

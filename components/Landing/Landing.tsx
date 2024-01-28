@@ -8,9 +8,13 @@ const Landing = () => {
   return <>
     <div className={styles.landPage}>
       <div className={styles.speal}>
-        <p>Welcome to MeshForms! This website contains a handful of tools to help
-        our volunteers operate and get new members connected. To get started, pick
-        a form to fill out below.
+        <p>
+          Welcome to MeshForms! This website contains a handful of tools to help
+          our volunteers operate and get new members connected.
+        </p>
+        <p>
+          To get started, pick
+          a form to fill out below.
         </p>
       </div>
       <div className={styles.horizontalize}>

@@ -10,12 +10,14 @@ export function Footer() {
       <div className={styles.footer}>
         <div className={styles.row}>
           <div className={styles.column}>
+            <a href='https://nycmesh.net' style={{ textDecoration: 'none', color: 'black' }}>
             <div className={styles.logoAndText}>
                 <img className={styles.logo} src={logo.src} height={512} width={512} alt="" />
                 <strong>
                     NYC Mesh
                 </strong>
             </div>
+            </a>
           </div>
           <div className={styles.column}>
             <h3>Community</h3>

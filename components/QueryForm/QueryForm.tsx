@@ -2,7 +2,7 @@
 
 import { useFormState } from "react-dom";
 import { useFormStatus } from "react-dom";
-import { submitQueryForm } from "@/app/api";
+import { QueryFormInput, QueryFormResponse, submitQueryForm } from "@/app/api";
 import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from "react-error-boundary";
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,14 +25,23 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 import styles from './QueryForm.module.scss'
 
 export function QueryForm() {
+
+  function parseForm(event: FormData) {
+    const data: Record< string, string | Blob > = {};
+    event.forEach((value, key) => {
+      data[key] = value;
+    });
+
+    return QueryFormInput.parse(data);
+  }
+
   async function sendForm(event: FormData) {
     try {
       setQueryComplete(true);
-      let query_type = event.get('query_type');
-      let password = event.get('password');
-      let data = event.get(query_type);
-      let route;
-      switch(query_type) {
+      const queryForm: QueryFormInput = parseForm(event);
+      let route: string = '';
+
+      switch(queryForm.query_type) {
         case 'email_address':
           route = 'member';
           break;
@@ -45,10 +54,13 @@ export function QueryForm() {
           route = 'install';
           break;
       }
-      console.log(route);
-      console.log(query_type);
-      console.log(data);
-      let resp = await submitQueryForm(route, query_type, data, password);
+      console.log(queryForm);
+      let resp = await submitQueryForm(
+        route,
+        queryForm.query_type,
+        queryForm.data,
+        queryForm.password
+      );
       toast.success('Success!', {
         hideProgressBar: true,
       });
@@ -57,7 +69,7 @@ export function QueryForm() {
     } catch (e) {
       console.log("Could not submit Query Form: ");
       console.log(e);
-      if (e.status === 401) {
+      if (e && (e as Response).status === 403) {
         toast.error('Invalid Password', {
           hideProgressBar: true,
           theme: "colored",
@@ -80,24 +92,8 @@ export function QueryForm() {
   const [queryType, setQueryType] = useState('select_query_type');
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
 
-  const [queryResult, setQueryResult] = useState([]);
-/*[
-    {
-      "install_number": -1,
-      "street_address": "",
-      "city": "",
-      "state": "",
-      "zip_code": "",
-      "unit": "",
-      "name": "",
-      "email_address": "",
-      "notes": "",
-      "network_number": -1,
-      "install_status": -1
-    }
-  ]
-    );
-*/
+  const [queryResult, setQueryResult] = useState<unknown>([]);
+
   // Column Definitions: Defines & controls grid columns.
   const [colDefs, setColDefs] = useState([
     { field: "install_number" },
@@ -125,12 +121,12 @@ export function QueryForm() {
             options={options}
             className={styles.drop}
             onChange={(selected) => {
-              setQueryType(selected.value);
-              setQueryLabel(selected.label);
+              selected? setQueryType(selected.value):null;
+              selected? setQueryLabel(selected.label):null;
             }}
           />
           <div className={styles.horizontal}>
-            <input type="text" name={queryType} placeholder={queryLabel} required />
+            <input type="text" name="data" placeholder={queryLabel} required />
             <input type="password" name="password" placeholder="Password" required />
           </div>
         <button className={styles.submitButton} type="submit">Submit</button>
@@ -141,7 +137,7 @@ export function QueryForm() {
     <br/>
     <div className={styles.queryResultTable}>
       <div className={styles.agThemeMesh + "ag-theme-quartz"} style={{height: '500px', width: '100%', overflow: 'auto'}}>
-        <AgGridReact rowData={queryResult} columnDefs={colDefs} />
+        <AgGridReact rowData={queryResult as any[]} columnDefs={colDefs as any[]} />
       </div>
     </div>
     <ToastContainer />
