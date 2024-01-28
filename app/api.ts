@@ -48,13 +48,13 @@ export type QueryFormInput = z.infer<typeof QueryFormInput>
 
 export const QueryFormResponse = z.array(z.object({
     install_number: z.number(),
-    street_address: z.string(),
+    street_address: z.string().nullable(),
     city: z.string(),
     state: z.string(),
     zip_code: z.string(),
     unit: z.string(),
     name: z.string(),
-    email_address: z.string(),
+    email_address: z.string().nullable(),
     notes: z.string(),
     network_number: z.number().nullable(),
     install_status: z.string(),

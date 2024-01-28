@@ -46,6 +46,11 @@ export function QueryForm() {
           route = 'member';
           break;
         case 'street_address':
+          console.log(queryForm.data);
+          if (!isNaN(Number(queryForm.data))) {
+            console.log("Parsing as zip");
+            queryForm.query_type = 'zip_code';
+          }
         case 'bin':
           route = 'building';
           break;
@@ -61,10 +66,16 @@ export function QueryForm() {
         queryForm.data,
         queryForm.password
       );
+      console.log(resp);
+      if (resp.length === 0) {
+        toast.warning('Query returned no results.', {
+          hideProgressBar: true,
+        });
+        return
+      }
       toast.success('Success!', {
         hideProgressBar: true,
       });
-      console.log(resp);
       setQueryResult(resp);
     } catch (e) {
       console.log("Could not submit Query Form: ");
