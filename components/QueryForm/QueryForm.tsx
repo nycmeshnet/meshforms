@@ -24,9 +24,6 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 
 import styles from './QueryForm.module.scss'
 
-import { useState } from "react";
-
-
 export function QueryForm() {
   async function sendForm(event: FormData) {
     try {
