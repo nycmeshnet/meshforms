@@ -12,7 +12,8 @@ services:
     expose:
       - 80
     labels:
-      - "traefik.http.routers.meshforms.rule=Host(`meshforms.meshsvc-grand.mesh.nycmesh.net`)"
+      - "traefik.http.routers.meshforms.rule=Host(`forms.grandsvc.mesh.nycmesh.net`)"
+      - "traefik.http.routers.meshforms-mesh.rule=Host(`forms.grandsvc.mesh`)"
       - traefik.enable=true
       - traefik.port=80
     env_file:
