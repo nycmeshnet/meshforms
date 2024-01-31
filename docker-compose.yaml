@@ -12,10 +12,14 @@ services:
     expose:
       - 80
     labels:
+      - "traefik.enable=true"
+      - "traefik.port=80"
+      - "traefik.http.routers.meshforms.entrypoints=web,websecure"
       - "traefik.http.routers.meshforms.rule=Host(`forms.grandsvc.mesh.nycmesh.net`)"
+      - "traefik.http.routers.meshforms.tls.certresolver=grandsvcresolver"
       - "traefik.http.routers.meshforms-mesh.rule=Host(`forms.grandsvc.mesh`)"
-      - traefik.enable=true
-      - traefik.port=80
+      - "traefik.http.routers.meshforms-mesh.entrypoints=web"
+
     env_file:
       - .env
     build:
