@@ -138,7 +138,7 @@ const JoinForm = () => {
           <input type="number" name="zip" placeholder="Zip Code" required />
           <label>
             <input type="checkbox" name="roof_access"/>
-            Do you have roof access?
+            Check this box if you have roof access
           </label>
         </div>
         <br/>
