@@ -97,7 +97,6 @@ export function QueryForm() {
   }
 
   const initialState = {};
-  // const [state, formAction] = useFormState(createTodo, initialState);
   const router = useRouter()
   const [queryComplete, setQueryComplete] = useState(false);
   const [queryType, setQueryType] = useState('select_query_type');

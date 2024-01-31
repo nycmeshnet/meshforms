@@ -97,10 +97,7 @@ const JoinForm = () => {
     }
   }
 
-
-
   const initialState = {};
-  // const [state, formAction] = useFormState(createTodo, initialState);
   const [phoneNumber, setPhoneNumber] = useState<E164Number | undefined>()
   
   const router = useRouter()
@@ -120,7 +117,6 @@ const JoinForm = () => {
           </div>
 
           <input type="email" name="email" placeholder="Email Address" required />
-          {/* <input type="tel" name="phone" placeholder="Phone Number" required /> */}
 
           <PhoneInput
             name="phone"
@@ -151,7 +147,6 @@ const JoinForm = () => {
       </form>
     </div>
     <ToastContainer />
-    
   </>
 }
 

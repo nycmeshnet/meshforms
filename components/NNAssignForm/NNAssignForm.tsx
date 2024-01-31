@@ -12,22 +12,6 @@ import styles from './NNAssignForm.module.scss'
 
 import { useState } from "react";
 
-
-// FIXME: I have no idea how this works. I think this is some
-// handleSubmit meme
- interface Fields {
-   first_name: string
-   last_name: string
-   email: string
-   phone: string
-   street_address: string
-   apartment: string
-   city: string
-   state: string
-   roof_access: boolean
-   referral: string
- }
-
 export function NNAssignForm() {
   function parseForm(event: FormData) {
     const data: Record<string, string | Blob | boolean | Number > = {};
@@ -74,9 +58,7 @@ export function NNAssignForm() {
     }
   }
 
-
   const initialState = {};
-  // const [state, formAction] = useFormState(createTodo, initialState);
   const [value, setValue] = useState()
   const router = useRouter()
   const [disableSubmitButton, setDisableSubmitButton] = useState(false);
