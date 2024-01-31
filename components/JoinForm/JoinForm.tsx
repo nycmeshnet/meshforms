@@ -145,7 +145,7 @@ const JoinForm = () => {
         <input type="text" name="referral" placeholder="How did you hear about us?" />
         <label>
             <input type="checkbox" name="ncl"/>
-            I agree to the Network Commons License
+            I agree to the <a href="https://www.nycmesh.net/ncl.pdf">Network Commons License</a>
           </label>
         <Button type="submit" disabled={disableSubmitButton}>Submit</Button>
       </form>
