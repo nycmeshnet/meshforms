@@ -60,7 +60,7 @@ const JoinForm = () => {
     if (data['ncl'] !== true) {
       data['ncl'] = false
 
-      toast.error('You must accept the NCL!', {
+      toast.error('You must accept the Network Commons License!', {
         hideProgressBar: true,
         theme: "colored",
       });
