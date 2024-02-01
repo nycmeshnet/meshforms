@@ -12,10 +12,22 @@ services:
     expose:
       - 80
     labels:
+      - "traefik.enable=true"
+      - "traefik.port=80"
+        # .nycmesh.net URL (with HTTPS)
       - "traefik.http.routers.meshforms.rule=Host(`forms.grandsvc.mesh.nycmesh.net`)"
+      - "traefik.http.routers.meshforms.entrypoints=websecure"
+      - "traefik.http.routers.meshforms.tls=true"
+      - "traefik.http.routers.meshforms.tls.certresolver=grandsvcresolver"
+        # .nycmesh.net Redirect insecure traffic
+      - "traefik.http.routers.meshforms-insecure.rule=Host(`forms.grandsvc.mesh.nycmesh.net`)"
+      - "traefik.http.routers.meshforms-insecure.entrypoints=web"
+      - "traefik.http.middlewares.meshforms-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.meshforms-insecure.middlewares=meshforms-https@docker"
+        # .mesh URL
       - "traefik.http.routers.meshforms-mesh.rule=Host(`forms.grandsvc.mesh`)"
-      - traefik.enable=true
-      - traefik.port=80
+      - "traefik.http.routers.meshforms-mesh.entrypoints=web"
+
     env_file:
       - .env
     build:
