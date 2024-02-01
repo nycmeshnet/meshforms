@@ -57,15 +57,17 @@ const JoinForm = () => {
     // Special cases for the checkboxes
     // Bail if no NCL
     if (data['ncl'] !== true) {
-      toast.error('You must accept the Network Commons License!', {
+      data['ncl'] = false
+
+      toast.error('You must accept the NCL!', {
         hideProgressBar: true,
         theme: "colored",
       });
-      return
+      return;
     }
 
     // Set roof_access to false if necessary
-    if (data['roof_access'] === undefined) {
+    if (data['roof_access'] !== true) {
       data['roof_access'] = false;
     }
 
@@ -87,11 +89,22 @@ const JoinForm = () => {
         theme: "colored",
       });
     } catch (e) {
-      console.log("Could not submit Join Form: " + e);
-      toast.error('Sorry, an error occurred.', {
-        hideProgressBar: true,
-        theme: "colored",
-      });
+      console.log("Could not submit Join Form:");
+      try {
+        e.json().then(errorData => {
+          console.log(errorData);
+          const message = errorData.message
+          toast.error('Sorry, an error occurred:\n\n ' + message, {
+            hideProgressBar: true,
+            theme: "colored",
+          });
+        }); 
+      } catch (e) {
+        toast.error('Sorry, an error occurred.', {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      }
       setDisableSubmitButton(false);
       return;
     }
@@ -103,11 +116,12 @@ const JoinForm = () => {
   const router = useRouter()
   const [disableSubmitButton, setDisableSubmitButton] = useState(false);
 
-
   return <>
     <div className={styles.formBody}>
       <form action={sendForm}>
         <h2>Join NYC Mesh</h2>
+        <p>Do you live in New York City?</p>
+        <p>Would you like to host a node in our network?</p>
         <p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>
         <div>
         <h3>Personal Info</h3>
@@ -140,7 +154,7 @@ const JoinForm = () => {
         <br/>
         <input type="text" name="referral" placeholder="How did you hear about us?" />
         <label>
-            <input type="checkbox" name="ncl"/>
+            <input type="checkbox" name="ncl" required/>
             I agree to the <a href="https://www.nycmesh.net/ncl.pdf">Network Commons License</a>
           </label>
         <Button type="submit" disabled={disableSubmitButton}>Submit</Button>
