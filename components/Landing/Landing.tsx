@@ -13,8 +13,7 @@ const Landing = () => {
           our volunteers operate and get new members connected.
         </p>
         <p>
-          To get started, pick
-          a form to fill out below.
+          To get started, pick a form or tool to fill out below.
         </p>
       </div>
       <div className={styles.horizontalize}>
@@ -28,6 +27,10 @@ const Landing = () => {
 
         <div className={styles.bigLink}>
           <a href='/query'><Button>Query Form</Button></a>
+        </div>
+
+        <div className={styles.bigLink}>
+          <a href={process.env.NEXT_PUBLIC_MESHDB_URL + "/admin/"}><Button>MeshDB Admin</Button></a>
         </div>
       </div>
     </div>
