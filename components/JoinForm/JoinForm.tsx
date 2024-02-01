@@ -120,8 +120,6 @@ const JoinForm = () => {
     <div className={styles.formBody}>
       <form action={sendForm}>
         <h2>Join NYC Mesh</h2>
-        <p>Do you live in New York City?</p>
-        <p>Would you like to host a node in our network?</p>
         <p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>
         <div>
         <h3>Personal Info</h3>
