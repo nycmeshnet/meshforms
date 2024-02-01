@@ -8,6 +8,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
+
 import styles from './NNAssignForm.module.scss'
 
 import { useState } from "react";
@@ -49,10 +51,7 @@ export function NNAssignForm() {
     } catch (e) {
       console.log("Could not submit NNAssign Form: ");
       console.log(e);
-      toast.error('Sorry, an error occurred.', {
-        hideProgressBar: true,
-        theme: "colored",
-      });
+      toastErrorMessage(e);
       setDisableSubmitButton(false);
       return;
     }
@@ -71,7 +70,7 @@ export function NNAssignForm() {
         <p>Enter an install number and the Pre-Shared Key, and receive a Network Number</p>
         <br/>
           <div className={styles.horizontal}>
-            <input type="text" name="install_number" placeholder="Install Number" required />
+            <input type="number" name="install_number" placeholder="Install Number" required />
             <input type="password" name="password" placeholder="Pre-Shared Key" required />
           </div>
         <button className={styles.submitButton} type="submit" disabled={disableSubmitButton} hidden={disableSubmitButton}>Submit</button>

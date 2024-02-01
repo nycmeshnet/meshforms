@@ -8,6 +8,7 @@ import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { E164Number } from 'libphonenumber-js/core';
 import { ErrorBoundary } from "react-error-boundary";
+import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -90,21 +91,7 @@ const JoinForm = () => {
       });
     } catch (e) {
       console.log("Could not submit Join Form:");
-      try {
-        e.json().then(errorData => {
-          console.log(errorData);
-          const message = errorData.message
-          toast.error('Sorry, an error occurred:\n\n ' + message, {
-            hideProgressBar: true,
-            theme: "colored",
-          });
-        }); 
-      } catch (e) {
-        toast.error('Sorry, an error occurred.', {
-          hideProgressBar: true,
-          theme: "colored",
-        });
-      }
+      toastErrorMessage(e);
       setDisableSubmitButton(false);
       return;
     }

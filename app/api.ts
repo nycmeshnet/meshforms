@@ -32,6 +32,7 @@ export const NNAssignFormInput = z.object({
 export type NNAssignFormInput = z.infer<typeof NNAssignFormInput>
 
 export const NNAssignFormResponse = z.object({
+  message: z.string().optional(),
   building_id: z.number(),
   install_number: z.number(),
   network_number: z.number(),
