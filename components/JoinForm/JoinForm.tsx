@@ -8,6 +8,7 @@ import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { E164Number } from 'libphonenumber-js/core';
 import { ErrorBoundary } from "react-error-boundary";
+import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -57,15 +58,17 @@ const JoinForm = () => {
     // Special cases for the checkboxes
     // Bail if no NCL
     if (data['ncl'] !== true) {
+      data['ncl'] = false
+
       toast.error('You must accept the Network Commons License!', {
         hideProgressBar: true,
         theme: "colored",
       });
-      return
+      return;
     }
 
     // Set roof_access to false if necessary
-    if (data['roof_access'] === undefined) {
+    if (data['roof_access'] !== true) {
       data['roof_access'] = false;
     }
 
@@ -87,25 +90,18 @@ const JoinForm = () => {
         theme: "colored",
       });
     } catch (e) {
-      console.log("Could not submit Join Form: " + e);
-      toast.error('Sorry, an error occurred.', {
-        hideProgressBar: true,
-        theme: "colored",
-      });
+      console.log("Could not submit Join Form:");
+      toastErrorMessage(e);
       setDisableSubmitButton(false);
       return;
     }
   }
 
-
-
   const initialState = {};
-  // const [state, formAction] = useFormState(createTodo, initialState);
   const [phoneNumber, setPhoneNumber] = useState<E164Number | undefined>()
   
   const router = useRouter()
   const [disableSubmitButton, setDisableSubmitButton] = useState(false);
-
 
   return <>
     <div className={styles.formBody}>
@@ -120,7 +116,6 @@ const JoinForm = () => {
           </div>
 
           <input type="email" name="email" placeholder="Email Address" required />
-          {/* <input type="tel" name="phone" placeholder="Phone Number" required /> */}
 
           <PhoneInput
             name="phone"
@@ -138,20 +133,19 @@ const JoinForm = () => {
           <input type="number" name="zip" placeholder="Zip Code" required />
           <label>
             <input type="checkbox" name="roof_access"/>
-            Do you have roof access?
+            Check this box if you have roof access
           </label>
         </div>
         <br/>
         <input type="text" name="referral" placeholder="How did you hear about us?" />
         <label>
-            <input type="checkbox" name="ncl"/>
-            I agree to the Network Commons License
+            <input type="checkbox" name="ncl" required/>
+            I agree to the <a href="https://www.nycmesh.net/ncl.pdf">Network Commons License</a>
           </label>
         <Button type="submit" disabled={disableSubmitButton}>Submit</Button>
       </form>
     </div>
     <ToastContainer />
-    
   </>
 }
 

@@ -8,25 +8,11 @@ import { ErrorBoundary } from "react-error-boundary";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
+
 import styles from './NNAssignForm.module.scss'
 
 import { useState } from "react";
-
-
-// FIXME: I have no idea how this works. I think this is some
-// handleSubmit meme
- interface Fields {
-   first_name: string
-   last_name: string
-   email: string
-   phone: string
-   street_address: string
-   apartment: string
-   city: string
-   state: string
-   roof_access: boolean
-   referral: string
- }
 
 export function NNAssignForm() {
   function parseForm(event: FormData) {
@@ -65,18 +51,13 @@ export function NNAssignForm() {
     } catch (e) {
       console.log("Could not submit NNAssign Form: ");
       console.log(e);
-      toast.error('Sorry, an error occurred.', {
-        hideProgressBar: true,
-        theme: "colored",
-      });
+      toastErrorMessage(e);
       setDisableSubmitButton(false);
       return;
     }
   }
 
-
   const initialState = {};
-  // const [state, formAction] = useFormState(createTodo, initialState);
   const [value, setValue] = useState()
   const router = useRouter()
   const [disableSubmitButton, setDisableSubmitButton] = useState(false);
@@ -89,7 +70,7 @@ export function NNAssignForm() {
         <p>Enter an install number and the Pre-Shared Key, and receive a Network Number</p>
         <br/>
           <div className={styles.horizontal}>
-            <input type="text" name="install_number" placeholder="Install Number" required />
+            <input type="number" name="install_number" placeholder="Install Number" required />
             <input type="password" name="password" placeholder="Pre-Shared Key" required />
           </div>
         <button className={styles.submitButton} type="submit" disabled={disableSubmitButton} hidden={disableSubmitButton}>Submit</button>

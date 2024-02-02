@@ -5,6 +5,7 @@ import { useFormStatus } from "react-dom";
 import { QueryFormInput, QueryFormResponse, submitQueryForm } from "@/app/api";
 import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from "react-error-boundary";
+import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -80,24 +81,13 @@ export function QueryForm() {
     } catch (e) {
       console.log("Could not submit Query Form: ");
       console.log(e);
-      if (e && (e as Response).status === 403) {
-        toast.error('Invalid Password', {
-          hideProgressBar: true,
-          theme: "colored",
-        });
-      } else {
-        toast.error('Sorry, an error occurred.', {
-          hideProgressBar: true,
-          theme: "colored",
-        });
-      }
+      toastErrorMessage(e);
       setQueryComplete(false);
       return;
     }
   }
 
   const initialState = {};
-  // const [state, formAction] = useFormState(createTodo, initialState);
   const router = useRouter()
   const [queryComplete, setQueryComplete] = useState(false);
   const [queryType, setQueryType] = useState('select_query_type');
