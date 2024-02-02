@@ -103,6 +103,12 @@
   justify-content: center;
 }
 
-.agThemeMesh {
-    --ag-odd-row-background-color: #e00;
+.ag-theme-quartz {
+  .ag-cell {
+    white-space: pre-wrap;
+  }
+}
+
+.ag-cell {
+  color: red;
 }

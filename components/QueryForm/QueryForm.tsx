@@ -94,6 +94,13 @@ export function QueryForm() {
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
 
   const [queryResult, setQueryResult] = useState<unknown>([]);
+ 
+  const showLineBreaks = ({ value }) => {
+    // Replace newline characters with <br> for HTML rendering
+    const formattedValue = value.replace(/\n/g, '<br>');
+
+    return <div dangerouslySetInnerHTML={{ __html: formattedValue }} />;
+  };
 
   // Column Definitions: Defines & controls grid columns.
   const [colDefs, setColDefs] = useState([
@@ -107,10 +114,10 @@ export function QueryForm() {
     { field: "email_address", headerName: 'Email' },
     { field: "stripe_email_address", headerName: 'Stripe Email' },
     { field: "secondary_emails", headerName: 'Secondary Email(s)' },
-    { field: "notes", headerName: 'Notes', width: 500, wrapText: true, autoHeight: true, },
     { field: "network_number", headerName: 'Network Number' },
     { field: "install_status", headerName: 'Install Status' },
-  ]);
+    { field: "notes", headerName: 'Notes', width: 800, wrapText: true, autoHeight: true, },
+  ]); 
 
   // a default column definition with properties that get applied to every column
   const defaultColDef = useState(() => { 
@@ -147,7 +154,7 @@ export function QueryForm() {
     <br/>
     <br/>
     <div className={styles.queryResultTable}>
-      <div className={styles.agThemeMesh + "ag-theme-quartz"} style={{ width: '100%', overflow: 'auto'}}>
+      <div className={"ag-theme-quartz"} style={{ width: '100%', overflow: 'auto'}}>
         <AgGridReact domLayout={'print'} rowData={queryResult as any[]} defaultColDef={defaultColDef} columnDefs={colDefs as any[]} enableCellTextSelection={true}  />
       </div>
     </div>
