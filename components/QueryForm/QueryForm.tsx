@@ -99,12 +99,14 @@ export function QueryForm() {
   const [colDefs, setColDefs] = useState([
     { field: "install_number" },
     { field: "street_address" },
+    { field: "unit" },
     { field: "city" },
     { field: "state" },
     { field: "zip_code" },
-    { field: "unit" },
     { field: "name" },
     { field: "email_address" },
+    { field: "stripe_email_address" },
+    { field: "secondary_emails" },
     { field: "notes" },
     { field: "network_number" },
     { field: "install_status" },
@@ -138,7 +140,7 @@ export function QueryForm() {
     <br/>
     <div className={styles.queryResultTable}>
       <div className={styles.agThemeMesh + "ag-theme-quartz"} style={{height: '500px', width: '100%', overflow: 'auto'}}>
-        <AgGridReact rowData={queryResult as any[]} columnDefs={colDefs as any[]} />
+        <AgGridReact rowData={queryResult as any[]} columnDefs={colDefs as any[]} enableCellTextSelection={true}  />
       </div>
     </div>
     <ToastContainer />
