@@ -10,7 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Select from 'react-select'
-import { useState } from "react";
+import { useState, useMemo } from "react";
 const options = [
   { value: "street_address", label: "Address" },
   { value: "email_address", label: "Email" },
@@ -104,28 +104,41 @@ export function QueryForm() {
 
   // Column Definitions: Defines & controls grid columns.
   const [colDefs, setColDefs] = useState([
-    { field: "install_number", headerName: 'Install #' },
-    { field: "street_address", headerName: 'Address' },
-    { field: "unit", headerName: 'Unit' },
-    { field: "city", headerName: 'City' },
-    { field: "state", headerName: 'State' },
-    { field: "zip_code", headerName: 'Zip' },
-    { field: "name", headerName: 'Member Name' },
-    { field: "email_address", headerName: 'Email' },
-    { field: "stripe_email_address", headerName: 'Stripe Email' },
-    { field: "secondary_emails", headerName: 'Secondary Email(s)' },
-    { field: "network_number", headerName: 'Network Number' },
-    { field: "install_status", headerName: 'Install Status' },
-    { field: "notes", headerName: 'Notes', width: 800, wrapText: true, autoHeight: true, },
+    { field: "install_number", headerName: 'Install #', width: 100 },
+    { field: "street_address", headerName: 'Address', width: 250 },
+    { field: "unit", headerName: 'Unit', width: 100 },
+    { field: "city", headerName: 'City', width: 100 },
+    { field: "state", headerName: 'State', width: 80 },
+    { field: "zip_code", headerName: 'Zip', width: 80 },
+    { field: "name", headerName: 'Member Name', width: 250 },
+    { field: "email_address", headerName: 'Email', width: 300 },
+    { field: "stripe_email_address", headerName: 'Stripe Email', width: 300 },
+    { field: "secondary_emails", headerName: 'Secondary Email(s)', 
+        editable: true,
+        cellEditor: 'agLargeTextCellEditor',
+        cellEditorPopup: true,
+        cellEditorPopupPosition: 'over'
+    },
+    { field: "network_number", headerName: 'NN', width: 80 },
+    { field: "install_status", headerName: 'Install Status', width: 160 },
+    { field: "notes",
+        headerName: 'Notes',
+        width: 400,
+    },
   ]); 
+  
 
-  // a default column definition with properties that get applied to every column
-  const defaultColDef = useState(() => { 
-      return {
-          // set every column width
-          width: 100,
-      };
-  }, []);
+// a default column definition with properties that get applied to every column
+const defaultColDef = useMemo(() => { 
+	return {
+        width: 200,
+        editable: true,
+        cellEditor: 'agLargeTextCellEditor',
+        cellEditorPopup: true,
+        cellEditorPopupPosition: 'over'
+    };
+}, []);
+
 
   return <>
     <div className={styles.formBody}>
@@ -150,12 +163,18 @@ export function QueryForm() {
         <button className={styles.submitButton} type="submit">Submit</button>
       </form>
     </div>
-    <strong>Scroll for more!</strong>
+    <strong>Double-click to select/expand. Scroll for more!</strong>
     <br/>
     <br/>
     <div className={styles.queryResultTable}>
-      <div className={"ag-theme-quartz"} style={{ width: '100%', overflow: 'auto'}}>
-        <AgGridReact domLayout={'print'} rowData={queryResult as any[]} defaultColDef={defaultColDef} columnDefs={colDefs as any[]} enableCellTextSelection={true}  />
+      <div className={"ag-theme-quartz"} style={{ width: '100%', minHeight: '400px', overflow: 'auto'}}>
+        <AgGridReact
+          domLayout={'print'}
+          rowData={queryResult as any[]}
+          columnDefs={colDefs as any[]}
+          defaultColDef={defaultColDef}
+          enableCellTextSelection={true}
+        />
       </div>
     </div>
     <ToastContainer />
