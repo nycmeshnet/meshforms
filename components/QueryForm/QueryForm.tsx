@@ -97,20 +97,28 @@ export function QueryForm() {
 
   // Column Definitions: Defines & controls grid columns.
   const [colDefs, setColDefs] = useState([
-    { field: "install_number" },
-    { field: "street_address" },
-    { field: "unit" },
-    { field: "city" },
-    { field: "state" },
-    { field: "zip_code" },
-    { field: "name" },
-    { field: "email_address" },
-    { field: "stripe_email_address" },
-    { field: "secondary_emails" },
-    { field: "notes" },
-    { field: "network_number" },
-    { field: "install_status" },
+    { field: "install_number", headerName: 'Install #' },
+    { field: "street_address", headerName: 'Address' },
+    { field: "unit", headerName: 'Unit' },
+    { field: "city", headerName: 'City' },
+    { field: "state", headerName: 'State' },
+    { field: "zip_code", headerName: 'Zip' },
+    { field: "name", headerName: 'Member Name' },
+    { field: "email_address", headerName: 'Email' },
+    { field: "stripe_email_address", headerName: 'Stripe Email' },
+    { field: "secondary_emails", headerName: 'Secondary Email(s)' },
+    { field: "notes", headerName: 'Notes', width: 500, wrapText: true, autoHeight: true, },
+    { field: "network_number", headerName: 'Network Number' },
+    { field: "install_status", headerName: 'Install Status' },
   ]);
+
+  // a default column definition with properties that get applied to every column
+  const defaultColDef = useState(() => { 
+      return {
+          // set every column width
+          width: 100,
+      };
+  }, []);
 
   return <>
     <div className={styles.formBody}>
@@ -139,8 +147,8 @@ export function QueryForm() {
     <br/>
     <br/>
     <div className={styles.queryResultTable}>
-      <div className={styles.agThemeMesh + "ag-theme-quartz"} style={{height: '500px', width: '100%', overflow: 'auto'}}>
-        <AgGridReact rowData={queryResult as any[]} columnDefs={colDefs as any[]} enableCellTextSelection={true}  />
+      <div className={styles.agThemeMesh + "ag-theme-quartz"} style={{ width: '100%', overflow: 'auto'}}>
+        <AgGridReact domLayout={'print'} rowData={queryResult as any[]} defaultColDef={defaultColDef} columnDefs={colDefs as any[]} enableCellTextSelection={true}  />
       </div>
     </div>
     <ToastContainer />
