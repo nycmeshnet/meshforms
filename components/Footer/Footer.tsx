@@ -1,167 +1,181 @@
-// import 'bootstrap/dist/css/bootstrap.min.css';
-
-import logo from '@/res/logo.svg'
-
-import styles from './Footer.module.scss'
+import { Container, Box, Grid, Typography, Link } from "@mui/material";
 
 export function Footer() {
-    return <>
-    <footer>
-      <div className={styles.footer}>
-        <div className={styles.row}>
-          <div className={styles.column}>
-            <a href='https://nycmesh.net' style={{ textDecoration: 'none', color: 'black' }}>
-            <div className={styles.logoAndText}>
-                <img className={styles.logo} src={logo.src} height={512} width={512} alt="" />
-                <strong>
-                    NYC Mesh
-                </strong>
-            </div>
-            </a>
-          </div>
-          <div className={styles.column}>
-            <h3>Community</h3>
-            <ul >
-              <li>
-                <a href="https://slack.nycmesh.net" className="text-muted">Slack</a>
-              </li>
-              <li>
-                <a href="https://meetup.com/nycmesh" className="text-muted"
-                  >Meetup</a
-                >
-              </li>
-              <li>
-                <a href="https://www.nycmesh.net/volunteer" className="text-muted"
-                  >Volunteer</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://us9.campaign-archive.com/home/?u=cf667149616fd293afa115f5a&amp;id=ebe72854f3"
-                  className="text-muted"
-                  >Newsletter</a
-                >
-              </li>
-              <li>
-                <a href="https://www.nycmesh.net/blog" className="text-muted"
-                  >Blog</a
-                >
-              </li>
-              <li>
-                <a href="https://www.nycmesh.net/coc" className="text-muted"
-                  >Code of Conduct</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div className={styles.column}>
-            <h3>Network</h3>
-            <ul>
-              <li>
-                <a href="https://stats.nycmesh.net" className="text-muted">Stats</a>
-              </li>
-              <li>
-                <a
-                  href="https://docs.nycmesh.net/networking/peering/"
-                  className="text-muted"
-                  >Peering</a
-                >
-              </li>
-              <li>
-                <a href="https://www.nycmesh.net/sponsors" className="text-muted"
-                  >Sponsors</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div className={styles.column}>
-            <h3>Resources</h3>
-            <ul>
-              <li>
-                <a href="https://www.nycmesh.net/faq" className="text-muted">FAQ</a>
-              </li>
-              <li>
-                <a href="https://docs.nycmesh.net" className="text-muted" target="_"
-                  >Docs</a
-                >
-              </li>
-              <li>
-                <a href="https://los.nycmesh.net" className="text-muted" target="_"
-                  >Line of Sight</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://www.nycmesh.net/presentations"
-                  className="text-muted"
-                  >Presentations</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://docs.nycmesh.net/organization/outreach/"
-                  className="text-muted"
-                  target="_"
-                  >Outreach</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://www.nycmesh.net/pay"
-                  className="text-muted"
-                  target="_"
-                  >Install Payment</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://github.com/WillNilges/cursed-status-page"
-                  className="text-muted"
-                  >GitHub</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div className={styles.column}>
-            <h3>Social</h3>
-            <ul>
-              <li>
-                <a href="https://mastodon.nycmesh.net/@mesh" className="text-muted"
-                  >Mastodon</a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://bsky.app/profile/nycmesh.bsky.social"
-                  className="text-muted"
-                  >Bluesky</a
-                >
-              </li>
-              <li>
-                <a href="https://www.threads.net/@nycmesh" className="text-muted"
-                  >Threads</a
-                >
-              </li>
-              <li>
-                <a href="https://www.youtube.com/@nycmesh" className="text-muted"
-                  >YouTube</a
-                >
-              </li>
-              <li>
-                <a href="https://www.facebook.com/nycmesh" className="text-muted"
-                  >Facebook</a
-                >
-              </li>
-              <li>
-                <a href="https://www.instagram.com/nycmesh" className="text-muted"
-                  >Instagram</a
-                >
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </footer>
-    </>
+  const links = [
+    [
+      {
+        text: "Community",
+        link: "",
+      },
+      {
+        text: "Slack",
+        link: "https://slack.nycmesh.net",
+      },
+      {
+        text: "Meetup",
+        link: "https://meetup.com/nycmesh",
+      },
+      {
+        text: "Volunteer",
+        link: "https://www.nycmesh.net/volunteer",
+      },
+      {
+        text: "Newsletter",
+        link: "https://us9.campaign-archive.com/home/?u=cf667149616fd293afa115f5a&amp;id=ebe72854f3",
+      },
+      {
+        text: "Blog",
+        link: "https://www.nycmesh.net/blog",
+      },
+      {
+        text: "Code of Conduct",
+        link: "https://www.nycmesh.net/coc",
+      },
+    ],
+    [
+      {
+        text: "Network",
+        link: "",
+      },
+      {
+        text: "Stats",
+        link: "https://stats.nycmesh.net",
+      },
+      {
+        text: "Peering",
+        link: "https://docs.nycmesh.net/networking/peering/",
+      },
+      {
+        text: "Sponsors",
+        link: "https://www.nycmesh.net/sponsors",
+      },
+    ],
+    [
+      {
+        text: "Resources",
+        link: "",
+      },
+      {
+        text: "FAQ",
+        link: "https://www.nycmesh.net/faq",
+      },
+      {
+        text: "Docs",
+        link: "https://docs.nycmesh.net",
+      },
+      {
+        text: "Line of Sight",
+        link: "https://los.nycmesh.net",
+      },
+      {
+        text: "Presentations",
+        link: "https://www.nycmesh.net/presentations",
+      },
+      {
+        text: "Outreach",
+        link: "https://docs.nycmesh.net/organization/outreach/",
+      },
+      {
+        text: "Install Payment",
+        link: "https://www.nycmesh.net/pay",
+      },
+      {
+        text: "GitHub",
+        link: "https://github.com/WillNilges/cursed-status-page",
+      },
+    ],
+    [
+      {
+        text: "Social",
+        link: "",
+      },
+      {
+        text: "Mastodon",
+        link: "https://mastodon.nycmesh.net/@mesh",
+      },
+      {
+        text: "Bluesky",
+        link: "https://bsky.app/profile/nycmesh.bsky.social",
+      },
+      {
+        text: "Threads",
+        link: "https://www.threads.net/@nycmesh",
+      },
+      {
+        text: "YouTube",
+        link: "https://www.youtube.com/@nycmesh",
+      },
+      {
+        text: "Facebook",
+        link: "https://www.facebook.com/nycmesh",
+      },
+      {
+        text: "Instagram",
+        link: "https://www.instagram.com/nycmesh",
+      },
+    ],
+  ];
 
+  return (
+    <>
+      <footer>
+        <Box
+          sx={{
+            backgroundColor: "#f4f4f4",
+            color: "black",
+            padding: "none",
+            width: "100%",
+            display: "flex",
+          }}
+          id="full-width-box"
+        >
+          <Container maxWidth="lg" id="container" sx={{}}>
+            <Grid container sx={{ py: "2rem", flex: 1, justifyContent:"space-between" }}>
+              <Grid item container md={2} sx={{ flex: 1, pb:"1rem", justifyContent:"center"  }} id="logo-column">
+                <img
+                  src="/logo.svg"
+                  style={{ width: "2rem", height: "2rem", display: "flex" }}
+                  alt=""
+                />
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ marginLeft: "1rem", display: "flex" }}
+                >
+                  <span style={{ fontWeight: 600 }}>NYC Mesh</span>{" "}
+                  <span style={{ fontWeight: 400 }}></span>
+                </Typography>
+              </Grid>
+              <Grid item container md={9} lg={7}>
+                {links.map((category, index) => (
+                  <Grid
+                    item
+                    sx={{textAlign:{sm:"left", xs:"center"}, pb:"1rem" }}
+                    xs={12}
+                    sm={3}
+                    key={index}
+                  >
+                    <Typography variant="h5" sx={{ fontWeight: 600, pb:".5rem" }}>
+                      {category[0].text}
+                    </Typography>
+                    {category.slice(1).map((link, index) => (
+                      <Grid item key={index} sx={{pb:".3rem"}}>
+                        <Link
+                          href={link.link}
+                          target="_"
+                          sx={{textDecoration: 'none' }}
+                        >
+                          {link.text}
+                        </Link>
+                      </Grid>
+                    ))}
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </Container>
+        </Box>
+      </footer>
+    </>
+  );
 }

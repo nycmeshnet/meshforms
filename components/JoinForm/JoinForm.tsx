@@ -110,10 +110,8 @@ const JoinForm = () => {
         <p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>
         <div>
         <h3>Personal Info</h3>
-          <div className={styles.horizontal}>
             <input type="text" name="first_name" placeholder="First Name" required />
             <input type="text" name="last_name" placeholder="Last Name" required />
-          </div>
 
           <input type="email" name="email" placeholder="Email Address" required />
 
@@ -140,7 +138,7 @@ const JoinForm = () => {
         <input type="text" name="referral" placeholder="How did you hear about us?" />
         <label>
             <input type="checkbox" name="ncl" required/>
-            I agree to the <a href="https://www.nycmesh.net/ncl.pdf">Network Commons License</a>
+            I agree to the <a href="https://www.nycmesh.net/ncl.pdf" target="_blank" style={{color:"black"}}>Network Commons License</a>
           </label>
         <Button type="submit" disabled={disableSubmitButton}>Submit</Button>
       </form>
