@@ -95,13 +95,6 @@ export function QueryForm() {
 
   const [queryResult, setQueryResult] = useState<unknown>([]);
  
-  const showLineBreaks = ({ value }) => {
-    // Replace newline characters with <br> for HTML rendering
-    const formattedValue = value.replace(/\n/g, '<br>');
-
-    return <div dangerouslySetInnerHTML={{ __html: formattedValue }} />;
-  };
-
   // Column Definitions: Defines & controls grid columns.
   const [colDefs, setColDefs] = useState([
     { field: "install_number", headerName: 'Install #', width: 100 },
