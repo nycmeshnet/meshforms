@@ -1,0 +1,16 @@
+name: Run Production Build
+
+on: [pull_request]
+
+jobs:
+  npm-run-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies 
+        run: npm install
+      - name: Build Next.js app
+        env:
+          NEXT_PUBLIC_MESHDB_URL: http://127.0.0.1:8000/
+        run: npm run build
+        # XXX (willnilges): We should maybe set up real integration tests.
