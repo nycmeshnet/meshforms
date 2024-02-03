@@ -20,6 +20,7 @@ const options = [
 ]
 
 import { AgGridReact } from 'ag-grid-react'; // React Grid Logic
+import { ColDef } from 'ag-grid-community';
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 
@@ -96,7 +97,7 @@ export function QueryForm() {
   const [queryResult, setQueryResult] = useState<unknown>([]);
  
   // Column Definitions: Defines & controls grid columns.
-  const [colDefs, setColDefs] = useState([
+  const colDefs: ColDef[] = useMemo(() => [
     { field: "install_number", headerName: 'Install #', width: 100 },
     { field: "street_address", headerName: 'Address', width: 250 },
     { field: "unit", headerName: 'Unit', width: 100 },
@@ -110,7 +111,7 @@ export function QueryForm() {
         editable: true,
         cellEditor: 'agLargeTextCellEditor',
         cellEditorPopup: true,
-        cellEditorPopupPosition: 'over'
+        /*cellEditorPopupPosition: 'over' as 'over',*/
     },
     { field: "network_number", headerName: 'NN', width: 80 },
     { field: "install_status", headerName: 'Install Status', width: 160 },
@@ -118,18 +119,18 @@ export function QueryForm() {
         headerName: 'Notes',
         width: 400,
     },
-  ]); 
+  ], []); 
   
 
 // a default column definition with properties that get applied to every column
-const defaultColDef = useMemo(() => { 
-	return {
-        width: 200,
-        editable: true,
-        cellEditor: 'agLargeTextCellEditor',
-        cellEditorPopup: true,
-        cellEditorPopupPosition: 'over'
-    };
+const defaultColDef: ColDef = useMemo(() => { 
+  return {
+    width: 200,
+    editable: true,
+    cellEditor: 'agLargeTextCellEditor',
+    cellEditorPopup: true,
+    cellEditorPopupPosition: 'over'
+  };
 }, []);
 
 
