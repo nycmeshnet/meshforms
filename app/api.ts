@@ -1,5 +1,11 @@
 import { z } from "zod";
 
+if (process.env.NEXT_PUBLIC_MESHDB_URL === undefined) {
+  throw new Error('Expected API url environment variable');
+}
+
+const API_BASE = new URL(process.env.NEXT_PUBLIC_MESHDB_URL as string);
+
 export const JoinFormInput = z.object({
   first_name: z.string(),
   last_name: z.string(),
@@ -91,8 +97,6 @@ const post = async <S extends z.Schema>(url: string, schema: S, input: unknown, 
   if (!res?.ok) throw res
   return schema.parse(await res.json())
 }
-
-const API_BASE = new URL(process.env.NEXT_PUBLIC_MESHDB_URL as string)
 
 // TODO: Env var for api token
 export const submitJoinForm = (input: JoinFormInput) => post(`/api/v1/join/`, JoinFormResponse, JoinFormInput.parse(input))

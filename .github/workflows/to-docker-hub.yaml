@@ -34,6 +34,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           # Hardcoding the URL of meshdb into the image we build... There is probably
           # a better way to do this.
-          secrets: |
-            NEXT_PUBLIC_MESHDB_URL=https://db.grandsvc.mesh.nycmesh.net/
+          build-args: |
+            "MESHDB_URL=${{ secrets.MESHDB_URL }}"
 
