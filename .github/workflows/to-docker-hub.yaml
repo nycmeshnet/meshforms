@@ -32,4 +32,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          # Hardcoding the URL of meshdb into the image we build... There should
+          # to be a better way to do this.
+          env:
+            NEXT_PUBLIC_MESHDB_URL: https://db.grandsvc.mesh.nycmesh.net/
 
