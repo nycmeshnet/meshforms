@@ -30,9 +30,8 @@ services:
 
     env_file:
       - .env
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image:
+      willnilges/meshforms:main
 
 networks:
   ui:
