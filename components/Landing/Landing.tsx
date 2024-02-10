@@ -1,7 +1,6 @@
 "use client";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
-// import Button from "@/components/Button/Button";
 
 import styles from "./Landing.module.scss";
 import { Box, Grid, Typography } from "@mui/material";
