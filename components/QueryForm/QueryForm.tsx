@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Select from 'react-select'
-import { useState, useMemo } from "react";
+import { useState, useMemo, FormEvent } from "react";
 const options = [
   { value: "street_address", label: "Address" },
   { value: "email_address", label: "Email" },
@@ -35,16 +35,18 @@ export function QueryForm() {
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
   const [queryResult, setQueryResult] = useState<unknown>([]);
 
-  function parseForm(event: FormData) {
+  function parseForm(event: FormEvent<HTMLFormElement>) {
+    const formData = new FormData(event.currentTarget)
     const data: Record< string, string | Blob > = {};
-    event.forEach((value, key) => {
+    formData.forEach((value, key) => {
       data[key] = value;
     });
 
     return QueryFormInput.parse(data);
   }
 
-  async function sendForm(event: FormData) {
+  async function sendForm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     setIsLoading(true);
     try {
       const queryForm: QueryFormInput = parseForm(event);
@@ -137,7 +139,7 @@ const defaultColDef: ColDef = useMemo(() => {
 
   return <>
     <div className={styles.formBody}>
-      <form action={sendForm}>
+      <form onSubmit={sendForm}>
         <h2>MeshDB Query</h2>
         <p>This is for installers to query our database. This is password protected.</p>
         <br/>
