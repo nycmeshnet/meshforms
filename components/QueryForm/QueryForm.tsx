@@ -1,11 +1,7 @@
 'use client'
 
-import { useFormState } from "react-dom";
-import { useFormStatus } from "react-dom";
-import { QueryFormInput, QueryFormResponse, submitQueryForm } from "@/app/api";
-import { useRouter } from 'next/navigation'
+import { QueryFormInput, submitQueryForm } from "@/app/api";
 import Button from "@mui/material/Button";
-import { ErrorBoundary } from "react-error-boundary";
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -28,10 +24,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 import styles from './QueryForm.module.scss'
 
 export function QueryForm() {
-  const initialState = {};
-  const router = useRouter()
   const [isLoading, setIsLoading] = useState(false);
-  const [queryType, setQueryType] = useState('select_query_type');
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
   const [queryResult, setQueryResult] = useState<unknown>([]);
 
@@ -149,7 +142,6 @@ const defaultColDef: ColDef = useMemo(() => {
             options={options}
             className={styles.drop}
             onChange={(selected) => {
-              selected? setQueryType(selected.value):null;
               selected? setQueryLabel(selected.label):null;
             }}
           />
