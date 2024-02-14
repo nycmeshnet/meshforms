@@ -20,19 +20,6 @@
   outline-offset: 4px;
 }
 
-.submitButton {
-  background-color: black;
-  border-radius: 4px;
-  color: white;
-  margin: 30px 0px 30px 0px;
-  padding: 10px 24px;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  font-size: 16px;
-  outline-offset: 4px;
-}
-
 .formBody button:hover {
   opacity: 0.8;
 }
@@ -103,3 +90,7 @@
   justify-content: center;
 }
 
+.centered {
+  display: flex;
+  justify-content: center;
+}

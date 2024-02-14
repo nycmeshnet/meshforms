@@ -4,7 +4,7 @@ if (process.env.NEXT_PUBLIC_MESHDB_URL === undefined) {
   throw new Error('Expected API url environment variable');
 }
 
-const API_BASE = new URL(process.env.NEXT_PUBLIC_MESHDB_URL as string);
+const API_BASE = new URL(process.env.NEXT_PUBLIC_MESHDB_URL as string + "/api/v1/");
 
 export const JoinFormInput = z.object({
   first_name: z.string(),

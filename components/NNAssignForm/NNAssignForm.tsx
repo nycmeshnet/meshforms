@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@mui/material/Button";
 import { useFormState } from "react-dom";
 import { useFormStatus } from "react-dom";
 import { NNAssignFormInput, submitNNAssignForm } from "@/app/api";
@@ -73,7 +74,16 @@ export function NNAssignForm() {
             <input type="number" name="install_number" placeholder="Install Number" required />
             <input type="password" name="password" placeholder="Pre-Shared Key" required />
           </div>
-        <button className={styles.submitButton} type="submit" disabled={disableSubmitButton} hidden={disableSubmitButton}>Submit</button>
+        <div className={styles.centered}>
+          <Button
+            type="submit"
+            disabled={disableSubmitButton}
+            hidden={disableSubmitButton}
+            variant="contained"
+            size="large"
+            sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
+          >Submit</Button>
+        </div>
         <h3 hidden={!disableSubmitButton} className={styles.nnLabel}>Your Network Number:</h3>
         <h1 hidden={!disableSubmitButton} id="">{networkNumber}</h1>
       </form>

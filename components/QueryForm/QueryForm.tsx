@@ -1,16 +1,13 @@
-"use client";
+'use client'
 
-import { useFormState } from "react-dom";
-import { useFormStatus } from "react-dom";
-import { QueryFormInput, QueryFormResponse, submitQueryForm } from "@/app/api";
-import { useRouter } from 'next/navigation'
-import { ErrorBoundary } from "react-error-boundary";
+import { QueryFormInput, submitQueryForm } from "@/app/api";
+import Button from "@mui/material/Button";
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Select from 'react-select'
-import { useState, useMemo } from "react";
+import { useState, useMemo, FormEvent } from "react";
 const options = [
   { value: "street_address", label: "Address" },
   { value: "email_address", label: "Email" },
@@ -27,19 +24,24 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 import styles from './QueryForm.module.scss'
 
 export function QueryForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [queryLabel, setQueryLabel] = useState('Select Query Type');
+  const [queryResult, setQueryResult] = useState<unknown>([]);
 
-  function parseForm(event: FormData) {
+  function parseForm(event: FormEvent<HTMLFormElement>) {
+    const formData = new FormData(event.currentTarget)
     const data: Record< string, string | Blob > = {};
-    event.forEach((value, key) => {
+    formData.forEach((value, key) => {
       data[key] = value;
     });
 
     return QueryFormInput.parse(data);
   }
 
-  async function sendForm(event: FormData) {
+  async function sendForm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setIsLoading(true);
     try {
-      setQueryComplete(true);
       const queryForm: QueryFormInput = parseForm(event);
       let route: string = '';
 
@@ -62,7 +64,7 @@ export function QueryForm() {
           break;
       }
       console.log(queryForm);
-      let resp = await submitQueryForm(
+      const resp = await submitQueryForm(
         route,
         queryForm.query_type,
         queryForm.data,
@@ -73,29 +75,23 @@ export function QueryForm() {
         toast.warning('Query returned no results.', {
           hideProgressBar: true,
         });
-        return
+        setIsLoading(false);
+        return;
       }
+      setQueryResult(resp);
       toast.success('Success!', {
         hideProgressBar: true,
       });
-      setQueryResult(resp);
+      setIsLoading(false);
     } catch (e) {
       console.log("Could not submit Query Form: ");
       console.log(e);
       toastErrorMessage(e);
-      setQueryComplete(false);
+      setIsLoading(false);
       return;
     }
   }
 
-  const initialState = {};
-  const router = useRouter()
-  const [queryComplete, setQueryComplete] = useState(false);
-  const [queryType, setQueryType] = useState('select_query_type');
-  const [queryLabel, setQueryLabel] = useState('Select Query Type');
-
-  const [queryResult, setQueryResult] = useState<unknown>([]);
- 
   // Column Definitions: Defines & controls grid columns.
   const colDefs: ColDef[] = useMemo(() => [
     { field: "install_number", headerName: 'Install #', width: 100 },
@@ -136,7 +132,7 @@ const defaultColDef: ColDef = useMemo(() => {
 
   return <>
     <div className={styles.formBody}>
-      <form action={sendForm}>
+      <form onSubmit={sendForm}>
         <h2>MeshDB Query</h2>
         <p>This is for installers to query our database. This is password protected.</p>
         <br/>
@@ -146,7 +142,6 @@ const defaultColDef: ColDef = useMemo(() => {
             options={options}
             className={styles.drop}
             onChange={(selected) => {
-              selected? setQueryType(selected.value):null;
               selected? setQueryLabel(selected.label):null;
             }}
           />
@@ -154,7 +149,17 @@ const defaultColDef: ColDef = useMemo(() => {
             <input type="text" name="data" placeholder={queryLabel} required />
             <input type="password" name="password" placeholder="Password" required />
           </div>
-        <button className={styles.submitButton} type="submit">Submit</button>
+          <div className={styles.centered}>
+            <Button
+              type="submit"
+              disabled={isLoading}
+              variant="contained"
+              size="large"
+              sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
+            >
+              { isLoading ? "Loading..." : "Submit" }
+            </Button>
+          </div>
       </form>
     </div>
     <strong>Double-click to select/expand. Scroll for more!</strong>

@@ -16,9 +16,9 @@ import styles from './JoinForm.module.scss'
 
 // import { SubmitHandler, useForm } from 'react-hook-form'
 import Select from 'react-select'
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
-import Button from '@/components/Button/Button';
+import Button from "@mui/material/Button";
 
 const options = [
   { value: 'NY', label: 'New York' },
@@ -41,9 +41,10 @@ const options = [
  }
 
 const JoinForm = () => {
-  function parseForm(event: FormData) {
+  function parseForm(event: FormEvent<HTMLFormElement>) {
+    const formData = new FormData(event.currentTarget)
     const data: Record<string, string | Blob | boolean | Number > = {};
-    event.forEach((value, key) => {
+    formData.forEach((value, key) => {
       if (key === 'roof_access' || key === 'ncl') {
         // Special case for the checkbox
         // This won't work for unchecked boxes because JS good language
@@ -75,11 +76,13 @@ const JoinForm = () => {
     return JoinFormInput.parse(data);
   }
 
-  async function sendForm(event: FormData) {
+  // TODO: Redirect them to a thank you/next steps page or something after they have submitted.
+  async function sendForm(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     console.log(event); 
 
     try {
-      setDisableSubmitButton(true);
+      setIsLoading(true);
       let parsedForm = parseForm(event);
       if (parsedForm === undefined) return;
       let j: JoinFormInput = parsedForm;
@@ -92,32 +95,34 @@ const JoinForm = () => {
     } catch (e) {
       console.log("Could not submit Join Form:");
       toastErrorMessage(e);
-      setDisableSubmitButton(false);
+      setIsLoading(false);
       return;
     }
+    setSubmitted(true);
+    setIsLoading(false);
   }
 
-  const initialState = {};
   const [phoneNumber, setPhoneNumber] = useState<E164Number | undefined>()
-  
-  const router = useRouter()
-  const [disableSubmitButton, setDisableSubmitButton] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   return <>
     <div className={styles.formBody}>
-      <form action={sendForm}>
+      <form onSubmit={sendForm}>
         <h2>Join NYC Mesh</h2>
         <p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>
         <div>
         <h3>Personal Info</h3>
-            <input type="text" name="first_name" placeholder="First Name" required />
-            <input type="text" name="last_name" placeholder="Last Name" required />
+          <input type="text" name="first_name" placeholder="First Name" required />
+          <input type="text" name="last_name" placeholder="Last Name" required />
 
           <input type="email" name="email" placeholder="Email Address" required />
 
           <PhoneInput
             name="phone"
             placeholder="Phone Number"
+            defaultCountry="US"
+            international={true}
             value={phoneNumber}
             onChange={setPhoneNumber}/>
         </div>
@@ -140,7 +145,17 @@ const JoinForm = () => {
             <input type="checkbox" name="ncl" required/>
             I agree to the <a href="https://www.nycmesh.net/ncl.pdf" target="_blank" style={{color:"black"}}>Network Commons License</a>
           </label>
-        <Button type="submit" disabled={disableSubmitButton}>Submit</Button>
+        <div className={styles.centered}>
+          <Button
+            type="submit"
+            disabled={isLoading || submitted}
+            variant="contained"
+            size="large"
+            sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
+          >
+            { isLoading ? "Loading..." : (submitted ? "Thanks!" : "Submit") }
+          </Button>
+        </div>
       </form>
     </div>
     <ToastContainer />
