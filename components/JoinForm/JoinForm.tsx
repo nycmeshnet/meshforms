@@ -96,7 +96,7 @@ const JoinForm = () => {
       console.log("Could not submit Join Form:");
       toastErrorMessage(e);
       setIsLoading(false);
-      return
+      return;
     }
     setSubmitted(true);
     setIsLoading(false);
