@@ -18,7 +18,7 @@ import styles from './JoinForm.module.scss'
 import Select from 'react-select'
 import { useState } from "react";
 
-import Button from '@/components/Button/Button';
+import Button from "@mui/material/Button";
 
 const options = [
   { value: 'NY', label: 'New York' },
@@ -110,14 +110,16 @@ const JoinForm = () => {
         <p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>
         <div>
         <h3>Personal Info</h3>
-            <input type="text" name="first_name" placeholder="First Name" required />
-            <input type="text" name="last_name" placeholder="Last Name" required />
+          <input type="text" name="first_name" placeholder="First Name" required />
+          <input type="text" name="last_name" placeholder="Last Name" required />
 
           <input type="email" name="email" placeholder="Email Address" required />
 
           <PhoneInput
             name="phone"
             placeholder="Phone Number"
+            defaultCountry="US"
+            international={true}
             value={phoneNumber}
             onChange={setPhoneNumber}/>
         </div>
@@ -140,7 +142,17 @@ const JoinForm = () => {
             <input type="checkbox" name="ncl" required/>
             I agree to the <a href="https://www.nycmesh.net/ncl.pdf" target="_blank" style={{color:"black"}}>Network Commons License</a>
           </label>
-        <Button type="submit" disabled={disableSubmitButton}>Submit</Button>
+        <div className={styles.centered}>
+          <Button
+            type="submit"
+            disabled={disableSubmitButton}
+            variant="contained"
+            size="large"
+            sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
+          >
+            Submit
+          </Button>
+        </div>
       </form>
     </div>
     <ToastContainer />
