@@ -11,7 +11,7 @@ const Landing = () => {
     { text: "Query Form", link: "/query" },
     {
       text: "MeshDB Admin",
-      link: process.env.NEXT_PUBLIC_MESHDB_URL + "/admin/",
+      link: process.env.NEXT_PUBLIC_MESHDB_ADMIN,
     },
   ];
 
