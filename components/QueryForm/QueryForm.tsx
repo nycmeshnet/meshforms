@@ -47,7 +47,7 @@ export function QueryForm() {
 
       switch(queryForm.query_type) {
         case 'email_address':
-          route = 'member';
+          route = 'members';
           break;
         case 'street_address':
           console.log(queryForm.data);
@@ -56,11 +56,11 @@ export function QueryForm() {
             queryForm.query_type = 'zip_code';
           }
         case 'bin':
-          route = 'building';
+          route = 'buildings';
           break;
         case 'install_number':
         case 'network_number':
-          route = 'install';
+          route = 'installs';
           break;
       }
       console.log(queryForm);
@@ -101,9 +101,9 @@ export function QueryForm() {
     { field: "state", headerName: 'State', width: 80 },
     { field: "zip_code", headerName: 'Zip', width: 80 },
     { field: "name", headerName: 'Member Name', width: 250 },
-    { field: "email_address", headerName: 'Email', width: 300 },
+    { field: "primary_email_address", headerName: 'Email', width: 300 },
     { field: "stripe_email_address", headerName: 'Stripe Email', width: 300 },
-    { field: "secondary_emails", headerName: 'Secondary Email(s)', 
+    { field: "additional_email_addresses", headerName: 'Additional Email(s)', 
         editable: true,
         cellEditor: 'agLargeTextCellEditor',
         cellEditorPopup: true,
