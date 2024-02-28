@@ -1,20 +1,15 @@
 "use client";
 
-import { useFormState } from "react-dom";
-import { useFormStatus } from "react-dom";
 import { JoinFormInput, submitJoinForm } from "@/app/api";
-import { useRouter } from 'next/navigation';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { E164Number } from 'libphonenumber-js/core';
-import { ErrorBoundary } from "react-error-boundary";
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import styles from './JoinForm.module.scss'
 
-// import { SubmitHandler, useForm } from 'react-hook-form'
 import Select from 'react-select'
 import { FormEvent, useState } from "react";
 
@@ -24,21 +19,6 @@ const options = [
   { value: 'NY', label: 'New York' },
   { value: 'NJ', label: 'New Jersey' },
 ]
-
-// FIXME: I have no idea how this works. I think this is some
-// handleSubmit meme
- interface Fields {
-   first_name: string
-   last_name: string
-   email: string
-   phone: string
-   street_address: string
-   apartment: string
-   city: string
-   state: string
-   roof_access: boolean
-   referral: string
- }
 
 const JoinForm = () => {
   function parseForm(event: FormEvent<HTMLFormElement>) {
