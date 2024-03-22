@@ -70,6 +70,7 @@ export function QueryForm() {
         queryForm.data,
         queryForm.password
       );
+      console.log('response is:');
       console.log(resp);
       if (resp.length === 0) {
         toast.warning('Query returned no results.', {
@@ -78,7 +79,7 @@ export function QueryForm() {
         setIsLoading(false);
         return;
       }
-      setQueryResult(resp);
+      setQueryResult(resp.results);
       toast.success('Success!', {
         hideProgressBar: true,
       });
