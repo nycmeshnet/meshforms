@@ -60,8 +60,8 @@ export type QueryFormInput = z.infer<typeof QueryFormInput>
 
 export const QueryFormResponse = z.object({
   count: z.number(),
-  next: z.object({}).nullable(),
-  previous: z.object({}).nullable(),
+  next: z.string().nullable(),
+  previous: z.string().nullable(),
   results: z.array(z.object({
     install_number: z.number(),
     street_address: z.string().nullable(),
