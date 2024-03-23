@@ -4,6 +4,10 @@ if (process.env.NEXT_PUBLIC_MESHDB_URL === undefined) {
   throw new Error('Expected API url environment variable');
 }
 
+//if (process.env.MESHDB_TOKEN === undefined) {
+//  throw new Error('Expected API token environment variable');
+//}
+
 const API_BASE = new URL(process.env.NEXT_PUBLIC_MESHDB_URL as string + "/api/v1/");
 
 export const JoinFormInput = z.object({
@@ -54,7 +58,11 @@ export const QueryFormInput = z.object({
 })
 export type QueryFormInput = z.infer<typeof QueryFormInput>
 
-export const QueryFormResponse = z.array(z.object({
+export const QueryFormResponse = z.object({
+  count: z.number(),
+  next: z.string().nullable(),
+  previous: z.string().nullable(),
+  results: z.array(z.object({
     install_number: z.number(),
     street_address: z.string().nullable(),
     unit: z.string(),
@@ -67,8 +75,9 @@ export const QueryFormResponse = z.array(z.object({
     additional_email_addresses: z.array(z.string()).nullable(),
     notes: z.string(),
     network_number: z.number().nullable(),
-    install_status: z.string(),
-}))
+    status: z.string(),
+  }))
+})
 export type QueryFormResponse = z.infer<typeof QueryFormResponse>
 
 const get = async <S extends z.Schema>(url: string, schema: S, auth?: string, nextOptions?: NextFetchRequestConfig): Promise<ReturnType<S['parse']>> => {
@@ -102,4 +111,4 @@ const post = async <S extends z.Schema>(url: string, schema: S, input: unknown, 
 export const submitJoinForm = (input: JoinFormInput) => post(`/api/v1/join/`, JoinFormResponse, JoinFormInput.parse(input))
 export const submitNNAssignForm = (input: NNAssignFormInput) => post(`/api/v1/nn-assign/`, NNAssignFormResponse, NNAssignFormInput.parse(input))
 
-export const submitQueryForm = (route: string, input_type: string, input: string, password: string) => get(`/api/v1/query/${route}/?${input_type}=${input}&password=${password}`, QueryFormResponse)
+export const submitQueryForm = (route: string, input_type: string, input: string, password: string) => get(`/api/v1/query/${route}/?${input_type}=${input}`, QueryFormResponse, password)
