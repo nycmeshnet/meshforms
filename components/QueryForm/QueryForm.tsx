@@ -102,6 +102,7 @@ export function QueryForm() {
     { field: "state", headerName: 'State', width: 80 },
     { field: "zip_code", headerName: 'Zip', width: 80 },
     { field: "name", headerName: 'Member Name', width: 250 },
+    { field: "phone_number", headerName: 'Phone Number', width: 250 },
     { field: "primary_email_address", headerName: 'Email', width: 300 },
     { field: "stripe_email_address", headerName: 'Stripe Email', width: 300 },
     { field: "additional_email_addresses", headerName: 'Additional Email(s)', 

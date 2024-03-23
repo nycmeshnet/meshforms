@@ -70,6 +70,7 @@ export const QueryFormResponse = z.object({
     state: z.string(),
     zip_code: z.string(),
     name: z.string(),
+    phone_number: z.string().nullable(),
     primary_email_address: z.string().nullable(),
     stripe_email_address: z.string().nullable(),
     additional_email_addresses: z.array(z.string()).nullable(),
