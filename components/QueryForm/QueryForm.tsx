@@ -72,7 +72,7 @@ export function QueryForm() {
       );
       console.log('response is:');
       console.log(resp);
-      if (resp.length === 0) {
+      if (resp.results.length === 0) {
         toast.warning('Query returned no results.', {
           hideProgressBar: true,
         });
