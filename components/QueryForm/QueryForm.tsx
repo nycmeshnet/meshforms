@@ -84,7 +84,9 @@ export function QueryForm() {
       }
       if (queryForm.legacy === "on") {
         setTableVisible(false);
-        setLegacyQueryResults("chom");
+        let lqr = ""
+        resp.results.forEach((r) => lqr += `${r.install_number}, ${r.address}, ${r.city}, ${r.state}, ${r.zip_code}, ${r.unit}, ${r.name}, ${r.primary_email_address}, ${r.stripe_email_address}, ${r.phone_number}`)
+        setLegacyQueryResults(lqr);
       } else {
         setTableVisible(true);
         setQueryResult(resp.results);
