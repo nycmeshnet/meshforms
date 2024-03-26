@@ -52,6 +52,7 @@ export type NNAssignFormResponse = z.infer<typeof NNAssignFormResponse>
 
 export const QueryFormInput = z.object({
   //route: z.string(),
+  legacy: z.string().optional(),
   query_type: z.string(),
   data: z.string(),
   password: z.string(), // TODO: Salt/hash/whatever this

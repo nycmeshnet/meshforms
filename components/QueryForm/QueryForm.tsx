@@ -25,6 +25,8 @@ import styles from './QueryForm.module.scss'
 
 export function QueryForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [tableVisible, setTableVisible] = useState(false);
+  const [legacyQueryResults, setLegacyQueryResults] = useState("");
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
   const [queryResult, setQueryResult] = useState<unknown>([]);
 
@@ -71,8 +73,8 @@ export function QueryForm() {
         queryForm.data,
         queryForm.password
       );
-      console.log('response is:');
-      console.log(resp);
+      //console.log('response is:');
+      //console.log(resp);
       if (resp.results.length === 0) {
         toast.warning('Query returned no results.', {
           hideProgressBar: true,
@@ -80,7 +82,13 @@ export function QueryForm() {
         setIsLoading(false);
         return;
       }
-      setQueryResult(resp.results);
+      if (queryForm.legacy === "on") {
+        setTableVisible(false);
+        setLegacyQueryResults("chom");
+      } else {
+        setTableVisible(true);
+        setQueryResult(resp.results);
+      }
       toast.success('Success!', {
         hideProgressBar: true,
       });
@@ -153,6 +161,10 @@ const defaultColDef: ColDef = useMemo(() => {
             <input type="password" name="password" placeholder="Password" required />
           </div>
           <div className={styles.centered}>
+            <label>
+            <input type="checkbox" name="legacy"/>
+            Use legacy join form format
+            </label>
             <Button
               type="submit"
               disabled={isLoading}
@@ -162,32 +174,27 @@ const defaultColDef: ColDef = useMemo(() => {
             >
               { isLoading ? "Loading..." : "Submit" }
             </Button>
-            <Button
-              type="submit"
-              value="legacy"
-              disabled={isLoading}
-              variant="outlined"
-              color="info"
-              size="large"
-              sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
-            >
-              { isLoading ? "Loading..." : "Legacy" }
-            </Button>
           </div>
       </form>
     </div>
-    <strong>Double-click to select/expand. Scroll for more!</strong>
-    <br/>
-    <br/>
-    <div className={styles.queryResultTable}>
-      <div className={"ag-theme-quartz"} style={{ width: '100%', minHeight: '400px', overflow: 'auto'}}>
-        <AgGridReact
-          domLayout={'print'}
-          rowData={queryResult as any[]}
-          columnDefs={colDefs as any[]}
-          defaultColDef={defaultColDef}
-          enableCellTextSelection={true}
-        />
+
+    <p hidden={tableVisible}>
+      {legacyQueryResults}
+    </p>
+    <div hidden={!tableVisible}>
+      <strong>Double-click to select/expand. Scroll for more!</strong>
+      <br/>
+      <br/>
+      <div id="queryResultTable" className={styles.queryResultTable}>
+        <div className={"ag-theme-quartz"} style={{ width: '100%', minHeight: '400px', overflow: 'auto'}}>
+          <AgGridReact
+            domLayout={'print'}
+            rowData={queryResult as any[]}
+            columnDefs={colDefs as any[]}
+            defaultColDef={defaultColDef}
+            enableCellTextSelection={true}
+          />
+        </div>
       </div>
     </div>
     <ToastContainer />
