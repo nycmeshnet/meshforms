@@ -41,6 +41,7 @@ export function QueryForm() {
   async function sendForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
+    console.log(event);
     try {
       const queryForm: QueryFormInput = parseForm(event);
       let route: string = '';
@@ -160,6 +161,17 @@ const defaultColDef: ColDef = useMemo(() => {
               sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
             >
               { isLoading ? "Loading..." : "Submit" }
+            </Button>
+            <Button
+              type="submit"
+              value="legacy"
+              disabled={isLoading}
+              variant="outlined"
+              color="info"
+              size="large"
+              sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
+            >
+              { isLoading ? "Loading..." : "Legacy" }
             </Button>
           </div>
       </form>
