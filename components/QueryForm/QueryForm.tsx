@@ -67,7 +67,7 @@ export function QueryForm() {
           break;
       }
       console.log(queryForm);
-      const resp = await submitQueryForm(
+      let resp = await submitQueryForm(
         route,
         queryForm.query_type,
         queryForm.data,
@@ -84,6 +84,15 @@ export function QueryForm() {
         setIsLoading(false);
         return;
       }
+   
+      // Crappy hack to change `Request Received` to `-`
+      resp.results = resp.results.map(obj => {
+          if (obj.status === "Request Received") {
+              return { ...obj, status: "-" };
+          } else {
+              return obj;
+          }
+      });
 
       // Check if we wanna use the legacy query form
       if (queryForm.legacy === "on") {
@@ -189,7 +198,7 @@ const defaultColDef: ColDef = useMemo(() => {
       <ul style={{ listStyleType: 'none'}}>
         {legacyQueryResults.map((r, key) => {
             return (
-                <li>{r.install_number}, {r.street_address}, {r.city}, {r.state}, {r.zip_code}, {r.unit}, {r.name}, {r.primary_email_address}, {r.stripe_email_address}, {r.phone_number}, {r.install_status}</li>
+                <li>{r.install_number}, {r.street_address}, {r.city}, {r.state}, {r.zip_code}, {r.unit}, {r.name}, {r.primary_email_address}, {r.stripe_email_address}, {r.phone_number}, {r.status}</li>
             )
         })}
       </ul>
