@@ -26,7 +26,7 @@ import styles from './QueryForm.module.scss'
 export function QueryForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [tableVisible, setTableVisible] = useState(false);
-  const [legacyQueryResults, setLegacyQueryResults] = useState("");
+  const [legacyQueryResults, setLegacyQueryResults] = useState<QueryFormResponse[]>([]);
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
   const [queryResult, setQueryResult] = useState<unknown>([]);
 
@@ -73,8 +73,10 @@ export function QueryForm() {
         queryForm.data,
         queryForm.password
       );
-      //console.log('response is:');
-      //console.log(resp);
+      console.log('response is:');
+      console.log(resp);
+
+      // If the query was empty, complain and bail
       if (resp.results.length === 0) {
         toast.warning('Query returned no results.', {
           hideProgressBar: true,
@@ -82,15 +84,17 @@ export function QueryForm() {
         setIsLoading(false);
         return;
       }
+
+      // Check if we wanna use the legacy query form
       if (queryForm.legacy === "on") {
+        setLegacyQueryResults(resp.results);
         setTableVisible(false);
-        let lqr = ""
-        resp.results.forEach((r) => lqr += `${r.install_number}, ${r.address}, ${r.city}, ${r.state}, ${r.zip_code}, ${r.unit}, ${r.name}, ${r.primary_email_address}, ${r.stripe_email_address}, ${r.phone_number}`)
-        setLegacyQueryResults(lqr);
       } else {
         setTableVisible(true);
         setQueryResult(resp.results);
       }
+
+      // Notify user of success
       toast.success('Success!', {
         hideProgressBar: true,
       });
@@ -180,9 +184,16 @@ const defaultColDef: ColDef = useMemo(() => {
       </form>
     </div>
 
-    <p hidden={tableVisible}>
-      {legacyQueryResults}
-    </p>
+    <div hidden={tableVisible} style={{fontFamily: "monospace"}}>
+      <strong>Install # /  Address / City / State / ZIP / Unit / Name / Email Address / Stripe Email / Phone</strong>
+      <ul style={{ listStyleType: 'none'}}>
+        {legacyQueryResults.map((r, key) => {
+            return (
+                <li>{r.install_number}, {r.street_address}, {r.city}, {r.state}, {r.zip_code}, {r.unit}, {r.name}, {r.primary_email_address}, {r.stripe_email_address}, {r.phone_number}, {r.install_status}</li>
+            )
+        })}
+      </ul>
+    </div>
     <div hidden={!tableVisible}>
       <strong>Double-click to select/expand. Scroll for more!</strong>
       <br/>
