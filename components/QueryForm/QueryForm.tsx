@@ -26,7 +26,7 @@ import styles from './QueryForm.module.scss'
 export function QueryForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [tableVisible, setTableVisible] = useState(false);
-  const [legacyQueryResults, setLegacyQueryResults] = useState<QueryFormResponse.results>([]);
+  const [legacyQueryResults, setLegacyQueryResults] = useState<QueryFormResponse["results"]>([]);
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
   const [queryResult, setQueryResult] = useState<unknown>([]);
 
