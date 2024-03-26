@@ -1,6 +1,6 @@
 'use client'
 
-import { QueryFormInput, submitQueryForm } from "@/app/api";
+import { QueryFormInput, QueryFormResponse, submitQueryForm } from "@/app/api";
 import Button from "@mui/material/Button";
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from 'react-toastify';
@@ -26,7 +26,7 @@ import styles from './QueryForm.module.scss'
 export function QueryForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [tableVisible, setTableVisible] = useState(false);
-  const [legacyQueryResults, setLegacyQueryResults] = useState<QueryFormResponse[]>([]);
+  const [legacyQueryResults, setLegacyQueryResults] = useState<QueryFormResponse.results>([]);
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
   const [queryResult, setQueryResult] = useState<unknown>([]);
 
