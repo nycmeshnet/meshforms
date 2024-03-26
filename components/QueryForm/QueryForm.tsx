@@ -112,7 +112,7 @@ export function QueryForm() {
         /*cellEditorPopupPosition: 'over' as 'over',*/
     },
     { field: "network_number", headerName: 'NN', width: 80 },
-    { field: "install_status", headerName: 'Install Status', width: 160 },
+    { field: "status", headerName: 'Install Status', width: 160 },
     { field: "notes",
         headerName: 'Notes',
         width: 400,
