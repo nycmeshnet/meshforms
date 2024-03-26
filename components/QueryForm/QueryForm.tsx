@@ -1,6 +1,6 @@
 'use client'
 
-import { QueryFormInput, submitQueryForm } from "@/app/api";
+import { QueryFormInput, QueryFormResponse, submitQueryForm } from "@/app/api";
 import Button from "@mui/material/Button";
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,6 +25,8 @@ import styles from './QueryForm.module.scss'
 
 export function QueryForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [tableVisible, setTableVisible] = useState(false);
+  const [legacyQueryResults, setLegacyQueryResults] = useState<QueryFormResponse["results"]>([]);
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
   const [queryResult, setQueryResult] = useState<unknown>([]);
 
@@ -41,6 +43,7 @@ export function QueryForm() {
   async function sendForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setIsLoading(true);
+    console.log(event);
     try {
       const queryForm: QueryFormInput = parseForm(event);
       let route: string = '';
@@ -64,7 +67,7 @@ export function QueryForm() {
           break;
       }
       console.log(queryForm);
-      const resp = await submitQueryForm(
+      let resp = await submitQueryForm(
         route,
         queryForm.query_type,
         queryForm.data,
@@ -72,6 +75,8 @@ export function QueryForm() {
       );
       console.log('response is:');
       console.log(resp);
+
+      // If the query was empty, complain and bail
       if (resp.results.length === 0) {
         toast.warning('Query returned no results.', {
           hideProgressBar: true,
@@ -79,7 +84,26 @@ export function QueryForm() {
         setIsLoading(false);
         return;
       }
-      setQueryResult(resp.results);
+   
+      // Crappy hack to change `Request Received` to `-`
+      resp.results = resp.results.map(obj => {
+          if (obj.status === "Request Received") {
+              return { ...obj, status: "-" };
+          } else {
+              return obj;
+          }
+      });
+
+      // Check if we wanna use the legacy query form
+      if (queryForm.legacy === "on") {
+        setLegacyQueryResults(resp.results);
+        setTableVisible(false);
+      } else {
+        setTableVisible(true);
+        setQueryResult(resp.results);
+      }
+
+      // Notify user of success
       toast.success('Success!', {
         hideProgressBar: true,
       });
@@ -152,6 +176,10 @@ const defaultColDef: ColDef = useMemo(() => {
             <input type="password" name="password" placeholder="Password" required />
           </div>
           <div className={styles.centered}>
+            <label>
+            <input type="checkbox" name="legacy"/>
+            Use legacy join form format
+            </label>
             <Button
               type="submit"
               disabled={isLoading}
@@ -164,18 +192,31 @@ const defaultColDef: ColDef = useMemo(() => {
           </div>
       </form>
     </div>
-    <strong>Double-click to select/expand. Scroll for more!</strong>
-    <br/>
-    <br/>
-    <div className={styles.queryResultTable}>
-      <div className={"ag-theme-quartz"} style={{ width: '100%', minHeight: '400px', overflow: 'auto'}}>
-        <AgGridReact
-          domLayout={'print'}
-          rowData={queryResult as any[]}
-          columnDefs={colDefs as any[]}
-          defaultColDef={defaultColDef}
-          enableCellTextSelection={true}
-        />
+
+    <div hidden={tableVisible} style={{fontFamily: "monospace"}}>
+      <strong>Install # /  Address / City / State / ZIP / Unit / Name / Email Address / Stripe Email / Phone</strong>
+      <ul style={{ listStyleType: 'none'}}>
+        {legacyQueryResults.map((r, key) => {
+            return (
+                <li>{r.install_number}, {r.street_address}, {r.city}, {r.state}, {r.zip_code}, {r.unit}, {r.name}, {r.primary_email_address}, {r.stripe_email_address}, {r.phone_number}, {r.status}</li>
+            )
+        })}
+      </ul>
+    </div>
+    <div hidden={!tableVisible}>
+      <strong>Double-click to select/expand. Scroll for more!</strong>
+      <br/>
+      <br/>
+      <div id="queryResultTable" className={styles.queryResultTable}>
+        <div className={"ag-theme-quartz"} style={{ width: '100%', minHeight: '400px', overflow: 'auto'}}>
+          <AgGridReact
+            domLayout={'print'}
+            rowData={queryResult as any[]}
+            columnDefs={colDefs as any[]}
+            defaultColDef={defaultColDef}
+            enableCellTextSelection={true}
+          />
+        </div>
       </div>
     </div>
     <ToastContainer />
