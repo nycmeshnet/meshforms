@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Dependencies 
-        run: npm install
+        run: npm ci
       - name: Build Next.js app
         env:
           NEXT_PUBLIC_MESHDB_URL: http://127.0.0.1:8000/
