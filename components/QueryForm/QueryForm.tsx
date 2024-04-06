@@ -25,7 +25,7 @@ import styles from './QueryForm.module.scss'
 
 export function QueryForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const [tableVisible, setTableVisible] = useState(false);
+  const [tableVisible, setTableVisible] = useState(true);
   const [legacyQueryResults, setLegacyQueryResults] = useState<QueryFormResponse["results"]>([]);
   const [queryLabel, setQueryLabel] = useState('Select Query Type');
   const [queryResult, setQueryResult] = useState<unknown>([]);
@@ -193,12 +193,12 @@ const defaultColDef: ColDef = useMemo(() => {
       </form>
     </div>
 
-    <div hidden={tableVisible} style={{fontFamily: "monospace"}}>
-      <strong>Install # /  Address / City / State / ZIP / Unit / Name / Email Address / Stripe Email / Phone</strong>
+    <div hidden={tableVisible} style={{fontFamily: "monospace", fontSize: "12px", width: "100%"}}>
+      <strong>Install # /  Address / City / State / ZIP / Unit / Name / Email Address / Stripe Email / Phone / NN / Status</strong>
       <ul style={{ listStyleType: 'none'}}>
         {legacyQueryResults.map((r, key) => {
             return (
-                <li>{r.install_number}, {r.street_address}, {r.city}, {r.state}, {r.zip_code}, {r.unit}, {r.name}, {r.primary_email_address}, {r.stripe_email_address}, {r.phone_number}, {r.status}</li>
+                <li>{r.install_number}, {r.street_address}, {r.city}, {r.state}, {r.zip_code}, {r.unit}, {r.name}, {r.primary_email_address}, {r.stripe_email_address}, {r.phone_number}, {r.network_number}, {r.status}</li>
             )
         })}
       </ul>
