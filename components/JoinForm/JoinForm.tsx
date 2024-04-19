@@ -90,7 +90,8 @@ const JoinForm = () => {
     <div className={styles.formBody}>
       <form onSubmit={sendForm}>
         <h2>Join NYC Mesh</h2>
-        <p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>
+        <!--<p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>-->
+        <p>This form is not production ready. Please fill out <a href="https://www.nycmesh.net/join">this form</a> instead.</p>
         <div>
         <h3>Personal Info</h3>
           <input type="text" name="first_name" placeholder="First Name" required />
