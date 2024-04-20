@@ -127,7 +127,7 @@ export function QueryForm() {
     { field: "zip_code", headerName: 'Zip', width: 80 },
     { field: "name", headerName: 'Member Name', width: 250 },
     {
-      field: "phone_number", headerName: 'Phone Number', width: 250, cellRenderer: props => {
+      field: "phone_number", headerName: 'Phone Number', width: 250, cellRenderer: (props: any) => {
         return (
           <a href={"tel:" + props.value}>
             {props.value}
@@ -136,7 +136,7 @@ export function QueryForm() {
       }
     },
     {
-      field: "primary_email_address", headerName: 'Email', width: 300, cellRenderer: props => {
+      field: "primary_email_address", headerName: 'Email', width: 300, cellRenderer: (props: any) => {
         return (
           <a href={"mailto:" + props.value}>
             {props.value}
@@ -145,7 +145,7 @@ export function QueryForm() {
       }
     },
     {
-      field: "stripe_email_address", headerName: 'Stripe Email', width: 300, cellRenderer: props => {
+      field: "stripe_email_address", headerName: 'Stripe Email', width: 300, cellRenderer: (props: any) => {
         return (
           <a href={"mailto:" + props.value}>
             {props.value}
