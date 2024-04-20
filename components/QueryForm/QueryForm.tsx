@@ -126,9 +126,33 @@ export function QueryForm() {
     { field: "state", headerName: 'State', width: 80 },
     { field: "zip_code", headerName: 'Zip', width: 80 },
     { field: "name", headerName: 'Member Name', width: 250 },
-    { field: "phone_number", headerName: 'Phone Number', width: 250 },
-    { field: "primary_email_address", headerName: 'Email', width: 300 },
-    { field: "stripe_email_address", headerName: 'Stripe Email', width: 300 },
+    {
+      field: "phone_number", headerName: 'Phone Number', width: 250, cellRenderer: props => {
+        return (
+          <a href={"tel:" + props.value}>
+            {props.value}
+          </a>
+        );
+      }
+    },
+    {
+      field: "primary_email_address", headerName: 'Email', width: 300, cellRenderer: props => {
+        return (
+          <a href={"mailto:" + props.value}>
+            {props.value}
+          </a>
+        );
+      }
+    },
+    {
+      field: "stripe_email_address", headerName: 'Stripe Email', width: 300, cellRenderer: props => {
+        return (
+          <a href={"mailto:" + props.value}>
+            {props.value}
+          </a>
+        );
+      }
+    },
     { field: "additional_email_addresses", headerName: 'Additional Email(s)', 
         editable: true,
         cellEditor: 'agLargeTextCellEditor',
@@ -198,7 +222,7 @@ const defaultColDef: ColDef = useMemo(() => {
       <ul style={{ listStyleType: 'none'}}>
         {legacyQueryResults.map((r, key) => {
             return (
-                <li>{r.install_number}, {r.street_address}, {r.city}, {r.state}, {r.zip_code}, {r.unit}, {r.name}, {r.primary_email_address}, {r.stripe_email_address}, {r.phone_number}, {r.network_number}, {r.status}</li>
+              <li>{r.install_number}, {r.street_address}, {r.city}, {r.state}, {r.zip_code}, {r.unit}, {r.name}, <a href={"mailto:" + r.primary_email_address}>{r.primary_email_address}</a>, <a href={"mailto:" + r.stripe_email_address}>{r.stripe_email_address}</a>, <a href={"tel:" + r.phone_number}>{r.phone_number}</a>, {r.network_number}, {r.status}</li>
             )
         })}
       </ul>
