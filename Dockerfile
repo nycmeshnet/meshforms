@@ -30,6 +30,11 @@ ENV NEXT_TELEMETRY_DISABLED 1
 # PSA: This is publically readable in the docker registry. Not a problem, since
 # it's a public URL anyway, but definitely don't do this with actually sensitive
 # data like an API key.
+
+# The reason we do this is because we're submitting the join form on the client side, and
+# NextJS won't let us update this arg at runtime like that. Part of the "accept everyhing"
+# work could (should) be to make the client talk to the meshforms server, then we can
+# control this (and talk to meshdb via the cluster!)
 ARG MESHDB_URL 
 ENV NEXT_PUBLIC_MESHDB_URL=${MESHDB_URL}
 

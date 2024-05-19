@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: meshforms-config
+  namespace: {{ .Values.meshforms_app_namespace }}
+data:
+  NEXT_PUBLIC_MESHDB_URL: {{ .Values.meshforms.next_public_meshdb_url }}
+

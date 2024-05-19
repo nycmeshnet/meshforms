@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "meshforms.fullname" . }}-test-connection"
+  labels:
+    {{- include "meshforms.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "meshforms.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
