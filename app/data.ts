@@ -30,7 +30,6 @@ export async function recordJoinFormSubmissionToCSV(submission: JoinFormInput) {
 }
 
 async function uploadJoinFormLogToS3() {
-  console.log("New S3 Client");
   const s3Client = new S3Client({
     region: S3_REGION,
     credentials: {
@@ -40,7 +39,7 @@ async function uploadJoinFormLogToS3() {
     endpoint: S3_ENDPOINT,
   });
 
-  readFile(JOIN_FORM_LOG, (err, data) => {
+  readFile(JOIN_FORM_LOG, async (err, data) => {
     if (err) throw err;
     const command = new PutObjectCommand({
       Bucket: S3_BUCKET_NAME,
@@ -49,7 +48,7 @@ async function uploadJoinFormLogToS3() {
     });
 
     try {
-      const response = s3Client.send(command);
+      const response = await s3Client.send(command);
       console.log(response);
     } catch (err) {
       console.error(err);
