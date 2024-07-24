@@ -27,7 +27,8 @@ export async function recordJoinFormSubmissionToCSV(submission: JoinFormInput) {
   });
 }
 
-async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
+// Records the submission we just got as a JSON object in an S3 bucket.
+export async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
   const s3Client = new S3Client({
     region: S3_REGION,
     credentials: {
@@ -51,6 +52,8 @@ async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
       console.log(response);
     } catch (err) {
       console.error(err);
+      // Record the submission to a local CSV file *just in case*
+      recordJoinFormSubmissionToCSV(submission);
     }
   
 }

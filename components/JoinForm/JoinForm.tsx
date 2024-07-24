@@ -1,7 +1,7 @@
 "use client";
 
 import { JoinFormInput, submitJoinForm } from "@/app/api";
-import { recordJoinFormSubmissionToCSV } from "@/app/data";
+import { recordJoinFormSubmissionToS3 } from "@/app/data";
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input/input';
 import { E164Number } from 'libphonenumber-js/core';
@@ -75,7 +75,7 @@ const JoinForm = () => {
       let parsedForm = parseForm(event);
       if (parsedForm === undefined) return;
       // If we were able to glean the form, then save it.
-      recordJoinFormSubmissionToCSV(parsedForm);
+      recordJoinFormSubmissionToS3(parsedForm);
       let j: JoinFormInput = parsedForm;
       console.log(j);
       await submitJoinForm(j);
