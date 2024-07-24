@@ -25,11 +25,9 @@ export async function recordJoinFormSubmissionToCSV(submission: JoinFormInput) {
     // Write the submission
     appendFileSync(JOIN_FORM_LOG, `${values}\n`);
   });
-
-  uploadJoinFormLogToS3();
 }
 
-async function uploadJoinFormLogToS3() {
+async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
   const s3Client = new S3Client({
     region: S3_REGION,
     credentials: {
@@ -39,12 +37,13 @@ async function uploadJoinFormLogToS3() {
     endpoint: S3_ENDPOINT,
   });
 
-  readFile(JOIN_FORM_LOG, async (err, data) => {
-    if (err) throw err;
-    const command = new PutObjectCommand({
+  // Thanks ChatGPT, eww...
+  const submissionKey = new Date().toISOString().replace(/[-:T]/g, '/').slice(0, 19);
+
+  const command = new PutObjectCommand({
       Bucket: S3_BUCKET_NAME,
-      Key: "join_form_log_date.csv",
-      Body: data,
+      Key: `join-form-submissions/${submissionKey}.json`,
+      Body: JSON.stringify(submission),
     });
 
     try {
@@ -53,6 +52,5 @@ async function uploadJoinFormLogToS3() {
     } catch (err) {
       console.error(err);
     }
-  });
   
 }
