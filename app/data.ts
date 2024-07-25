@@ -29,14 +29,26 @@ export async function recordJoinFormSubmissionToCSV(submission: JoinFormInput) {
 
 // Records the submission we just got as a JSON object in an S3 bucket.
 export async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
-  const s3Client = new S3Client({
-    region: S3_REGION,
-    credentials: {
-      accessKeyId: S3_ACCESS_KEY,
-      secretAccessKey: S3_SECRET_KEY,
-    },
-    endpoint: S3_ENDPOINT,
-  });
+  // Don't define endpoint if one is not passed
+  let s3Client;
+  if (S3_ENDPOINT != "" && S3_ENDPOINT != null) {
+    s3Client = new S3Client({
+      region: S3_REGION,
+      endpoint: S3_ENDPOINT,
+      credentials: {
+        accessKeyId: S3_ACCESS_KEY,
+        secretAccessKey: S3_SECRET_KEY,
+      },
+    });
+  } else {
+    s3Client = new S3Client({
+      region: S3_REGION,
+      credentials: {
+        accessKeyId: S3_ACCESS_KEY,
+        secretAccessKey: S3_SECRET_KEY,
+      },
+    });
+  }
 
   // Thanks ChatGPT, eww...
   const submissionKey = new Date().toISOString().replace(/[-:T]/g, '/').slice(0, 19);
