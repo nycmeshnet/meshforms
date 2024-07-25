@@ -2,6 +2,8 @@ name: Run Production Build
 
 on: [pull_request]
 
+permissions: read-all
+
 jobs:
   npm-run-build:
     runs-on: ubuntu-latest

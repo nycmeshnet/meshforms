@@ -2,11 +2,12 @@
 
 import { JoinFormInput, submitJoinForm } from "@/app/api";
 import 'react-phone-number-input/style.css';
-import PhoneInput from 'react-phone-number-input';
+import PhoneInput from 'react-phone-number-input/input';
 import { E164Number } from 'libphonenumber-js/core';
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { formatPhoneNumberIntl, parsePhoneNumber } from 'react-phone-number-input'
 
 import styles from './JoinForm.module.scss'
 
@@ -31,6 +32,13 @@ const JoinForm = () => {
         data[key] = value === 'on' ? true : false;
       } else if (key === 'zip') {
         data[key] = Number(value);
+      } else if (key === 'phone') {
+        const parsedPhone = parsePhoneNumber(value as string, "US");
+        if(parsedPhone?.number) {
+          data[key] = formatPhoneNumberIntl(parsedPhone?.number)
+        } else {
+          data[key] = value;
+        }
       } else {
         data[key] = value;
       }
@@ -103,7 +111,6 @@ const JoinForm = () => {
             name="phone"
             placeholder="Phone Number"
             defaultCountry="US"
-            international={true}
             value={phoneNumber}
             onChange={setPhoneNumber}/>
         </div>
@@ -113,7 +120,7 @@ const JoinForm = () => {
           <input type="text" name="street_address" placeholder="Street Address" required />
           <input type="text" name="apartment" placeholder="Unit #" required />
           <input type="text" name="city" placeholder="City" required />
-          <Select name="state" placeholder="State" options={options} className={styles.drop} />
+          <Select name="state" placeholder="State" options={options} defaultValue={options[0]} className={styles.drop} required />
           <input type="number" name="zip" placeholder="Zip Code" required />
           <label>
             <input type="checkbox" name="roof_access"/>
