@@ -94,11 +94,12 @@ const JoinForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  /*<p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>*/
   return <>
     <div className={styles.formBody}>
       <form onSubmit={sendForm}>
         <h2>Join NYC Mesh</h2>
-        <p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>
+        <p style={{ backgroundColor: "yellow" }} >This form is not production ready. Please fill out <a href="https://www.nycmesh.net/join">this form</a> instead.</p>
         <div>
         <h3>Personal Info</h3>
           <input type="text" name="first_name" placeholder="First Name" required />
