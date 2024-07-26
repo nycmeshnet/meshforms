@@ -41,3 +41,7 @@ yarn-error.log*
 
 # IDEs
 .idea/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
