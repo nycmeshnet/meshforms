@@ -1,6 +1,7 @@
 "use client";
 
-import { JoinFormInput, submitJoinForm } from "@/app/api";
+import { submitJoinForm } from "@/app/api";
+import { JoinFormInput } from "@/app/io";
 import { recordJoinFormSubmissionToS3 } from "@/app/data";
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input/input';
