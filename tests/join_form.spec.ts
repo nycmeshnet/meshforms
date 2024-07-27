@@ -13,6 +13,7 @@ import { test, expect } from '@playwright/test';
 
 // This tests the actual form.
 test('happy join form', async ({ page }) => {
+  test.setTimeout(10000)
   await page.goto('/join');
 
   // Is the page title correct?
@@ -55,21 +56,18 @@ test('happy join form', async ({ page }) => {
     .getByPlaceholder('How did you hear about us?')
     .fill('I googled it.');
 
+  // Agree to the NCL
+  await page.locator("[name='ncl']").check();
   
   // Submit the join form
   await page
     .getByRole('button', { name: /Submit/i })
     .click();
+  
+  // Make sure that the submit button says "Thanks!"
+  await page.waitForTimeout(3000);
+  await expect(
+   page.locator("[name='submit_join_form']")
+  ).toHaveText('Thanks!');
 });
 
-/*
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
-
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
-});
-*/

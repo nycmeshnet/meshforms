@@ -143,6 +143,7 @@ const JoinForm = () => {
             variant="contained"
             size="large"
             sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
+            name="submit_join_form"
           >
             { isLoading ? "Loading..." : (submitted ? "Thanks!" : "Submit") }
           </Button>
