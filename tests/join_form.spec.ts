@@ -1,5 +1,7 @@
 import { JoinFormInput } from '@/app/io';
-import { test, expect, Page } from '@playwright/test';
+import { test, expect } from '@playwright/test';
+
+import { sampleData, fillOutJoinForm, submitSuccessExpected, submitFailureExpected } from '@/tests/util';
 
 // Integration tests for the Join Form.
 //
@@ -18,57 +20,6 @@ import { test, expect, Page } from '@playwright/test';
 // - Bad email
 // Can we mirror what meshdb does?
 
-async function fillOutJoinForm(page: Page, sampleData: JoinFormInput) {
-  // Set up some sample data
-
-  // Personal info
-  await page
-    .getByPlaceholder('First Name')
-    .fill(sampleData.first_name);
-  await page
-    .getByPlaceholder('Last Name')
-    .fill(sampleData.last_name);
-  await page
-    .getByPlaceholder('Email Address')
-    .fill(sampleData.email);
-  await page
-    .getByPlaceholder('Phone Number')
-    .fill(sampleData.phone);
-
-  // Address Info
-  await page
-    .getByPlaceholder('Street Address')
-    .fill(sampleData.street_address);
-
-  await page
-    .getByPlaceholder('Unit #')
-    .fill(sampleData.apartment);
-
-  await page
-    .getByPlaceholder('City')
-    .fill(sampleData.city);
-
-  await page
-    .getByPlaceholder('Zip Code')
-    .fill(sampleData.zip.toString());
-
-  // How did you hear about us?
-  await page
-    .getByPlaceholder('How did you hear about us?')
-    .fill(sampleData.referral);
-
-  // Agree to the NCL
-  if (sampleData.ncl) {
-    await page.locator("[name='ncl']").check();
-  }
-
-  // Roof Access
-  if (sampleData.roof_access) {
-    await page.locator("[name='roof_access']").check();
-  }
-}
-
-// This tests the actual form.
 test('happy join form', async ({ page }) => {
   test.setTimeout(10000)
   await page.goto('/join');
@@ -76,33 +27,75 @@ test('happy join form', async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  const sampleData: JoinFormInput = JoinFormInput.parse({
-    first_name: "Jon",
-    last_name: "Smith",
-    email: "js@gmail.com",
-    phone: "585-475-2411",
-    street_address: "876 Bergen St",
-    apartment: "7",
-    city: "Brooklyn",
-    state: "NY",
-    zip: 11238,
-    roof_access: true,
-    referral: "I googled it.",
-    ncl: true,
-  });
-
   // Set up sample data.
   await fillOutJoinForm(page, sampleData);
   
-  // Submit the join form
-  await page
-    .getByRole('button', { name: /Submit/i })
-    .click();
-  
-  // Make sure that the submit button says "Thanks!"
-  await page.waitForTimeout(3000);
-  await expect(
-   page.locator("[name='submit_join_form']")
-  ).toHaveText('Thanks!');
+  await submitSuccessExpected(page);
 });
+
+// Tests missing both first and last name
+test('missing name', async ({ page }) => {
+  test.setTimeout(10000)
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingNameData: JoinFormInput;
+
+  missingNameData = sampleData;
+  missingNameData.first_name = "";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingNameData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+
+  // Do it again with last name
+  missingNameData = sampleData;
+  missingNameData.last_name = "";
+  await fillOutJoinForm(page, missingNameData);
+  await submitFailureExpected(page);
+});
+
+
+test('missing address', async ({ page }) => {
+  test.setTimeout(10000)
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  // Set up sample data.
+  let missingAddressData: JoinFormInput;
+
+  missingAddressData = sampleData;
+  missingAddressData.street_address = "";
+  await fillOutJoinForm(page, missingAddressData);
+  await submitFailureExpected(page);
+
+  missingAddressData = sampleData;
+  missingAddressData.city = "";
+  await fillOutJoinForm(page, missingAddressData);
+  await submitFailureExpected(page);
+});
+
+// This one should pass
+test('missing unit number should pass', async ({ page }) => {
+  test.setTimeout(10000)
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  // Set up sample data.
+  let missingAddressData: JoinFormInput;
+
+  missingAddressData = sampleData;
+  missingAddressData.apartment = "";
+  await fillOutJoinForm(page, missingAddressData);
+  await submitSuccessExpected(page);
+});
+
 
