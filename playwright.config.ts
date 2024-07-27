@@ -25,28 +25,36 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
+    baseURL: 'http://127.0.0.1:3000',
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
 
   /* Configure projects for major browsers */
+  // XXX (willnilges): I don't care so much about testing per-browser functionality
+  // right now as much as I care about testing basic logic and such, so I'm gonna
+  // use what WOMM. I invite someone to get the others working locally in Docker
+  // or something.
   projects: [
+    /*
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+    */
 
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
 
+    /*
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+    */
 
     /* Test against mobile viewports. */
     // {
