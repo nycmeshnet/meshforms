@@ -56,3 +56,18 @@ To run a specific test, you can use `-g`:
 `npx playwright test -g 'missing name'`
 
 See the [docs](https://playwright.dev/docs/running-tests) for more information about playwright.
+
+If you get an error like this one:
+
+```
+[WebServer] [Error: ENOENT: no such file or directory, open '/home/wilnil/Code/nycmesh/meshforms/.next/BUILD_ID'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/wilnil/Code/nycmesh/meshforms/.next/BUILD_ID'
+}
+
+Error: Process from config.webServer was not able to start. Exit code: 1
+```
+
+Try running `npm run build`

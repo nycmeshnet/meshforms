@@ -1,6 +1,6 @@
 'use server'
 import { access, constants, appendFileSync, readFile } from 'node:fs';
-import { JoinFormInput } from "@/app/api";
+import { JoinFormInput } from "@/app/io";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 const JOIN_FORM_LOG = process.env.JOIN_FORM_LOG as string;
 
