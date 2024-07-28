@@ -76,7 +76,7 @@ const JoinForm = () => {
       let parsedForm = parseForm(event);
       if (parsedForm === undefined) return;
       // If we were able to glean the form, then save it.
-      recordJoinFormSubmissionToS3(parsedForm);
+      //recordJoinFormSubmissionToS3(parsedForm);
       let j: JoinFormInput = parsedForm;
       console.log(j);
       await submitJoinForm(j);

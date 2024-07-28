@@ -35,17 +35,17 @@ export default defineConfig({
   // use what WOMM. I invite someone to get the others working locally in Docker
   // or something.
   projects: [
-    /*
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    */
 
+    /*
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
+    */
 
     /*
     {

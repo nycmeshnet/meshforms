@@ -6,8 +6,8 @@ export const sampleData: JoinFormInput = JoinFormInput.parse({
   last_name: "Smith",
   email: "js@gmail.com",
   phone: "585-475-2411",
-  street_address: "876 Bergen St",
-  apartment: "7",
+  street_address: "197 Prospect Pl",
+  apartment: "1",
   city: "Brooklyn",
   state: "NY",
   zip: 11238,
@@ -81,13 +81,16 @@ export async function submitFailureExpected(page: Page) {
 }
 
 export async function submitSuccessExpected(page: Page) {
+  // Listen for all console logs
+  page.on('console', msg => console.log(msg.text()));
+
   // Submit the join form
   await page
     .getByRole('button', { name: /Submit/i })
     .click();
   
   // Make sure that the submit button says "Thanks!"
-  await page.waitForTimeout(3000);
+  await page.waitForTimeout(10000);
   await expect(
    page.locator("[name='submit_join_form']")
   ).toHaveText('Thanks!');

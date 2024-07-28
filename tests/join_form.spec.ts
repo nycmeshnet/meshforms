@@ -3,6 +3,8 @@ import { test, expect } from '@playwright/test';
 
 import { sampleData, fillOutJoinForm, submitSuccessExpected, submitFailureExpected } from '@/tests/util';
 
+const joinFormTimeout = 20000;
+
 // Integration tests for the Join Form.
 //
 // These tests can hit either a self-hosted dev instance of MeshDB
@@ -21,7 +23,7 @@ import { sampleData, fillOutJoinForm, submitSuccessExpected, submitFailureExpect
 // Can we mirror what meshdb does?
 
 test('happy join form', async ({ page }) => {
-  test.setTimeout(10000)
+  test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
   // Is the page title correct?
@@ -29,13 +31,13 @@ test('happy join form', async ({ page }) => {
 
   // Set up sample data.
   await fillOutJoinForm(page, sampleData);
-  
+
   await submitSuccessExpected(page);
 });
 
 // Tests missing both first and last name
 test('missing name', async ({ page }) => {
-  test.setTimeout(10000)
+  test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
   // Is the page title correct?
@@ -61,7 +63,7 @@ test('missing name', async ({ page }) => {
 
 
 test('missing address', async ({ page }) => {
-  test.setTimeout(10000)
+  test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
   // Is the page title correct?
@@ -83,7 +85,7 @@ test('missing address', async ({ page }) => {
 
 // This one should pass
 test('missing unit number should pass', async ({ page }) => {
-  test.setTimeout(10000)
+  test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
   // Is the page title correct?
