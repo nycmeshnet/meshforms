@@ -1,4 +1,5 @@
 name: Playwright Tests
+permissions: read-all
 on:
   push:
     branches: [ main, master ]
