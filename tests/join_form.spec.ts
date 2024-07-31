@@ -36,7 +36,7 @@ test('happy join form', async ({ page }) => {
 });
 
 // Tests missing both first and last name
-test('missing name', async ({ page }) => {
+test('fail missing name', async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
@@ -62,7 +62,7 @@ test('missing name', async ({ page }) => {
 });
 
 
-test('missing address', async ({ page }) => {
+test('fail missing address', async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
@@ -83,8 +83,12 @@ test('missing address', async ({ page }) => {
   await submitFailureExpected(page);
 });
 
-// This one should pass
-test('missing unit number should pass', async ({ page }) => {
+// This one should fail and here's why: It's really annoying when people
+// don't give us their apartment #, so we make it required at the expense
+// of those who live in houses. They can just write "house" or "N/A" or
+// something
+// TODO (wdn): Add a checkbox for my house-havers
+test('fail missing unit number', async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
@@ -97,7 +101,7 @@ test('missing unit number should pass', async ({ page }) => {
   missingAddressData = sampleData;
   missingAddressData.apartment = "";
   await fillOutJoinForm(page, missingAddressData);
-  await submitSuccessExpected(page);
+  await submitFailureExpected(page);
 });
 
 
