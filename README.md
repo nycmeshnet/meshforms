@@ -37,3 +37,37 @@ npm run dev
 ```
 
 Finally, open `http://127.0.0.1:3000` in your web browser to interact with your copy of the application
+
+# Testing
+
+We use `playwright` to do integration tests. You can run them with the following instructions:
+
+1. Setup a dev instance of [meshdb](https://github.com/nycmeshnet/meshdb)
+
+2. Copy `.env.sample` into `.env.local` and fill it out
+
+3. Run the integration tests with `npx playwright test`
+
+You can see what playwright is doing with `--headed`, and you can pause a test to
+examine the browser by inserting `page.pause()` in your test.
+
+To run a specific test, you can use `-g`:
+
+`npx playwright test -g 'missing name'`
+
+See the [docs](https://playwright.dev/docs/running-tests) for more information about playwright.
+
+If you get an error like this one:
+
+```
+[WebServer] [Error: ENOENT: no such file or directory, open '/home/wilnil/Code/nycmesh/meshforms/.next/BUILD_ID'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/wilnil/Code/nycmesh/meshforms/.next/BUILD_ID'
+}
+
+Error: Process from config.webServer was not able to start. Exit code: 1
+```
+
+Try running `npm run build`

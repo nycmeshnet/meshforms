@@ -1,6 +1,7 @@
 "use client";
 
-import { JoinFormInput, submitJoinForm } from "@/app/api";
+import { submitJoinForm } from "@/app/api";
+import { JoinFormInput } from "@/app/io";
 import { recordJoinFormSubmissionToS3 } from "@/app/data";
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input/input';
@@ -143,13 +144,16 @@ const JoinForm = () => {
             variant="contained"
             size="large"
             sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
+            name="submit_join_form"
           >
             { isLoading ? "Loading..." : (submitted ? "Thanks!" : "Submit") }
           </Button>
         </div>
       </form>
     </div>
+    <div className="toasty">
     <ToastContainer />
+    </div>
   </>
 }
 

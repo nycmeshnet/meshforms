@@ -1,6 +1,7 @@
 'use client'
 
-import { QueryFormInput, QueryFormResponse, submitQueryForm } from "@/app/api";
+import { submitQueryForm } from "@/app/api";
+import { QueryFormInput, QueryFormResponse } from "@/app/io";
 import Button from "@mui/material/Button";
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from 'react-toastify';
