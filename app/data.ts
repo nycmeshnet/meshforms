@@ -55,6 +55,7 @@ export async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
       console.error(err);
       // Record the submission to a local CSV file *just in case*
       recordJoinFormSubmissionToCSV(submission);
+      throw err;
     }
   
 }
