@@ -122,7 +122,7 @@ const JoinForm = () => {
         <div className={styles.block}>
           <h3>Address Info</h3>
           <input type="text" name="street_address" placeholder="Street Address" required />
-          <input type="text" name="apartment" placeholder="Unit #" />
+          <input type="text" name="apartment" placeholder="Unit #" required />
           <input type="text" name="city" placeholder="City" required />
           <Select name="state" placeholder="State" options={options} defaultValue={options[0]} className={styles.drop} required />
           <input type="number" name="zip" placeholder="Zip Code" required />
