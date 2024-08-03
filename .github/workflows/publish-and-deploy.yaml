@@ -2,7 +2,7 @@ name: Publish Docker Image
 
 on:
   push:
-    branches: [ main ]
+    branches: [ wdn/helm ] #FIXME!!!!!!!!!!!!!!!!!
 
 permissions: read-all
 
@@ -68,7 +68,7 @@ jobs:
       environment: dev3
       needs: push_to_registry
       runs-on: ubuntu-latest
-      if: github.ref == 'refs/heads/main'
+      #if: github.ref == 'refs/heads/main' # FIXME!!!!!!!!!!!!!!!!!!!
       steps:
       - name: Check out the repo
         uses: actions/checkout@v4
