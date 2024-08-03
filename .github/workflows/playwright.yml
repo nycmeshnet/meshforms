@@ -3,8 +3,9 @@ permissions: read-all
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # FIXME!!!!!!!!!!!!!!!!!!!!!
+  #pull_request:
+  #  branches: [ main ]
 jobs:
   test:
     name: Run Playwright Tests

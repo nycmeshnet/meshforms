@@ -33,7 +33,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: forms.mesh.nycmesh.net # This will get overridden. Set Values.ingress.hosts[0].host
+    - host: forms.mesh.nycmesh.net
       paths:
         - path: /
           pathType: Prefix 
