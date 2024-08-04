@@ -1,10 +1,9 @@
 name: Publish Docker Image
+permissions: read-all
 
 on:
   push:
     branches: [ wdn/helm ] #FIXME!!!!!!!!!!!!!!!!!
-
-permissions: read-all
 
 jobs:
   push_to_registry:
