@@ -12,7 +12,6 @@ jobs:
   deploy_to_env:
     name: Deploy to env
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     #needs: push_to_registry # FIXME!!!!!!!!!!!!!!!!!!!!!!!
     #if: github.ref == 'refs/heads/main' # FIXME!!!!!!!!!!!!!!!!!!!
     steps:
