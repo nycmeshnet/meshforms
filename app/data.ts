@@ -57,5 +57,4 @@ export async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
       recordJoinFormSubmissionToCSV(submission);
       throw err;
     }
-  
 }
