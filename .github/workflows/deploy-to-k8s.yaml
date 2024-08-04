@@ -9,8 +9,8 @@ on:
         type: string
 
 jobs:
-  deploy_to_env:
-    name: Deploy to env
+  deploy_to_k8s:
+    name: Deploy to k8s
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
