@@ -64,96 +64,13 @@ jobs:
       run: ssh ${{ secrets.GRANDSVC_SSH_TARGET }} "cd ${{ secrets.GRANDSVC_PROJECT_PATH }} && git pull && docker compose pull && docker compose up -d"
 
   deploy_to_dev3:
-    name: Deploy to dev3
+    name: Deploy to dev 3
     environment: dev3
-    #needs: push_to_registry # FIXME!!!!!!!!!!!!!!!!!!!!!!!
-    runs-on: ubuntu-latest
-    #if: github.ref == 'refs/heads/main' # FIXME!!!!!!!!!!!!!!!!!!!
-    steps:
-    - name: Check out the repo
-      uses: actions/checkout@v4
-
-    - name: Install SSH key
-      uses: shimataro/ssh-key-action@d4fffb50872869abe2d9a9098a6d9c5aa7d16be4 # v2
-      with:
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        name: id_ed25519 # optional
-        known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
-        if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
-
-    - name: Setup WireGuard
-      run:  |
-        sudo apt install wireguard
-        echo "${{ secrets.WIREGUARD_PRIVATE_KEY }}" > privatekey
-        sudo ip link add dev wg1 type wireguard
-        sudo ip address add dev wg1 ${{ secrets.WIREGUARD_OVERLAY_NETWORK_IP }} peer ${{ secrets.SSH_TARGET_IP }}
-        sudo wg set wg1 listen-port 48123 private-key privatekey peer ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }} allowed-ips 0.0.0.0/0 endpoint ${{ secrets.WIREGUARD_ENDPOINT }}
-        sudo ip link set up dev wg1
-
-    # TODO: Figure out of helm install/upgrade can take `--set` or some other
-    # configuration option
-    - name: Deploy Helm Chart
-      run: |
-        # Grab the kubeconfig, then use helm install from the github worker
-        # to install the chart. We have the tunnel leftover from earlier, so
-        # We can just hit the Kube API server directly.
-        # FIXME: Check if helm install will always work, and if it starts a deploy.
-        scp ${{ secrets.SSH_USER }}@${{ secrets.SSH_TARGET_IP }}:~/.kube/config ./
-
-        # Create the namespace if necessary
-        kubectl --kubeconfig ./config --server https://${{ secrets.SSH_TARGET_IP }}:6443 create namespace ${{ vars.APP_NAMESPACE }} || echo namespace already exists
-
-        # Install the chart with helm
-        helm upgrade --install --kubeconfig ./config --kube-apiserver https://${{ secrets.SSH_TARGET_IP }}:6443 -n ${{ vars.APP_NAMESPACE }} --create-namespace meshforms infra/helm/meshforms/ \
-        --set meshforms.meshdb_url="${{ vars.MESHDB_URL }}" \
-        --set meshforms_app_namespace="${{ vars.APP_NAMESPACE }}" \
-        --set aws.access_key="${{ secrets.S3_ACCESS_KEY }}" \
-        --set aws.secret_key="${{ secrets.S3_SECRET_KEY }}" \
-        --set meshforms.s3_bucket_name="${{ secrets.S3_BUCKET_NAME }}" \
-        --set meshforms.s3_base_name="${{ secrets.S3_BASE_NAME }}" \
-        --set ingress.hosts[0].host="${{ vars.INGRESS_HOST }}",ingress.hosts[0].paths[0].path=/,ingress.hosts[0].paths[0].pathType=Prefix
+    uses: ./.github/workflows/deploy-to-k8s.yaml
+    needs: push_to_registry
 
   deploy_to_prod1:
     name: Deploy to prod 1
-    environment: prod
-    needs: push_to_registry
-    runs-on: ubuntu-latest
+    environment: prod1
+    uses: ./.github/workflows/deploy-to-k8s.yaml
     if: github.ref == 'refs/heads/main'
-    steps:
-    - name: Check out the repo
-      uses: actions/checkout@v4
-  
-    - name: Install SSH key
-      uses: shimataro/ssh-key-action@d4fffb50872869abe2d9a9098a6d9c5aa7d16be4 # v2
-      with:
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        name: id_ed25519 # optional
-        known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
-        if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
-    
-    - name: Setup WireGuard
-      run:  |
-        sudo apt install wireguard
-        echo "${{ secrets.WIREGUARD_PRIVATE_KEY }}" > privatekey
-        sudo ip link add dev wg2 type wireguard
-        sudo ip address add dev wg2 ${{ secrets.WIREGUARD_OVERLAY_NETWORK_IP }} peer ${{ secrets.SSH_TARGET_IP }}
-        sudo wg set wg2 listen-port 48123 private-key privatekey peer ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }} allowed-ips 0.0.0.0/0 endpoint ${{ secrets.WIREGUARD_ENDPOINT }}
-        sudo ip link set up dev wg2
-    - name: Deploy Helm Chart
-      run: |
-        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_TARGET_IP }} "\
-          sudo bash -c '\
-            cd ${{ secrets.PROJECT_PATH }} && \
-            git pull && \
-            git checkout main && \
-            cd infra/helm/meshforms && \
-            helm template . -f values.yaml \
-              --set meshforms_app_namespace=\"${{ vars.APP_NAMESPACE }}\" \
-              --set aws.access_key_id=\"${{ secrets.S3_ACCESS_KEY }}\" \
-              --set aws.secret_access_key=\"${{ secrets.S3_ACCESS_KEY }}\" \
-              --set meshforms.s3_bucket_name=\"${{ secrets.S3_BUCKET_NAME }}\" \
-              --set meshforms.s3_base_name=\"${{ secrets.S3_BASE_NAME }}\" \
-              --set ingress.hosts[0].host=\"${{ vars.INGRESS_HOST }}\" \
-              | kubectl apply -f - && \
-            kubectl -n ${{ vars.APP_NAMESPACE }} rollout restart deploy \
-          '"
