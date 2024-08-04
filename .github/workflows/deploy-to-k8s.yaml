@@ -39,9 +39,6 @@ jobs:
         # Get the kubeconfig
         scp ${{ secrets.SSH_USER }}@${{ secrets.SSH_TARGET_IP }}:~/.kube/config ./
 
-        # Create the namespace if necessary
-        kubectl --kubeconfig ./config --server https://${{ secrets.SSH_TARGET_IP }}:6443 create namespace ${{ vars.APP_NAMESPACE }} || echo namespace already exists
-
         # Install the chart with helm
         helm upgrade --install --kubeconfig ./config --kube-apiserver https://${{ secrets.SSH_TARGET_IP }}:6443 -n ${{ vars.APP_NAMESPACE }} --create-namespace meshforms infra/helm/meshforms/ \
         --set meshforms.meshdb_url="${{ vars.MESHDB_URL }}" \

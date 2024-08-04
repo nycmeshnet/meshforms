@@ -42,7 +42,7 @@ spec:
               protocol: TCP
           envFrom:
           - secretRef:
-              name: meshforms-secrets
+              name: {{ .Chart.Name }}-secrets
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
