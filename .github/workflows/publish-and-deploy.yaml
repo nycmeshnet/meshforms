@@ -65,14 +65,16 @@ jobs:
   deploy_to_dev3:
     name: Deploy to dev 3
     uses: ./.github/workflows/deploy-to-k8s.yaml
-    environment: dev3
+    with:
+      environment: dev3
     secrets: inherit
     needs: push_to_registry
 
   deploy_to_prod1:
     name: Deploy to prod 1
     uses: ./.github/workflows/deploy-to-k8s.yaml
-    environment: prod1
+    with:
+      environment: prod1
     secrets: inherit
     needs: push_to_registry
     if: github.ref == 'refs/heads/main'
