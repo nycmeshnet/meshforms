@@ -12,7 +12,6 @@ jobs:
   deploy_to_env:
     name: Deploy to env
     #needs: push_to_registry # FIXME!!!!!!!!!!!!!!!!!!!!!!!
-    runs-on: ubuntu-latest
     #if: github.ref == 'refs/heads/main' # FIXME!!!!!!!!!!!!!!!!!!!
     steps:
     - name: Check out the repo
