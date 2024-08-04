@@ -31,8 +31,6 @@ ingress:
           pathType: Prefix 
   tls: []
 
-resources: {}
-
 livenessProbe:
   httpGet:
     path: /
@@ -41,14 +39,4 @@ readinessProbe:
   httpGet:
     path: /
     port: http
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-
-volumes: []
-
-volumeMounts: []
 
