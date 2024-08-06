@@ -5,9 +5,6 @@ metadata:
   labels:
     {{- include "meshforms.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "meshforms.selectorLabels" . | nindent 6 }}
@@ -42,7 +39,7 @@ spec:
               protocol: TCP
           envFrom:
           - secretRef:
-              name: meshforms-secrets
+              name: {{ .Chart.Name }}-secrets
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
