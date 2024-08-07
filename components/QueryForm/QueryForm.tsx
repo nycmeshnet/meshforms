@@ -12,8 +12,8 @@ import { useState, useMemo, FormEvent } from "react";
 const options = [
   { value: "street_address", label: "Address" },
   { value: "email_address", label: "Email" },
-  { value: "network_number", label: "Network Number" },
-  { value: "install_number", label: "Install Number" },
+  { value: "network_number", label: "Network Number (NN)" },
+  { value: "install_number", label: "Install Number (#)" },
   { value: "bin", label: "BIN" }
 ]
 
