@@ -117,6 +117,8 @@ const JoinForm = () => {
             defaultCountry="US"
             value={phoneNumber}
             onChange={setPhoneNumber}/>
+            
+          <input type="text" name="ContactPreference" placeholder="Contact Preference" required />
         </div>
 
         <div className={styles.block}>
