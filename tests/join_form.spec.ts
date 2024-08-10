@@ -1,7 +1,7 @@
 import { JoinFormInput, JoinFormResponse } from '@/app/io';
 import { test, expect } from '@playwright/test';
 
-import { sampleData, fillOutJoinForm, submitSuccessExpected, submitFailureExpected, mockJoinForm } from '@/tests/util';
+import { sampleData, fillOutJoinForm, submitSuccessExpected, submitFailureExpected, mockJoinAPIOnClient } from '@/tests/util';
 
 const joinFormTimeout = 10000;
 const unitTestTimeout = 5000;
@@ -9,7 +9,7 @@ const unitTestTimeout = 5000;
 // Unit tests for the Join Form.
 //
 // These tests will mock a connection to MeshDB. It is simply making sure that
-// the form creates a good-looking payload.
+// the form creates a good-looking payload and can hit a mock API.
 
 // TODO (wdn): I want to test
 // - Full cooperation with real address X
@@ -23,7 +23,7 @@ const unitTestTimeout = 5000;
 // Can we mirror what meshdb does?
 
 test('happy join form', async ({ page }) => {
-  mockJoinForm(page);
+  mockJoinAPIOnClient(page);
 
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
@@ -40,7 +40,7 @@ test('happy join form', async ({ page }) => {
 
 // Tests missing both first and last name
 test('fail missing name', async ({ page }) => {
-  mockJoinForm(page);
+  mockJoinAPIOnClient(page);
 
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
@@ -68,7 +68,7 @@ test('fail missing name', async ({ page }) => {
 
 
 test('fail missing address', async ({ page }) => {
-  mockJoinForm(page);
+  mockJoinAPIOnClient(page);
 
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
@@ -96,7 +96,7 @@ test('fail missing address', async ({ page }) => {
 // something
 // TODO (wdn): Add a checkbox for my house-havers
 test('fail missing unit number', async ({ page }) => {
-  mockJoinForm(page);
+  mockJoinAPIOnClient(page);
 
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');

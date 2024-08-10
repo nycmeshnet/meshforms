@@ -96,8 +96,8 @@ export async function submitSuccessExpected(page: Page, timeout: number = 10000)
   ).toHaveText('Thanks!');
 }
 
-export async function mockJoinForm(page: Page) {
-  await page.route('*/**/api/v1/join', async route => {
+export async function mockJoinAPIOnClient(page: Page) {
+  await page.route('*/**/api/v1/join/', async route => {
   const json: JoinFormResponse = JoinFormResponse.parse({
       message: "",
       building_id: 1000,
