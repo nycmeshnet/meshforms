@@ -16,6 +16,22 @@ export const sampleData: JoinFormInput = JoinFormInput.parse({
   ncl: true,
 });
 
+// The phone number is formatted differently
+export const expectedAPIRequestData: JoinFormInput = JoinFormInput.parse({
+  first_name: "Jon",
+  last_name: "Smith",
+  email: "js@gmail.com",
+  phone: "+1 585 475 2411",
+  street_address: "197 Prospect Pl",
+  apartment: "1",
+  city: "Brooklyn",
+  state: "NY",
+  zip: 11238,
+  roof_access: true,
+  referral: "I googled it.",
+  ncl: true,
+});
+
 export async function fillOutJoinForm(page: Page, sampleData: JoinFormInput) {
   // Set up some sample data
 
@@ -96,15 +112,3 @@ export async function submitSuccessExpected(page: Page, timeout: number = 10000)
   ).toHaveText('Thanks!');
 }
 
-export async function mockJoinAPIOnClient(page: Page) {
-  await page.route('*/**/api/v1/join/', async route => {
-  const json: JoinFormResponse = JoinFormResponse.parse({
-      message: "",
-      building_id: 1000,
-      member_id: 1001,
-      install_number: 1002,
-      member_exists: false,
-  });
-    await route.fulfill({ json });
-  });
-}

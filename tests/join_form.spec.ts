@@ -1,7 +1,7 @@
 import { JoinFormInput, JoinFormResponse } from '@/app/io';
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@/tests/mock/test';
 
-import { sampleData, fillOutJoinForm, submitSuccessExpected, submitFailureExpected, mockJoinAPIOnClient } from '@/tests/util';
+import { sampleData, fillOutJoinForm, submitSuccessExpected, submitFailureExpected } from '@/tests/util';
 
 const joinFormTimeout = 10000;
 const unitTestTimeout = 5000;
@@ -23,8 +23,6 @@ const unitTestTimeout = 5000;
 // Can we mirror what meshdb does?
 
 test('happy join form', async ({ page }) => {
-  mockJoinAPIOnClient(page);
-
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
@@ -40,8 +38,6 @@ test('happy join form', async ({ page }) => {
 
 // Tests missing both first and last name
 test('fail missing name', async ({ page }) => {
-  mockJoinAPIOnClient(page);
-
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
@@ -68,8 +64,6 @@ test('fail missing name', async ({ page }) => {
 
 
 test('fail missing address', async ({ page }) => {
-  mockJoinAPIOnClient(page);
-
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
@@ -96,8 +90,6 @@ test('fail missing address', async ({ page }) => {
 // something
 // TODO (wdn): Add a checkbox for my house-havers
 test('fail missing unit number', async ({ page }) => {
-  mockJoinAPIOnClient(page);
-
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
