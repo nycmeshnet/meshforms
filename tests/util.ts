@@ -1,4 +1,4 @@
-import { JoinFormInput } from '@/app/io';
+import { JoinFormInput, JoinFormResponse } from '@/app/io';
 import { expect, Page } from '@playwright/test';
 
 export const sampleData: JoinFormInput = JoinFormInput.parse({
@@ -80,7 +80,7 @@ export async function submitFailureExpected(page: Page) {
   ).toHaveText('Submit');
 }
 
-export async function submitSuccessExpected(page: Page) {
+export async function submitSuccessExpected(page: Page, timeout: number = 10000) {
   // Listen for all console logs
   page.on('console', msg => console.log(msg.text()));
 
@@ -90,8 +90,21 @@ export async function submitSuccessExpected(page: Page) {
     .click();
   
   // Make sure that the submit button says "Thanks!"
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(timeout);
   await expect(
    page.locator("[name='submit_join_form']")
   ).toHaveText('Thanks!');
+}
+
+export async function mockJoinForm(page: Page) {
+  await page.route('*/**/api/v1/join', async route => {
+  const json: JoinFormResponse = JoinFormResponse.parse({
+      message: "",
+      building_id: 1000,
+      member_id: 1001,
+      install_number: 1002,
+      member_exists: false,
+  });
+    await route.fulfill({ json });
+  });
 }

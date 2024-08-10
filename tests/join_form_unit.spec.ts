@@ -1,15 +1,15 @@
-import { JoinFormInput } from '@/app/io';
+import { JoinFormInput, JoinFormResponse } from '@/app/io';
 import { test, expect } from '@playwright/test';
 
-import { sampleData, fillOutJoinForm, submitSuccessExpected, submitFailureExpected } from '@/tests/util';
+import { sampleData, fillOutJoinForm, submitSuccessExpected, submitFailureExpected, mockJoinForm } from '@/tests/util';
 
-const joinFormTimeout = 20000;
+const joinFormTimeout = 10000;
+const unitTestTimeout = 5000;
 
-// Integration tests for the Join Form.
+// Unit tests for the Join Form.
 //
-// These tests can hit either a self-hosted dev instance of MeshDB
-// (See https://github.com/nycmeshnet/meshdb) or it can hit the beta
-// env.
+// These tests will mock a connection to MeshDB. It is simply making sure that
+// the form creates a good-looking payload.
 
 // TODO (wdn): I want to test
 // - Full cooperation with real address X
@@ -23,6 +23,8 @@ const joinFormTimeout = 20000;
 // Can we mirror what meshdb does?
 
 test('happy join form', async ({ page }) => {
+  mockJoinForm(page);
+
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
@@ -32,11 +34,14 @@ test('happy join form', async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, sampleData);
 
-  await submitSuccessExpected(page);
+  await submitSuccessExpected(page, unitTestTimeout);
 });
+
 
 // Tests missing both first and last name
 test('fail missing name', async ({ page }) => {
+  mockJoinForm(page);
+
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
@@ -63,6 +68,8 @@ test('fail missing name', async ({ page }) => {
 
 
 test('fail missing address', async ({ page }) => {
+  mockJoinForm(page);
+
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
@@ -89,6 +96,8 @@ test('fail missing address', async ({ page }) => {
 // something
 // TODO (wdn): Add a checkbox for my house-havers
 test('fail missing unit number', async ({ page }) => {
+  mockJoinForm(page);
+
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
 
@@ -103,5 +112,4 @@ test('fail missing unit number', async ({ page }) => {
   await fillOutJoinForm(page, missingAddressData);
   await submitFailureExpected(page);
 });
-
 

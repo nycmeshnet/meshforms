@@ -30,6 +30,11 @@ export async function recordJoinFormSubmissionToCSV(submission: JoinFormInput) {
 
 // Records the submission we just got as a JSON object in an S3 bucket.
 export async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
+  if (S3_ACCESS_KEY === undefined || S3_SECRET_KEY === undefined) {
+    console.error("S3 credentials not configured. I WILL NOT SAVE THIS SUBMISSION.");
+    return
+  }
+
   const s3Client = new S3Client({
     region: S3_REGION != undefined ? S3_REGION : "us-east-1",
     endpoint: S3_ENDPOINT != undefined ? S3_ENDPOINT : "https://s3.us-east-1.amazonaws.com",
