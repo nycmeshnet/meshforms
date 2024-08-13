@@ -90,7 +90,7 @@ export async function submitFailureExpected(page: Page) {
   
   await page.waitForTimeout(1000);
 
-  // The submission should've been stopped
+  // The submission should've been stopped, and the member should be able to try again.
   await expect(
    page.locator("[name='submit_join_form']")
   ).toHaveText('Submit');

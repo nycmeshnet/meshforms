@@ -58,8 +58,9 @@ https://playwright.dev/docs/running-tests#run-tests-in-ui-mode
 
 ### Headed Mode
 
-You can see what playwright is doing with `--headed`, and you can pause a test to
-examine the browser by inserting `page.pause()` in your test.
+Playwright will show you the browser window it is using with `--headed`,
+and you can pause a test to examine the browser by inserting `page.pause()`
+in your test.
 
 ### Running a specific test
 
