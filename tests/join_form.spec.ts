@@ -11,17 +11,6 @@ const unitTestTimeout = 5000;
 // These tests will mock a connection to MeshDB. It is simply making sure that
 // the form creates a good-looking payload and can hit a mock API.
 
-// TODO (wdn): I want to test
-// - Full cooperation with real address X
-// - Missing address
-// - Missing phone
-// - Missing email
-// - Missing phone + Missing email
-// - Missing last name
-// - Bad phone
-// - Bad email
-// Can we mirror what meshdb does?
-
 test('happy join form', async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto('/join');
@@ -124,6 +113,58 @@ test('fail missing email and phone', async ({ page }) => {
   await fillOutJoinForm(page, missingData);
   
   // Shouldn't go through
+  await submitFailureExpected(page);
+});
+
+// Give a bad email address
+test('fail bad email', async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormInput;
+
+  missingData = sampleData;
+  missingData.email = "notagoodemail";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+
+  // Try another one
+  missingData = sampleData;
+  missingData.email = "18";
+  await fillOutJoinForm(page, missingData);
+  await submitFailureExpected(page);
+});
+
+// Tests bad phone
+test('fail bad phone', async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormInput;
+
+  missingData = sampleData;
+  missingData.phone = "twelve";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+
+  // Try another one.
+  missingData = sampleData;
+  missingData.phone = "12";
+  await fillOutJoinForm(page, missingData);
   await submitFailureExpected(page);
 });
 
