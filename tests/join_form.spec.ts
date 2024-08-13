@@ -62,6 +62,70 @@ test('fail missing name', async ({ page }) => {
   await submitFailureExpected(page);
 });
 
+// Tests missing email
+// XXX (wdn): This is meant to fail right now, but we've got support for 
+// email OR phone available, so we should update meshforms to do that.
+test('fail missing email', async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormInput;
+
+  missingData = sampleData;
+  missingData.email = "";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+});
+
+// Tests missing phone
+// XXX (wdn): Ditto to the above
+test('fail missing phone', async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormInput;
+
+  missingData = sampleData;
+  missingData.phone = "";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+});
+
+// Tests missing email + phone
+// XXX (wdn): Ditto to the above
+test('fail missing email and phone', async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormInput;
+
+  missingData = sampleData;
+  missingData.phone = "";
+  missingData.email = "";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+});
 
 test('fail missing address', async ({ page }) => {
   test.setTimeout(joinFormTimeout);
