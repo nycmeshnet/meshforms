@@ -8,7 +8,6 @@ on:
 jobs:
   test:
     name: Run Playwright Tests
-    environment: dev3
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -23,12 +22,7 @@ jobs:
     - name: Run Playwright tests
       run: npx playwright test
       env:
-        NEXT_PUBLIC_MESHDB_URL: ${{ secrets.BETA_MESHDB_URL }}
-        S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-        S3_BASE_NAME: ${{ secrets.TEST_S3_BASE_NAME }}
-        S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
-        S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
-        JOIN_FORM_LOG: /tmp/join.csv
+        NEXT_PUBLIC_MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
     - uses: actions/upload-artifact@v4
       if: always()
       with:

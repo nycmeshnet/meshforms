@@ -48,14 +48,29 @@ We use `playwright` to do integration tests. You can run them with the following
 
 3. Run the integration tests with `npx playwright test`
 
-You can see what playwright is doing with `--headed`, and you can pause a test to
-examine the browser by inserting `page.pause()` in your test.
+## Tips for Testing
+
+### UI Mode
+
+Run with `npx playwright test --ui` to get a nice UI to see your tests with.
+
+https://playwright.dev/docs/running-tests#run-tests-in-ui-mode
+
+### Headed Mode
+
+Playwright will show you the browser window it is using with `--headed`,
+and you can pause a test to examine the browser by inserting `page.pause()`
+in your test.
+
+### Running a specific test
 
 To run a specific test, you can use `-g`:
 
 `npx playwright test -g 'missing name'`
 
 See the [docs](https://playwright.dev/docs/running-tests) for more information about playwright.
+
+### Troubleshooting Tests
 
 If you get an error like this one:
 

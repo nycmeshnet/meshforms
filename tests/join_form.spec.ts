@@ -1,26 +1,15 @@
-import { JoinFormInput } from '@/app/io';
-import { test, expect } from '@playwright/test';
+import { JoinFormInput, JoinFormResponse } from '@/app/io';
+import { test, expect } from '@/tests/mock/test';
 
 import { sampleData, fillOutJoinForm, submitSuccessExpected, submitFailureExpected } from '@/tests/util';
 
-const joinFormTimeout = 20000;
+const joinFormTimeout = 10000;
+const unitTestTimeout = 5000;
 
-// Integration tests for the Join Form.
+// Unit tests for the Join Form.
 //
-// These tests can hit either a self-hosted dev instance of MeshDB
-// (See https://github.com/nycmeshnet/meshdb) or it can hit the beta
-// env.
-
-// TODO (wdn): I want to test
-// - Full cooperation with real address X
-// - Missing address
-// - Missing phone
-// - Missing email
-// - Missing phone + Missing email
-// - Missing last name
-// - Bad phone
-// - Bad email
-// Can we mirror what meshdb does?
+// These tests will mock a connection to MeshDB. It is simply making sure that
+// the form creates a good-looking payload and can hit a mock API.
 
 test('happy join form', async ({ page }) => {
   test.setTimeout(joinFormTimeout);
@@ -32,8 +21,9 @@ test('happy join form', async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, sampleData);
 
-  await submitSuccessExpected(page);
+  await submitSuccessExpected(page, unitTestTimeout);
 });
+
 
 // Tests missing both first and last name
 test('fail missing name', async ({ page }) => {
@@ -61,6 +51,122 @@ test('fail missing name', async ({ page }) => {
   await submitFailureExpected(page);
 });
 
+// Tests missing email
+// XXX (wdn): This is meant to fail right now, but we've got support for 
+// email OR phone available, so we should update meshforms to do that.
+test('fail missing email', async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormInput;
+
+  missingData = sampleData;
+  missingData.email = "";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+});
+
+// Tests missing phone
+// XXX (wdn): Ditto to the above
+test('fail missing phone', async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormInput;
+
+  missingData = sampleData;
+  missingData.phone = "";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+});
+
+// Tests missing email + phone
+// XXX (wdn): Ditto to the above
+test('fail missing email and phone', async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormInput;
+
+  missingData = sampleData;
+  missingData.phone = "";
+  missingData.email = "";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+});
+
+// Give a bad email address
+test('fail bad email', async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormInput;
+
+  missingData = sampleData;
+  missingData.email = "notagoodemail";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+
+  // Try another one
+  missingData = sampleData;
+  missingData.email = "18";
+  await fillOutJoinForm(page, missingData);
+  await submitFailureExpected(page);
+});
+
+// Tests bad phone
+test('fail bad phone', async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto('/join');
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormInput;
+
+  missingData = sampleData;
+  missingData.phone = "twelve";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  
+  // Shouldn't go through
+  await submitFailureExpected(page);
+
+  // Try another one.
+  missingData = sampleData;
+  missingData.phone = "12";
+  await fillOutJoinForm(page, missingData);
+  await submitFailureExpected(page);
+});
 
 test('fail missing address', async ({ page }) => {
   test.setTimeout(joinFormTimeout);
@@ -103,5 +209,4 @@ test('fail missing unit number', async ({ page }) => {
   await fillOutJoinForm(page, missingAddressData);
   await submitFailureExpected(page);
 });
-
 

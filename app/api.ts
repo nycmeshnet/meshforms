@@ -1,4 +1,5 @@
-import { JoinFormInput, JoinFormResponse, NNAssignFormInput, NNAssignFormResponse, QueryFormInput, QueryFormResponse } from "@/app/io";
+"use client"
+import { JoinFormInput, JoinFormResponse, NNAssignFormInput, NNAssignFormResponse, QueryFormResponse } from "@/app/io";
 import { z } from "zod";
 
 if (process.env.NEXT_PUBLIC_MESHDB_URL === undefined) {
