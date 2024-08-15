@@ -112,7 +112,7 @@ export function QueryForm() {
     } catch (e) {
       console.log("Could not submit Query Form: ");
       console.log(e);
-      toastErrorMessage(e);
+      toastErroressage(e);
       setIsLoading(false);
       return;
     }
@@ -120,7 +120,15 @@ export function QueryForm() {
 
   // Column Definitions: Defines & controls grid columns.
   const colDefs: ColDef[] = useMemo(() => [
-    { field: "install_number", headerName: 'Install #', width: 100 },
+    {
+      field: "install_number", headerName: 'Install #', width: 100, cellRenderer: (props: any) => {
+        return (
+          <a href={`${process.env.NEXT_PUBLIC_MESHDB_URL}/admin/meshapi/install/${props.value}`}>
+            {props.value}
+          </a>
+        );
+      }
+    },
     { field: "street_address", headerName: 'Address', width: 250 },
     { field: "unit", headerName: 'Unit', width: 100 },
     { field: "city", headerName: 'City', width: 100 },
@@ -130,7 +138,7 @@ export function QueryForm() {
     {
       field: "phone_number", headerName: 'Phone Number', width: 250, cellRenderer: (props: any) => {
         return (
-          <a href={"tel:" + props.value}>
+          <a href={`tel:${props.value}`}>
             {props.value}
           </a>
         );
@@ -139,7 +147,7 @@ export function QueryForm() {
     {
       field: "primary_email_address", headerName: 'Email', width: 300, cellRenderer: (props: any) => {
         return (
-          <a href={"mailto:" + props.value}>
+          <a href={`mailto:${props.value}`}>
             {props.value}
           </a>
         );
@@ -148,7 +156,7 @@ export function QueryForm() {
     {
       field: "stripe_email_address", headerName: 'Stripe Email', width: 300, cellRenderer: (props: any) => {
         return (
-          <a href={"mailto:" + props.value}>
+          <a href={`mailto:${props.value}`}>
             {props.value}
           </a>
         );
@@ -160,7 +168,15 @@ export function QueryForm() {
         cellEditorPopup: true,
         /*cellEditorPopupPosition: 'over' as 'over',*/
     },
-    { field: "network_number", headerName: 'NN', width: 80 },
+    {
+      field: "network_number", headerName: 'NN', width: 80, cellRenderer: (props: any) => {
+        return (
+          <a href={`${process.env.NEXT_PUBLIC_MESHDB_URL}/admin/meshapi/node/${props.value}`}>
+            {props.value}
+          </a>
+        );
+      }
+    },
     { field: "status", headerName: 'Install Status', width: 160 },
     { field: "notes",
         headerName: 'Notes',
