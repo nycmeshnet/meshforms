@@ -112,7 +112,7 @@ export function QueryForm() {
     } catch (e) {
       console.log("Could not submit Query Form: ");
       console.log(e);
-      toastErroressage(e);
+      toastErrorMessage(e);
       setIsLoading(false);
       return;
     }
