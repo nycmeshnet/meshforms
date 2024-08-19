@@ -180,10 +180,14 @@ const defaultColDef: ColDef = useMemo(() => {
   };
 }, []);
 
+let exceptNotes: string[] = colDefs
+  .map(x => x.field != undefined ? x.field : "")
+  .filter(x => x !== "notes");
+
 const gridOptions: GridOptions = {
     autoSizeStrategy: {
         type: 'fitCellContents',
-        colIds: colDefs.map(x => x.field).filter(x => x !== "notes") 
+        colIds: exceptNotes
     },
 }
 
