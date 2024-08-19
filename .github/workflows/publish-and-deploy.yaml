@@ -31,12 +31,12 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: willnilges/meshforms:helm
           labels: ${{ steps.meta.outputs.labels }}
           # Hardcoding the URL of meshdb into the image we build... There is probably
           # a better way to do this.
           build-args: |
-            "MESHDB_URL=${{ secrets.MESHDB_URL }}"
+            "MESHDB_URL=${{ vars.MESHDB_URL }}"
 
   deploy_to_grandsvc:
     name: Deploy to grandsvc
