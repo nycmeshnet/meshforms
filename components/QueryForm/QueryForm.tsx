@@ -239,7 +239,7 @@ const gridOptions: GridOptions = {
       </ul>
     </div>
     <div hidden={!tableVisible}>
-      <strong>Double-click to select/expand. Scroll for more!</strong>
+      <h2>Double-click to select/expand. Scroll for more.</h2>
       <br/>
       <br/>
       <div id="queryResultTable" className={styles.queryResultTable}>
