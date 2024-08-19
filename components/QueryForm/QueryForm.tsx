@@ -18,7 +18,7 @@ const options = [
 ]
 
 import { AgGridReact } from 'ag-grid-react'; // React Grid Logic
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridOptions } from 'ag-grid-community';
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 
@@ -176,13 +176,16 @@ const defaultColDef: ColDef = useMemo(() => {
     cellEditor: 'agLargeTextCellEditor',
     cellEditorPopup: true,
     cellEditorPopupPosition: 'over',
-    flex: 1,
-    minWidth: 100,
-    maxWidth: 300,
     resizable: true,
   };
 }, []);
 
+const gridOptions: GridOptions = {
+    autoSizeStrategy: {
+        type: 'fitCellContents',
+        colIds: colDefs.map(x => x.field).filter(x => x !== "notes") 
+    },
+}
 
   return <>
     <div className={styles.formBody}>
@@ -243,7 +246,8 @@ const defaultColDef: ColDef = useMemo(() => {
             columnDefs={colDefs as any[]}
             defaultColDef={defaultColDef}
             enableCellTextSelection={true}
-          />
+            gridOptions={gridOptions}
+            />
         </div>
       </div>
     </div>
