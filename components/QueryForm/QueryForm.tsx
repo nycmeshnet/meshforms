@@ -239,19 +239,19 @@ const gridOptions: GridOptions = {
       </ul>
     </div>
     <div hidden={!tableVisible}>
-      <h2>Double-click to select/expand. Scroll for more.</h2>
-      <br/>
-      <br/>
-      <div id="queryResultTable" className={styles.queryResultTable}>
-        <div className={"ag-theme-quartz"} style={{ minHeight: '400px', overflow: 'auto'}}>
-          <AgGridReact
-            domLayout={'print'}
-            rowData={queryResult as any[]}
-            columnDefs={colDefs as any[]}
-            defaultColDef={defaultColDef}
-            enableCellTextSelection={true}
-            gridOptions={gridOptions}
-            />
+      <h2 style={{display: 'flex', justifyContent: 'center' }}>Double-click to select/expand. Scroll for more.</h2>
+      <div className={styles.queryResultTableContainer}>
+        <div id="queryResultTable" className={styles.queryResultTable}>
+          <div className={"ag-theme-quartz"} style={{ minHeight: '400px', overflow: 'auto'}}>
+            <AgGridReact
+              domLayout={'print'}
+              rowData={queryResult as any[]}
+              columnDefs={colDefs as any[]}
+              defaultColDef={defaultColDef}
+              enableCellTextSelection={true}
+              gridOptions={gridOptions}
+              />
+          </div>
         </div>
       </div>
     </div>

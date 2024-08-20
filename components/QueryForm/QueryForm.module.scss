@@ -85,6 +85,15 @@
   color: #666;
 }
 
+.queryResultTableContainer {
+  border-left-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-width: 1px;
+  border-radius: 0 0 10px 10px;
+  border-color: #ccc;
+}
+
 .queryResultTable {
   display: flex;
   justify-content: center;
