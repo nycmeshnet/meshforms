@@ -1,66 +1,26 @@
-name: Publish Docker Image
+name: Publish and Deploy
 permissions: read-all
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, james/hardcode_different_domain ]
 
 jobs:
-  push_to_registry:
-    name: Push Docker Image to Docker Hub
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
-      
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: willnilges/meshforms
-      
-      - name: Build and push Docker image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: willnilges/meshforms:helm
-          labels: ${{ steps.meta.outputs.labels }}
-          # Hardcoding the URL of meshdb into the image we build... There is probably
-          # a better way to do this.
-          build-args: |
-            "MESHDB_URL=${{ vars.MESHDB_URL }}"
-
-  deploy_to_grandsvc:
-    name: Deploy to grandsvc
-    needs: push_to_registry
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup WireGuard
-      run:  |
-        sudo apt install wireguard
-        echo "${{ secrets.WIREGUARD_PRIVATE_KEY }}" > privatekey
-        sudo ip link add dev wg0 type wireguard
-        sudo ip address add dev wg0 ${{ secrets.WIREGUARD_OVERLAY_NETWORK_IP }} peer ${{ secrets.WIREGUARD_PEER }}
-        sudo wg set wg0 listen-port 48123 private-key privatekey peer ${{ secrets.WIREGUARD_PEER_PUBLIC_KEY }} allowed-ips 0.0.0.0/0 endpoint ${{ secrets.WIREGUARD_ENDPOINT }}
-        sudo ip link set up dev wg0
-    - name: Install SSH key
-      uses: shimataro/ssh-key-action@d4fffb50872869abe2d9a9098a6d9c5aa7d16be4 # v2
-      with:
-        key: ${{ secrets.GRANDSVC_KEY }}
-        name: id_ed25519 # optional
-        known_hosts: ${{ secrets.GRANDSVC_KNOWN_HOSTS }}
-        #config: ${{ secrets.CONFIG }} # ssh_config; optional
-        if_key_exists: fail # replace / ignore / fail; optional (defaults to fail)
-    - name: Pull new Docker image
-      run: ssh ${{ secrets.GRANDSVC_SSH_TARGET }} "cd ${{ secrets.GRANDSVC_PROJECT_PATH }} && git pull && docker compose pull && docker compose up -d"
+  push_to_registry_dev:
+    name: Deploy to dev 3
+    uses: ./.github/workflows/build-push-image.yaml
+    with:
+      environment: dev3
+    secrets: inherit
+    #if: github.ref == 'refs/heads/main'
+  
+  push_to_registry_prod:
+    name: Deploy to prod1
+    uses: ./.github/workflows/build-push-image.yaml
+    with:
+      environment: dev3
+    secrets: inherit
+    if: github.ref == 'refs/heads/main'
 
   deploy_to_dev3:
     name: Deploy to dev 3
@@ -68,8 +28,8 @@ jobs:
     with:
       environment: dev3
     secrets: inherit
-    needs: push_to_registry
-    if: github.ref == 'refs/heads/main'
+    needs: push_to_registry_dev
+    #if: github.ref == 'refs/heads/main'
 
   deploy_to_prod1:
     name: Deploy to prod 1
@@ -77,5 +37,5 @@ jobs:
     with:
       environment: prod1
     secrets: inherit
-    needs: push_to_registry
+    needs: push_to_registry_prod
     if: github.ref == 'refs/heads/main'
