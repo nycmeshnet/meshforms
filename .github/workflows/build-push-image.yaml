@@ -9,10 +9,10 @@ on:
         type: string
 
 jobs:
-  push_to_registry_dev:
+  push_to_registry_env:
     name: Push Docker Image to Docker Hub
     runs-on: ubuntu-latest
-    environment: dev3
+    environment: ${{ inputs.environment }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
