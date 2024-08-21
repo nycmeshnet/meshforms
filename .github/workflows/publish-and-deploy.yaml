@@ -3,36 +3,37 @@ permissions: read-all
 
 on:
   push:
-    branches: [ main, james/hardcode_different_domain ]
+    branches: [ main ]
 
 jobs:
   push_to_registry_dev:
-    name: Deploy to dev 3
+    name: Push to dev3
     uses: ./.github/workflows/build-push-image.yaml
     with:
       environment: dev3
     secrets: inherit
-    #if: github.ref == 'refs/heads/main'
-  
-  push_to_registry_prod:
-    name: Deploy to prod1
-    uses: ./.github/workflows/build-push-image.yaml
-    with:
-      environment: prod1
-    secrets: inherit
     if: github.ref == 'refs/heads/main'
 
   deploy_to_dev3:
-    name: Deploy to dev 3
+    name: Deploy to dev3
     uses: ./.github/workflows/deploy-to-k8s.yaml
     with:
       environment: dev3
     secrets: inherit
     needs: push_to_registry_dev
-    #if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
+
+  push_to_registry_prod:
+    name: Push to prod1
+    uses: ./.github/workflows/build-push-image.yaml
+    with:
+      environment: prod1
+    secrets: inherit
+    needs: deploy_to_dev3
+    if: github.ref == 'refs/heads/main'
 
   deploy_to_prod1:
-    name: Deploy to prod 1
+    name: Deploy to prod1
     uses: ./.github/workflows/deploy-to-k8s.yaml
     with:
       environment: prod1
