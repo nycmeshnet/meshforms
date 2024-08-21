@@ -3,7 +3,6 @@ replicaCount: 1
 image:
   repository: willnilges/meshforms
   pullPolicy: IfNotPresent
-  tag: helm
 
 imagePullSecrets: []
 nameOverride: "meshforms"

@@ -47,6 +47,7 @@ jobs:
         --set aws.secret_key="${{ secrets.S3_SECRET_KEY }}" \
         --set meshforms.s3_bucket_name="${{ secrets.S3_BUCKET_NAME }}" \
         --set meshforms.s3_base_name="${{ secrets.S3_BASE_NAME }}" \
+        --set image.tag="${{ inputs.environment }}" \
         --set ingress.hosts[0].host="${{ vars.INGRESS_HOST }}",ingress.hosts[0].paths[0].path=/,ingress.hosts[0].paths[0].pathType=Prefix
 
         # Rolling restart
