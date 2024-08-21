@@ -18,7 +18,7 @@ jobs:
     name: Deploy to prod1
     uses: ./.github/workflows/build-push-image.yaml
     with:
-      environment: dev3
+      environment: prod1
     secrets: inherit
     if: github.ref == 'refs/heads/main'
 
