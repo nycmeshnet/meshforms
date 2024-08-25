@@ -4,8 +4,7 @@ import { z } from "zod";
 import { getMeshDBAPIEndpoint } from "./endpoint";
 
 const get = async <S extends z.Schema>(url: string, schema: S, auth?: string, nextOptions?: NextFetchRequestConfig): Promise<ReturnType<S['parse']>> => {
-  console.log("Will GET: " + input)
-  const api_base = new URL(`${getMeshDBAPIEndpoint()}/api/v1/`);
+  const api_base = new URL(`${await getMeshDBAPIEndpoint()}/api/v1/`);
   const res = await fetch(new URL(url, api_base), {
     headers: {
       ...auth && { Authorization: `Bearer ${auth}` },
