@@ -85,7 +85,7 @@ const JoinForm = () => {
         theme: "colored",
       });
     } catch (e) {
-      console.log("Could not submit Join Form:");
+      console.error(`Could not submit Join Form: ${e}`);
       toastErrorMessage(e);
       setIsLoading(false);
       return;
