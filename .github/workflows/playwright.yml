@@ -23,6 +23,7 @@ jobs:
       run: npx playwright test
       env:
         NEXT_PUBLIC_MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
+        MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
     - uses: actions/upload-artifact@v4
       if: always()
       with:

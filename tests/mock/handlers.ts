@@ -9,6 +9,7 @@ export default [
     const joinRequest = await request.json();
 
     if (!isDeepStrictEqual(joinRequest, expectedAPIRequestData)) {
+      console.error("Mock Join API is returning 400.");
       return HttpResponse.json(
         {"detail": "Mock failure. Request does not match expected request."}, { status: 400 }
       );

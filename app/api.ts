@@ -1,19 +1,11 @@
 "use client"
 import { JoinFormInput, JoinFormResponse, NNAssignFormInput, NNAssignFormResponse, QueryFormResponse } from "@/app/io";
 import { z } from "zod";
-
-if (process.env.NEXT_PUBLIC_MESHDB_URL === undefined) {
-  throw new Error('Expected API url environment variable');
-}
-
-//if (process.env.MESHDB_TOKEN === undefined) {
-//  throw new Error('Expected API token environment variable');
-//}
-
-const API_BASE = new URL(process.env.NEXT_PUBLIC_MESHDB_URL as string + "/api/v1/");
+import { getMeshDBAPIEndpoint } from "./endpoint";
 
 const get = async <S extends z.Schema>(url: string, schema: S, auth?: string, nextOptions?: NextFetchRequestConfig): Promise<ReturnType<S['parse']>> => {
-  const res = await fetch(new URL(url, API_BASE), {
+  const api_base = new URL(`${await getMeshDBAPIEndpoint()}/api/v1/`);
+  const res = await fetch(new URL(url, api_base), {
     headers: {
       ...auth && { Authorization: `Bearer ${auth}` },
     },
@@ -26,7 +18,8 @@ const get = async <S extends z.Schema>(url: string, schema: S, auth?: string, ne
 
 const post = async <S extends z.Schema>(url: string, schema: S, input: unknown, auth?: string, method = 'POST'): Promise<ReturnType<S['parse']>> => {
   console.log("Will POST: " + input)
-  const res = await fetch(new URL(url, API_BASE), {
+  const api_base = new URL(`${await getMeshDBAPIEndpoint()}/api/v1/`);
+  const res = await fetch(new URL(url, api_base), {
     method,
     headers: {
       'Content-Type': 'application/json',
