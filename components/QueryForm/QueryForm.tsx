@@ -18,7 +18,7 @@ const options = [
 ]
 
 import { AgGridReact } from 'ag-grid-react'; // React Grid Logic
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridOptions } from 'ag-grid-community';
 import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 
@@ -121,7 +121,7 @@ export function QueryForm() {
   // Column Definitions: Defines & controls grid columns.
   const colDefs: ColDef[] = useMemo(() => [
     {
-      field: "install_number", headerName: 'Install #', width: 100, cellRenderer: (props: any) => {
+      field: "install_number", headerName: 'Install #', cellRenderer: (props: any) => {
         return (
           <a href={`${process.env.NEXT_PUBLIC_MESHDB_URL}/admin/meshapi/install/${props.value}`}>
             {props.value}
@@ -129,14 +129,14 @@ export function QueryForm() {
         );
       }
     },
-    { field: "street_address", headerName: 'Address', width: 250 },
-    { field: "unit", headerName: 'Unit', width: 100 },
-    { field: "city", headerName: 'City', width: 100 },
-    { field: "state", headerName: 'State', width: 80 },
-    { field: "zip_code", headerName: 'Zip', width: 80 },
-    { field: "name", headerName: 'Member Name', width: 250 },
+    { field: "street_address", headerName: 'Address' },
+    { field: "unit", headerName: 'Unit' },
+    { field: "city", headerName: 'City' },
+    { field: "state", headerName: 'State' },
+    { field: "zip_code", headerName: 'Zip' },
+    { field: "name", headerName: 'Member Name' },
     {
-      field: "phone_number", headerName: 'Phone Number', width: 250, cellRenderer: (props: any) => {
+      field: "phone_number", headerName: 'Phone Number', cellRenderer: (props: any) => {
         return (
           <a href={`tel:${props.value}`}>
             {props.value}
@@ -145,7 +145,7 @@ export function QueryForm() {
       }
     },
     {
-      field: "primary_email_address", headerName: 'Email', width: 300, cellRenderer: (props: any) => {
+      field: "primary_email_address", headerName: 'Email', cellRenderer: (props: any) => {
         return (
           <a href={`mailto:${props.value}`}>
             {props.value}
@@ -154,7 +154,7 @@ export function QueryForm() {
       }
     },
     {
-      field: "stripe_email_address", headerName: 'Stripe Email', width: 300, cellRenderer: (props: any) => {
+      field: "stripe_email_address", headerName: 'Stripe Email', cellRenderer: (props: any) => {
         return (
           <a href={`mailto:${props.value}`}>
             {props.value}
@@ -169,7 +169,7 @@ export function QueryForm() {
         /*cellEditorPopupPosition: 'over' as 'over',*/
     },
     {
-      field: "network_number", headerName: 'NN', width: 80, cellRenderer: (props: any) => {
+      field: "network_number", headerName: 'NN', cellRenderer: (props: any) => {
         return (
           <a href={`${process.env.NEXT_PUBLIC_MESHDB_URL}/admin/meshapi/node/${props.value}`}>
             {props.value}
@@ -177,7 +177,7 @@ export function QueryForm() {
         );
       }
     },
-    { field: "status", headerName: 'Install Status', width: 160 },
+    { field: "status", headerName: 'Install Status' },
     { field: "notes",
         headerName: 'Notes',
         width: 400,
@@ -188,14 +188,24 @@ export function QueryForm() {
 // a default column definition with properties that get applied to every column
 const defaultColDef: ColDef = useMemo(() => { 
   return {
-    width: 200,
     editable: true,
     cellEditor: 'agLargeTextCellEditor',
     cellEditorPopup: true,
-    cellEditorPopupPosition: 'over'
+    cellEditorPopupPosition: 'over',
+    resizable: true,
   };
 }, []);
 
+let exceptNotes: string[] = colDefs
+  .map(x => x.field != undefined ? x.field : "")
+  .filter(x => x !== "notes");
+
+const gridOptions: GridOptions = {
+    autoSizeStrategy: {
+        type: 'fitCellContents',
+        colIds: exceptNotes
+    },
+}
 
   return <>
     <div className={styles.formBody}>
@@ -245,18 +255,19 @@ const defaultColDef: ColDef = useMemo(() => {
       </ul>
     </div>
     <div hidden={!tableVisible}>
-      <strong>Double-click to select/expand. Scroll for more!</strong>
-      <br/>
-      <br/>
-      <div id="queryResultTable" className={styles.queryResultTable}>
-        <div className={"ag-theme-quartz"} style={{ width: '100%', minHeight: '400px', overflow: 'auto'}}>
-          <AgGridReact
-            domLayout={'print'}
-            rowData={queryResult as any[]}
-            columnDefs={colDefs as any[]}
-            defaultColDef={defaultColDef}
-            enableCellTextSelection={true}
-          />
+      <h2 style={{display: 'flex', justifyContent: 'center' }}>Double-click to select/expand. Scroll for more.</h2>
+      <div className={styles.queryResultTableContainer}>
+        <div id="queryResultTable" className={styles.queryResultTable}>
+          <div className={"ag-theme-quartz"} style={{ minHeight: '400px', overflow: 'auto'}}>
+            <AgGridReact
+              domLayout={'print'}
+              rowData={queryResult as any[]}
+              columnDefs={colDefs as any[]}
+              defaultColDef={defaultColDef}
+              enableCellTextSelection={true}
+              gridOptions={gridOptions}
+              />
+          </div>
         </div>
       </div>
     </div>
