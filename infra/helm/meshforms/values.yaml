@@ -12,7 +12,7 @@ serviceAccount:
   create: false
 
 podAnnotations:
-  admission.datadoghq.com/js-lib.version: v5.22.0
+  admission.datadoghq.com/js-lib.version: v5.22
 podLabels:
   app: meshforms
 
