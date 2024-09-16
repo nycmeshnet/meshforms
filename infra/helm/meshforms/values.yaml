@@ -11,7 +11,8 @@ fullnameOverride: "meshforms"
 serviceAccount:
   create: false
 
-podAnnotations: {}
+podAnnotations:
+  admission.datadoghq.com/js-lib.version: v5.22
 podLabels:
   app: meshforms
 
