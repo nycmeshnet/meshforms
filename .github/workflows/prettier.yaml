@@ -4,7 +4,7 @@ on: [pull_request]
 
 jobs:
   test:
-    name: Run Playwright Tests
+    name: Check Formatting with Prettier
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
