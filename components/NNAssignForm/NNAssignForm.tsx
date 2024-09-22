@@ -3,21 +3,21 @@
 import Button from "@mui/material/Button";
 import { NNAssignFormInput } from "@/app/io";
 import { submitNNAssignForm } from "@/app/api";
-import { useRouter } from 'next/navigation'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 
-import styles from './NNAssignForm.module.scss'
+import styles from "./NNAssignForm.module.scss";
 
 import { useState } from "react";
 
 export function NNAssignForm() {
   function parseForm(event: FormData) {
-    const data: Record<string, string | Blob | boolean | Number > = {};
+    const data: Record<string, string | Blob | boolean | Number> = {};
     event.forEach((value, key) => {
-      if (key === 'install_number') {
+      if (key === "install_number") {
         data[key] = Number(value);
       } else {
         data[key] = value;
@@ -28,7 +28,7 @@ export function NNAssignForm() {
   }
 
   async function sendForm(event: FormData) {
-    console.log(event); 
+    console.log(event);
 
     try {
       setDisableSubmitButton(true);
@@ -36,17 +36,17 @@ export function NNAssignForm() {
       console.log(a);
       let resp = await submitNNAssignForm(a);
       if (resp.created) {
-        toast.success('Success! Network Number is: ' + resp.network_number, {
+        toast.success("Success! Network Number is: " + resp.network_number, {
           hideProgressBar: true,
           autoClose: false,
         });
       } else {
-        toast.success('Found existing Network Number: ' + resp.network_number, {
+        toast.success("Found existing Network Number: " + resp.network_number, {
           hideProgressBar: true,
           autoClose: false,
         });
       }
-      setNetworkNumber(resp.network_number)
+      setNetworkNumber(resp.network_number);
     } catch (e) {
       console.log("Could not submit NNAssign Form: ");
       console.log(e);
@@ -57,36 +57,56 @@ export function NNAssignForm() {
   }
 
   const initialState = {};
-  const [value, setValue] = useState()
-  const router = useRouter()
+  const [value, setValue] = useState();
+  const router = useRouter();
   const [disableSubmitButton, setDisableSubmitButton] = useState(false);
   const [networkNumber, setNetworkNumber] = useState(-1);
 
-  return <>
-    <div className={styles.formBody}>
-      <form action={sendForm}>
-        <h2>Request Network Number</h2>
-        <p>Enter an install number and the Pre-Shared Key, and receive a Network Number</p>
-        <br/>
+  return (
+    <>
+      <div className={styles.formBody}>
+        <form action={sendForm}>
+          <h2>Request Network Number</h2>
+          <p>
+            Enter an install number and the Pre-Shared Key, and receive a
+            Network Number
+          </p>
+          <br />
           <div className={styles.horizontal}>
-            <input type="number" name="install_number" placeholder="Install Number" required />
-            <input type="password" name="password" placeholder="Pre-Shared Key" required />
+            <input
+              type="number"
+              name="install_number"
+              placeholder="Install Number"
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Pre-Shared Key"
+              required
+            />
           </div>
-        <div className={styles.centered}>
-          <Button
-            type="submit"
-            disabled={disableSubmitButton}
-            hidden={disableSubmitButton}
-            variant="contained"
-            size="large"
-            sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
-          >Submit</Button>
-        </div>
-        <h3 hidden={!disableSubmitButton} className={styles.nnLabel}>Your Network Number:</h3>
-        <h1 hidden={!disableSubmitButton} id="">{networkNumber}</h1>
-      </form>
-    </div>
-    <ToastContainer />
-    
-  </>
+          <div className={styles.centered}>
+            <Button
+              type="submit"
+              disabled={disableSubmitButton}
+              hidden={disableSubmitButton}
+              variant="contained"
+              size="large"
+              sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}
+            >
+              Submit
+            </Button>
+          </div>
+          <h3 hidden={!disableSubmitButton} className={styles.nnLabel}>
+            Your Network Number:
+          </h3>
+          <h1 hidden={!disableSubmitButton} id="">
+            {networkNumber}
+          </h1>
+        </form>
+      </div>
+      <ToastContainer />
+    </>
+  );
 }

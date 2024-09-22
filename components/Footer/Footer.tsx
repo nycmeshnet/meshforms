@@ -130,8 +130,17 @@ export function Footer() {
           id="full-width-box"
         >
           <Container maxWidth="lg" id="container" sx={{}}>
-            <Grid container sx={{ py: "2rem", flex: 1, justifyContent:"space-between" }}>
-              <Grid item container md={2} sx={{ flex: 1, pb:"1rem", justifyContent:"center"  }} id="logo-column">
+            <Grid
+              container
+              sx={{ py: "2rem", flex: 1, justifyContent: "space-between" }}
+            >
+              <Grid
+                item
+                container
+                md={2}
+                sx={{ flex: 1, pb: "1rem", justifyContent: "center" }}
+                id="logo-column"
+              >
                 <img
                   src="/logo.svg"
                   style={{ width: "2rem", height: "2rem", display: "flex" }}
@@ -150,20 +159,23 @@ export function Footer() {
                 {links.map((category, index) => (
                   <Grid
                     item
-                    sx={{textAlign:{sm:"left", xs:"center"}, pb:"1rem" }}
+                    sx={{ textAlign: { sm: "left", xs: "center" }, pb: "1rem" }}
                     xs={12}
                     sm={3}
                     key={index}
                   >
-                    <Typography variant="h5" sx={{ fontWeight: 600, pb:".5rem" }}>
+                    <Typography
+                      variant="h5"
+                      sx={{ fontWeight: 600, pb: ".5rem" }}
+                    >
                       {category[0].text}
                     </Typography>
                     {category.slice(1).map((link, index) => (
-                      <Grid item key={index} sx={{pb:".3rem"}}>
+                      <Grid item key={index} sx={{ pb: ".3rem" }}>
                         <Link
                           href={link.link}
                           target="_"
-                          sx={{textDecoration: 'none' }}
+                          sx={{ textDecoration: "none" }}
                         >
                           {link.text}
                         </Link>

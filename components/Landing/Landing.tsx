@@ -17,7 +17,7 @@ const Landing = () => {
 
   return (
     <>
-      <Box sx={{ textAlign: "center", py:{md:"7vw", sm:0} }}>
+      <Box sx={{ textAlign: "center", py: { md: "7vw", sm: 0 } }}>
         <Typography variant="h2" sx={{ pb: 3 }}>
           Welcome to MeshForms!
         </Typography>
@@ -25,7 +25,7 @@ const Landing = () => {
           This website contains a handful of tools to help our volunteers
           operate and get new members connected.
         </Typography>
-        <Typography variant="h5" sx={{pb:"2rem"}}>
+        <Typography variant="h5" sx={{ pb: "2rem" }}>
           To get started, pick a form or tool to fill out below:
         </Typography>
         <Grid container justifyContent="center">
@@ -36,13 +36,12 @@ const Landing = () => {
               variant="contained"
               size="large"
               href={button.link}
-              sx={{ width: "12rem", fontSize: "1rem", m:"1rem"}}
-              
+              sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}
             >
               {button.text}
             </Button>
           ))}
-          </Grid>
+        </Grid>
       </Box>
     </>
   );
