@@ -25,7 +25,7 @@ ingress:
   className: "traefik"
   annotations: {}
   hosts:
-    - host: forms.mesh.nycmesh.net
+    - host: forms.nycmesh.net
       paths:
         - path: /
           pathType: Prefix 
