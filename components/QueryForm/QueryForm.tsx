@@ -42,6 +42,10 @@ export function QueryForm() {
   }
 
   async function sendForm(event: FormEvent<HTMLFormElement>) {
+    // Clear previous query results
+    setLegacyQueryResults([]);
+    setQueryResults([]);
+
     event.preventDefault();
     setIsLoading(true);
     console.log(event);
