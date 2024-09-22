@@ -43,6 +43,14 @@ npm run dev
 
 Finally, open `http://127.0.0.1:3000` in your web browser to interact with your copy of the application
 
+## Formatting
+
+We use [Prettier](https://prettier.io/docs/en/install) for formatting our code. 
+There is a GitHub check that will get mad at you if you don't format your code
+correctly.
+
+To appease it, run `npx prettier . --write`
+
 # Testing
 
 We use `playwright` to do integration tests. You can run them with the following instructions:
