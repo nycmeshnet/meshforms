@@ -1,13 +1,13 @@
 // src/theme.ts
-'use client';
-import { createTheme } from '@mui/material/styles';
+"use client";
+import { createTheme } from "@mui/material/styles";
 
-import { Roboto } from 'next/font/google';
+import { Roboto } from "next/font/google";
 
 const roboto = Roboto({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin'],
-  display: 'swap',
+  weight: ["300", "400", "500", "700"],
+  subsets: ["latin"],
+  display: "swap",
 });
 
 const theme = createTheme({
@@ -16,24 +16,24 @@ const theme = createTheme({
   },
   palette: {
     primary: {
-      main: '#000000', 
+      main: "#000000",
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'none',
+          textTransform: "none",
         },
         sizeLarge: {
-          height: '40px',
-          paddingLeft: '34px',
-          paddingRight: '34px',
+          height: "40px",
+          paddingLeft: "34px",
+          paddingRight: "34px",
         },
         sizeSmall: {
-          height: '32px',
-          paddingLeft: '14px',
-          paddingRight: '14px',
+          height: "32px",
+          paddingLeft: "14px",
+          paddingRight: "14px",
         },
       },
     },

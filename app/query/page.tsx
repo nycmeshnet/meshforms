@@ -7,9 +7,11 @@ import { QueryForm } from "@/components/QueryForm/QueryForm";
 // https://www.npmjs.com/package/react-error-boundary
 
 export default async function Join() {
-  return <>
-    <main>
-      <QueryForm />
-    </main>
-  </>
+  return (
+    <>
+      <main>
+        <QueryForm />
+      </main>
+    </>
+  );
 }

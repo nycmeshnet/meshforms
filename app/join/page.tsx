@@ -1,7 +1,7 @@
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import JoinForm from "@/components/JoinForm/JoinForm";
-import Head from 'next/head';
+import Head from "next/head";
 
 export const metadata = {
   title: "Join Our Community Network!",
@@ -9,9 +9,11 @@ export const metadata = {
 };
 
 export default async function Join() {
-  return <>
-    <main>
-      <JoinForm />
-    </main>
-  </>
+  return (
+    <>
+      <main>
+        <JoinForm />
+      </main>
+    </>
+  );
 }

@@ -19,11 +19,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{backgroundColor:"#f4f4f4"}}>
+      <body style={{ backgroundColor: "#f4f4f4" }}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <Header />
-                <Box sx={{width:"100%", backgroundColor:"white"}}><Container maxWidth="lg" sx={{py:{md:"3rem", sm:"1rem"}}}>{children}</Container></Box>
+            <Box sx={{ width: "100%", backgroundColor: "white" }}>
+              <Container maxWidth="lg" sx={{ py: { md: "3rem", sm: "1rem" } }}>
+                {children}
+              </Container>
+            </Box>
             <Footer />
           </ThemeProvider>
         </AppRouterCacheProvider>

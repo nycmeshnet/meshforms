@@ -67,18 +67,17 @@ export function Header(props: Props) {
 
   const styles = {
     a: {
-      color: 'inherit', // Makes the link color the same as the surrounding text
-      textDecoration: 'none', // Removes underline from links
-      backgroundColor: 'transparent', // Removes any background color
-      fontSize: 'inherit', // Makes the link text size the same as surrounding text
-      fontFamily: 'inherit', // Ensures the link font family is the same as surrounding text
-      fontWeight: 'inherit', // Ensures the link font weight is the same as surrounding text
-      lineHeight: 'inherit', // Ensures the link line height is the same as surrounding text
+      color: "inherit", // Makes the link color the same as the surrounding text
+      textDecoration: "none", // Removes underline from links
+      backgroundColor: "transparent", // Removes any background color
+      fontSize: "inherit", // Makes the link text size the same as surrounding text
+      fontFamily: "inherit", // Ensures the link font family is the same as surrounding text
+      fontWeight: "inherit", // Ensures the link font weight is the same as surrounding text
+      lineHeight: "inherit", // Ensures the link line height is the same as surrounding text
       // Add any other properties you want to reset
-      display:"flex"
-    }
+      display: "flex",
+    },
   };
-  
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
@@ -89,19 +88,32 @@ export function Header(props: Props) {
       <AppBar
         component="nav"
         elevation={0}
-        sx={{ backgroundColor: "#f4f4f4", color: "black", padding:"none"}}
+        sx={{ backgroundColor: "#f4f4f4", color: "black", padding: "none" }}
         position="sticky"
       >
         <Container maxWidth="lg" disableGutters id="container">
-          <Toolbar sx={{height: "4rem", display:"flex", justifyContent:"space-between"}}>
-            <a href="/" style={styles.a}><img src="/logo.svg" style={{ width: "2rem" }} alt="" />
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, marginLeft:"1rem", display: { xs: "none", sm: "block" } }}
-            >
-              <span style={{fontWeight:600}}>NYC Mesh</span>  <span style={{fontWeight:400}}>| Forms</span>
-            </Typography></a>
+          <Toolbar
+            sx={{
+              height: "4rem",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <a href="/" style={styles.a}>
+              <img src="/logo.svg" style={{ width: "2rem" }} alt="" />
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  flexGrow: 1,
+                  marginLeft: "1rem",
+                  display: { xs: "none", sm: "block" },
+                }}
+              >
+                <span style={{ fontWeight: 600 }}>NYC Mesh</span>{" "}
+                <span style={{ fontWeight: 400 }}>| Forms</span>
+              </Typography>
+            </a>
             <Box sx={{ display: { xs: "none", md: "block" } }}>
               {navItems.map((item) => (
                 <Button component={Link} key={item.text} href={item.link}>
@@ -109,16 +121,22 @@ export function Header(props: Props) {
                 </Button>
               ))}
             </Box>
-            <Box sx={{ display: { xs: "flex", md: "none" }, flex:1, justifyContent: 'flex-end' }}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              // sx={{ mr: 2, display: { sm: "none" } }}
+            <Box
+              sx={{
+                display: { xs: "flex", md: "none" },
+                flex: 1,
+                justifyContent: "flex-end",
+              }}
             >
-              <MenuIcon />
-            </IconButton>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                // sx={{ mr: 2, display: { sm: "none" } }}
+              >
+                <MenuIcon />
+              </IconButton>
             </Box>
           </Toolbar>
         </Container>
