@@ -2,3 +2,4 @@ infra/
 .github/
 .git/
 *.yaml
+*.md
