@@ -3,7 +3,8 @@
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "codegen": "rm -rf src/generated-sources/openapi; openapi-generator-cli generate -i https://db.nycmesh.net/api-docs/openapi3.json -o src/generated-sources/openapi -g typescript-fetch --additional-properties=supportsES6=true,npmVersion=6.9.0,typescriptThreePlus=true --skip-validate-spec"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.614.0",
@@ -14,6 +15,7 @@
     "@mui/icons-material": "^5.15.7",
     "@mui/material": "^5.15.7",
     "@mui/material-nextjs": "^5.15.7",
+    "@openapitools/openapi-generator-cli": "^2.13.9",
     "@types/node": "20.10.6",
     "@types/react-dom": "18.2.18",
     "ag-grid-react": "^31.0.3",
@@ -35,6 +37,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.45.3",
-    "@types/react": "^18.2.48"
+    "@types/react": "^18.2.48",
+    "prettier": "3.3.3"
   }
 }

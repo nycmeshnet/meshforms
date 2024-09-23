@@ -24,6 +24,24 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 
 import styles from "./QueryForm.module.scss";
 
+import { ApiV1QueryInstallsListRequest, Configuration, LegacyQueryFormApi, PaginatedQueryFormList } from "@/src/generated-sources/openapi";
+
+async function chom() {
+  const configuration = new Configuration({
+    basePath: "http://127.0.0.1:8000"
+  });
+
+  const api = new LegacyQueryFormApi(configuration);
+
+  const queryResponse: Promise<PaginatedQueryFormList> = api.apiV1QueryInstallsList({
+    password: "localdev",
+    networkNumber: 713,
+  });
+  console.log(await queryResponse);
+}
+
+chom();
+
 export function QueryForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [tableVisible, setTableVisible] = useState(true);
@@ -73,7 +91,6 @@ export function QueryForm() {
           route = "installs";
           break;
       }
-      console.log(queryForm);
       let resp = await submitQueryForm(
         route,
         queryForm.query_type,
