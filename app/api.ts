@@ -42,7 +42,8 @@ const post = async <S extends z.Schema>(
       ...(auth && { Authorization: `Bearer ${auth}` }),
     },
     body: JSON.stringify(input),
-  }).catch(console.warn);
+  });//.catch(console.warn);
+  console.log(res.json());
   if (!res?.ok) throw res;
   return schema.parse(await res.json());
 };
