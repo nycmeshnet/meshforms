@@ -49,15 +49,14 @@ function PanoramaDropzone(props) {
   });
   
   const thumbs = files.map(file => (
-    <div className={styles.thumb} key={file.name}>
-      <div className={styles.thumbInner}>
-        <div className={styles.img}>
-          <img
-            src={file.preview}
-            // Revoke data uri after image is loaded
-            onLoad={() => { URL.revokeObjectURL(file.preview) }}
-          />
-        </div>
+    <div style={thumb} key={file.name}>
+      <div style={thumbInner}>
+        <img
+          src={file.preview}
+          style={img}
+          // Revoke data uri after image is loaded
+          onLoad={() => { URL.revokeObjectURL(file.preview) }}
+        />
       </div>
     </div>
   ));
