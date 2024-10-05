@@ -1,12 +1,12 @@
 // Idea: Have people validate their panoramas with their email?
 
-import PanoramaDropzone from "@/components/PanoramaUpload/PanoramaDropzone";
+import PanoramaUploadForm from "@/components/PanoramaUpload/PanoramaUpload";
 
 export default async function PanoramaUpload() {
   return (
     <>
       <main>
-        <PanoramaDropzone />
+        <PanoramaUploadForm />
       </main>
     </>
   );

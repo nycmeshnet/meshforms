@@ -6,6 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PanoramaDropzone from "./PanoramaDropzone";
 
 type FormValues = {
   files: FileList;
@@ -49,13 +50,44 @@ const PanoramaUploadForm: React.FC = () => {
 
   return (
     <>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        type="file"
-        {...register("files", { required: true })}
-        multiple
-      />
-      <button type="submit">Upload</button>
+    <form onSubmit={(e) => {
+      e.preventDefault();
+
+      // Now get the form data as you regularly would
+      const formData = new FormData(e.currentTarget);
+      const file =formData.get("dropzone-files");
+      //alert(file);
+
+    Array.from(file).forEach(file => {
+      formData.append('files[]', file); // Append each file to FormData
+    });
+
+    console.log(formData);
+
+    fetch('http://127.0.0.1:8089/upload', {
+      method: 'POST',
+      body: formData,
+    }).then((response) => {
+      if (response.ok) {
+        console.log('Files uploaded successfully');
+
+        toast.success("Upload Successful!", {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+
+      }
+    }).catch((error) => {
+      console.error('File upload error:', error);
+
+      toast.error(`File upload error: ${error}`, {
+        hideProgressBar: true,
+        theme: "colored",
+      });
+    });
+    }}>
+      <PanoramaDropzone name="dropzone-files" required/>
+      <button type="submit">Submit</button>
     </form>
     <div className="toasty">
       <ToastContainer />
