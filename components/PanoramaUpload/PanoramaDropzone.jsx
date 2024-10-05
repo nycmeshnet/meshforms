@@ -87,10 +87,8 @@ function PanoramaDropzone(props) {
         */}
         <input type ="file" name={name} required={required} style ={{opacity: 0}} ref={hiddenInputRef}/>
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here</p>
-        <button type="button" onClick={open}>
-          Open File Dialog
-        </button>
+        <p>Drag and drop panoramas here</p>
+        <p>Or click to open the file dialog</p>
       </div>
       <aside className={styles.thumbsContainer}>
         {thumbs}

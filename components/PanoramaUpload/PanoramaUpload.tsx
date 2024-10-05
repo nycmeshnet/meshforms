@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PanoramaDropzone from "./PanoramaDropzone";
 
 type FormValues = {
+  install_number: string;
   files: FileList;
 };
 
@@ -23,11 +24,14 @@ const PanoramaUploadForm: React.FC = () => {
       formData.append('files[]', file); // Append each file to FormData
     });
 
-    console.log(formData);
+    console.log(`Install #: ${data.install_number}`);
 
     fetch('http://127.0.0.1:8089/upload', {
       method: 'POST',
       body: formData,
+      headers: {
+        "install_number": data.install_number
+      }
     }).then((response) => {
       if (response.ok) {
         console.log('Files uploaded successfully');
@@ -55,28 +59,38 @@ const PanoramaUploadForm: React.FC = () => {
 
       // Now get the form data as you regularly would
       const formData = new FormData(e.currentTarget);
-    fetch('http://127.0.0.1:8089/upload', {
-      method: 'POST',
-      body: formData,
-    }).then((response) => {
-      if (response.ok) {
-        console.log('Files uploaded successfully');
 
-        toast.success("Upload Successful!", {
+      fetch('http://127.0.0.1:8089/upload', {
+        method: 'POST',
+        headers: {
+          "Install": formData.get("install_number")
+        },
+        body: formData,
+      }).then((response) => {
+        if (response.ok) {
+          console.log('Files uploaded successfully');
+
+          toast.success("Upload Successful!", {
+            hideProgressBar: true,
+            theme: "colored",
+          });
+
+        }
+      }).catch((error) => {
+        console.error('File upload error:', error);
+        toast.error(`File upload error: ${error}`, {
           hideProgressBar: true,
           theme: "colored",
         });
-
-      }
-    }).catch((error) => {
-      console.error('File upload error:', error);
-      toast.error(`File upload error: ${error}`, {
-        hideProgressBar: true,
-        theme: "colored",
       });
-    });
     }}>
-      <PanoramaDropzone name="dropzone-files" required/>
+      <PanoramaDropzone name="dropzone_files" required/>
+      <input
+        type="number"
+        name="install_number"
+        placeholder="Install Number"
+        required
+      />
       <button type="submit">Submit</button>
     </form>
     <div className="toasty">
@@ -88,3 +102,4 @@ const PanoramaUploadForm: React.FC = () => {
 
 export default PanoramaUploadForm;
 
+// TODO: Can I show the existing panoramas?
