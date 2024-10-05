@@ -1,14 +1,12 @@
-import React from "react";
-
 // Idea: Have people validate their panoramas with their email?
-export default async function Panorama() {
+
+import PanoramaUploadForm from "@/components/PanoramaUpload/PanoramaUpload";
+
+export default async function PanoramaUpload() {
   return (
     <>
       <main>
-        
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <input type="file" multiple={true} />
-        </form>
+        <PanoramaUploadForm />
       </main>
     </>
   );
