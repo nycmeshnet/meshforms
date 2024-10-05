@@ -1,6 +1,7 @@
 "use client"
 import React, {useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
+import styles from "./PanoramaDropzone.module.scss";
 
 const thumbsContainer = {
   display: 'flex',
@@ -48,14 +49,15 @@ function PanoramaDropzone(props) {
   });
   
   const thumbs = files.map(file => (
-    <div style={thumb} key={file.name}>
-      <div style={thumbInner}>
-        <img
-          src={file.preview}
-          style={img}
-          // Revoke data uri after image is loaded
-          onLoad={() => { URL.revokeObjectURL(file.preview) }}
-        />
+    <div className={styles.thumb} key={file.name}>
+      <div className={styles.thumbInner}>
+        <div className={styles.img}>
+          <img
+            src={file.preview}
+            // Revoke data uri after image is loaded
+            onLoad={() => { URL.revokeObjectURL(file.preview) }}
+          />
+        </div>
       </div>
     </div>
   ));
@@ -66,12 +68,12 @@ function PanoramaDropzone(props) {
   }, [files]);
 
   return (
-    <section className="container">
-      <div {...getRootProps({className: 'dropzone'})}>
+    <section className={styles.container}>
+      <div {...getRootProps({className: styles.dropzone})}>
         <input {...getInputProps()} />
-        <p>Drag 'n' drop some files here, or click to select files</p>
+        <p>Drag and Drop panoramas here, or click to select files</p>
       </div>
-      <aside style={thumbsContainer}>
+      <aside className={styles.thumbsContainer}>
         {thumbs}
       </aside>
     </section>
