@@ -48,6 +48,12 @@ function PanoramaDropzone(props) {
     }
   });
   
+  const fileList = files.map(file => (
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+    </li>
+  ));
+  
   const thumbs = files.map(file => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
@@ -74,6 +80,10 @@ function PanoramaDropzone(props) {
       </div>
       <aside className={styles.thumbsContainer}>
         {thumbs}
+      </aside>
+      <aside>
+        <h4>Files</h4>
+        <ul>{fileList}</ul>
       </aside>
     </section>
   );
