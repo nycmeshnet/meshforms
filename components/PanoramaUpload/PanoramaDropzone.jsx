@@ -1,7 +1,38 @@
 "use client"
-import React, {useRef} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import styles from "./PanoramaDropzone.module.scss";
+
+const thumbsContainer = {
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  marginTop: 16
+};
+
+const thumb = {
+  display: 'inline-flex',
+  borderRadius: 2,
+  border: '1px solid #eaeaea',
+  marginBottom: 8,
+  marginRight: 8,
+  width: 100,
+  height: 100,
+  padding: 4,
+  boxSizing: 'border-box'
+};
+
+const thumbInner = {
+  display: 'flex',
+  minWidth: 0,
+  overflow: 'hidden'
+};
+
+const img = {
+  display: 'block',
+  width: 'auto',
+  height: '100%'
+};
 
 function PanoramaDropzone(props) {
   const {required, name} = props;
@@ -28,6 +59,25 @@ function PanoramaDropzone(props) {
     </li>
   ));
 
+  const thumbs = acceptedFiles.map(file => (
+    <div style={thumb} key={file.name}>
+      <div style={thumbInner}>
+        <img
+          src={URL.createObjectURL(file)}
+          style={img}
+          // Revoke data uri after image is loaded
+          onLoad={() => { URL.revokeObjectURL(file.preview) }}
+        />
+      </div>
+    </div>
+  ));
+
+  
+  useEffect(() => {
+    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
+    return () => acceptedFiles.forEach(file => URL.revokeObjectURL(file.preview));
+  }, [files]);
+
   return (
     <div className="container">
       <div {...getRootProps({className: styles.dropzone})}>
@@ -42,6 +92,9 @@ function PanoramaDropzone(props) {
           Open File Dialog
         </button>
       </div>
+      <aside className={styles.thumbsContainer}>
+        {thumbs}
+      </aside>
       <aside>
         <h4>Files</h4>
         <ul>{files}</ul>
