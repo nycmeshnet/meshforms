@@ -17,8 +17,6 @@ const PanoramaUploadForm: React.FC = () => {
   // Define the submit handler
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     const files = data.files;
-
-    
     const formData = new FormData();
     
     Array.from(files).forEach(file => {
@@ -29,7 +27,7 @@ const PanoramaUploadForm: React.FC = () => {
     Array.from(files).forEach(file => {
       console.log(file.name);
       // TODO: Uplaod photos to S3 via Pano
-      fetch('http://127.0.0.1:8089', {
+      fetch('http://127.0.0.1:8089/upload', {
         method: 'POST',
         body: formData,
       }).then((response) => {
