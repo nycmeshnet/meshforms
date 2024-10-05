@@ -17,42 +17,6 @@ type FormValues = {
 const PanoramaUploadForm: React.FC = () => {
   const { register, handleSubmit } = useForm<FormValues>();
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    const files = data.files;
-    const formData = new FormData();
-
-    Array.from(files).forEach(file => {
-      formData.append('files[]', file); // Append each file to FormData
-    });
-
-    console.log(`Install #: ${data.install_number}`);
-
-    fetch('http://127.0.0.1:8089/upload', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        "install_number": data.install_number
-      }
-    }).then((response) => {
-      if (response.ok) {
-        console.log('Files uploaded successfully');
-
-        toast.success("Upload Successful!", {
-          hideProgressBar: true,
-          theme: "colored",
-        });
-
-      }
-    }).catch((error) => {
-      console.error('File upload error:', error);
-
-      toast.error(`File upload error: ${error}`, {
-        hideProgressBar: true,
-        theme: "colored",
-      });
-    });
-  };
-
   function handleSubmit(e) {
       e.preventDefault();
 
