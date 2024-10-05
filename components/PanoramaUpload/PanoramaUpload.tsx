@@ -7,6 +7,7 @@ import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PanoramaDropzone from "./PanoramaDropzone";
+import { Button } from "@mui/material";
 
 type FormValues = {
   install_number: string;
@@ -52,9 +53,7 @@ const PanoramaUploadForm: React.FC = () => {
     });
   };
 
-  return (
-    <>
-    <form onSubmit={(e) => {
+  function handleSubmit(e) {
       e.preventDefault();
 
       // Now get the form data as you regularly would
@@ -83,7 +82,11 @@ const PanoramaUploadForm: React.FC = () => {
           theme: "colored",
         });
       });
-    }}>
+    }
+
+  return (
+    <>
+    <form onSubmit={handleSubmit}>
       <PanoramaDropzone name="dropzone_files" required/>
       <input
         type="number"
@@ -91,7 +94,11 @@ const PanoramaUploadForm: React.FC = () => {
         placeholder="Install Number"
         required
       />
-      <button type="submit">Submit</button>
+      <Button
+        type="submit"
+        variant="contained"
+        size="large"
+      >Submit</Button>
     </form>
     <div className="toasty">
       <ToastContainer />
@@ -103,3 +110,5 @@ const PanoramaUploadForm: React.FC = () => {
 export default PanoramaUploadForm;
 
 // TODO: Can I show the existing panoramas?
+// TODO: Figure out key events for lookup by install num (or don't and let Olivier
+// figure it out)
