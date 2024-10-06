@@ -98,7 +98,7 @@ function PanoramaDropzone(props) {
         <p>Drag and drop panoramas here;<br />Or click to open the file dialog</p>
       </div>
       <aside className={styles.thumbsContainer}>{thumbs}</aside>
-      <aside>
+      <aside className={styles.itemList}>
         <h4>Files</h4>
         <ul>{files}</ul>
       </aside>
