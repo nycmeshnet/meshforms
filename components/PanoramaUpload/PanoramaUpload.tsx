@@ -52,7 +52,7 @@ const PanoramaUploadForm: React.FC = () => {
 
   return (
     <>
-      <div className={styles.formBody}>
+      <div>
         <form onSubmit={onSubmit}>
           <PanoramaDropzone name="dropzone_files" required />
             <div className={styles.centered}>

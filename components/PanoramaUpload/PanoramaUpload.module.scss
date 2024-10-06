@@ -1,7 +1,8 @@
 .formBody {
   display: flex;
-  justify-content: center;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .formBody input[type="number"] {
@@ -44,4 +45,5 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
+  justify-content: center;
 }
