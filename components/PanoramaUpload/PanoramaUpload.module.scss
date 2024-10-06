@@ -1,0 +1,47 @@
+.formBody {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.formBody input[type="number"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  outline-offset: 4px;
+}
+
+.formBody button:hover {
+  opacity: 0.8;
+}
+
+.formBody button[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.formBody ul {
+  padding: 0;
+  margin: auto;
+}
+
+.formBody li {
+  background: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.centered {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}

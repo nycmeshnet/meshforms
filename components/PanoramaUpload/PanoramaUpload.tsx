@@ -1,4 +1,4 @@
-"use client"
+"use client";
 // Idea: Have people validate their panoramas with their email?
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PanoramaDropzone from "./PanoramaDropzone";
 import { Button } from "@mui/material";
+import styles from "./PanoramaUpload.module.scss";
 
 type FormValues = {
   install_number: string;
@@ -17,56 +18,59 @@ type FormValues = {
 const PanoramaUploadForm: React.FC = () => {
   const { register, handleSubmit } = useForm<FormValues>();
 
-  function handleSubmit(e) {
-      e.preventDefault();
+  function onSubmit(e) {
+    e.preventDefault();
 
-      // Now get the form data as you regularly would
-      const formData = new FormData(e.currentTarget);
+    // Now get the form data as you regularly would
+    const formData = new FormData(e.currentTarget);
 
-      fetch('http://127.0.0.1:8089/upload', {
-        method: 'POST',
-        headers: {
-          "Install": formData.get("install_number")
-        },
-        body: formData,
-      }).then((response) => {
+    fetch("http://127.0.0.1:8089/upload", {
+      method: "POST",
+      headers: {
+        Install: formData.get("install_number"),
+      },
+      body: formData,
+    })
+      .then((response) => {
         if (response.ok) {
-          console.log('Files uploaded successfully');
+          console.log("Files uploaded successfully");
 
           toast.success("Upload Successful!", {
             hideProgressBar: true,
             theme: "colored",
           });
-
         }
-      }).catch((error) => {
-        console.error('File upload error:', error);
+      })
+      .catch((error) => {
+        console.error("File upload error:", error);
         toast.error(`File upload error: ${error}`, {
           hideProgressBar: true,
           theme: "colored",
         });
       });
-    }
+  }
 
   return (
     <>
-    <form onSubmit={handleSubmit}>
-      <PanoramaDropzone name="dropzone_files" required/>
-      <input
-        type="number"
-        name="install_number"
-        placeholder="Install Number"
-        required
-      />
-      <Button
-        type="submit"
-        variant="contained"
-        size="large"
-      >Submit</Button>
-    </form>
-    <div className="toasty">
-      <ToastContainer />
-    </div>
+      <div className={styles.formBody}>
+        <form onSubmit={onSubmit}>
+          <PanoramaDropzone name="dropzone_files" required />
+            <div className={styles.centered}>
+              <input
+                type="number"
+                name="install_number"
+                placeholder="Install Number"
+                required
+              />
+              <Button type="submit" variant="contained" size="large">
+                Submit
+              </Button>
+            </div>
+        </form>
+      </div>
+      <div className="toasty">
+        <ToastContainer />
+      </div>
     </>
   );
 };
