@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PanoramaDropzone from "./PanoramaDropzone";
 import { Button } from "@mui/material";
 import styles from "./PanoramaUpload.module.scss";
+import PanoramaDuplicateDialog from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
 
 type FormValues = {
   install_number: string;
@@ -18,20 +19,40 @@ type FormValues = {
 const PanoramaUploadForm: React.FC = () => {
   const { register, handleSubmit } = useForm<FormValues>();
 
+  const [duplicateDialogOpen, setDuplicateDialogOpen] = React.useState(false);
+  const [duplicateDialogInstallNumber, setDuplicateDialogInstallNumber] =
+    React.useState(0);
+  const [duplicateDialogImages, setDuplicateDialogImages] = React.useState([]);
+
+  const handleClickUpload = () => {
+    setDuplicateDialogOpen(false);
+  };
+
+  const handleClickCancel = () => {
+    setDuplicateDialogOpen(false);
+  };
+
   function onSubmit(e) {
     e.preventDefault();
 
     // Now get the form data as you regularly would
     const formData = new FormData(e.currentTarget);
 
-    fetch("http://127.0.0.1:8089/upload", {
+    // Typescript go brrrrr
+    const installNumberValue = formData.get("install_number");
+    let installNumber = NaN;
+    if (installNumberValue !== null) {
+      installNumber = parseInt(installNumberValue as string);
+    }
+
+    fetch("http://127.0.0.1:8089/api/v1/upload", {
       method: "POST",
       headers: {
-        Install: formData.get("install_number"),
+        Install: installNumber,
       },
       body: formData,
     })
-      .then((response) => {
+      .then(async (response) => {
         if (response.ok) {
           console.log("Files uploaded successfully");
 
@@ -39,6 +60,19 @@ const PanoramaUploadForm: React.FC = () => {
             hideProgressBar: true,
             theme: "colored",
           });
+        }
+
+        if (response.status == 409) {
+          const imagesDuplicated = Object.entries(await response.json()); // Await the text() promise here
+          toast.error(`Duplicate images detected`, {
+            hideProgressBar: true,
+            theme: "colored",
+          });
+          console.log(imagesDuplicated);
+          setDuplicateDialogImages(imagesDuplicated);
+          setDuplicateDialogInstallNumber(installNumber);
+          setDuplicateDialogOpen(true);
+          return;
         }
       })
       .catch((error) => {
@@ -76,6 +110,13 @@ const PanoramaUploadForm: React.FC = () => {
       <div className="toasty">
         <ToastContainer />
       </div>
+      <PanoramaDuplicateDialog
+        installNumber={duplicateDialogInstallNumber}
+        duplicateImages={duplicateDialogImages}
+        isDialogOpened={duplicateDialogOpen}
+        handleClickUpload={handleClickUpload}
+        handleClickCancel={handleClickCancel}
+      />
     </>
   );
 };
