@@ -52,10 +52,14 @@ const PanoramaUploadForm: React.FC = () => {
 
   return (
     <>
+      <h2>Image Upload</h2>
+      <p>
+        Upload panoramas and other relevant install photos here. This form is backed by Pano, our self-hosted panorama hosting solution.
+      </p>
       <div>
         <form onSubmit={onSubmit}>
           <PanoramaDropzone name="dropzone_files" required />
-            <div className={styles.centered}>
+            <div className={styles.formBody}>
               <input
                 type="number"
                 name="install_number"
