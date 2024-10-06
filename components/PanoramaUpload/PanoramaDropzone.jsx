@@ -81,27 +81,34 @@ function PanoramaDropzone(props) {
   }, [files]);
 
   return (
-    <div className="container">
-      <div {...getRootProps({ className: styles.dropzone })}>
-        {/*
+    <div className={styles.container}>
+      <div className={styles.subContainer}>
+        <div {...getRootProps({ className: styles.dropzone })}>
+          {/*
           Add a hidden file input
           Best to use opacity 0, so that the required validation message will appear on form submission
         */}
-        <input
-          type="file"
-          name={name}
-          required={required}
-          style={{ opacity: 0 }}
-          ref={hiddenInputRef}
-        />
-        <input {...getInputProps()} />
-        <p>Drag and drop panoramas here;<br />Or click to open the file dialog</p>
+          <input
+            type="file"
+            name={name}
+            required={required}
+            style={{ opacity: 0 }}
+            ref={hiddenInputRef}
+          />
+          <input {...getInputProps()} />
+          <p>
+            Drag and drop panoramas here;
+            <br />
+            Or click to open the file dialog
+          </p>
+        </div>
+        <div className={styles.thumbsContainer}>{thumbs}</div>
       </div>
-      <aside className={styles.thumbsContainer}>{thumbs}</aside>
-      <aside className={styles.itemList}>
+      {/*XXX (wdn): It would be very cool if I could integrate the file names into the photos.*/}
+      <div className={styles.itemList}>
         <h4>Files</h4>
         <ul>{files}</ul>
-      </aside>
+      </div>
     </div>
   );
 }
