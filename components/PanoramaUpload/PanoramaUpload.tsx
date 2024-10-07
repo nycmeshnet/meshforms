@@ -38,6 +38,7 @@ function PanoramaUploader() {
   // Closes dupe dialog and tries the submission again
   const handleClickUpload = () => {
     setIsDuplicateDialogOpen(false);
+    attemptUpload(true);
   };
 
   // Closes the dupe dialog and allows the user to make chances
