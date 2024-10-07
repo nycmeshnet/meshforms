@@ -45,13 +45,11 @@ function PanoramaUploader() {
     setIsDuplicateDialogOpen(false);
   };
   
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length) {
-      setValue('dropzoneImages', acceptedFiles);  // Update the form state with the file
+  const onFileDrop = (dropzoneImages: File[]) => {
+    if (dropzoneImages.length) {
+      setValue('dropzoneImages', dropzoneImages);  // Update the form state with the file
     }
-  }, [setValue]);
-
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  };
 
   const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data)
 
@@ -64,10 +62,7 @@ function PanoramaUploader() {
       </p>
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div {...getRootProps()} style={{ border: '2px dashed #000', padding: '20px', marginTop: '20px' }}>
-            <input {...getInputProps()} />
-            <p>Drag 'n' drop a file here, or click to select a file</p>
-          </div>
+          <PanoramaDropzone onFileDrop={onFileDrop} />
           <div className={styles.formBody}>
             <input
               {...register("installNumber")}

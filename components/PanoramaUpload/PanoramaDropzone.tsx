@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styles from "./PanoramaDropzone.module.scss";
 
@@ -34,32 +34,27 @@ const img = {
   height: "100%",
 };
 
-function PanoramaDropzone(props) {
-  const { required, name } = props;
+interface PanoramaDropzoneProps {
+  onFileDrop: (dropzoneImages: File[]) => void;
+}
 
-  const hiddenInputRef = useRef(null);
+const PanoramaDropzone: React.FC<PanoramaDropzoneProps> = ({ onFileDrop }) => {
+  const [files, setFiles] = useState<File[]>([]);
 
-  const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
-    onDrop: (incomingFiles) => {
-      if (hiddenInputRef.current) {
-        // Note the specific way we need to munge the file into the hidden input
-        // https://stackoverflow.com/a/68182158/1068446
-        const dataTransfer = new DataTransfer();
-        incomingFiles.forEach((v) => {
-          dataTransfer.items.add(v);
-        });
-        hiddenInputRef.current.files = dataTransfer.files;
-      }
-    },
-  });
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setFiles(acceptedFiles); // Store files locally
+    onFileDrop(acceptedFiles); // Pass files to main form via callback
+  }, [onFileDrop]);
 
-  const files = acceptedFiles.map((file) => (
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+  const filenames = files.map((file) => (
     <li key={file.path}>
       {file.path} - {file.size} bytes
     </li>
   ));
 
-  const thumbs = acceptedFiles.map((file) => (
+  const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
         <img
@@ -78,24 +73,13 @@ function PanoramaDropzone(props) {
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
     return () =>
-      acceptedFiles.forEach((file) => URL.revokeObjectURL(file.preview));
+      files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, [files]);
 
   return (
     <div className={styles.container}>
       <div className={styles.subContainer}>
         <div {...getRootProps({ className: styles.dropzone })}>
-          {/*
-          Add a hidden file input
-          Best to use opacity 0, so that the required validation message will appear on form submission
-        */}
-          <input
-            type="file"
-            name={name}
-            required={required}
-            style={{ opacity: 0 }}
-            ref={hiddenInputRef}
-          />
           <input {...getInputProps()} />
           <p>
             Drag and drop panoramas here;
@@ -108,7 +92,7 @@ function PanoramaDropzone(props) {
       {/*XXX (wdn): It would be very cool if I could integrate the file names into the photos.*/}
       <div className={styles.itemList}>
         <h4>Files</h4>
-        <ul>{files}</ul>
+        <ul>{filenames}</ul>
       </div>
     </div>
   );
