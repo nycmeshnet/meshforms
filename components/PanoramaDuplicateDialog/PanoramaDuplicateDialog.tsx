@@ -38,8 +38,8 @@ export default function PanoramaDuplicateDialog({
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             The following images submitted seem to be duplicates of existing
-            images for Install #{formSubmission.installNumber}. Would you like to upload these
-            anyway?
+            images for Install #{formSubmission.installNumber}. Would you like
+            to upload these anyway?
             <br />
             <div className={styles.alertTable}>
               <table>
@@ -58,7 +58,11 @@ export default function PanoramaDuplicateDialog({
                         }}
                       >
                         <img
-                          src={URL.createObjectURL(formSubmission.dropzoneImages.find((file: File) => file.name === k))}
+                          src={URL.createObjectURL(
+                            formSubmission.dropzoneImages.find(
+                              (file: File) => file.name === k,
+                            ),
+                          )}
                           style={{
                             display: "block",
                             marginLeft: "auto",
@@ -66,7 +70,11 @@ export default function PanoramaDuplicateDialog({
                             height: "100px",
                           }}
                         />
-                        {formSubmission.dropzoneImages.find((file: File) => file.name === k).name}
+                        {
+                          formSubmission.dropzoneImages.find(
+                            (file: File) => file.name === k,
+                          ).name
+                        }
                       </div>
                     </td>
                     <td>

@@ -20,17 +20,28 @@ export type { FormValues };
 
 function PanoramaUploader() {
   // React hook form stuff
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>();
 
   // Most recently submitted user form
-  const [formSubmission, setFormSubmission] = React.useState<FormValues>({installNumber: 0, dropzoneImages: []});
+  const [formSubmission, setFormSubmission] = React.useState<FormValues>({
+    installNumber: 0,
+    dropzoneImages: [],
+  });
 
   // Titles and Links to images on the server that we think are duplicates
-  const [possibleDuplicates, setPossibleDuplicates] = React.useState<Array<[string, string]>>([]);
- 
+  const [possibleDuplicates, setPossibleDuplicates] = React.useState<
+    Array<[string, string]>
+  >([]);
+
   // Shows and hides the duplicate dialog
-  const [isDuplicateDialogOpen, setIsDuplicateDialogOpen] = React.useState(false);
- 
+  const [isDuplicateDialogOpen, setIsDuplicateDialogOpen] =
+    React.useState(false);
+
   // Disables the submit button and shows the throbber when a request is being processed.
   // TODO (wdn): Implement this
   const [isLoading, setIsLoading] = React.useState(false);
@@ -46,13 +57,12 @@ function PanoramaUploader() {
     setIsDuplicateDialogOpen(false);
     setIsLoading(false);
   };
-  
+
   const onFileDrop = (dropzoneImages: File[]) => {
     if (dropzoneImages.length) {
-      setValue('dropzoneImages', dropzoneImages);  // Update the form state with the file
+      setValue("dropzoneImages", dropzoneImages); // Update the form state with the file
     }
   };
-
 
   function attemptUpload(trustMeBro: boolean = false) {
     let formData = new FormData();
@@ -109,11 +119,11 @@ function PanoramaUploader() {
   }
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data)
+    console.log(data);
     setFormSubmission(data);
     setIsLoading(true);
     attemptUpload();
-  }
+  };
 
   return (
     <>
@@ -132,7 +142,12 @@ function PanoramaUploader() {
               placeholder="Install Number"
               required
             />
-            <Button type="submit" variant="contained" size="large" disabled={isLoading}>
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              disabled={isLoading}
+            >
               Submit
             </Button>
           </div>
@@ -152,149 +167,4 @@ function PanoramaUploader() {
   );
 }
 
-
-
-
-/*
-const PanoramaUploadForm: React.FC = () => {
-  const { register, handleSubmit } = useForm<FormValues>();
-
-  const [isDuplicateDialogOpen, setIsDuplicateDialogOpen] = React.useState(false);
-
-  // Install number currently being processed
-  const [installNumber, setInstallNumber] = React.useState(0);
-
-  // Links to images on the server that we think are duplicates.
-  const [possibleDuplicates, setPossibleDuplicates] = React.useState([]);
-
-  // Displays previews of the user's submitted images on the duplicate dialog.
-  const [previews, setPreviews] = React.useState<Array<[string, string]>>([]);
-
-  // Files submitted by user
-  // XXX (wdn): Will hopefully obsolete a lot of the faffing about I do with the
-  // dupe detector
-  const [submission, setSubmission] = React.useState<FormData>(new FileList());
-
-  // Disables the submit button and shows the throbber when a request is being processed.
-  // TODO (wdn): Implement this
-  const [isLoading, setIsLoading] = React.useState(false);
-
-  const handleClickUpload = () => {
-    setIsDuplicateDialogOpen(false);
-  };
-
-  const handleClickCancel = () => {
-    setIsDuplicateDialogOpen(false);
-  };
-
-  function attemptUpload() {
-    fetch("http://127.0.0.1:8089/api/v1/upload", {
-      method: "POST",
-      headers: {
-        "Install": installNumber.toString(),
-      },
-      body: formData,
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          console.log("Files uploaded successfully");
-
-          toast.success("Upload Successful!", {
-            hideProgressBar: true,
-            theme: "colored",
-          });
-        }
-
-        if (response.status == 409) {
-          const imagesDuplicated = Object.entries(await response.json()); // Await the text() promise here
-          toast.error(`Duplicate images detected`, {
-            hideProgressBar: true,
-            theme: "colored",
-          });
-          console.log(imagesDuplicated);
-          setPossibleDuplicates(imagesDuplicated);
-          setDuplicateDialogOpen(true);
-          return;
-        }
-      })
-      .catch((error) => {
-        console.error("File upload error:", error);
-        toast.error(`File upload error: ${error}`, {
-          hideProgressBar: true,
-          theme: "colored",
-        });
-      });
-
-  }
-
-  function onSubmit(e) {
-    e.preventDefault();
-
-    // Now get the form data as you regularly would
-    const formData = new FormData(e.currentTarget);
-
-    // Typescript go brrrrr
-    const installNumberValue = formData.get("install_number");
-    if (installNumberValue !== null) {
-      setInstallNumber(parseInt(installNumberValue as string));
-    }
-  }
-
-  useEffect(() => {
-    // Revoke the URLs for the preview images on unmount.
-    return () => previews.forEach(([_, url]) => URL.revokeObjectURL(url));
-  }, [previews]);
-
-  return (
-    <>
-      <h2>Image Upload</h2>
-      <p>
-        Upload panoramas and other relevant install photos here. This form is
-        backed by Pano, our panorama hosting solution.
-      </p>
-      <div>
-        <form onSubmit={onSubmit}>
-          <PanoramaDropzone
-            name="dropzone_files"
-            setPreviews={setPreviews}
-            required
-          />
-          <div className={styles.formBody}>
-            <input
-              type="number"
-              name="install_number"
-              placeholder="Install Number"
-              required
-            />
-            <Button type="submit" variant="contained" size="large"
-
-              disabled={isLoading}
-
-            >
-              Submit
-            </Button>
-          </div>
-        </form>
-      </div>
-      <div className="toasty">
-        <ToastContainer />
-      </div>
-      <PanoramaDuplicateDialog
-        installNumber={installNumber}
-        previews={previews}
-        possibleDuplicates={possibleDuplicates}
-        isDialogOpened={isDuplicateDialogOpen}
-        handleClickUpload={handleClickUpload}
-        handleClickCancel={handleClickCancel}
-      />
-    </>
-  );
-};
-
-*/
-
 export default PanoramaUploader;
-
-// TODO: Can I show the existing panoramas?
-// TODO: Figure out key events for lookup by install num (or don't and let Olivier
-// figure it out)

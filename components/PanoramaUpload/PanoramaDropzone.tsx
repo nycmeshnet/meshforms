@@ -41,10 +41,13 @@ interface PanoramaDropzoneProps {
 const PanoramaDropzone: React.FC<PanoramaDropzoneProps> = ({ onFileDrop }) => {
   const [files, setFiles] = useState<File[]>([]);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles(acceptedFiles); // Store files locally
-    onFileDrop(acceptedFiles); // Pass files to main form via callback
-  }, [onFileDrop]);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      setFiles(acceptedFiles); // Store files locally
+      onFileDrop(acceptedFiles); // Pass files to main form via callback
+    },
+    [onFileDrop],
+  );
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
@@ -72,8 +75,7 @@ const PanoramaDropzone: React.FC<PanoramaDropzoneProps> = ({ onFileDrop }) => {
 
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-    return () =>
-      files.forEach((file) => URL.revokeObjectURL(file.preview));
+    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, [files]);
 
   return (
@@ -96,6 +98,6 @@ const PanoramaDropzone: React.FC<PanoramaDropzoneProps> = ({ onFileDrop }) => {
       </div>
     </div>
   );
-}
+};
 
 export default PanoramaDropzone;
