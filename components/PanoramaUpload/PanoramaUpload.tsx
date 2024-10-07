@@ -1,6 +1,6 @@
 "use client";
 // Idea: Have people validate their panoramas with their email?
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
@@ -10,6 +10,7 @@ import PanoramaDropzone from "./PanoramaDropzone";
 import { Button } from "@mui/material";
 import styles from "./PanoramaUpload.module.scss";
 import PanoramaDuplicateDialog from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
+import { useDropzone } from "react-dropzone";
 
 type FormValues = {
   installNumber: number;
@@ -17,7 +18,7 @@ type FormValues = {
 };
 
 function PanoramaUploader() {
-  const { register, handleSubmit } = useForm<FormValues>()
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>()
 
   const [isDuplicateDialogOpen, setIsDuplicateDialogOpen] = React.useState(false);
 
@@ -43,6 +44,14 @@ function PanoramaUploader() {
   const handleClickCancel = () => {
     setIsDuplicateDialogOpen(false);
   };
+  
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    if (acceptedFiles.length) {
+      setValue('dropzoneImages', acceptedFiles);  // Update the form state with the file
+    }
+  }, [setValue]);
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data)
 
@@ -55,11 +64,10 @@ function PanoramaUploader() {
       </p>
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <PanoramaDropzone
-            {...register("dropzoneImages")} 
-            name="dropzoneImages" // Kinda scuffed, but necessary due to how the dropzone works
-            required
-          />
+          <div {...getRootProps()} style={{ border: '2px dashed #000', padding: '20px', marginTop: '20px' }}>
+            <input {...getInputProps()} />
+            <p>Drag 'n' drop a file here, or click to select a file</p>
+          </div>
           <div className={styles.formBody}>
             <input
               {...register("installNumber")}
