@@ -19,28 +19,27 @@ type FormValues = {
 const PanoramaUploadForm: React.FC = () => {
   const { register, handleSubmit } = useForm<FormValues>();
 
-  const [duplicateDialogOpen, setDuplicateDialogOpen] = React.useState(false);
-
+  const [isDuplicateDialogOpen, setIsDuplicateDialogOpen] = React.useState(false);
 
   // Install number currently being processed
-  const [installNumber, setInstallNumber] =
-    React.useState(0);
+  const [installNumber, setInstallNumber] = React.useState(0);
 
   // Links to images on the server that we think are duplicates.
-  const [duplicateDialogImages, setDuplicateDialogImages] = React.useState([]);
+  const [possibleDuplicates, setPossibleDuplicates] = React.useState([]);
 
   // Displays previews of the user's submitted images on the duplicate dialog.
-  const [previews, setPreviews] = React.useState([]);
+  const [previews, setPreviews] = React.useState<Array<[string, string]>>([]);
 
   // Disables the submit button and shows the throbber when a request is being processed.
+  // TODO (wdn): Implement this
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleClickUpload = () => {
-    setDuplicateDialogOpen(false);
+    setIsDuplicateDialogOpen(false);
   };
 
   const handleClickCancel = () => {
-    setDuplicateDialogOpen(false);
+    setIsDuplicateDialogOpen(false);
   };
 
   function onSubmit(e) {
@@ -79,7 +78,7 @@ const PanoramaUploadForm: React.FC = () => {
             theme: "colored",
           });
           console.log(imagesDuplicated);
-          setDuplicateDialogImages(imagesDuplicated);
+          setPossibleDuplicates(imagesDuplicated);
           setDuplicateDialogOpen(true);
           return;
         }
@@ -119,7 +118,11 @@ const PanoramaUploadForm: React.FC = () => {
               placeholder="Install Number"
               required
             />
-            <Button type="submit" variant="contained" size="large">
+            <Button type="submit" variant="contained" size="large"
+
+              disabled={isLoading}
+
+            >
               Submit
             </Button>
           </div>
@@ -131,8 +134,8 @@ const PanoramaUploadForm: React.FC = () => {
       <PanoramaDuplicateDialog
         installNumber={installNumber}
         previews={previews}
-        duplicateImages={duplicateDialogImages}
-        isDialogOpened={duplicateDialogOpen}
+        duplicateImages={possibleDuplicates}
+        isDialogOpened={isDuplicateDialogOpen}
         handleClickUpload={handleClickUpload}
         handleClickCancel={handleClickCancel}
       />

@@ -58,16 +58,16 @@ export default function PanoramaDuplicateDialog({
                           alignItems: "center",
                         }}
                       >
-                      <img
-                        src={previews.find(([name, _]) => name === k)[1]}
-                        style={{
-                          display: "block",
-                          marginLeft: "auto",
-                          marginRight: "auto",
-                          height: "100px",
-                        }}
-                      />
-                      {previews.find(([name, _]) => name === k)[0]}
+                        <img
+                          src={previews.find(([name, _]) => name === k)[1]}
+                          style={{
+                            display: "block",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            height: "100px",
+                          }}
+                        />
+                        {previews.find(([name, _]) => name === k)[0]}
                       </div>
                     </td>
                     <td>
@@ -78,18 +78,18 @@ export default function PanoramaDuplicateDialog({
                           alignItems: "center",
                         }}
                       >
-                      <img
-                        src={v}
-                        style={{
-                          display: "block",
-                          marginLeft: "auto",
-                          marginRight: "auto",
-                          height: "100px",
-                        }}
-                      />
-                      <a href={new URL(v).origin + new URL(v).pathname}>
-                        {new URL(v).origin + new URL(v).pathname}
-                      </a>
+                        <img
+                          src={v}
+                          style={{
+                            display: "block",
+                            marginLeft: "auto",
+                            marginRight: "auto",
+                            height: "100px",
+                          }}
+                        />
+                        <a href={new URL(v).origin + new URL(v).pathname}>
+                          {new URL(v).origin + new URL(v).pathname}
+                        </a>
                       </div>
                     </td>
                   </tr>
