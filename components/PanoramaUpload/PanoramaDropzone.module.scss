@@ -29,12 +29,16 @@
   padding: 20px;
   border-width: 2px;
   border-radius: 2px;
-  border-color: #eeeeee;
+  border-color: #bbbbbb;
   border-style: dashed;
-  background-color: #fafafa;
-  color: #bdbdbd;
+  background-color: #eaeaea;
+  color: #adadad;
   outline: none;
   transition: border 0.24s ease-in-out;
+}
+
+.dropzone:hover {
+  border-color: #8BC8FF;
 }
 
 .dropzone:focus {

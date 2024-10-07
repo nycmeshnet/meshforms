@@ -24,6 +24,8 @@ const PanoramaUploadForm: React.FC = () => {
     React.useState(0);
   const [duplicateDialogImages, setDuplicateDialogImages] = React.useState([]);
 
+  const [previews, setPreviews] = React.useState([]);
+
   const handleClickUpload = () => {
     setDuplicateDialogOpen(false);
   };

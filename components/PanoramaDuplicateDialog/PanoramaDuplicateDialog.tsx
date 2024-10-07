@@ -5,6 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import styles from "./PanoramaDuplicateDialog.module.scss";
 
 interface PanoramaDuplicateDialogProps {
   installNumber: number;
@@ -22,16 +23,6 @@ export default function PanoramaDuplicateDialog({
   handleClickUpload,
   handleClickCancel,
 }: PanoramaDuplicateDialogProps) {
-  /*const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };*/
-
   return (
     <React.Fragment>
       <Dialog
@@ -45,17 +36,23 @@ export default function PanoramaDuplicateDialog({
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            The following images submitted were detected to be duplicates of
+            The following images submitted seem to be duplicates of
             existing images for Install #{installNumber}. Would you like to
-            submit new ones anyway?
+            upload these anyway?
             <br />
-            <ul>
+            <div className={styles.alertTable}>
+            <table>
+              <tr>
+                <th>Uploaded</th>
+                <th>Existing Image</th>
+              </tr>
               {duplicateImages.map(([k, v], _) => (
-                <li>
-                  <strong>Uploaded:</strong> {k}, <strong>Existing Object:</strong> {v}
-                </li>
+                <tr>
+                  <td>{k}</td> <td><img src={v} style={{display:"block", marginLeft: "auto", marginRight: "auto", height: "100px"}}/></td>
+                </tr>
               ))}
-            </ul>
+            </table>
+            </div>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

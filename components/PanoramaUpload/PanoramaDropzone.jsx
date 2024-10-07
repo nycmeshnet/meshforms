@@ -6,7 +6,7 @@ import styles from "./PanoramaDropzone.module.scss";
 const thumbsContainer = {
   display: "flex",
   flexDirection: "row",
-  flexWrap: "wrap",
+flexWrap: "wrap",
   marginTop: 16,
 };
 
@@ -35,7 +35,7 @@ const img = {
 };
 
 function PanoramaDropzone(props) {
-  const { required, name } = props;
+  const {required, name} = props
 
   const hiddenInputRef = useRef(null);
 
@@ -69,10 +69,16 @@ function PanoramaDropzone(props) {
           onLoad={() => {
             URL.revokeObjectURL(file.preview);
           }}
+          name={file.path}
         />
       </div>
     </div>
-  ));
+  ))
+
+  const previews: Array<[string, string]> = acceptedFiles.map((file) => {
+    // TODO: Don't forget to revoke this URL once it's done.
+    [file.name, URL.createObjectURL(file)]
+  });
 
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
