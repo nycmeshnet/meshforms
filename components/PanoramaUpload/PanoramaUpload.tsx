@@ -33,6 +33,14 @@ function PanoramaUploader() {
     dropzoneImages: [],
   });
 
+  // When we update the state due to a form submisson, try to submit the images
+  // once the update is complete. This is a little confusing to my small-brained
+  // backend mind, but it avoids a race condition evoked by trying to use the new
+  // state immediately after setting it in the submission handler.
+  useEffect(() => {
+    attemptUpload();
+  }, [formSubmission]);
+
   // Titles and Links to images on the server that we think are duplicates
   const [possibleDuplicates, setPossibleDuplicates] = React.useState<
     Array<[string, string]>
@@ -82,6 +90,8 @@ function PanoramaUploader() {
     // Upload possibly duplicate images
     formData.append("trustMeBro", trustMeBro ? "true" : "false");
 
+    console.log(formData);
+
     fetch("http://127.0.0.1:8089/api/v1/upload", {
       method: "POST",
       body: formData,
@@ -102,7 +112,7 @@ function PanoramaUploader() {
             hideProgressBar: true,
             theme: "colored",
           });
-          console.log(imagesDuplicated);
+          console.debug(imagesDuplicated);
           setPossibleDuplicates(imagesDuplicated);
           setIsDuplicateDialogOpen(true);
           return;
@@ -119,10 +129,9 @@ function PanoramaUploader() {
   }
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
-    setFormSubmission(data);
+    console.debug(data);
     setIsLoading(true);
-    attemptUpload();
+    setFormSubmission(data); // Side Effect: Submits the form
   };
 
   return (

@@ -26,4 +26,11 @@ export default [
 
     return HttpResponse.json(json, { status: 201 });
   }),
+
+  http.post("/api/v1/upload", async ({ request }) => {
+    console.log("Hello from mocked pano API.");
+    const requestPayload = await request.json();
+
+    return HttpResponse.json("", { status: 201 });
+  }),
 ];
