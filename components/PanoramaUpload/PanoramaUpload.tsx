@@ -1,13 +1,11 @@
 "use client";
-// Idea: Have people validate their panoramas with their email?
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PanoramaDropzone from "./PanoramaDropzone";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import styles from "./PanoramaUpload.module.scss";
 import PanoramaDuplicateDialog from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
 
@@ -99,33 +97,26 @@ function PanoramaUploader() {
       .then(async (response) => {
         if (response.ok) {
           console.log("Files uploaded successfully");
-
-          toast.success("Upload Successful!", {
-            hideProgressBar: true,
-            theme: "colored",
-          });
+          toast.success("Upload Successful!");
+          setIsLoading(false);
         }
-
         if (response.status == 409) {
           const imagesDuplicated = Object.entries(await response.json()); // Await the text() promise here
-          toast.error(`Duplicate images detected`, {
-            hideProgressBar: true,
-            theme: "colored",
-          });
           console.debug(imagesDuplicated);
           setPossibleDuplicates(imagesDuplicated);
           setIsDuplicateDialogOpen(true);
           return;
         }
+        if (response.status == 413) {
+          toast.error(`File size limit exceeded! Try splitting into multiple submissions.`);
+          setIsLoading(false);
+        }
       })
       .catch((error) => {
         console.error("File upload error:", error);
-        toast.error(`File upload error: ${error}`, {
-          hideProgressBar: true,
-          theme: "colored",
-        });
+        toast.error(`File upload error: ${error}`);
+        setIsLoading(false);
       });
-    setIsLoading(false);
   }
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
@@ -157,13 +148,19 @@ function PanoramaUploader() {
               size="large"
               disabled={isLoading}
             >
-              Submit
+              {isLoading ? "Loading..." : "Submit"}
             </Button>
+            <div hidden={!isLoading}>
+            <CircularProgress/>
+            </div>
           </div>
         </form>
       </div>
       <div className="toasty">
-        <ToastContainer />
+        <ToastContainer
+          hideProgressBar={true}
+          theme={"colored"}
+        />
       </div>
       <PanoramaDuplicateDialog
         formSubmission={formSubmission}
@@ -177,3 +174,5 @@ function PanoramaUploader() {
 }
 
 export default PanoramaUploader;
+
+// Idea: Have people validate their panoramas with their email?
