@@ -9,8 +9,8 @@ import styles from "./PanoramaDuplicateDialog.module.scss";
 
 interface PanoramaDuplicateDialogProps {
   installNumber: number;
-  previews: Array<[string, string]>;
-  duplicateImages: Array<[string, string]>;
+  submittedFiles: File[];
+  possibleDuplicates: Array<[string, string]>;
   isDialogOpened: boolean;
   handleClickUpload: () => void;
   handleClickCancel: () => void;
@@ -19,8 +19,8 @@ interface PanoramaDuplicateDialogProps {
 // https://mui.com/material-ui/react-dialog/#alerts
 export default function PanoramaDuplicateDialog({
   installNumber,
-  previews,
-  duplicateImages,
+  submittedFiles,
+  possibleDuplicates,
   isDialogOpened,
   handleClickUpload,
   handleClickCancel,
@@ -48,7 +48,7 @@ export default function PanoramaDuplicateDialog({
                   <th>Uploaded</th>
                   <th>Existing Image</th>
                 </tr>
-                {duplicateImages.map(([k, v], _) => (
+                {possibleDuplicates.map(([k, v], _) => (
                   <tr>
                     <td>
                       <div
@@ -59,7 +59,7 @@ export default function PanoramaDuplicateDialog({
                         }}
                       >
                         <img
-                          src={previews.find(([name, _]) => name === k)[1]}
+                          src={URL.createObjectURL(submittedFiles.find((file: File) => file.name === k))}
                           style={{
                             display: "block",
                             marginLeft: "auto",
@@ -67,7 +67,7 @@ export default function PanoramaDuplicateDialog({
                             height: "100px",
                           }}
                         />
-                        {previews.find(([name, _]) => name === k)[0]}
+                        {submittedFiles.find((file: File) => file.name === k).name}
                       </div>
                     </td>
                     <td>

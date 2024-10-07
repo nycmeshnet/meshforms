@@ -35,7 +35,7 @@ const img = {
 };
 
 function PanoramaDropzone(props) {
-  const { required, name, setPreviews } = props;
+  const { required, name } = props;
 
   const hiddenInputRef = useRef(null);
 
@@ -50,14 +50,6 @@ function PanoramaDropzone(props) {
         });
         hiddenInputRef.current.files = dataTransfer.files;
       }
-
-      // Kick filenames/previews out to the parent for use with the dupe window
-      const previews = incomingFiles.map((file) =>
-        // TODO: Don't forget to revoke this URL once it's done.
-        [file.name, URL.createObjectURL(file)],
-      );
-
-      setPreviews(previews);
     },
   });
 
