@@ -20,12 +20,19 @@ const PanoramaUploadForm: React.FC = () => {
   const { register, handleSubmit } = useForm<FormValues>();
 
   const [duplicateDialogOpen, setDuplicateDialogOpen] = React.useState(false);
-  const [duplicateDialogInstallNumber, setDuplicateDialogInstallNumber] =
+
+
+  // Install number currently being processed
+  const [installNumber, setInstallNumber] =
     React.useState(0);
+
+  // Links to images on the server that we think are duplicates.
   const [duplicateDialogImages, setDuplicateDialogImages] = React.useState([]);
 
+  // Displays previews of the user's submitted images on the duplicate dialog.
   const [previews, setPreviews] = React.useState([]);
 
+  // Disables the submit button and shows the throbber when a request is being processed.
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleClickUpload = () => {
@@ -44,9 +51,8 @@ const PanoramaUploadForm: React.FC = () => {
 
     // Typescript go brrrrr
     const installNumberValue = formData.get("install_number");
-    let installNumber = NaN;
     if (installNumberValue !== null) {
-      installNumber = parseInt(installNumberValue as string);
+      setInstallNumber(parseInt(installNumberValue as string));
     }
 
     fetch("http://127.0.0.1:8089/api/v1/upload", {
@@ -74,7 +80,6 @@ const PanoramaUploadForm: React.FC = () => {
           });
           console.log(imagesDuplicated);
           setDuplicateDialogImages(imagesDuplicated);
-          setDuplicateDialogInstallNumber(installNumber);
           setDuplicateDialogOpen(true);
           return;
         }
@@ -124,7 +129,7 @@ const PanoramaUploadForm: React.FC = () => {
         <ToastContainer />
       </div>
       <PanoramaDuplicateDialog
-        installNumber={duplicateDialogInstallNumber}
+        installNumber={installNumber}
         previews={previews}
         duplicateImages={duplicateDialogImages}
         isDialogOpened={duplicateDialogOpen}
