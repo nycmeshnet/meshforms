@@ -9,6 +9,7 @@ import styles from "./PanoramaDuplicateDialog.module.scss";
 
 interface PanoramaDuplicateDialogProps {
   installNumber: number;
+  previews: Array<[string, string]>;
   duplicateImages: Array<[string, string]>;
   isDialogOpened: boolean;
   handleClickUpload: () => void;
@@ -18,6 +19,7 @@ interface PanoramaDuplicateDialogProps {
 // https://mui.com/material-ui/react-dialog/#alerts
 export default function PanoramaDuplicateDialog({
   installNumber,
+  previews,
   duplicateImages,
   isDialogOpened,
   handleClickUpload,
@@ -36,22 +38,63 @@ export default function PanoramaDuplicateDialog({
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            The following images submitted seem to be duplicates of
-            existing images for Install #{installNumber}. Would you like to
-            upload these anyway?
+            The following images submitted seem to be duplicates of existing
+            images for Install #{installNumber}. Would you like to upload these
+            anyway?
             <br />
             <div className={styles.alertTable}>
-            <table>
-              <tr>
-                <th>Uploaded</th>
-                <th>Existing Image</th>
-              </tr>
-              {duplicateImages.map(([k, v], _) => (
+              <table>
                 <tr>
-                  <td>{k}</td> <td><img src={v} style={{display:"block", marginLeft: "auto", marginRight: "auto", height: "100px"}}/></td>
+                  <th>Uploaded</th>
+                  <th>Existing Image</th>
                 </tr>
-              ))}
-            </table>
+                {duplicateImages.map(([k, v], _) => (
+                  <tr>
+                    <td>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                      <img
+                        src={previews.find(([name, _]) => name === k)[1]}
+                        style={{
+                          display: "block",
+                          marginLeft: "auto",
+                          marginRight: "auto",
+                          height: "100px",
+                        }}
+                      />
+                      {previews.find(([name, _]) => name === k)[0]}
+                      </div>
+                    </td>
+                    <td>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
+                      >
+                      <img
+                        src={v}
+                        style={{
+                          display: "block",
+                          marginLeft: "auto",
+                          marginRight: "auto",
+                          height: "100px",
+                        }}
+                      />
+                      <a href={new URL(v).origin + new URL(v).pathname}>
+                        {new URL(v).origin + new URL(v).pathname}
+                      </a>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </table>
             </div>
           </DialogContentText>
         </DialogContent>

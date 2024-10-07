@@ -1,6 +1,6 @@
 "use client";
 // Idea: Have people validate their panoramas with their email?
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import { toastErrorMessage } from "@/app/utils/toastErrorMessage";
@@ -25,6 +25,8 @@ const PanoramaUploadForm: React.FC = () => {
   const [duplicateDialogImages, setDuplicateDialogImages] = React.useState([]);
 
   const [previews, setPreviews] = React.useState([]);
+
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleClickUpload = () => {
     setDuplicateDialogOpen(false);
@@ -86,16 +88,25 @@ const PanoramaUploadForm: React.FC = () => {
       });
   }
 
+  useEffect(() => {
+    // Revoke the URLs for the preview images on unmount.
+    return () => previews.forEach(([_, url]) => URL.revokeObjectURL(url));
+  }, [previews]);
+
   return (
     <>
       <h2>Image Upload</h2>
       <p>
         Upload panoramas and other relevant install photos here. This form is
-        backed by Pano, our self-hosted panorama hosting solution.
+        backed by Pano, our panorama hosting solution.
       </p>
       <div>
         <form onSubmit={onSubmit}>
-          <PanoramaDropzone name="dropzone_files" required />
+          <PanoramaDropzone
+            name="dropzone_files"
+            setPreviews={setPreviews}
+            required
+          />
           <div className={styles.formBody}>
             <input
               type="number"
@@ -114,6 +125,7 @@ const PanoramaUploadForm: React.FC = () => {
       </div>
       <PanoramaDuplicateDialog
         installNumber={duplicateDialogInstallNumber}
+        previews={previews}
         duplicateImages={duplicateDialogImages}
         isDialogOpened={duplicateDialogOpen}
         handleClickUpload={handleClickUpload}
