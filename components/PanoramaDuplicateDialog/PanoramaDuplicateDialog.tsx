@@ -6,10 +6,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import styles from "./PanoramaDuplicateDialog.module.scss";
+import { FormValues } from "../PanoramaUpload/PanoramaUpload";
 
 interface PanoramaDuplicateDialogProps {
-  installNumber: number;
-  submittedFiles: File[];
+  formSubmission: FormValues;
   possibleDuplicates: Array<[string, string]>;
   isDialogOpened: boolean;
   handleClickUpload: () => void;
@@ -18,8 +18,7 @@ interface PanoramaDuplicateDialogProps {
 
 // https://mui.com/material-ui/react-dialog/#alerts
 export default function PanoramaDuplicateDialog({
-  installNumber,
-  submittedFiles,
+  formSubmission,
   possibleDuplicates,
   isDialogOpened,
   handleClickUpload,
@@ -39,7 +38,7 @@ export default function PanoramaDuplicateDialog({
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             The following images submitted seem to be duplicates of existing
-            images for Install #{installNumber}. Would you like to upload these
+            images for Install #{formSubmission.installNumber}. Would you like to upload these
             anyway?
             <br />
             <div className={styles.alertTable}>
@@ -59,7 +58,7 @@ export default function PanoramaDuplicateDialog({
                         }}
                       >
                         <img
-                          src={URL.createObjectURL(submittedFiles.find((file: File) => file.name === k))}
+                          src={URL.createObjectURL(formSubmission.dropzoneImages.find((file: File) => file.name === k))}
                           style={{
                             display: "block",
                             marginLeft: "auto",
@@ -67,7 +66,7 @@ export default function PanoramaDuplicateDialog({
                             height: "100px",
                           }}
                         />
-                        {submittedFiles.find((file: File) => file.name === k).name}
+                        {formSubmission.dropzoneImages.find((file: File) => file.name === k).name}
                       </div>
                     </td>
                     <td>

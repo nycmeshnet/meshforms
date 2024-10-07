@@ -10,27 +10,27 @@ import PanoramaDropzone from "./PanoramaDropzone";
 import { Button } from "@mui/material";
 import styles from "./PanoramaUpload.module.scss";
 import PanoramaDuplicateDialog from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
-import { useDropzone } from "react-dropzone";
 
 type FormValues = {
   installNumber: number;
-  dropzoneImages: FileList;
+  dropzoneImages: File[];
 };
 
+export type { FormValues };
+
 function PanoramaUploader() {
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>()
+  // React hook form stuff
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>();
 
-  const [isDuplicateDialogOpen, setIsDuplicateDialogOpen] = React.useState(false);
-
-  // Install number currently being processed
-  const [installNumber, setInstallNumber] = React.useState(0);
-
-  // Files submitted by user
-  const [submittedFiles, setSubmittedFiles] = React.useState<File[]>([]);
+  // Most recently submitted user form
+  const [formSubmission, setFormSubmission] = React.useState<FormValues>({installNumber: 0, dropzoneImages: []});
 
   // Titles and Links to images on the server that we think are duplicates
   const [possibleDuplicates, setPossibleDuplicates] = React.useState<Array<[string, string]>>([]);
-  
+ 
+  // Shows and hides the duplicate dialog
+  const [isDuplicateDialogOpen, setIsDuplicateDialogOpen] = React.useState(false);
+ 
   // Disables the submit button and shows the throbber when a request is being processed.
   // TODO (wdn): Implement this
   const [isLoading, setIsLoading] = React.useState(false);
@@ -43,6 +43,7 @@ function PanoramaUploader() {
   // Closes the dupe dialog and allows the user to make chances
   const handleClickCancel = () => {
     setIsDuplicateDialogOpen(false);
+    setIsLoading(false);
   };
   
   const onFileDrop = (dropzoneImages: File[]) => {
@@ -51,7 +52,67 @@ function PanoramaUploader() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data)
+
+  function attemptUpload(trustMeBro: boolean = false) {
+    let formData = new FormData();
+
+    if (formSubmission === undefined) {
+      return;
+    }
+
+    // Set the install number
+    formData.append("installNumber", formSubmission.installNumber.toString());
+
+    // Upload images
+    for (var x = 0; x < formSubmission.dropzoneImages.length; x++) {
+      formData.append("dropzoneImages[]", formSubmission.dropzoneImages[x]);
+    }
+
+    // Upload possibly duplicate images
+    formData.append("trustMeBro", trustMeBro ? "true" : "false");
+
+    fetch("http://127.0.0.1:8089/api/v1/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          console.log("Files uploaded successfully");
+
+          toast.success("Upload Successful!", {
+            hideProgressBar: true,
+            theme: "colored",
+          });
+        }
+
+        if (response.status == 409) {
+          const imagesDuplicated = Object.entries(await response.json()); // Await the text() promise here
+          toast.error(`Duplicate images detected`, {
+            hideProgressBar: true,
+            theme: "colored",
+          });
+          console.log(imagesDuplicated);
+          setPossibleDuplicates(imagesDuplicated);
+          setIsDuplicateDialogOpen(true);
+          return;
+        }
+      })
+      .catch((error) => {
+        console.error("File upload error:", error);
+        toast.error(`File upload error: ${error}`, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      });
+    setIsLoading(false);
+  }
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.log(data)
+    setFormSubmission(data);
+    setIsLoading(true);
+    attemptUpload();
+  }
 
   return (
     <>
@@ -80,8 +141,7 @@ function PanoramaUploader() {
         <ToastContainer />
       </div>
       <PanoramaDuplicateDialog
-        installNumber={installNumber}
-        submittedFiles={submittedFiles}
+        formSubmission={formSubmission}
         possibleDuplicates={possibleDuplicates}
         isDialogOpened={isDuplicateDialogOpen}
         handleClickUpload={handleClickUpload}
