@@ -103,7 +103,7 @@ export default function App() {
             <Select
               {...register("state")} 
               placeholder="State"
-              defaultValue={selectStateOptions[0]}
+              defaultValue={selectStateOptions[0].label}
               className={styles.drop}
               required
             >
