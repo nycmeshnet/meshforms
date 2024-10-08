@@ -41,7 +41,7 @@ export default function App() {
 
     if (parsedPhoneNumber) {
       // Format the number and set the formatted value in react-hook-form
-      setValue("phoneNumber", parsedPhoneNumber.formatInternational());
+      setValue("phoneNumber", parsedPhoneNumber.formatInternational().replace(/ (\d{3}) (\d{4})$/, '-$1-$2'));
     } else {
 
     }
