@@ -3,7 +3,7 @@
 import React, { useState } from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import styles from "./JoinForm.module.scss";
-import PhoneInput from "react-phone-number-input/input";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 import { CircularProgress, MenuItem, Select, Button } from "@mui/material";
 import { ToastContainer } from "react-toastify";
@@ -29,11 +29,23 @@ const selectStateOptions = [
 ];
 
 export default function App() {
-  const { register, handleSubmit } = useForm<FormValues>()
+  const { register, setValue, handleSubmit } = useForm<FormValues>()
   const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data)
 
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  
+  const handlePhoneNumberBlur = (e) => {
+    const inputPhoneNumber = e.target.value;
+    const parsedPhoneNumber = parsePhoneNumberFromString(inputPhoneNumber, "US"); // Adjust the country code as needed
+
+    if (parsedPhoneNumber) {
+      // Format the number and set the formatted value in react-hook-form
+      setValue("phoneNumber", parsedPhoneNumber.formatInternational());
+    } else {
+
+    }
+  };
 
   /*
   return (
@@ -84,9 +96,7 @@ export default function App() {
               {...register("phoneNumber")}
               type="tel"
               placeholder="Phone Number"
-              //defaultCountry="US"
-              //value={phoneNumber}
-              //onChange={setPhoneNumber}
+              onBlur={handlePhoneNumberBlur}
             />
           </div>
 
