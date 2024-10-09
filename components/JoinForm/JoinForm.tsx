@@ -18,6 +18,7 @@ type JoinFormValues = {
   emailAddress: string
   phoneNumber: string
   streetAddress: string
+  apartment: string
   city: string
   state: string
   zipCode: string
@@ -38,6 +39,7 @@ export default function App() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const isBeta = true;
   
   const handlePhoneNumberBlur = (e) => {
     const inputPhoneNumber = e.target.value;
@@ -61,6 +63,7 @@ export default function App() {
   formData.append("emailAddress", joinFormSubmission.emailAddress);
   formData.append("phoneNumber", joinFormSubmission.phoneNumber);
   formData.append("streetAddress", joinFormSubmission.streetAddress);
+  formData.append("apartment", joinFormSubmission.apartment);
   formData.append("city", joinFormSubmission.city);
   formData.append("state", joinFormSubmission.state);
   formData.append("zipCode", joinFormSubmission.zipCode);
@@ -102,28 +105,23 @@ export default function App() {
     submitJoinFormToMeshDB(data);
   }
 
-  /*
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("firstName")} />
-      <input {...register("lastName")} />
-      <input type="email" {...register("email")} />
+  const betaDisclaimerBanner = (
+    <p style={{ backgroundColor: "yellow" }}>
+      This form is not production ready. Please fill out{" "}
+      <a href="https://www.nycmesh.net/join">this form</a> instead.
+    </p>
+  );
 
+  const welcomeBanner = (
+    <p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>
+  );
 
-      <input type="submit" />
-    </form>
-  )*/
-
-  /*<p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>*/
   return (
     <>
       <div className={styles.formBody}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <h2>Join NYC Mesh</h2>
-          <p style={{ backgroundColor: "yellow" }}>
-            This form is not production ready. Please fill out{" "}
-            <a href="https://www.nycmesh.net/join">this form</a> instead.
-          </p>
+          {isBeta ? betaDisclaimerBanner : welcomeBanner}
           <div>
             <h3>Personal Info</h3>
             <input
@@ -146,7 +144,6 @@ export default function App() {
               required
             />
 
-            {/*TODO: Re-implement PhoneInput*/}
             <input
               {...register("phoneNumber")}
               type="tel"
