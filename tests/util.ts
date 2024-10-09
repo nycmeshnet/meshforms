@@ -11,7 +11,7 @@ export const sampleData: JoinFormValues = {
   apartment: "1",
   city: "Brooklyn",
   state: "NY",
-  zipCode: 11238,
+  zipCode: "11238",
   roofAccess: true,
   referral: "I googled it.",
   ncl: true,

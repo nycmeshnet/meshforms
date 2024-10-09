@@ -26,6 +26,9 @@ test("happy join form", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, sampleData);
 
+  // Uncomment this if you want to poke around after the join form has been filled out
+  //await page.pause();
+
   await submitSuccessExpected(page, unitTestTimeout);
 });
 

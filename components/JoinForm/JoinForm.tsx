@@ -7,6 +7,7 @@ import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 import { CircularProgress, MenuItem, Select, Button } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { recordJoinFormSubmissionToS3 } from "@/app/data";
 import { submitJoinForm } from "@/app/api";
 import { getMeshDBAPIEndpoint, submitJoinFormToMeshDB } from "@/app/endpoint";
@@ -54,7 +55,7 @@ export default function App() {
   };
 
   
-  function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
+  async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
   const formData = new FormData();
 
   // Don't love this, but IDK if there's a better way to do it.
@@ -71,7 +72,7 @@ export default function App() {
   formData.append("referral", joinFormSubmission.referral);
   formData.append("ncl", String(joinFormSubmission.ncl));
 
-  return fetch(`${getMeshDBAPIEndpoint()}/api/v1/join/`, {
+  return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
       method: "POST",
       body: formData,
   })
@@ -89,11 +90,17 @@ export default function App() {
       toast.warning("Please confirm some information");
       return;
     }
+    if (response.status == 500) {
+      // This looks disgusting when Debug is on in MeshDB because it replies with HTML. 
+      // There's probably a way to coax the exception out of the response somewhere 
+      toast.error(`Could not submit Join Form: ${await response.text()}`);
+      setIsLoading(false);
+    }
   })
   .catch((error) => {
     // TODO (wdn): Submit errors to the server?
-    console.error("Join Form submission error:", error);
-    toast.error(`Could not submit Join Form: ${error}`);
+    //console.error("Join Form submission error:", error);
+    toast.error(`Could not submit Join Form`);
     setIsLoading(false);
   });
 }
