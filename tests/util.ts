@@ -62,7 +62,7 @@ export async function fillOutJoinForm(page: Page, sampleData: JoinFormInput) {
 
   // Roof Access
   if (sampleData.roof_access) {
-    await page.locator("[name='roof_access']").check();
+    await page.locator("[name='roofAccess']").check();
   }
 }
 

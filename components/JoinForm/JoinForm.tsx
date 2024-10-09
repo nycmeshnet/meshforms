@@ -6,10 +6,13 @@ import styles from "./JoinForm.module.scss";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 import { CircularProgress, MenuItem, Select, Button } from "@mui/material";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import { recordJoinFormSubmissionToS3 } from "@/app/data";
+import { submitJoinForm } from "@/app/api";
+import { getMeshDBAPIEndpoint, submitJoinFormToMeshDB } from "@/app/endpoint";
 
 
-type FormValues = {
+type JoinFormValues = {
   firstName: string
   lastName: string
   emailAddress: string
@@ -23,14 +26,15 @@ type FormValues = {
   ncl: boolean
 }
 
+export type {JoinFormValues};
+
 const selectStateOptions = [
   { value: "NY", label: "New York" },
   { value: "NJ", label: "New Jersey" },
 ];
 
 export default function App() {
-  const { register, setValue, handleSubmit } = useForm<FormValues>()
-  const onSubmit: SubmitHandler<FormValues> = (data) => console.log(data)
+  const { register, setValue, handleSubmit } = useForm<JoinFormValues>()
 
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -46,6 +50,57 @@ export default function App() {
 
     }
   };
+
+  
+  function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
+  const formData = new FormData();
+
+  // Don't love this, but IDK if there's a better way to do it.
+  formData.append("firstName", joinFormSubmission.firstName);
+  formData.append("lastName", joinFormSubmission.lastName);
+  formData.append("emailAddress", joinFormSubmission.emailAddress);
+  formData.append("phoneNumber", joinFormSubmission.phoneNumber);
+  formData.append("streetAddress", joinFormSubmission.streetAddress);
+  formData.append("city", joinFormSubmission.city);
+  formData.append("state", joinFormSubmission.state);
+  formData.append("zipCode", joinFormSubmission.zipCode);
+  formData.append("roofAccess", String(joinFormSubmission.roofAccess));
+  formData.append("referral", joinFormSubmission.referral);
+  formData.append("ncl", String(joinFormSubmission.ncl));
+
+  return fetch(`${getMeshDBAPIEndpoint()}/api/v1/join/`, {
+      method: "POST",
+      body: formData,
+  })
+  .then(async (response) => {
+    if (response.ok) {
+      console.debug("Join Form submitted successfully");
+      toast.success("Thanks! You will receive an email shortly 🙂");
+      setIsLoading(false);
+    }
+    if (response.status == 409) {
+      const imagesDuplicated = Object.entries(await response.json());
+      console.debug(imagesDuplicated);
+      //setPossibleDuplicates(imagesDuplicated);
+      //setIsDuplicateDialogOpen(true);
+      toast.warning("Please confirm some information");
+      return;
+    }
+  })
+  .catch((error) => {
+    // TODO (wdn): Submit errors to the server?
+    console.error("Join Form submission error:", error);
+    toast.error(`Could not submit Join Form: ${error}`);
+    setIsLoading(false);
+  });
+}
+
+  const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
+    console.debug(data)
+    setIsLoading(true);
+    recordJoinFormSubmissionToS3(data);
+    submitJoinFormToMeshDB(data);
+  }
 
   /*
   return (
@@ -163,7 +218,10 @@ export default function App() {
         </form>
       </div>
       <div className="toasty">
-        <ToastContainer />
+        <ToastContainer
+          hideProgressBar={true}
+          theme={"colored"}
+        />
       </div>
     </>
   );
