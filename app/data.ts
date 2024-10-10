@@ -11,7 +11,9 @@ const S3_BASE_NAME = process.env.S3_BASE_NAME as string;
 const S3_ACCESS_KEY = process.env.S3_ACCESS_KEY as string;
 const S3_SECRET_KEY = process.env.S3_SECRET_KEY as string;
 
-export async function recordJoinFormSubmissionToCSV(submission: JoinFormValues) {
+export async function recordJoinFormSubmissionToCSV(
+  submission: JoinFormValues,
+) {
   const keys = Object.keys(submission).join(",");
   // Surround each value in quotes to avoid confusion with strings like
   // "Brooklyn, NY"
@@ -67,7 +69,7 @@ export async function recordJoinFormSubmissionToS3(submission: JoinFormValues) {
     console.log(response);
   } catch (err) {
     console.error(err);
-    // Record the submission to a local CSV file as a last-ditch effort 
+    // Record the submission to a local CSV file as a last-ditch effort
     recordJoinFormSubmissionToCSV(submission);
     throw err;
   }

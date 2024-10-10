@@ -68,6 +68,3 @@ export const submitQueryForm = (
     QueryFormResponse,
     password,
   );
-
-
-

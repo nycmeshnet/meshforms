@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { useForm, SubmitHandler } from "react-hook-form"
+import React, { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./JoinForm.module.scss";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
@@ -12,24 +12,23 @@ import { recordJoinFormSubmissionToS3 } from "@/app/data";
 import { submitJoinForm } from "@/app/api";
 import { getMeshDBAPIEndpoint, submitJoinFormToMeshDB } from "@/app/endpoint";
 
-
 type JoinFormValues = {
-  first_name: string
-  last_name: string
-  email_address: string
-  phone_number: string
-  street_address: string
-  apartment: string
-  city: string
-  state: string
-  zip_code: string
-  roof_access: boolean
-  referral: string
-  ncl: boolean
-  trust_me_bro: boolean
-}
+  first_name: string;
+  last_name: string;
+  email_address: string;
+  phone_number: string;
+  street_address: string;
+  apartment: string;
+  city: string;
+  state: string;
+  zip_code: string;
+  roof_access: boolean;
+  referral: string;
+  ncl: boolean;
+  trust_me_bro: boolean;
+};
 
-export type {JoinFormValues};
+export type { JoinFormValues };
 
 const selectStateOptions = [
   { value: "NY", label: "New York" },
@@ -37,69 +36,78 @@ const selectStateOptions = [
 ];
 
 export default function App() {
-  const { register, setValue, handleSubmit } = useForm<JoinFormValues>()
+  const { register, setValue, handleSubmit } = useForm<JoinFormValues>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
   const isBeta = true;
-  
+
   const handlePhoneNumberBlur = (e) => {
     const inputPhoneNumber = e.target.value;
-    const parsedPhoneNumber = parsePhoneNumberFromString(inputPhoneNumber, "US"); // Adjust the country code as needed
+    const parsedPhoneNumber = parsePhoneNumberFromString(
+      inputPhoneNumber,
+      "US",
+    ); // Adjust the country code as needed
 
     if (parsedPhoneNumber) {
       setIsBadPhoneNumber(false);
       // Format the number and set the formatted value in react-hook-form
-      setValue("phone_number", parsedPhoneNumber.formatInternational().replace(/ (\d{3}) (\d{4})$/, '-$1-$2'));
+      setValue(
+        "phone_number",
+        parsedPhoneNumber
+          .formatInternational()
+          .replace(/ (\d{3}) (\d{4})$/, "-$1-$2"),
+      );
     } else {
       setIsBadPhoneNumber(true);
     }
   };
 
-  
-  async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues, trustMeBro: boolean = false) {
-    
-  joinFormSubmission.trust_me_bro = trustMeBro;
-  return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
+  async function submitJoinFormToMeshDB(
+    joinFormSubmission: JoinFormValues,
+    trustMeBro: boolean = false,
+  ) {
+    joinFormSubmission.trust_me_bro = trustMeBro;
+    return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
       method: "POST",
       body: JSON.stringify(joinFormSubmission),
-  })
-  .then(async (response) => {
-    if (response.ok) {
-      console.debug("Join Form submitted successfully");
-      toast.success("Thanks! You will receive an email shortly 🙂");
-      setIsLoading(false);
-    }
-    if (response.status == 409) {
-      const imagesDuplicated = Object.entries(await response.json());
-      console.debug(imagesDuplicated);
-      //setPossibleDuplicates(imagesDuplicated);
-      //setIsDuplicateDialogOpen(true);
-      toast.warning("Please confirm some information");
-      return;
-    }
-    if (response.status == 500) {
-      // This looks disgusting when Debug is on in MeshDB because it replies with HTML. 
-      // There's probably a way to coax the exception out of the response somewhere 
-      toast.error(`Could not submit Join Form: ${await response.text()}`);
-      setIsLoading(false);
-    }
-  })
-  .catch((error) => {
-    // TODO (wdn): Submit errors to the server?
-    //console.error("Join Form submission error:", error);
-    toast.error(`Could not submit Join Form`);
-    setIsLoading(false);
-  });
-}
+    })
+      .then(async (response) => {
+        if (response.ok) {
+          console.debug("Join Form submitted successfully");
+          toast.success("Thanks! You will receive an email shortly 🙂");
+          setIsLoading(false);
+        }
+        if (response.status == 409) {
+          const imagesDuplicated = Object.entries(await response.json());
+          console.debug(imagesDuplicated);
+          //setPossibleDuplicates(imagesDuplicated);
+          //setIsDuplicateDialogOpen(true);
+          toast.warning("Please confirm some information");
+          return;
+        }
+        if (response.status == 500) {
+          // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
+          // There's probably a way to coax the exception out of the response somewhere
+          toast.error(`Could not submit Join Form: ${await response.text()}`);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        // TODO (wdn): Submit errors to the server?
+        //console.error("Join Form submission error:", error);
+        toast.error(`Could not submit Join Form`);
+        setIsLoading(false);
+      });
+  }
 
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
-    console.debug(data)
+    console.debug(data);
     setIsLoading(true);
     recordJoinFormSubmissionToS3(data);
     submitJoinFormToMeshDB(data);
-  }
+  };
 
   const betaDisclaimerBanner = (
     <p style={{ backgroundColor: "yellow" }}>
@@ -109,7 +117,10 @@ export default function App() {
   );
 
   const welcomeBanner = (
-    <p>Join our community network! Fill out the form, and we will reach out over email shortly.</p>
+    <p>
+      Join our community network! Fill out the form, and we will reach out over
+      email shortly.
+    </p>
   );
 
   return (
@@ -146,7 +157,9 @@ export default function App() {
               placeholder="Phone Number"
               onBlur={handlePhoneNumberBlur}
             />
-            <p style={{color:"red"}} hidden={!isBadPhoneNumber}>Please enter a valid phone number</p>
+            <p style={{ color: "red" }} hidden={!isBadPhoneNumber}>
+              Please enter a valid phone number
+            </p>
           </div>
 
           <div className={styles.block}>
@@ -160,7 +173,7 @@ export default function App() {
             <input type="text" name="apartment" placeholder="Unit #" required />
             <input type="text" name="city" placeholder="City" required />
             <Select
-              {...register("state")} 
+              {...register("state")}
               placeholder="State"
               defaultValue={selectStateOptions[0].label}
               className={styles.drop}
@@ -172,7 +185,12 @@ export default function App() {
                 </MenuItem>
               ))}
             </Select>
-            <input {...register("zip_code")} type="number" placeholder="Zip Code" required />
+            <input
+              {...register("zip_code")}
+              type="number"
+              placeholder="Zip Code"
+              required
+            />
             <label>
               <input {...register("roof_access")} type="checkbox" />
               Check this box if you have roof access
@@ -185,7 +203,8 @@ export default function App() {
             placeholder="How did you hear about us?"
           />
           <label>
-            <input {...register("ncl")} type="checkbox" required />I agree to the{" "}
+            <input {...register("ncl")} type="checkbox" required />I agree to
+            the{" "}
             <a
               href="https://www.nycmesh.net/ncl.pdf"
               target="_blank"
@@ -206,18 +225,14 @@ export default function App() {
               {isLoading ? "Loading..." : submitted ? "Thanks!" : "Submit"}
             </Button>
             <div hidden={!isLoading}>
-            <CircularProgress/>
+              <CircularProgress />
             </div>
           </div>
         </form>
       </div>
       <div className="toasty">
-        <ToastContainer
-          hideProgressBar={true}
-          theme={"colored"}
-        />
+        <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
     </>
   );
-
 }
