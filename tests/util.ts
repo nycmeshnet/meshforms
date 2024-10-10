@@ -3,37 +3,40 @@ import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { expect, Page } from "@playwright/test";
 
 export const sampleData: JoinFormValues = {
-  firstName: "Jon",
-  lastName: "Smith",
-  emailAddress: "js@gmail.com",
-  phoneNumber: "585-475-2411",
-  streetAddress: "197 Prospect Pl",
+  first_name: "Jon",
+  last_name: "Smith",
+  email_address: "js@gmail.com",
+  phone_number: "585-475-2411",
+  street_address: "197 Prospect Pl",
   apartment: "1",
   city: "Brooklyn",
   state: "NY",
-  zipCode: "11238",
-  roofAccess: true,
+  zip_code: "11238",
+  roof_access: true,
   referral: "I googled it.",
   ncl: true,
+  trust_me_bro: false,
 };
 
-let expectedAPIRequestData: JoinFormValues = sampleData;
-expectedAPIRequestData.phoneNumber = "+1 585 475 2411";
+let expectedAPIRequestDataMut: JoinFormValues = sampleData;
+expectedAPIRequestDataMut.phone_number = "+1 585-475-2411";
+
+export const expectedAPIRequestData = expectedAPIRequestDataMut;
 
 export async function fillOutJoinForm(page: Page, sampleData: JoinFormValues) {
   // Set up some sample data
 
   // Personal info
-  await page.getByPlaceholder("First Name").fill(sampleData.firstName);
-  await page.getByPlaceholder("Last Name").fill(sampleData.lastName);
-  await page.getByPlaceholder("Email Address").fill(sampleData.emailAddress);
-  await page.getByPlaceholder("Phone Number").fill(sampleData.phoneNumber);
+  await page.getByPlaceholder("First Name").fill(sampleData.first_name);
+  await page.getByPlaceholder("Last Name").fill(sampleData.last_name);
+  await page.getByPlaceholder("Email Address").fill(sampleData.email_address);
+  await page.getByPlaceholder("Phone Number").fill(sampleData.phone_number);
 
   // Address Info
-  await page.getByPlaceholder("Street Address").fill(sampleData.streetAddress);
+  await page.getByPlaceholder("Street Address").fill(sampleData.street_address);
   await page.getByPlaceholder("Unit #").fill(sampleData.apartment);
   await page.getByPlaceholder("City").fill(sampleData.city);
-  await page.getByPlaceholder("Zip Code").fill(sampleData.zipCode.toString());
+  await page.getByPlaceholder("Zip Code").fill(sampleData.zip_code.toString());
 
   // How did you hear about us?
   await page
@@ -46,8 +49,8 @@ export async function fillOutJoinForm(page: Page, sampleData: JoinFormValues) {
   }
 
   // Roof Access
-  if (sampleData.roofAccess) {
-    await page.locator("[name='roofAccess']").check();
+  if (sampleData.roof_access) {
+    await page.locator("[name='roof_access']").check();
   }
 }
 

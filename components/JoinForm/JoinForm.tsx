@@ -10,7 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { recordJoinFormSubmissionToS3 } from "@/app/data";
 import { submitJoinForm } from "@/app/api";
-import { getMeshDBAPIEndpoint, submitJoinFormToMeshDB } from "@/app/endpoint";
+import { getMeshDBAPIEndpoint } from "@/app/endpoint";
 
 type JoinFormValues = {
   first_name: string;
@@ -39,6 +39,7 @@ export default function App() {
   const { register, setValue, handleSubmit } = useForm<JoinFormValues>();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
   const isBeta = true;
@@ -68,6 +69,7 @@ export default function App() {
     joinFormSubmission: JoinFormValues,
     trustMeBro: boolean = false,
   ) {
+    console.debug(JSON.stringify(joinFormSubmission));
     joinFormSubmission.trust_me_bro = trustMeBro;
     return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
       method: "POST",
@@ -78,6 +80,7 @@ export default function App() {
           console.debug("Join Form submitted successfully");
           toast.success("Thanks! You will receive an email shortly 🙂");
           setIsLoading(false);
+          setIsSubmitted(true);
         }
         if (response.status == 409) {
           const imagesDuplicated = Object.entries(await response.json());
@@ -103,7 +106,6 @@ export default function App() {
   }
 
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
-    console.debug(data);
     setIsLoading(true);
     recordJoinFormSubmissionToS3(data);
     submitJoinFormToMeshDB(data);
@@ -170,17 +172,17 @@ export default function App() {
               placeholder="Street Address"
               required
             />
-            <input type="text" name="apartment" placeholder="Unit #" required />
-            <input type="text" name="city" placeholder="City" required />
+            <input {...register("apartment")} type="text" placeholder="Unit #" required />
+            <input {...register("city")} type="text" placeholder="City" required />
             <Select
               {...register("state")}
               placeholder="State"
-              defaultValue={selectStateOptions[0].label}
+              defaultValue={selectStateOptions[0].value}
               className={styles.drop}
               required
             >
               {selectStateOptions.map((option) => (
-                <MenuItem key={option.value} value={option.label}>
+                <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
               ))}
@@ -216,13 +218,13 @@ export default function App() {
           <div className={styles.centered}>
             <Button
               type="submit"
-              disabled={isLoading || submitted}
+              disabled={isLoading || isSubmitted}
               variant="contained"
               size="large"
               sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}
               name="submit_join_form"
             >
-              {isLoading ? "Loading..." : submitted ? "Thanks!" : "Submit"}
+              {isLoading ? "Loading..." : isSubmitted ? "Thanks!" : "Submit"}
             </Button>
             <div hidden={!isLoading}>
               <CircularProgress />
