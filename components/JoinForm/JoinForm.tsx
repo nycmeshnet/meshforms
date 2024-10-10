@@ -14,19 +14,19 @@ import { getMeshDBAPIEndpoint, submitJoinFormToMeshDB } from "@/app/endpoint";
 
 
 type JoinFormValues = {
-  firstName: string
-  lastName: string
-  emailAddress: string
-  phoneNumber: string
-  streetAddress: string
+  first_name: string
+  last_name: string
+  email_address: string
+  phone_number: string
+  street_address: string
   apartment: string
   city: string
   state: string
-  zipCode: string
-  roofAccess: boolean
+  zip_code: string
+  roof_access: boolean
   referral: string
   ncl: boolean
-  trustMeBro: boolean
+  trust_me_bro: boolean
 }
 
 export type {JoinFormValues};
@@ -41,6 +41,7 @@ export default function App() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
   const isBeta = true;
   
   const handlePhoneNumberBlur = (e) => {
@@ -48,35 +49,21 @@ export default function App() {
     const parsedPhoneNumber = parsePhoneNumberFromString(inputPhoneNumber, "US"); // Adjust the country code as needed
 
     if (parsedPhoneNumber) {
+      setIsBadPhoneNumber(false);
       // Format the number and set the formatted value in react-hook-form
-      setValue("phoneNumber", parsedPhoneNumber.formatInternational().replace(/ (\d{3}) (\d{4})$/, '-$1-$2'));
+      setValue("phone_number", parsedPhoneNumber.formatInternational().replace(/ (\d{3}) (\d{4})$/, '-$1-$2'));
     } else {
-      // TODO: Show error?
+      setIsBadPhoneNumber(true);
     }
   };
 
   
-  async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
-  const formData = new FormData();
-
-  // Don't love this, but IDK if there's a better way to do it.
-  formData.append("firstName", joinFormSubmission.firstName);
-  formData.append("lastName", joinFormSubmission.lastName);
-  formData.append("emailAddress", joinFormSubmission.emailAddress);
-  formData.append("phoneNumber", joinFormSubmission.phoneNumber);
-  formData.append("streetAddress", joinFormSubmission.streetAddress);
-  formData.append("apartment", joinFormSubmission.apartment);
-  formData.append("city", joinFormSubmission.city);
-  formData.append("state", joinFormSubmission.state);
-  formData.append("zipCode", joinFormSubmission.zipCode);
-  formData.append("roofAccess", String(joinFormSubmission.roofAccess));
-  formData.append("referral", joinFormSubmission.referral);
-  formData.append("ncl", String(joinFormSubmission.ncl));
-  formData.append("trustMeBro", String(joinFormSubmission.trustMeBro));
-
+  async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues, trustMeBro: boolean = false) {
+    
+  joinFormSubmission.trust_me_bro = trustMeBro;
   return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
       method: "POST",
-      body: formData,
+      body: JSON.stringify(joinFormSubmission),
   })
   .then(async (response) => {
     if (response.ok) {
@@ -134,37 +121,38 @@ export default function App() {
           <div>
             <h3>Personal Info</h3>
             <input
-              {...register("firstName")}
+              {...register("first_name")}
               type="text"
               placeholder="First Name"
               required
             />
             <input
-              {...register("lastName")}
+              {...register("last_name")}
               type="text"
               placeholder="Last Name"
               required
             />
 
             <input
-              {...register("emailAddress")}
+              {...register("email_address")}
               type="email"
               placeholder="Email Address"
               required
             />
 
             <input
-              {...register("phoneNumber")}
+              {...register("phone_number")}
               type="tel"
               placeholder="Phone Number"
               onBlur={handlePhoneNumberBlur}
             />
+            <p style={{color:"red"}} hidden={!isBadPhoneNumber}>Please enter a valid phone number</p>
           </div>
 
           <div className={styles.block}>
             <h3>Address Info</h3>
             <input
-              {...register("streetAddress")}
+              {...register("street_address")}
               type="text"
               placeholder="Street Address"
               required
@@ -184,9 +172,9 @@ export default function App() {
                 </MenuItem>
               ))}
             </Select>
-            <input {...register("zipCode")} type="number" placeholder="Zip Code" required />
+            <input {...register("zip_code")} type="number" placeholder="Zip Code" required />
             <label>
-              <input {...register("roofAccess")} type="checkbox" />
+              <input {...register("roof_access")} type="checkbox" />
               Check this box if you have roof access
             </label>
           </div>
