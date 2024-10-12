@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./JoinForm.module.scss";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
@@ -11,6 +11,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { recordJoinFormSubmissionToS3 } from "@/app/data";
 import { submitJoinForm } from "@/app/api";
 import { getMeshDBAPIEndpoint } from "@/app/endpoint";
+import { JoinFormResponse } from "@/app/io";
+import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 
 type JoinFormValues = {
   first_name: string;
@@ -28,6 +30,25 @@ type JoinFormValues = {
   trust_me_bro: boolean;
 };
 
+// Coding like it's 1997
+export function NewJoinFormValues() {
+  return {
+    first_name: "",
+    last_name: "",
+    email_address: "",
+    phone_number: "",
+    street_address: "",
+    apartment: "",
+    city: "",
+    state: "",
+    zip_code: "",
+    roof_access: false,
+    referral: "",
+    ncl: false,
+    trust_me_bro: false,
+  };
+}
+
 export type { JoinFormValues };
 
 const selectStateOptions = [
@@ -39,10 +60,21 @@ export default function App() {
   const { register, setValue, handleSubmit } = useForm<JoinFormValues>();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isInfoConfirmationDialogueOpen, setIsInfoConfirmationDialogueOpen] =
+    useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
   const isBeta = true;
+
+  // Store the values submitted by the user or returned by the server
+  const [joinFormSubmission, setJoinFormSubmission] =
+    useState<JoinFormValues>(NewJoinFormValues());
+  const [infoToConfirm, setInfoToConfirm] =
+    useState<JoinFormValues>(NewJoinFormValues());
+
+  useEffect(() => {
+    submitJoinFormToMeshDB();
+  }, [joinFormSubmission]);
 
   const handlePhoneNumberBlur = (e) => {
     const inputPhoneNumber = e.target.value;
@@ -65,12 +97,32 @@ export default function App() {
     }
   };
 
-  async function submitJoinFormToMeshDB(
-    joinFormSubmission: JoinFormValues,
-    trustMeBro: boolean = false,
-  ) {
+  // Closes dupe dialog and tries the submission again
+  const handleClickConfirm = () => {
+    setIsInfoConfirmationDialogueOpen(false);
+    submitJoinFormToMeshDB();
+  };
+
+  // Closes the dupe dialog and allows the user to make chances
+  const handleClickCancel = () => {
+    setIsInfoConfirmationDialogueOpen(false);
+    setIsLoading(false);
+  };
+
+  async function submitJoinFormToMeshDB() {
     console.debug(JSON.stringify(joinFormSubmission));
-    joinFormSubmission.trust_me_bro = trustMeBro;
+
+    // Die if undefined
+    if (joinFormSubmission === undefined) {
+      toast.error("Could not submit Join Form: Input is undefined");
+      return;
+    }
+
+    // If this isn't true, then it's is probably undefined, so we gotta fix that.
+    if (joinFormSubmission.trust_me_bro !== true) {
+      joinFormSubmission.trust_me_bro = false;
+    }
+
     return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
       method: "POST",
       body: JSON.stringify(joinFormSubmission),
@@ -95,10 +147,9 @@ export default function App() {
         // We just need to confirm some information
         if (error.status == 409) {
           // TODO: Finish this
-          const infoToConfirm = Object.entries(errorJson);
+          setInfoToConfirm(errorJson);
           console.debug(infoToConfirm);
-          //setPossibleDuplicates(imagesDuplicated);
-          //setIsDuplicateDialogOpen(true);
+          setIsInfoConfirmationDialogueOpen(true);
           toast.warning("Please confirm some information");
           return;
         }
@@ -113,7 +164,7 @@ export default function App() {
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
     setIsLoading(true);
     recordJoinFormSubmissionToS3(data);
-    submitJoinFormToMeshDB(data);
+    setJoinFormSubmission(data); // Kicks off a submission
   };
 
   const betaDisclaimerBanner = (
@@ -250,6 +301,12 @@ export default function App() {
       <div className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
+      <InfoConfirmationDialog
+        infoToConfirm={infoToConfirm}
+        isDialogOpened={isInfoConfirmationDialogueOpen}
+        handleClickConfirm={handleClickConfirm}
+        handleClickCancel={handleClickConfirm}
+      />
     </>
   );
 }
