@@ -9,7 +9,7 @@ import styles from "./InfoConfirmation.module.scss";
 import { JoinFormValues } from "../JoinForm/JoinForm";
 
 interface PanoramaDuplicateDialogProps {
-  infoToConfirm: Array<[string, string]>;
+  infoToConfirm: Array<[keyof JoinFormValues, string]>;
   isDialogOpened: boolean;
   handleClickConfirm: () => void;
   handleClickCancel: () => void;
@@ -22,7 +22,6 @@ export default function InfoConfirmationDialog({
   handleClickConfirm,
   handleClickCancel,
 }: PanoramaDuplicateDialogProps) {
-  console.log(infoToConfirm);
   return (
     <React.Fragment>
       <Dialog
@@ -59,10 +58,11 @@ export default function InfoConfirmationDialog({
           </div>
         </DialogContent>
         <DialogActions>
-          <Button color="error" onClick={handleClickCancel}>
+          <Button name="cancel" color="error" onClick={handleClickCancel}>
             Cancel
           </Button>
           <Button
+            name="confirm"
             color="success"
             variant="contained"
             onClick={handleClickConfirm}

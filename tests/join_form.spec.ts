@@ -39,16 +39,22 @@ test("confirm city", async ({ page }) => {
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
-  let data = sampleData;
+  let data = Object.assign({}, sampleData);
   data.city = "brooklyn";
 
   // Set up sample data.
   await fillOutJoinForm(page, data);
 
   // Uncomment this if you want to poke around after the join form has been filled out
-  await page.pause();
+  // await page.pause();
 
-  await submitConfirmationDialogExpected(page, unitTestTimeout);
+  await submitConfirmationDialogExpected(page, 2000);
+
+  await page.locator("[name='confirm']").click();
+
+  await page.waitForTimeout(unitTestTimeout);
+
+  await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
 });
 
 // Tests missing both first and last name

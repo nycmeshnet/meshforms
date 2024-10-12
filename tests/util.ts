@@ -89,7 +89,6 @@ export async function submitConfirmationDialogExpected(
   // Submit the join form
   await page.getByRole("button", { name: /Submit/i }).click();
 
-  // Make sure that the submit button says "Thanks!"
   await page.waitForTimeout(timeout);
-  await expect(page.getByText("Please confirm some information")).toBeVisible();
+  await expect(page.locator("[id='alert-dialog-title']")).toBeVisible();
 }

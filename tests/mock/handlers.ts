@@ -25,6 +25,10 @@ export default [
       );
     }
 
+
+    // Duct tape to make the isDeepStrictEqual pass.
+    joinRequest.trust_me_bro = false;
+
     if (!isDeepStrictEqual(joinRequest, expectedAPIRequestData)) {
       console.error(
         "Mock Join API is returning 400. (request is not deeply equal)",

@@ -98,10 +98,18 @@ export default function App() {
     setIsInfoConfirmationDialogueOpen(false);
     let joinFormSubmission: JoinFormValues = getValues();
 
-    console.log(joinFormSubmission);
-    console.log(infoToConfirm);
+    let updatedJoinFormSubmission = joinFormSubmission;
 
-    submitJoinFormToMeshDB(Object.assign(joinFormSubmission, infoToConfirm));
+    infoToConfirm.forEach(([key, value]) => {
+      updatedJoinFormSubmission[key as keyof JoinFormValues] = value;
+    });
+
+    updatedJoinFormSubmission.trust_me_bro = true;
+
+    console.log('chom');
+    console.log(updatedJoinFormSubmission);
+
+    submitJoinFormToMeshDB(updatedJoinFormSubmission);
   };
 
   // Closes the dupe dialog and allows the user to make chances
