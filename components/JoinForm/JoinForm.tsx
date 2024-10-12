@@ -57,7 +57,8 @@ const selectStateOptions = [
 ];
 
 export default function App() {
-  const { register, setValue, handleSubmit } = useForm<JoinFormValues>();
+  const { register, setValue, getValues, handleSubmit } =
+    useForm<JoinFormValues>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isInfoConfirmationDialogueOpen, setIsInfoConfirmationDialogueOpen] =
@@ -67,14 +68,9 @@ export default function App() {
   const isBeta = true;
 
   // Store the values submitted by the user or returned by the server
-  const [joinFormSubmission, setJoinFormSubmission] =
-    useState<JoinFormValues>(NewJoinFormValues());
-  const [infoToConfirm, setInfoToConfirm] =
-    useState<JoinFormValues>(NewJoinFormValues());
-
-  useEffect(() => {
-    submitJoinFormToMeshDB();
-  }, [joinFormSubmission]);
+  const [infoToConfirm, setInfoToConfirm] = useState<Array<[string, string]>>(
+    [],
+  );
 
   const handlePhoneNumberBlur = (e) => {
     const inputPhoneNumber = e.target.value;
@@ -100,7 +96,12 @@ export default function App() {
   // Closes dupe dialog and tries the submission again
   const handleClickConfirm = () => {
     setIsInfoConfirmationDialogueOpen(false);
-    submitJoinFormToMeshDB();
+    let joinFormSubmission: JoinFormValues = getValues();
+
+    console.log(joinFormSubmission);
+    console.log(infoToConfirm);
+
+    submitJoinFormToMeshDB(Object.assign(joinFormSubmission, infoToConfirm));
   };
 
   // Closes the dupe dialog and allows the user to make chances
@@ -109,19 +110,8 @@ export default function App() {
     setIsLoading(false);
   };
 
-  async function submitJoinFormToMeshDB() {
+  async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
     console.debug(JSON.stringify(joinFormSubmission));
-
-    // Die if undefined
-    if (joinFormSubmission === undefined) {
-      toast.error("Could not submit Join Form: Input is undefined");
-      return;
-    }
-
-    // If this isn't true, then it's is probably undefined, so we gotta fix that.
-    if (joinFormSubmission.trust_me_bro !== true) {
-      joinFormSubmission.trust_me_bro = false;
-    }
 
     return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
       method: "POST",
@@ -143,11 +133,12 @@ export default function App() {
         //console.error("Join Form submission error:", error);
         const errorJson = await error.json();
         const detail = await errorJson.detail;
+        console.debug(errorJson);
 
         // We just need to confirm some information
         if (error.status == 409) {
           // TODO: Finish this
-          setInfoToConfirm(errorJson);
+          setInfoToConfirm(Object.entries(errorJson.changed_info));
           console.debug(infoToConfirm);
           setIsInfoConfirmationDialogueOpen(true);
           toast.warning("Please confirm some information");
@@ -164,7 +155,8 @@ export default function App() {
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
     setIsLoading(true);
     recordJoinFormSubmissionToS3(data);
-    setJoinFormSubmission(data); // Kicks off a submission
+    data.trust_me_bro = false;
+    submitJoinFormToMeshDB(data);
   };
 
   const betaDisclaimerBanner = (

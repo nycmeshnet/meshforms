@@ -2,12 +2,28 @@ import { JoinFormResponse } from "@/app/io";
 import { http, HttpResponse } from "msw";
 import { expectedAPIRequestData } from "../util";
 import { isDeepStrictEqual } from "util";
+import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 
 export default [
   http.post("/api/v1/join/", async ({ request }) => {
     console.debug("Hello from mocked join API.");
-    const joinRequest = await request.json();
+    const joinRequest: JoinFormValues = await request.json();
     console.debug(joinRequest);
+
+    if (joinRequest.city === "brooklyn") {
+      return HttpResponse.json(
+        {
+          detail: "Mock: Please confirm a few details.",
+          building_id: "",
+          member_id: "",
+          install_id: "",
+          install_number: "",
+          member_exists: "",
+          changed_info: { city: "Brooklyn" },
+        },
+        { status: 409 },
+      );
+    }
 
     if (!isDeepStrictEqual(joinRequest, expectedAPIRequestData)) {
       console.error(

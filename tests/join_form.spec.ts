@@ -6,6 +6,7 @@ import {
   fillOutJoinForm,
   submitSuccessExpected,
   submitFailureExpected,
+  submitConfirmationDialogExpected,
 } from "@/tests/util";
 
 const joinFormTimeout = 10000;
@@ -30,6 +31,24 @@ test("happy join form", async ({ page }) => {
   //await page.pause();
 
   await submitSuccessExpected(page, unitTestTimeout);
+});
+
+test("confirm city", async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+  let data = sampleData;
+  data.city = "brooklyn";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, data);
+
+  // Uncomment this if you want to poke around after the join form has been filled out
+  await page.pause();
+
+  await submitConfirmationDialogExpected(page, unitTestTimeout);
 });
 
 // Tests missing both first and last name

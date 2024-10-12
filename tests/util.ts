@@ -78,3 +78,18 @@ export async function submitSuccessExpected(
   await page.waitForTimeout(timeout);
   await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
 }
+
+export async function submitConfirmationDialogExpected(
+  page: Page,
+  timeout: number = 10000,
+) {
+  // Listen for all console logs
+  page.on("console", (msg) => console.log(msg.text()));
+
+  // Submit the join form
+  await page.getByRole("button", { name: /Submit/i }).click();
+
+  // Make sure that the submit button says "Thanks!"
+  await page.waitForTimeout(timeout);
+  await expect(page.getByText("Please confirm some information")).toBeVisible();
+}

@@ -9,7 +9,7 @@ import styles from "./InfoConfirmation.module.scss";
 import { JoinFormValues } from "../JoinForm/JoinForm";
 
 interface PanoramaDuplicateDialogProps {
-  infoToConfirm: JoinFormValues;
+  infoToConfirm: Array<[string, string]>;
   isDialogOpened: boolean;
   handleClickConfirm: () => void;
   handleClickCancel: () => void;
@@ -22,6 +22,7 @@ export default function InfoConfirmationDialog({
   handleClickConfirm,
   handleClickCancel,
 }: PanoramaDuplicateDialogProps) {
+  console.log(infoToConfirm);
   return (
     <React.Fragment>
       <Dialog
@@ -31,30 +32,36 @@ export default function InfoConfirmationDialog({
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle color="warning" id="alert-dialog-title">
-          {"Possible duplicates detected"}
+          {"Please confirm some information"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             Please confirm some info
-            <br />
-            <div className={styles.alertTable}>
-              <table>
-                <tr>
-                  <th>Field</th>
-                  <th>Value</th>
-                </tr>
-                {Object.entries(infoToConfirm).map(([key, value]) => (
-                  <tr>
-                    <td>{key}</td>
-                    <td>{value}</td>
-                  </tr>
-                ))}
-              </table>
-            </div>
           </DialogContentText>
+          <br />
+          <div className={styles.alertTable}>
+            <table>
+              <thead>
+              <tr key="headers">
+                <th>Field</th>
+                <th>Value</th>
+              </tr>
+              </thead>
+              <tbody>
+              {infoToConfirm.map(([key, value], _) => (
+                <tr key={key}>
+                  <td>{key}</td>
+                  <td>{value}</td>
+                </tr>
+              ))}
+              </tbody>
+            </table>
+          </div>
         </DialogContent>
         <DialogActions>
-          <Button color="error" onClick={handleClickCancel}>Cancel</Button>
+          <Button color="error" onClick={handleClickCancel}>
+            Cancel
+          </Button>
           <Button
             color="success"
             variant="contained"
