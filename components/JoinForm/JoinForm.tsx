@@ -81,26 +81,31 @@ export default function App() {
           toast.success("Thanks! You will receive an email shortly 🙂");
           setIsLoading(false);
           setIsSubmitted(true);
+          return;
         }
-        if (response.status == 409) {
-          const imagesDuplicated = Object.entries(await response.json());
-          console.debug(imagesDuplicated);
+
+        throw(response);
+      })
+      .catch(async (error) => {
+        // TODO (wdn): Log errors to the server?
+        //console.error("Join Form submission error:", error);
+        const errorJson = await error.json();
+        const detail = await errorJson.detail;
+        
+        // We just need to confirm some information
+        if (error.status == 409) {
+          // TODO: Finish this
+          const infoToConfirm = Object.entries(errorJson);
+          console.debug(infoToConfirm);
           //setPossibleDuplicates(imagesDuplicated);
           //setIsDuplicateDialogOpen(true);
           toast.warning("Please confirm some information");
           return;
         }
-        if (response.status == 500) {
-          // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
-          // There's probably a way to coax the exception out of the response somewhere
-          toast.error(`Could not submit Join Form: ${await response.text()}`);
-          setIsLoading(false);
-        }
-      })
-      .catch((error) => {
-        // TODO (wdn): Submit errors to the server?
-        //console.error("Join Form submission error:", error);
-        toast.error(`Could not submit Join Form`);
+
+        // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
+        // There's probably a way to coax the exception out of the response somewhere
+        toast.error(`Could not submit Join Form: ${detail}`);
         setIsLoading(false);
       });
   }
