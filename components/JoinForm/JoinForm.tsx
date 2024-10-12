@@ -84,14 +84,14 @@ export default function App() {
           return;
         }
 
-        throw(response);
+        throw response;
       })
       .catch(async (error) => {
         // TODO (wdn): Log errors to the server?
         //console.error("Join Form submission error:", error);
         const errorJson = await error.json();
         const detail = await errorJson.detail;
-        
+
         // We just need to confirm some information
         if (error.status == 409) {
           // TODO: Finish this
@@ -177,8 +177,18 @@ export default function App() {
               placeholder="Street Address"
               required
             />
-            <input {...register("apartment")} type="text" placeholder="Unit #" required />
-            <input {...register("city")} type="text" placeholder="City" required />
+            <input
+              {...register("apartment")}
+              type="text"
+              placeholder="Unit #"
+              required
+            />
+            <input
+              {...register("city")}
+              type="text"
+              placeholder="City"
+              required
+            />
             <Select
               {...register("state")}
               placeholder="State"
