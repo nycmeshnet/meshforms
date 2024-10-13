@@ -50,7 +50,7 @@ export async function fillOutJoinForm(page: Page, sampleData: JoinFormValues) {
 
   // Address Info
   await page.getByPlaceholder("Street Address").fill(sampleData.street_address);
-  await page.getByPlaceholder("Unit #").fill(sampleData.apartment);
+  await page.getByPlaceholder("Unit / Apartment #").fill(sampleData.apartment);
   await page.getByPlaceholder("City").fill(sampleData.city);
   await page.getByPlaceholder("State").fill(sampleData.state);
   await page.getByPlaceholder("Zip Code").fill(sampleData.zip_code.toString());

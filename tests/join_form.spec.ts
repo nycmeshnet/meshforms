@@ -49,7 +49,7 @@ test("confirm city", async ({ page }) => {
   await fillOutJoinForm(page, data);
 
   // Uncomment this if you want to poke around after the join form has been filled out
-  await page.pause();
+  //await page.pause();
 
   await submitConfirmationDialogExpected(page, 2000);
 
@@ -73,7 +73,7 @@ test("confirm street address", async ({ page }) => {
   await fillOutJoinForm(page, data);
 
   // Uncomment this if you want to poke around after the join form has been filled out
-  await page.pause();
+  //await page.pause();
 
   await submitConfirmationDialogExpected(page, 2000);
 

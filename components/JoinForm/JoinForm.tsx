@@ -61,8 +61,10 @@ const selectStateOptions = [
 ];
 
 export default function App() {
-  const { register, setValue, getValues, handleSubmit } =
-    useForm<JoinFormValues>();
+  let defaultFormValues = NewJoinFormValues();
+  defaultFormValues.state = selectStateOptions[0].value;
+  const { register, setValue, getValues, handleSubmit, formState: { isDirty, isValid }  } =
+    useForm<JoinFormValues>({ mode: "onChange", defaultValues: defaultFormValues});
 
   const [isLoading, setIsLoading] = useState(false);
   const [isInfoConfirmationDialogueOpen, setIsInfoConfirmationDialogueOpen] =
@@ -207,27 +209,27 @@ export default function App() {
           <div>
             <h3>Personal Info</h3>
             <input
-              {...register("first_name")}
+              {...register("first_name", {required: "Please enter your first name"})}
               type="text"
               placeholder="First Name"
               required
             />
             <input
-              {...register("last_name")}
+              {...register("last_name", {required: "Please enter your last name"})}
               type="text"
               placeholder="Last Name"
               required
             />
 
             <input
-              {...register("email_address")}
+              {...register("email_address", {required: "Please enter your email address"})}
               type="email"
               placeholder="Email Address"
               required
             />
 
             <input
-              {...register("phone_number")}
+              {...register("phone_number", {required: "Please enter your phone number"})}
               type="tel"
               placeholder="Phone Number"
               onBlur={handlePhoneNumberBlur}
@@ -240,19 +242,19 @@ export default function App() {
           <div className={styles.block}>
             <h3>Address Info</h3>
             <input
-              {...register("street_address")}
+              {...register("street_address", {required: "Please enter your first name"})}
               type="text"
               placeholder="Street Address"
               required
             />
             <input
-              {...register("apartment")}
+              {...register("apartment", {required: "Please enter your apartment number"})}
               type="text"
-              placeholder="Unit #"
+              placeholder="Unit / Apartment #"
               required
             />
             <input
-              {...register("city")}
+              {...register("city", {required: "Please enter your city"})}
               type="text"
               placeholder="City"
               required
@@ -271,7 +273,7 @@ export default function App() {
               ))}
             </Select>
             <input
-              {...register("zip_code")}
+              {...register("zip_code", {required: "Please enter your ZIP code"})}
               type="number"
               placeholder="Zip Code"
               required
@@ -288,7 +290,7 @@ export default function App() {
             placeholder="How did you hear about us?"
           />
           <label>
-            <input {...register("ncl")} type="checkbox" required />I agree to
+            <input {...register("ncl", {required: "Please agree to the NCL!"})} type="checkbox" required />I agree to
             the{" "}
             <a
               href="https://www.nycmesh.net/ncl.pdf"
@@ -301,7 +303,7 @@ export default function App() {
           <div className={styles.centered}>
             <Button
               type="submit"
-              disabled={isLoading || isSubmitted || isBadPhoneNumber}
+              disabled={isLoading || isSubmitted || isBadPhoneNumber || !isDirty || !isValid}
               variant="contained"
               size="large"
               sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}
