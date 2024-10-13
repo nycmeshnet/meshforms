@@ -12,7 +12,7 @@ import {
   submitAndCheckToast,
 } from "@/tests/util";
 
-const joinFormTimeout = 10000;
+const joinFormTimeout = 5000;
 const unitTestTimeout = 5000;
 
 // Unit tests for the Join Form.
@@ -103,14 +103,13 @@ test("fail missing name", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingNameData);
 
-  // Shouldn't go through
-  await submitFailureExpected(page);
+  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
 
   // Do it again with last name
   missingNameData = sampleData;
   missingNameData.last_name = "";
   await fillOutJoinForm(page, missingNameData);
-  await submitFailureExpected(page);
+  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
 });
 
 // Tests missing email
@@ -124,13 +123,12 @@ test("fail missing email", async ({ page }) => {
   let missingData: JoinFormValues;
 
   missingData = sampleData;
-  missingData.email = "";
+  missingData.email_address = "";
 
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  // Shouldn't go through
-  await submitFailureExpected(page);
+  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
 });
 
 // Tests missing phone
@@ -217,17 +215,17 @@ test("fail bad phone", async ({ page }) => {
   let missingData: JoinFormValues;
 
   missingData = sampleData;
-  missingData.phone = "twelve";
+  missingData.phone_number = "twelve";
 
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
   // Shouldn't go through
-  await submitFailureExpected(page);
+  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
 
   // Try another one.
   missingData = sampleData;
-  missingData.phone = "12";
+  missingData.phone_number = "12";
   await fillOutJoinForm(page, missingData);
   await submitFailureExpected(page);
 });
@@ -245,12 +243,25 @@ test("fail missing address", async ({ page }) => {
   missingAddressData = sampleData;
   missingAddressData.street_address = "";
   await fillOutJoinForm(page, missingAddressData);
-  await submitFailureExpected(page);
+
+  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+});
+
+test("fail missing city", async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  // Set up sample data.
+  let missingAddressData: JoinFormValues;
 
   missingAddressData = sampleData;
   missingAddressData.city = "";
   await fillOutJoinForm(page, missingAddressData);
-  await submitFailureExpected(page);
+
+  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
 });
 
 // This one should fail and here's why: It's really annoying when people
@@ -271,7 +282,8 @@ test("fail missing unit number", async ({ page }) => {
   missingAddressData = sampleData;
   missingAddressData.apartment = "";
   await fillOutJoinForm(page, missingAddressData);
-  await submitFailureExpected(page);
+
+  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
 });
 
 test("fail nj", async ({ page }) => {
