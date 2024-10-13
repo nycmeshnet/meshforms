@@ -44,7 +44,7 @@ export default function InfoConfirmationDialog({
           <div className={styles.alertTable}>
             <table>
               <thead>
-                <tr key="headers" >
+                <tr key="headers">
                   <th>Original</th>
                   <th>New</th>
                 </tr>
