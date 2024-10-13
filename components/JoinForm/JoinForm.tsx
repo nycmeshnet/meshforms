@@ -104,7 +104,7 @@ export default function App() {
 
     joinFormSubmission.trust_me_bro = true;
 
-    console.log('chom');
+    console.log("chom");
     console.log(joinFormSubmission);
 
     submitJoinFormToMeshDB(joinFormSubmission);

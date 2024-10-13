@@ -89,7 +89,7 @@ export async function submitAndCheckToast(page: Page, toastMessage: string) {
 
   // The submission should've been stopped, and the member should be able to try again.
   await expect(page.locator("[name='submit_join_form']")).toHaveText("Submit");
-  await expect(page.getByTestId("toasty")).toContainText(toastMessage)
+  await expect(page.getByTestId("toasty")).toContainText(toastMessage);
 }
 
 export async function submitSuccessExpected(

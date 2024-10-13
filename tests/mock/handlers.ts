@@ -11,7 +11,12 @@ export default [
     console.debug(joinRequest);
 
     if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
-      return HttpResponse.json({detail: "Mock: Non-NYC registrations are not supported at this time."}, {status: 400});
+      return HttpResponse.json(
+        {
+          detail: "Mock: Non-NYC registrations are not supported at this time.",
+        },
+        { status: 400 },
+      );
     }
 
     if (joinRequest.city === "brooklyn") {

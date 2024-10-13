@@ -60,7 +60,6 @@ test("confirm city", async ({ page }) => {
   await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
 });
 
-
 // TODO: Add a garbage testcase
 // TODO: Add nj testcase
 //
@@ -264,5 +263,8 @@ test("fail nj", async ({ page }) => {
   // Uncomment this if you want to poke around after the join form has been filled out
   //await page.pause();
 
-  await submitAndCheckToast(page, "Non-NYC registrations are not supported at this time");
+  await submitAndCheckToast(
+    page,
+    "Non-NYC registrations are not supported at this time",
+  );
 });

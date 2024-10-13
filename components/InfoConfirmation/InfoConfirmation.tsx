@@ -42,18 +42,18 @@ export default function InfoConfirmationDialog({
           <div className={styles.alertTable}>
             <table>
               <thead>
-              <tr key="headers">
-                <th>Field</th>
-                <th>Value</th>
-              </tr>
+                <tr key="headers">
+                  <th>Field</th>
+                  <th>Value</th>
+                </tr>
               </thead>
               <tbody>
-              {infoToConfirm.map(([key, value], _) => (
-                <tr key={key}>
-                  <td>{key}</td>
-                  <td>{value}</td>
-                </tr>
-              ))}
+                {infoToConfirm.map(([key, value], _) => (
+                  <tr key={key}>
+                    <td>{key}</td>
+                    <td>{value}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -62,10 +62,7 @@ export default function InfoConfirmationDialog({
           <Button name="cancel" color="error" onClick={handleClickCancel}>
             Go back
           </Button>
-          <Button
-            name="reject"
-            color="secondary"
-          >
+          <Button name="reject" color="secondary">
             Use Original
           </Button>
           <Button
