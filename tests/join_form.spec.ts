@@ -196,6 +196,16 @@ test("fail bad email", async ({ page }) => {
 
   // Shouldn't go through
   await submitFailureExpected(page);
+});
+
+test("fail bad email 2", async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormValues;
 
   // Try another one
   missingData = sampleData;
