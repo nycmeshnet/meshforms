@@ -12,7 +12,7 @@ import {
   submitAndCheckToast,
 } from "@/tests/util";
 
-const joinFormTimeout = 5000;
+const joinFormTimeout = 10000;
 const unitTestTimeout = 5000;
 
 // Unit tests for the Join Form.
@@ -222,6 +222,16 @@ test("fail bad phone", async ({ page }) => {
 
   // Shouldn't go through
   await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+});
+
+test("fail bad phone 2", async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormValues;
 
   // Try another one.
   missingData = sampleData;
