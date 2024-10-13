@@ -33,7 +33,7 @@ export async function recordJoinFormSubmissionToCSV(
 }
 
 // Records the submission we just got as a JSON object in an S3 bucket.
-export async function recordJoinFormSubmissionToS3(submission: JoinFormValues) {
+export async function recordJoinFormSubmissionToS3(submission: JoinFormValues, key: string = "", responseCode: string = "") {
   if (S3_ACCESS_KEY === undefined || S3_SECRET_KEY === undefined) {
     console.error(
       "S3 credentials not configured. I WILL NOT SAVE THIS SUBMISSION.",
@@ -58,10 +58,14 @@ export async function recordJoinFormSubmissionToS3(submission: JoinFormValues) {
     .replace(/[-:T]/g, "/")
     .slice(0, 19);
 
+  key = key != "" ? key : `${S3_BASE_NAME}/${submissionKey}.json`;
+
+  let body = responseCode != "" ? JSON.stringify(Object.assign(submission, {responseCode: responseCode})) : JSON.stringify(submission);
+
   const command = new PutObjectCommand({
     Bucket: S3_BUCKET_NAME,
-    Key: `${S3_BASE_NAME}/${submissionKey}.json`,
-    Body: JSON.stringify(submission),
+    Key: key,
+    Body: body,
   });
 
   try {
@@ -73,4 +77,7 @@ export async function recordJoinFormSubmissionToS3(submission: JoinFormValues) {
     recordJoinFormSubmissionToCSV(submission);
     throw err;
   }
+
+  // Return the key later so we can update it.
+  return key;
 }
