@@ -84,6 +84,30 @@ test("confirm street address", async ({ page }) => {
   await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
 });
 
+test("confirm street address trust me bro", async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+  let data: JoinFormValues = Object.assign({}, sampleData);
+  data.street_address = "333 chom st";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, data);
+
+  // Uncomment this if you want to poke around after the join form has been filled out
+  //await page.pause();
+
+  await submitConfirmationDialogExpected(page, 2000);
+
+  await page.locator("[name='reject']").click();
+
+  await page.waitForTimeout(unitTestTimeout);
+
+  await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
+});
+
 // TODO: Add a garbage testcase
 // TODO: Add confirm block (is this trust me bro?)
 
