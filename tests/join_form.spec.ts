@@ -114,8 +114,6 @@ test("fail missing name", async ({ page }) => {
 });
 
 // Tests missing email
-// XXX (wdn): This is meant to fail right now, but we've got support for
-// email OR phone available, so we should update meshforms to do that.
 test("fail missing email", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto("/join");
@@ -136,7 +134,6 @@ test("fail missing email", async ({ page }) => {
 });
 
 // Tests missing phone
-// XXX (wdn): Ditto to the above
 test("fail missing phone", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto("/join");
@@ -152,12 +149,12 @@ test("fail missing phone", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  // Shouldn't go through
-  await submitFailureExpected(page);
+  await expect(page.getByText("Please enter a valid phone number")).toBeVisible();
+
+  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
 });
 
 // Tests missing email + phone
-// XXX (wdn): Ditto to the above
 test("fail missing email and phone", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto("/join");
@@ -174,8 +171,9 @@ test("fail missing email and phone", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  // Shouldn't go through
-  await submitFailureExpected(page);
+  await expect(page.getByText("Please enter a valid phone number")).toBeVisible();
+
+  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
 });
 
 // Give a bad email address

@@ -12,6 +12,7 @@ interface PanoramaDuplicateDialogProps {
   infoToConfirm: Array<ConfirmationField>;
   isDialogOpened: boolean;
   handleClickConfirm: () => void;
+  handleClickReject: () => void;
   handleClickCancel: () => void;
 }
 
@@ -20,6 +21,7 @@ export default function InfoConfirmationDialog({
   infoToConfirm,
   isDialogOpened,
   handleClickConfirm,
+  handleClickReject,
   handleClickCancel,
 }: PanoramaDuplicateDialogProps) {
   return (
@@ -62,7 +64,7 @@ export default function InfoConfirmationDialog({
           <Button name="cancel" color="primary" onClick={handleClickCancel}>
             Go Back
           </Button>
-          <Button name="reject" color="warning">
+          <Button name="reject" color="warning" onClick={handleClickReject}>
             Use Original
           </Button>
           <Button

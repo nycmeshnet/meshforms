@@ -97,7 +97,7 @@ export default function App() {
     }
   };
 
-  // Closes dialog and tries the submission again
+  // Closes dialog, updates the values, and tries the submission again 
   const handleClickConfirm = () => {
     setIsInfoConfirmationDialogueOpen(false);
     let joinFormSubmission: JoinFormValues = getValues();
@@ -105,6 +105,16 @@ export default function App() {
     infoToConfirm.map((field) => {
       joinFormSubmission[field.key as keyof JoinFormValues] = field.new;
     });
+
+    joinFormSubmission.trust_me_bro = true;
+
+    submitJoinFormToMeshDB(joinFormSubmission);
+  };
+
+  // Closes the dialog and just sends it
+  const handleClickReject = () => {
+    setIsInfoConfirmationDialogueOpen(false);
+    let joinFormSubmission: JoinFormValues = getValues();
 
     joinFormSubmission.trust_me_bro = true;
 
@@ -312,6 +322,7 @@ export default function App() {
         infoToConfirm={infoToConfirm}
         isDialogOpened={isInfoConfirmationDialogueOpen}
         handleClickConfirm={handleClickConfirm}
+        handleClickReject={handleClickReject}
         handleClickCancel={handleClickCancel}
       />
     </>
