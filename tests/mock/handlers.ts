@@ -13,7 +13,7 @@ export default [
     if (requestJson === undefined || requestJson === null) {
       return HttpResponse.json(
         { detail: "Mock: Missing request body" },
-        {status: 400},
+        { status: 400 },
       );
     }
 
