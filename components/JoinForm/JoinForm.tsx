@@ -72,7 +72,7 @@ export default function App() {
     [],
   );
 
-  const handlePhoneNumberBlur = (e) => {
+  const handlePhoneNumberBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const inputPhoneNumber = e.target.value;
     const parsedPhoneNumber = parsePhoneNumberFromString(
       inputPhoneNumber,
