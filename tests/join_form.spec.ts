@@ -149,7 +149,9 @@ test("fail missing phone", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  await expect(page.getByText("Please enter a valid phone number")).toBeVisible();
+  await expect(
+    page.getByText("Please enter a valid phone number"),
+  ).toBeVisible();
 
   await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
 });
@@ -171,7 +173,9 @@ test("fail missing email and phone", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  await expect(page.getByText("Please enter a valid phone number")).toBeVisible();
+  await expect(
+    page.getByText("Please enter a valid phone number"),
+  ).toBeVisible();
 
   await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
 });

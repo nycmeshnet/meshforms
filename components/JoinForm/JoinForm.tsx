@@ -51,7 +51,11 @@ export function NewJoinFormValues() {
 
 export type { JoinFormValues };
 
-type ConfirmationField = {key: keyof JoinFormValues, original: string, new: string};
+type ConfirmationField = {
+  key: keyof JoinFormValues;
+  original: string;
+  new: string;
+};
 
 export type { ConfirmationField };
 
@@ -63,8 +67,16 @@ const selectStateOptions = [
 export default function App() {
   let defaultFormValues = NewJoinFormValues();
   defaultFormValues.state = selectStateOptions[0].value;
-  const { register, setValue, getValues, handleSubmit, formState: { isDirty, isValid }  } =
-    useForm<JoinFormValues>({ mode: "onChange", defaultValues: defaultFormValues});
+  const {
+    register,
+    setValue,
+    getValues,
+    handleSubmit,
+    formState: { isDirty, isValid },
+  } = useForm<JoinFormValues>({
+    mode: "onChange",
+    defaultValues: defaultFormValues,
+  });
 
   const [isLoading, setIsLoading] = useState(false);
   const [isInfoConfirmationDialogueOpen, setIsInfoConfirmationDialogueOpen] =
@@ -74,9 +86,9 @@ export default function App() {
   const isBeta = true;
 
   // Store the values submitted by the user or returned by the server
-  const [infoToConfirm, setInfoToConfirm] = useState<Array<ConfirmationField>>(
-    [{key: "" as keyof JoinFormValues, original: "", new: ""}],
-  );
+  const [infoToConfirm, setInfoToConfirm] = useState<Array<ConfirmationField>>([
+    { key: "" as keyof JoinFormValues, original: "", new: "" },
+  ]);
 
   const handlePhoneNumberBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const inputPhoneNumber = e.target.value;
@@ -99,7 +111,7 @@ export default function App() {
     }
   };
 
-  // Closes dialog, updates the values, and tries the submission again 
+  // Closes dialog, updates the values, and tries the submission again
   const handleClickConfirm = () => {
     setIsInfoConfirmationDialogueOpen(false);
     let joinFormSubmission: JoinFormValues = getValues();
@@ -153,16 +165,25 @@ export default function App() {
 
         // We just need to confirm some information
         if (error.status == 409) {
-          let needsConfirmation: Array<ConfirmationField> = []
+          let needsConfirmation: Array<ConfirmationField> = [];
           const changedInfo = errorJson.changed_info;
           console.log(joinFormSubmission);
           console.log(errorJson.changed_info);
-          
+
           for (const key in joinFormSubmission) {
             console.log(key);
-            if (joinFormSubmission.hasOwnProperty(key) && changedInfo.hasOwnProperty(key)) {
-              const originalValue = String(joinFormSubmission[key as keyof JoinFormValues]);
-              needsConfirmation.push({key: key as keyof JoinFormValues, original: originalValue, new: changedInfo[key] });
+            if (
+              joinFormSubmission.hasOwnProperty(key) &&
+              changedInfo.hasOwnProperty(key)
+            ) {
+              const originalValue = String(
+                joinFormSubmission[key as keyof JoinFormValues],
+              );
+              needsConfirmation.push({
+                key: key as keyof JoinFormValues,
+                original: originalValue,
+                new: changedInfo[key],
+              });
             }
           }
 
@@ -209,27 +230,35 @@ export default function App() {
           <div>
             <h3>Personal Info</h3>
             <input
-              {...register("first_name", {required: "Please enter your first name"})}
+              {...register("first_name", {
+                required: "Please enter your first name",
+              })}
               type="text"
               placeholder="First Name"
               required
             />
             <input
-              {...register("last_name", {required: "Please enter your last name"})}
+              {...register("last_name", {
+                required: "Please enter your last name",
+              })}
               type="text"
               placeholder="Last Name"
               required
             />
 
             <input
-              {...register("email_address", {required: "Please enter your email address"})}
+              {...register("email_address", {
+                required: "Please enter your email address",
+              })}
               type="email"
               placeholder="Email Address"
               required
             />
 
             <input
-              {...register("phone_number", {required: "Please enter your phone number"})}
+              {...register("phone_number", {
+                required: "Please enter your phone number",
+              })}
               type="tel"
               placeholder="Phone Number"
               onBlur={handlePhoneNumberBlur}
@@ -242,19 +271,23 @@ export default function App() {
           <div className={styles.block}>
             <h3>Address Info</h3>
             <input
-              {...register("street_address", {required: "Please enter your first name"})}
+              {...register("street_address", {
+                required: "Please enter your first name",
+              })}
               type="text"
               placeholder="Street Address"
               required
             />
             <input
-              {...register("apartment", {required: "Please enter your apartment number"})}
+              {...register("apartment", {
+                required: "Please enter your apartment number",
+              })}
               type="text"
               placeholder="Unit / Apartment #"
               required
             />
             <input
-              {...register("city", {required: "Please enter your city"})}
+              {...register("city", { required: "Please enter your city" })}
               type="text"
               placeholder="City"
               required
@@ -273,7 +306,9 @@ export default function App() {
               ))}
             </Select>
             <input
-              {...register("zip_code", {required: "Please enter your ZIP code"})}
+              {...register("zip_code", {
+                required: "Please enter your ZIP code",
+              })}
               type="number"
               placeholder="Zip Code"
               required
@@ -290,8 +325,12 @@ export default function App() {
             placeholder="How did you hear about us?"
           />
           <label>
-            <input {...register("ncl", {required: "Please agree to the NCL!"})} type="checkbox" required />I agree to
-            the{" "}
+            <input
+              {...register("ncl", { required: "Please agree to the NCL!" })}
+              type="checkbox"
+              required
+            />
+            I agree to the{" "}
             <a
               href="https://www.nycmesh.net/ncl.pdf"
               target="_blank"
@@ -303,7 +342,13 @@ export default function App() {
           <div className={styles.centered}>
             <Button
               type="submit"
-              disabled={isLoading || isSubmitted || isBadPhoneNumber || !isDirty || !isValid}
+              disabled={
+                isLoading ||
+                isSubmitted ||
+                isBadPhoneNumber ||
+                !isDirty ||
+                !isValid
+              }
               variant="contained"
               size="large"
               sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}

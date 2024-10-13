@@ -13,7 +13,8 @@ export default [
       if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
         return HttpResponse.json(
           {
-            detail: "Mock: Non-NYC registrations are not supported at this time.",
+            detail:
+              "Mock: Non-NYC registrations are not supported at this time.",
           },
           { status: 400 },
         );
