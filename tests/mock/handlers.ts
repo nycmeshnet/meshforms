@@ -7,7 +7,17 @@ import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 export default [
   http.post("/api/v1/join/", async ({ request }) => {
     console.debug("Hello from mocked join API.");
-    const joinRequest: JoinFormValues = await request.json();
+
+    const requestJson = await request.json();
+
+    if (requestJson === undefined || requestJson === null) {
+      return HttpResponse.json(
+        { detail: "Mock: Missing request body" },
+        {status: 400},
+      );
+    }
+
+    const joinRequest: JoinFormValues = requestJson as JoinFormValues;
 
     if (!joinRequest.trust_me_bro) {
       if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
