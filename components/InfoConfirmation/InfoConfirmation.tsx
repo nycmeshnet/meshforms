@@ -6,10 +6,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import styles from "./InfoConfirmation.module.scss";
-import { JoinFormValues } from "../JoinForm/JoinForm";
+import { ConfirmationField, JoinFormValues } from "../JoinForm/JoinForm";
 
 interface PanoramaDuplicateDialogProps {
-  infoToConfirm: Array<[keyof JoinFormValues, string]>;
+  infoToConfirm: Array<ConfirmationField>;
   isDialogOpened: boolean;
   handleClickConfirm: () => void;
   handleClickCancel: () => void;
@@ -43,15 +43,15 @@ export default function InfoConfirmationDialog({
             <table>
               <thead>
                 <tr key="headers">
-                  <th>Field</th>
-                  <th>Value</th>
+                  <th>Original</th>
+                  <th>New</th>
                 </tr>
               </thead>
               <tbody>
-                {infoToConfirm.map(([key, value], _) => (
-                  <tr key={key}>
-                    <td>{key}</td>
-                    <td>{value}</td>
+                {infoToConfirm.map((field) => (
+                  <tr key={field.key}>
+                    <td>{field.original}</td>
+                    <td>{field.new}</td>
                   </tr>
                 ))}
               </tbody>
@@ -59,10 +59,10 @@ export default function InfoConfirmationDialog({
           </div>
         </DialogContent>
         <DialogActions>
-          <Button name="cancel" color="error" onClick={handleClickCancel}>
-            Go back
+          <Button name="cancel" color="primary" onClick={handleClickCancel}>
+            Go Back
           </Button>
-          <Button name="reject" color="secondary">
+          <Button name="reject" color="warning">
             Use Original
           </Button>
           <Button

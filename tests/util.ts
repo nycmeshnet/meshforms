@@ -7,7 +7,7 @@ export const sampleData: JoinFormValues = {
   last_name: "Smith",
   email_address: "js@gmail.com",
   phone_number: "585-475-2411",
-  street_address: "197 Prospect Pl",
+  street_address: "197 Prospect Place",
   apartment: "1",
   city: "Brooklyn",
   state: "NY",

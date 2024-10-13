@@ -8,7 +8,6 @@ export default [
   http.post("/api/v1/join/", async ({ request }) => {
     console.debug("Hello from mocked join API.");
     const joinRequest: JoinFormValues = await request.json();
-    console.debug(joinRequest);
 
     if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
       return HttpResponse.json(
@@ -16,6 +15,22 @@ export default [
           detail: "Mock: Non-NYC registrations are not supported at this time.",
         },
         { status: 400 },
+      );
+    }
+
+
+    if (joinRequest.street_address === "197 prospect pl") {
+      return HttpResponse.json(
+        {
+          detail: "Mock: Please confirm a few details.",
+          building_id: "",
+          member_id: "",
+          install_id: "",
+          install_number: "",
+          member_exists: "",
+          changed_info: { street_address: "197 Prospect Place" },
+        },
+        { status: 409 },
       );
     }
 

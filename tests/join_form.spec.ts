@@ -49,7 +49,31 @@ test("confirm city", async ({ page }) => {
   await fillOutJoinForm(page, data);
 
   // Uncomment this if you want to poke around after the join form has been filled out
-  // await page.pause();
+  await page.pause();
+
+  await submitConfirmationDialogExpected(page, 2000);
+
+  await page.locator("[name='confirm']").click();
+
+  await page.waitForTimeout(unitTestTimeout);
+
+  await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
+});
+
+test("confirm street address", async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+  let data = Object.assign({}, sampleData);
+  data.street_address = "197 prospect pl";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, data);
+
+  // Uncomment this if you want to poke around after the join form has been filled out
+  await page.pause();
 
   await submitConfirmationDialogExpected(page, 2000);
 
@@ -61,9 +85,7 @@ test("confirm city", async ({ page }) => {
 });
 
 // TODO: Add a garbage testcase
-// TODO: Add nj testcase
-//
-// TODO: Add confirm block
+// TODO: Add confirm block (is this trust me bro?)
 
 // Tests missing both first and last name
 test("fail missing name", async ({ page }) => {

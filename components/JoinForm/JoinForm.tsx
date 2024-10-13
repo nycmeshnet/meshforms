@@ -51,6 +51,10 @@ export function NewJoinFormValues() {
 
 export type { JoinFormValues };
 
+type ConfirmationField = {key: keyof JoinFormValues, original: string, new: string};
+
+export type { ConfirmationField };
+
 const selectStateOptions = [
   { value: "NY", label: "New York" },
   { value: "NJ", label: "New Jersey" },
@@ -68,8 +72,8 @@ export default function App() {
   const isBeta = true;
 
   // Store the values submitted by the user or returned by the server
-  const [infoToConfirm, setInfoToConfirm] = useState<Array<[string, string]>>(
-    [],
+  const [infoToConfirm, setInfoToConfirm] = useState<Array<ConfirmationField>>(
+    [{key: "" as keyof JoinFormValues, original: "", new: ""}],
   );
 
   const handlePhoneNumberBlur = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -98,14 +102,11 @@ export default function App() {
     setIsInfoConfirmationDialogueOpen(false);
     let joinFormSubmission: JoinFormValues = getValues();
 
-    infoToConfirm.forEach(([key, value]) => {
-      joinFormSubmission[key as keyof JoinFormValues] = value;
+    infoToConfirm.map((field) => {
+      joinFormSubmission[field.key as keyof JoinFormValues] = field.new;
     });
 
     joinFormSubmission.trust_me_bro = true;
-
-    console.log("chom");
-    console.log(joinFormSubmission);
 
     submitJoinFormToMeshDB(joinFormSubmission);
   };
@@ -135,17 +136,25 @@ export default function App() {
         throw response;
       })
       .catch(async (error) => {
-        // TODO (wdn): Log errors to the server?
-        //console.error("Join Form submission error:", error);
         const errorJson = await error.json();
         const detail = await errorJson.detail;
-        console.debug(errorJson);
 
         // We just need to confirm some information
         if (error.status == 409) {
-          // TODO: Finish this
-          setInfoToConfirm(Object.entries(errorJson.changed_info));
-          console.debug(infoToConfirm);
+          let needsConfirmation: Array<ConfirmationField> = []
+          const changedInfo = errorJson.changed_info;
+          console.log(joinFormSubmission);
+          console.log(errorJson.changed_info);
+          
+          for (const key in joinFormSubmission) {
+            console.log(key);
+            if (joinFormSubmission.hasOwnProperty(key) && changedInfo.hasOwnProperty(key)) {
+              const originalValue = String(joinFormSubmission[key as keyof JoinFormValues]);
+              needsConfirmation.push({key: key as keyof JoinFormValues, original: originalValue, new: changedInfo[key] });
+            }
+          }
+
+          setInfoToConfirm(needsConfirmation);
           setIsInfoConfirmationDialogueOpen(true);
           toast.warning("Please confirm some information");
           return;
@@ -303,7 +312,7 @@ export default function App() {
         infoToConfirm={infoToConfirm}
         isDialogOpened={isInfoConfirmationDialogueOpen}
         handleClickConfirm={handleClickConfirm}
-        handleClickCancel={handleClickConfirm}
+        handleClickCancel={handleClickCancel}
       />
     </>
   );
