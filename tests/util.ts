@@ -18,6 +18,22 @@ export const sampleData: JoinFormValues = {
   trust_me_bro: false,
 };
 
+export const expectedTrustMeBroValues: JoinFormValues = {
+  first_name: "Jon",
+  last_name: "Smith",
+  email_address: "js@gmail.com",
+  phone_number: "585-475-2411",
+  street_address: "197 prospect pl",
+  apartment: "1",
+  city: "brooklyn",
+  state: "NY",
+  zip_code: "11238",
+  roof_access: true,
+  referral: "I googled it.",
+  ncl: true,
+  trust_me_bro: false,
+};
+
 export const sampleNJData: JoinFormValues = {
   first_name: "Jon",
   last_name: "Smith",
@@ -72,6 +88,7 @@ export async function fillOutJoinForm(page: Page, sampleData: JoinFormValues) {
 }
 
 export async function submitFailureExpected(page: Page) {
+  await page.waitForTimeout(1000);
   // Submit the join form
   await page.getByRole("button", { name: /Submit/i }).click();
 
@@ -82,6 +99,7 @@ export async function submitFailureExpected(page: Page) {
 }
 
 export async function submitAndCheckToast(page: Page, toastMessage: string) {
+  await page.waitForTimeout(1000);
   // Submit the join form
   await page.getByRole("button", { name: /Submit/i }).click();
 
@@ -96,6 +114,7 @@ export async function submitSuccessExpected(
   page: Page,
   timeout: number = 10000,
 ) {
+  await page.waitForTimeout(1000);
   // Listen for all console logs
   page.on("console", (msg) => console.log(msg.text()));
 

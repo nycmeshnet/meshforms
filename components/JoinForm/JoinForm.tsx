@@ -115,12 +115,17 @@ export default function App() {
   const handleClickConfirm = () => {
     setIsInfoConfirmationDialogueOpen(false);
     let joinFormSubmission: JoinFormValues = getValues();
+    
+    // Create an object with the new values to update
+    const updates = Object.fromEntries(
+      infoToConfirm.map((field) => [field.key, field.new])
+    );
 
-    infoToConfirm.map((field) => {
-      joinFormSubmission[field.key as keyof JoinFormValues] = field.new;
-    });
-
-    joinFormSubmission.trust_me_bro = true;
+    joinFormSubmission = {
+      ...joinFormSubmission,
+      ...updates,
+      trust_me_bro: true,
+    }
 
     submitJoinFormToMeshDB(joinFormSubmission);
   };

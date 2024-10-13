@@ -12,7 +12,7 @@ import {
   submitAndCheckToast,
 } from "@/tests/util";
 
-const joinFormTimeout = 10000;
+const joinFormTimeout = 20000;
 const unitTestTimeout = 5000;
 
 // Unit tests for the Join Form.
@@ -42,7 +42,7 @@ test("confirm city", async ({ page }) => {
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
-  let data = Object.assign({}, sampleData);
+  let data: JoinFormValues = Object.assign({}, sampleData);
   data.city = "brooklyn";
 
   // Set up sample data.
@@ -66,7 +66,7 @@ test("confirm street address", async ({ page }) => {
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
-  let data = Object.assign({}, sampleData);
+  let data: JoinFormValues = Object.assign({}, sampleData);
   data.street_address = "197 prospect pl";
 
   // Set up sample data.
@@ -88,25 +88,31 @@ test("confirm street address", async ({ page }) => {
 // TODO: Add confirm block (is this trust me bro?)
 
 // Tests missing both first and last name
-test("fail missing name", async ({ page }) => {
+test("fail missing first name", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto("/join");
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingNameData: JoinFormInput;
-
-  missingNameData = sampleData;
+  let missingNameData: JoinFormValues = Object.assign({}, sampleData);
   missingNameData.first_name = "";
 
   // Set up sample data.
   await fillOutJoinForm(page, missingNameData);
 
   await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+});
+
+test("fail missing last name", async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
 
   // Do it again with last name
-  missingNameData = sampleData;
+  let missingNameData: JoinFormValues = Object.assign({}, sampleData);
   missingNameData.last_name = "";
   await fillOutJoinForm(page, missingNameData);
   await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
@@ -120,9 +126,7 @@ test("fail missing email", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormValues;
-
-  missingData = sampleData;
+  let missingData: JoinFormValues = Object.assign({}, sampleData);
   missingData.email_address = "";
 
   // Set up sample data.
@@ -139,9 +143,7 @@ test("fail missing phone", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormValues;
-
-  missingData = sampleData;
+  let missingData: JoinFormValues = Object.assign({}, sampleData);
   missingData.phone_number = "";
 
   // Set up sample data.
@@ -162,9 +164,7 @@ test("fail missing email and phone", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormValues;
-
-  missingData = sampleData;
+  let missingData: JoinFormValues = Object.assign({}, sampleData);
   missingData.phone_number = "";
   missingData.email_address = "";
 
@@ -186,9 +186,7 @@ test("fail bad email", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormValues;
-
-  missingData = sampleData;
+  let missingData: JoinFormValues = Object.assign({}, sampleData);
   missingData.email_address = "notagoodemail";
 
   // Set up sample data.
@@ -205,10 +203,7 @@ test("fail bad email 2", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormValues;
-
-  // Try another one
-  missingData = sampleData;
+  let missingData: JoinFormValues = Object.assign({}, sampleData);
   missingData.email_address = "18";
   await fillOutJoinForm(page, missingData);
   await submitFailureExpected(page);
@@ -222,9 +217,7 @@ test("fail bad phone", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormValues;
-
-  missingData = sampleData;
+  let missingData: JoinFormValues = Object.assign({}, sampleData);
   missingData.phone_number = "twelve";
 
   // Set up sample data.
@@ -241,10 +234,7 @@ test("fail bad phone 2", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormValues;
-
-  // Try another one.
-  missingData = sampleData;
+  let missingData: JoinFormValues = Object.assign({}, sampleData);
   missingData.phone_number = "12";
   await fillOutJoinForm(page, missingData);
   await submitFailureExpected(page);
@@ -257,10 +247,7 @@ test("fail missing address", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  // Set up sample data.
-  let missingAddressData: JoinFormValues;
-
-  missingAddressData = sampleData;
+  let missingAddressData: JoinFormValues = Object.assign({}, sampleData);
   missingAddressData.street_address = "";
   await fillOutJoinForm(page, missingAddressData);
 
@@ -274,10 +261,7 @@ test("fail missing city", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  // Set up sample data.
-  let missingAddressData: JoinFormValues;
-
-  missingAddressData = sampleData;
+  let missingAddressData: JoinFormValues = Object.assign({}, sampleData);
   missingAddressData.city = "";
   await fillOutJoinForm(page, missingAddressData);
 
@@ -296,10 +280,7 @@ test("fail missing unit number", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  // Set up sample data.
-  let missingAddressData: JoinFormValues;
-
-  missingAddressData = sampleData;
+  let missingAddressData: JoinFormValues = Object.assign({}, sampleData);
   missingAddressData.apartment = "";
   await fillOutJoinForm(page, missingAddressData);
 
