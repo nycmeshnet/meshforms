@@ -1,4 +1,5 @@
 import { JoinFormInput, JoinFormResponse } from "@/app/io";
+import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { test, expect } from "@/tests/mock/test";
 
 import {
@@ -7,6 +8,8 @@ import {
   submitSuccessExpected,
   submitFailureExpected,
   submitConfirmationDialogExpected,
+  sampleNJData,
+  submitAndCheckToast,
 } from "@/tests/util";
 
 const joinFormTimeout = 10000;
@@ -57,6 +60,12 @@ test("confirm city", async ({ page }) => {
   await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
 });
 
+
+// TODO: Add a garbage testcase
+// TODO: Add nj testcase
+//
+// TODO: Add confirm block
+
 // Tests missing both first and last name
 test("fail missing name", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
@@ -93,7 +102,7 @@ test("fail missing email", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormInput;
+  let missingData: JoinFormValues;
 
   missingData = sampleData;
   missingData.email = "";
@@ -114,10 +123,10 @@ test("fail missing phone", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormInput;
+  let missingData: JoinFormValues;
 
   missingData = sampleData;
-  missingData.phone = "";
+  missingData.phone_number = "";
 
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
@@ -135,11 +144,11 @@ test("fail missing email and phone", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormInput;
+  let missingData: JoinFormValues;
 
   missingData = sampleData;
-  missingData.phone = "";
-  missingData.email = "";
+  missingData.phone_number = "";
+  missingData.email_address = "";
 
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
@@ -156,10 +165,10 @@ test("fail bad email", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormInput;
+  let missingData: JoinFormValues;
 
   missingData = sampleData;
-  missingData.email = "notagoodemail";
+  missingData.email_address = "notagoodemail";
 
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
@@ -169,7 +178,7 @@ test("fail bad email", async ({ page }) => {
 
   // Try another one
   missingData = sampleData;
-  missingData.email = "18";
+  missingData.email_address = "18";
   await fillOutJoinForm(page, missingData);
   await submitFailureExpected(page);
 });
@@ -182,7 +191,7 @@ test("fail bad phone", async ({ page }) => {
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
-  let missingData: JoinFormInput;
+  let missingData: JoinFormValues;
 
   missingData = sampleData;
   missingData.phone = "twelve";
@@ -208,7 +217,7 @@ test("fail missing address", async ({ page }) => {
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
   // Set up sample data.
-  let missingAddressData: JoinFormInput;
+  let missingAddressData: JoinFormValues;
 
   missingAddressData = sampleData;
   missingAddressData.street_address = "";
@@ -234,10 +243,26 @@ test("fail missing unit number", async ({ page }) => {
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
   // Set up sample data.
-  let missingAddressData: JoinFormInput;
+  let missingAddressData: JoinFormValues;
 
   missingAddressData = sampleData;
   missingAddressData.apartment = "";
   await fillOutJoinForm(page, missingAddressData);
   await submitFailureExpected(page);
+});
+
+test("fail nj", async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  // Set up sample data.
+  await fillOutJoinForm(page, sampleNJData);
+
+  // Uncomment this if you want to poke around after the join form has been filled out
+  //await page.pause();
+
+  await submitAndCheckToast(page, "Non-NYC registrations are not supported at this time");
 });

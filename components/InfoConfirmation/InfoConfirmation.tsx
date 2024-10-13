@@ -35,7 +35,8 @@ export default function InfoConfirmationDialog({
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Please confirm some info
+            We needed to re-format some of your information. Please ensure that
+            the below fields are accurate.
           </DialogContentText>
           <br />
           <div className={styles.alertTable}>
@@ -59,7 +60,13 @@ export default function InfoConfirmationDialog({
         </DialogContent>
         <DialogActions>
           <Button name="cancel" color="error" onClick={handleClickCancel}>
-            Cancel
+            Go back
+          </Button>
+          <Button
+            name="reject"
+            color="secondary"
+          >
+            Use Original
           </Button>
           <Button
             name="confirm"
@@ -68,7 +75,7 @@ export default function InfoConfirmationDialog({
             onClick={handleClickConfirm}
             autoFocus
           >
-            Confirm
+            Accept Changes
           </Button>
         </DialogActions>
       </Dialog>

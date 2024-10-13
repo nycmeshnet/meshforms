@@ -10,6 +10,10 @@ export default [
     const joinRequest: JoinFormValues = await request.json();
     console.debug(joinRequest);
 
+    if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
+      return HttpResponse.json({detail: "Mock: Non-NYC registrations are not supported at this time."}, {status: 400});
+    }
+
     if (joinRequest.city === "brooklyn") {
       return HttpResponse.json(
         {
@@ -24,7 +28,6 @@ export default [
         { status: 409 },
       );
     }
-
 
     // Duct tape to make the isDeepStrictEqual pass.
     joinRequest.trust_me_bro = false;

@@ -93,23 +93,21 @@ export default function App() {
     }
   };
 
-  // Closes dupe dialog and tries the submission again
+  // Closes dialog and tries the submission again
   const handleClickConfirm = () => {
     setIsInfoConfirmationDialogueOpen(false);
     let joinFormSubmission: JoinFormValues = getValues();
 
-    let updatedJoinFormSubmission = joinFormSubmission;
-
     infoToConfirm.forEach(([key, value]) => {
-      updatedJoinFormSubmission[key as keyof JoinFormValues] = value;
+      joinFormSubmission[key as keyof JoinFormValues] = value;
     });
 
-    updatedJoinFormSubmission.trust_me_bro = true;
+    joinFormSubmission.trust_me_bro = true;
 
     console.log('chom');
-    console.log(updatedJoinFormSubmission);
+    console.log(joinFormSubmission);
 
-    submitJoinFormToMeshDB(updatedJoinFormSubmission);
+    submitJoinFormToMeshDB(joinFormSubmission);
   };
 
   // Closes the dupe dialog and allows the user to make chances
@@ -284,7 +282,7 @@ export default function App() {
           <div className={styles.centered}>
             <Button
               type="submit"
-              disabled={isLoading || isSubmitted}
+              disabled={isLoading || isSubmitted || isBadPhoneNumber}
               variant="contained"
               size="large"
               sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}
@@ -298,7 +296,7 @@ export default function App() {
           </div>
         </form>
       </div>
-      <div className="toasty">
+      <div data-testid="toasty" className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
       <InfoConfirmationDialog

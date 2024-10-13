@@ -18,6 +18,22 @@ export const sampleData: JoinFormValues = {
   trust_me_bro: false,
 };
 
+export const sampleNJData: JoinFormValues = {
+  first_name: "Jon",
+  last_name: "Smith",
+  email_address: "js@gmail.com",
+  phone_number: "585-475-2411",
+  street_address: "711 Hudson Street",
+  city: "Hoboken",
+  state: "NJ",
+  zip_code: "07030",
+  apartment: "1",
+  roof_access: true,
+  referral: "I googled it.",
+  ncl: true,
+  trust_me_bro: false,
+};
+
 let expectedAPIRequestDataMut: JoinFormValues = sampleData;
 expectedAPIRequestDataMut.phone_number = "+1 585-475-2411";
 
@@ -36,6 +52,7 @@ export async function fillOutJoinForm(page: Page, sampleData: JoinFormValues) {
   await page.getByPlaceholder("Street Address").fill(sampleData.street_address);
   await page.getByPlaceholder("Unit #").fill(sampleData.apartment);
   await page.getByPlaceholder("City").fill(sampleData.city);
+  await page.getByPlaceholder("State").fill(sampleData.state);
   await page.getByPlaceholder("Zip Code").fill(sampleData.zip_code.toString());
 
   // How did you hear about us?
@@ -62,6 +79,17 @@ export async function submitFailureExpected(page: Page) {
 
   // The submission should've been stopped, and the member should be able to try again.
   await expect(page.locator("[name='submit_join_form']")).toHaveText("Submit");
+}
+
+export async function submitAndCheckToast(page: Page, toastMessage: string) {
+  // Submit the join form
+  await page.getByRole("button", { name: /Submit/i }).click();
+
+  await page.waitForTimeout(1000);
+
+  // The submission should've been stopped, and the member should be able to try again.
+  await expect(page.locator("[name='submit_join_form']")).toHaveText("Submit");
+  await expect(page.getByTestId("toasty")).toContainText(toastMessage)
 }
 
 export async function submitSuccessExpected(
