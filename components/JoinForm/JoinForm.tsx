@@ -371,11 +371,13 @@ export default function App() {
       <div data-testid="toasty" className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
+      <div hidden={!isSubmitted}>
       <Alert className={styles.thanks}>
         <h1>
         Thanks! You will receive an email shortly 🙂
         </h1>
       </Alert>
+      </div>
       <InfoConfirmationDialog
         infoToConfirm={infoToConfirm}
         isDialogOpened={isInfoConfirmationDialogueOpen}
