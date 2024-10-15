@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./JoinForm.module.scss";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-import { CircularProgress, MenuItem, Select, Button } from "@mui/material";
+import { CircularProgress, MenuItem, Select, Button, Alert } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { recordJoinFormSubmissionToS3 } from "@/app/data";
@@ -13,6 +13,7 @@ import { submitJoinForm } from "@/app/api";
 import { getMeshDBAPIEndpoint } from "@/app/endpoint";
 import { JoinFormResponse } from "@/app/io";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
+import ThanksDialog from "../ThanksDialog/ThanksDialog";
 
 type JoinFormValues = {
   first_name: string;
@@ -370,6 +371,13 @@ export default function App() {
       <div data-testid="toasty" className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
+      <ThanksDialog
+        isSubmitted={isSubmitted}
+        setIsSubmitted={setIsSubmitted}
+      />
+      <Button variant="outlined" onClick={() => setIsSubmitted(true)}>
+        Open alert dialog
+      </Button>
       <InfoConfirmationDialog
         infoToConfirm={infoToConfirm}
         isDialogOpened={isInfoConfirmationDialogueOpen}

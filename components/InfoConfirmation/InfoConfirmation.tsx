@@ -8,7 +8,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import styles from "./InfoConfirmation.module.scss";
 import { ConfirmationField, JoinFormValues } from "../JoinForm/JoinForm";
 
-interface PanoramaDuplicateDialogProps {
+interface InfoConfirmationDialogProps {
   infoToConfirm: Array<ConfirmationField>;
   isDialogOpened: boolean;
   handleClickConfirm: () => void;
@@ -23,7 +23,7 @@ export default function InfoConfirmationDialog({
   handleClickConfirm,
   handleClickReject,
   handleClickCancel,
-}: PanoramaDuplicateDialogProps) {
+}: InfoConfirmationDialogProps) {
   return (
     <React.Fragment>
       <Dialog
