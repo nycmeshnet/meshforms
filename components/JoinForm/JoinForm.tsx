@@ -371,13 +371,11 @@ export default function App() {
       <div data-testid="toasty" className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
-      <ThanksDialog
-        isSubmitted={isSubmitted}
-        setIsSubmitted={setIsSubmitted}
-      />
-      <Button variant="outlined" onClick={() => setIsSubmitted(true)}>
-        Open alert dialog
-      </Button>
+      <Alert className={styles.thanks}>
+        <h1>
+        Thanks! You will receive an email shortly 🙂
+        </h1>
+      </Alert>
       <InfoConfirmationDialog
         infoToConfirm={infoToConfirm}
         isDialogOpened={isInfoConfirmationDialogueOpen}
