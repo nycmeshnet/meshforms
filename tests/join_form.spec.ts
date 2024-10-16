@@ -84,7 +84,7 @@ test("confirm street address", async ({ page }) => {
   await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
 });
 
-test("confirm street address trust me bro", async ({ page }) => {
+test("street address trust me bro", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto("/join");
 

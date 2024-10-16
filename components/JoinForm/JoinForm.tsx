@@ -229,7 +229,7 @@ export default function App() {
 
   return (
     <>
-      <div className={styles.formBody}>
+      <div className={isSubmitted ? styles.hidden : styles.formBody}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <h2>Join NYC Mesh</h2>
           {isBeta ? betaDisclaimerBanner : welcomeBanner}
@@ -371,13 +371,11 @@ export default function App() {
       <div data-testid="toasty" className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
-      <div hidden={!isSubmitted}>
-      <Alert className={styles.thanks}>
+      <Alert className={!isSubmitted ? styles.hidden : styles.thanks}>
         <h1>
         Thanks! You will receive an email shortly 🙂
         </h1>
       </Alert>
-      </div>
       <InfoConfirmationDialog
         infoToConfirm={infoToConfirm}
         isDialogOpened={isInfoConfirmationDialogueOpen}
