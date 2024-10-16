@@ -121,9 +121,13 @@ export async function submitSuccessExpected(
   // Submit the join form
   await page.getByRole("button", { name: /Submit/i }).click();
 
-  // Make sure that the submit button says "Thanks!"
+  await expectSuccess(page, timeout);
+}
+
+export async function expectSuccess(page: Page, timeout: number = 1000) {
   await page.waitForTimeout(timeout);
-  await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
+  await expect(page.locator("[name='submit_join_form']")).toBeHidden();
+  await expect(page.locator("[id='alert-thank-you']")).toBeVisible();
 }
 
 export async function submitConfirmationDialogExpected(

@@ -10,6 +10,7 @@ import {
   submitConfirmationDialogExpected,
   sampleNJData,
   submitAndCheckToast,
+  expectSuccess,
 } from "@/tests/util";
 
 const joinFormTimeout = 20000;
@@ -34,6 +35,13 @@ test("happy join form", async ({ page }) => {
   //await page.pause();
 
   await submitSuccessExpected(page, unitTestTimeout);
+
+  // Then go home
+  await page.waitForTimeout(1000);
+  await page.locator("[name='home']").click();
+  await page.waitForTimeout(1000);
+  const currentURL = new URL(page.url());
+  expect(currentURL.pathname).toBe('/');
 });
 
 test("confirm city", async ({ page }) => {
@@ -55,9 +63,7 @@ test("confirm city", async ({ page }) => {
 
   await page.locator("[name='confirm']").click();
 
-  await page.waitForTimeout(unitTestTimeout);
-
-  await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
+  await expectSuccess(page, 1000);
 });
 
 test("confirm street address", async ({ page }) => {
@@ -73,15 +79,13 @@ test("confirm street address", async ({ page }) => {
   await fillOutJoinForm(page, data);
 
   // Uncomment this if you want to poke around after the join form has been filled out
-  await page.pause();
+  //await page.pause();
 
   await submitConfirmationDialogExpected(page, 2000);
 
   await page.locator("[name='confirm']").click();
 
-  await page.waitForTimeout(unitTestTimeout);
-
-  await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
+  await expectSuccess(page, unitTestTimeout);
 });
 
 test("street address trust me bro", async ({ page }) => {
@@ -103,9 +107,7 @@ test("street address trust me bro", async ({ page }) => {
 
   await page.locator("[name='reject']").click();
 
-  await page.waitForTimeout(unitTestTimeout);
-
-  await expect(page.locator("[name='submit_join_form']")).toHaveText("Thanks!");
+  await expectSuccess(page, unitTestTimeout);
 });
 
 // TODO: Add a garbage testcase

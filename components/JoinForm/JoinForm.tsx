@@ -157,7 +157,6 @@ export default function App() {
       .then(async (response) => {
         if (response.ok) {
           console.debug("Join Form submitted successfully");
-          toast.success("Thanks! You will receive an email shortly 🙂");
           setIsLoading(false);
           setIsSubmitted(true);
           return;
@@ -371,11 +370,16 @@ export default function App() {
       <div data-testid="toasty" className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
-      <Alert className={!isSubmitted ? styles.hidden : styles.thanks}>
-        <h1>
-        Thanks! You will receive an email shortly 🙂
-        </h1>
-      </Alert>
+      <div hidden={!isSubmitted}>
+        <Alert className={styles.thanks} id="alert-thank-you">
+          <h2>
+          Thanks! You will receive an email shortly 🙂
+          </h2>
+        </Alert>
+        <div  className={styles.centered} style={{padding: "10px"}}>
+        <Button name="home" variant="contained" size="large" href="/">Go Home</Button>
+        </div>
+      </div>
       <InfoConfirmationDialog
         infoToConfirm={infoToConfirm}
         isDialogOpened={isInfoConfirmationDialogueOpen}
