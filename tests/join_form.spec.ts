@@ -41,7 +41,7 @@ test("happy join form", async ({ page }) => {
   await page.locator("[name='home']").click();
   await page.waitForTimeout(1000);
   const currentURL = new URL(page.url());
-  expect(currentURL.pathname).toBe('/');
+  expect(currentURL.pathname).toBe("/");
 });
 
 test("confirm city", async ({ page }) => {

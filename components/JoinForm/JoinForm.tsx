@@ -5,7 +5,13 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./JoinForm.module.scss";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 
-import { CircularProgress, MenuItem, Select, Button, Alert } from "@mui/material";
+import {
+  CircularProgress,
+  MenuItem,
+  Select,
+  Button,
+  Alert,
+} from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { recordJoinFormSubmissionToS3 } from "@/app/data";
@@ -372,12 +378,12 @@ export default function App() {
       </div>
       <div hidden={!isSubmitted}>
         <Alert className={styles.thanks} id="alert-thank-you">
-          <h2>
-          Thanks! You will receive an email shortly 🙂
-          </h2>
+          <h2>Thanks! You will receive an email shortly 🙂</h2>
         </Alert>
-        <div  className={styles.centered} style={{padding: "10px"}}>
-        <Button name="home" variant="contained" size="large" href="/">Go Home</Button>
+        <div className={styles.centered} style={{ padding: "10px" }}>
+          <Button name="home" variant="contained" size="large" href="/">
+            Go Home
+          </Button>
         </div>
       </div>
       <InfoConfirmationDialog
