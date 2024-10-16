@@ -378,7 +378,7 @@ export default function App() {
       </div>
       <div hidden={!isSubmitted}>
         <Alert className={styles.thanks} id="alert-thank-you">
-          <h2>Thanks! You will receive an email shortly 🙂</h2>
+          <h2>Thanks! You will receive an email shortly.</h2>
         </Alert>
         <div className={styles.centered} style={{ padding: "10px" }}>
           <Button name="home" variant="contained" size="large" href="/">
