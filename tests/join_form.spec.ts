@@ -36,6 +36,8 @@ test("happy join form", async ({ page }) => {
 
   await submitSuccessExpected(page, unitTestTimeout);
 
+  await page.pause();
+
   // Then go home
   await page.waitForTimeout(1000);
   await page.locator("[name='home']").click();

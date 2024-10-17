@@ -378,8 +378,19 @@ export default function App() {
       </div>
       <div hidden={!isSubmitted}>
         <Alert className={styles.thanks} id="alert-thank-you">
-          <h2>Thanks! You will receive an email shortly.</h2>
+          <h2>Thanks! Please check your email.</h2>
         </Alert>
+        <div className={styles.thanksBlurb}>
+          <p>
+            You will receive an email from us in the next 5-10 minutes with next
+            steps, including how to submit panorama photos.
+          </p>
+          <p>
+            If you do not see the email, please check your "Spam" folder, or
+            email <a href="mailto:support@nycmesh.net">support@nycmesh.net</a>{" "}
+            for help.
+          </p>
+        </div>
         <div className={styles.centered} style={{ padding: "10px" }}>
           <Button name="home" variant="contained" size="large" href="/">
             Go Home
