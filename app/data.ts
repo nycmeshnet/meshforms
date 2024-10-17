@@ -1,7 +1,7 @@
 "use server";
 import { access, constants, appendFileSync, readFile } from "node:fs";
-import { JoinFormInput } from "@/app/io";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 const JOIN_FORM_LOG = process.env.JOIN_FORM_LOG as string;
 
 const S3_REGION = process.env.S3_REGION as string;
@@ -11,7 +11,9 @@ const S3_BASE_NAME = process.env.S3_BASE_NAME as string;
 const S3_ACCESS_KEY = process.env.S3_ACCESS_KEY as string;
 const S3_SECRET_KEY = process.env.S3_SECRET_KEY as string;
 
-export async function recordJoinFormSubmissionToCSV(submission: JoinFormInput) {
+export async function recordJoinFormSubmissionToCSV(
+  submission: JoinFormValues,
+) {
   const keys = Object.keys(submission).join(",");
   // Surround each value in quotes to avoid confusion with strings like
   // "Brooklyn, NY"
@@ -31,7 +33,7 @@ export async function recordJoinFormSubmissionToCSV(submission: JoinFormInput) {
 }
 
 // Records the submission we just got as a JSON object in an S3 bucket.
-export async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
+export async function recordJoinFormSubmissionToS3(submission: JoinFormValues) {
   if (S3_ACCESS_KEY === undefined || S3_SECRET_KEY === undefined) {
     console.error(
       "S3 credentials not configured. I WILL NOT SAVE THIS SUBMISSION.",
@@ -51,7 +53,6 @@ export async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
     },
   });
 
-  // Thanks ChatGPT, eww...
   const submissionKey = new Date()
     .toISOString()
     .replace(/[-:T]/g, "/")
@@ -68,7 +69,7 @@ export async function recordJoinFormSubmissionToS3(submission: JoinFormInput) {
     console.log(response);
   } catch (err) {
     console.error(err);
-    // Record the submission to a local CSV file *just in case*
+    // Record the submission to a local CSV file as a last-ditch effort
     recordJoinFormSubmissionToCSV(submission);
     throw err;
   }

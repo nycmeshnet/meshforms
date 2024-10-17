@@ -83,3 +83,25 @@
   display: flex;
   justify-content: center;
 }
+
+.thanks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.thanksBlurb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1em;
+}
+
+.thanksBlurb p {
+  margin: 0em;
+}
+
+.hidden {
+  display: none;
+}
