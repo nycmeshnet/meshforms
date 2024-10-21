@@ -45,6 +45,13 @@ const post = async <S extends z.Schema>(
   return schema.parse(await res.json());
 };
 
+export const submitNNAssignForm = (input: NNAssignFormInput) =>
+  post(
+    `/api/v1/nn-assign/`,
+    NNAssignFormResponse,
+    NNAssignFormInput.parse(input),
+  );
+
 export const submitQueryForm = (
   route: string,
   input_type: string,
