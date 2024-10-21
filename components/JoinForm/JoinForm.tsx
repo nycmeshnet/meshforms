@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./JoinForm.module.scss";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
-
 import {
   CircularProgress,
   MenuItem,
@@ -15,11 +14,8 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { recordJoinFormSubmissionToS3 } from "@/app/data";
-import { submitJoinForm } from "@/app/api";
 import { getMeshDBAPIEndpoint } from "@/app/endpoint";
-import { JoinFormResponse } from "@/app/io";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
-import ThanksDialog from "../ThanksDialog/ThanksDialog";
 
 type JoinFormValues = {
   first_name: string;
