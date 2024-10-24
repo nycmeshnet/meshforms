@@ -32,7 +32,9 @@ test("nn assign happy", async ({ page }) => {
   await page.waitForTimeout(clickTimeout);
 
   await expect(page.locator("[id='alert-network-number']")).toBeVisible();
-  await expect(page.locator("[id='assigned-network-number']")).toHaveText("420");
+  await expect(page.locator("[id='assigned-network-number']")).toHaveText(
+    "420",
+  );
 });
 
 test("nn assign already assigned", async ({ page }) => {
@@ -48,7 +50,9 @@ test("nn assign already assigned", async ({ page }) => {
   await page.waitForTimeout(clickTimeout);
 
   await expect(page.locator("[id='alert-network-number']")).toBeVisible();
-  await expect(page.locator("[id='assigned-network-number']")).toHaveText("420");
+  await expect(page.locator("[id='assigned-network-number']")).toHaveText(
+    "420",
+  );
 });
 
 test("nn assign wrong password", async ({ page }) => {
@@ -62,7 +66,7 @@ test("nn assign wrong password", async ({ page }) => {
 
   await page.getByRole("button", { name: /Submit/i }).click();
   await page.waitForTimeout(clickTimeout);
-  
+
   await expect(page.locator("[id='alert-network-number']")).toBeHidden();
   await expect(page.locator("[id='assigned-network-number']")).toHaveText("");
 });
@@ -77,8 +81,7 @@ test("nn assign no password", async ({ page }) => {
 
   await expect(page.getByRole("button", { name: /Submit/i })).toBeDisabled();
   await page.waitForTimeout(clickTimeout);
-  
+
   await expect(page.locator("[id='alert-network-number']")).toBeHidden();
   await expect(page.locator("[id='assigned-network-number']")).toHaveText("");
 });
-

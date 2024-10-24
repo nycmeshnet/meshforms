@@ -130,48 +130,47 @@ export default [
       );
     }
 
-    const nnAssignRequest: NNAssignRequestValues = requestJson as NNAssignRequestValues;
+    const nnAssignRequest: NNAssignRequestValues =
+      requestJson as NNAssignRequestValues;
 
     // Firstly, check if we have the right password
     if (nnAssignRequest.password != "localdev") {
       console.debug("Mock bad password");
-    return HttpResponse.json(
-          { detail: "Mock failure. Authentication Failed." },
-          { status: 400 },
-        );
+      return HttpResponse.json(
+        { detail: "Mock failure. Authentication Failed." },
+        { status: 400 },
+      );
     }
 
-
     if (nnAssignRequest.install_number == "20000") {
-    const json = {
-            "detail": "Network Number has been assigned!",
-            "building_id": 69,
-            "install_id": 69,
-            "install_number": 20000,
-            "network_number": 420,
-            "created": true,
-        };
+      const json = {
+        detail: "Network Number has been assigned!",
+        building_id: 69,
+        install_id: 69,
+        install_number: 20000,
+        network_number: 420,
+        created: true,
+      };
 
-    return HttpResponse.json(json, { status: 201 });
+      return HttpResponse.json(json, { status: 201 });
     }
 
     if (nnAssignRequest.install_number == "30000") {
-        const message = `This Install Number ({r.install_number}) already has a Network Number ({nn_install.node.network_number}) associated with it!`
-        const json = 
-            {
-                "detail": message,
-                "building_id": 79,
-                "install_id": 79,
-                "install_number": 30000,
-                "network_number": 520,
-                "created": false,
-            };
-    return HttpResponse.json(json, { status: 200 });
+      const message = `This Install Number ({r.install_number}) already has a Network Number ({nn_install.node.network_number}) associated with it!`;
+      const json = {
+        detail: message,
+        building_id: 79,
+        install_id: 79,
+        install_number: 30000,
+        network_number: 520,
+        created: false,
+      };
+      return HttpResponse.json(json, { status: 200 });
     }
 
     return HttpResponse.json(
-          { detail: "Mock failure. Server Error." },
-          { status: 500 },
-        );
+      { detail: "Mock failure. Server Error." },
+      { status: 500 },
+    );
   }),
 ];

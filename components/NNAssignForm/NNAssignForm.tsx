@@ -101,12 +101,12 @@ export function NNAssignForm() {
       <div data-testid="toasty" className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
-        <div hidden={isNaN(parseInt(networkNumber))} id="alert-network-number">
-          <Alert>
-            <h3 className={styles.nnLabel}>{nnMessage}</h3>
-            <h1 id="assigned-network-number">{networkNumber}</h1>
-          </Alert>
-        </div>
+      <div hidden={isNaN(parseInt(networkNumber))} id="alert-network-number">
+        <Alert>
+          <h3 className={styles.nnLabel}>{nnMessage}</h3>
+          <h1 id="assigned-network-number">{networkNumber}</h1>
+        </Alert>
+      </div>
     </>
   );
 }
