@@ -50,3 +50,18 @@ test("nn assign wrong password", async ({ page }) => {
   await expect(page.locator("[id='alert-network-number']")).toBeHidden();
   await expect(page.locator("[id='assigned-network-number']")).toHaveText("");
 });
+
+test("nn assign no password", async ({ page }) => {
+  test.setTimeout(timeout);
+  await page.goto("/nn-assign");
+
+  await expect(page).toHaveTitle(/Assign a Network Number/);
+
+  await page.getByPlaceholder("Install Number").fill("20000");
+
+  await expect(page.getByRole("button", { name: /Submit/i })).toBeDisabled();
+  await page.waitForTimeout(clickTimeout);
+  
+  await expect(page.locator("[id='alert-network-number']")).toBeHidden();
+  await expect(page.locator("[id='assigned-network-number']")).toHaveText("");
+});
