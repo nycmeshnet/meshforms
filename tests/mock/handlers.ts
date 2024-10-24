@@ -132,8 +132,17 @@ export default [
 
     const nnAssignRequest: NNAssignRequestValues = requestJson as NNAssignRequestValues;
 
-    if (nnAssignRequest.install_number == "20000" && nnAssignRequest.password == "localdev") {
-      
+    // Firstly, check if we have the right password
+    if (nnAssignRequest.password != "localdev") {
+      console.debug("Mock bad password");
+    return HttpResponse.json(
+          { detail: "Mock failure. Authentication Failed." },
+          { status: 400 },
+        );
+    }
+
+
+    if (nnAssignRequest.install_number == "20000") {
     const json = {
             "detail": "Network Number has been assigned!",
             "building_id": 69,
@@ -145,5 +154,10 @@ export default [
 
     return HttpResponse.json(json, { status: 201 });
     }
+
+    return HttpResponse.json(
+          { detail: "Mock failure. Server Error." },
+          { status: 500 },
+        );
   }),
 ];

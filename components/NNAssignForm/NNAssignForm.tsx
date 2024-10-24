@@ -6,7 +6,8 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./NNAssignForm.module.scss";
 import { Alert } from "@mui/material";
 import { getMeshDBAPIEndpoint } from "@/app/endpoint";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type NNAssignRequestValues = {
   install_number: string;
@@ -36,10 +37,13 @@ export function NNAssignForm() {
           const responseJson = await response.json();
           setNetworkNumber(responseJson.network_number);
         }
+
+        throw response;
       })
       .catch(async (error) => {
         const errorJson = await error.json();
         const detail = await errorJson.detail;
+        console.error(`Could not assign NN: ${detail}`);
         toast.error(`Could not assign NN: ${detail}`);
         setIsSubmitted(false);
       });
@@ -90,6 +94,10 @@ export function NNAssignForm() {
             </Button>
           </div>
         </form>
+      </div>
+
+      <div data-testid="toasty" className="toasty">
+        <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
         <div hidden={isNaN(parseInt(networkNumber))} id="alert-network-number">
           <Alert>
