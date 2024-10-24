@@ -3,6 +3,7 @@ import { http, HttpResponse } from "msw";
 import { expectedAPIRequestData } from "../util";
 import { isDeepStrictEqual } from "util";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
+import { NNAssignRequestValues } from "@/components/NNAssignForm/NNAssignForm";
 
 export default [
   http.post("/api/v1/join/", async ({ request }) => {
@@ -116,5 +117,33 @@ export default [
     };
 
     return HttpResponse.json(json, { status: 201 });
+  }),
+  http.post("/api/v1/nn-assign/", async ({ request }) => {
+    console.debug("Hello from mocked NN Assign API.");
+
+    const requestJson = await request.json();
+
+    if (requestJson === undefined || requestJson === null) {
+      return HttpResponse.json(
+        { detail: "Mock: Missing request body" },
+        { status: 400 },
+      );
+    }
+
+    const nnAssignRequest: NNAssignRequestValues = requestJson as NNAssignRequestValues;
+
+    if (nnAssignRequest.install_number == "20000" && nnAssignRequest.password == "localdev") {
+      
+    const json = {
+            "detail": "Network Number has been assigned!",
+            "building_id": 69,
+            "install_id": 69,
+            "install_number": 20000,
+            "network_number": 420,
+            "created": true,
+        };
+
+    return HttpResponse.json(json, { status: 201 });
+    }
   }),
 ];

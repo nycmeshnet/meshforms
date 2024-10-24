@@ -13,6 +13,8 @@ type NNAssignRequestValues = {
   password: string;
 };
 
+export type { NNAssignRequestValues };
+
 export function NNAssignForm() {
   const {
     register,
@@ -88,12 +90,11 @@ export function NNAssignForm() {
             </Button>
           </div>
         </form>
-
       </div>
-        <div hidden={isNaN(parseInt(networkNumber))}>
+        <div hidden={isNaN(parseInt(networkNumber))} id="alert-network-number">
           <Alert>
             <h3 className={styles.nnLabel}>Your Network Number:</h3>
-            <h1 id="">{networkNumber}</h1>
+            <h1 id="assigned-network-number">{networkNumber}</h1>
           </Alert>
         </div>
     </>
