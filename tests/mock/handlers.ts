@@ -156,7 +156,7 @@ export default [
     }
 
     if (nnAssignRequest.install_number == "30000") {
-      const message = `This Install Number ({r.install_number}) already has a Network Number ({nn_install.node.network_number}) associated with it!`;
+      const message = `This Install Number (30000) already has a Network Number (520) associated with it!`;
       const json = {
         detail: message,
         building_id: 79,

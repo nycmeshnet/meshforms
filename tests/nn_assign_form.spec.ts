@@ -50,8 +50,11 @@ test("nn assign already assigned", async ({ page }) => {
   await page.waitForTimeout(clickTimeout);
 
   await expect(page.locator("[id='alert-network-number']")).toBeVisible();
+  await expect(page.locator("[id='nn-message']")).toHaveText(
+    "This Install Number (30000) already has a Network Number (520) associated with it!",
+  );
   await expect(page.locator("[id='assigned-network-number']")).toHaveText(
-    "420",
+    "520",
   );
 });
 

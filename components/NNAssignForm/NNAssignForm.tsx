@@ -38,6 +38,7 @@ export function NNAssignForm() {
           const responseJson = await response.json();
           setNetworkNumber(responseJson.network_number);
           setNnMessage(responseJson.detail);
+          return;
         }
 
         throw response;
@@ -103,7 +104,9 @@ export function NNAssignForm() {
       </div>
       <div hidden={isNaN(parseInt(networkNumber))} id="alert-network-number">
         <Alert>
-          <h3 className={styles.nnLabel}>{nnMessage}</h3>
+          <h3 className={styles.nnLabel} id="nn-message">
+            {nnMessage}
+          </h3>
           <h1 id="assigned-network-number">{networkNumber}</h1>
         </Alert>
       </div>
