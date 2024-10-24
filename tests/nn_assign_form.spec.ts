@@ -35,6 +35,22 @@ test("nn assign happy", async ({ page }) => {
   await expect(page.locator("[id='assigned-network-number']")).toHaveText("420");
 });
 
+test("nn assign already assigned", async ({ page }) => {
+  test.setTimeout(timeout);
+  await page.goto("/nn-assign");
+
+  await expect(page).toHaveTitle(/Assign a Network Number/);
+
+  await page.getByPlaceholder("Install Number").fill("30000");
+  await page.getByPlaceholder("Pre-Shared Key").fill("localdev");
+
+  await page.getByRole("button", { name: /Submit/i }).click();
+  await page.waitForTimeout(clickTimeout);
+
+  await expect(page.locator("[id='alert-network-number']")).toBeVisible();
+  await expect(page.locator("[id='assigned-network-number']")).toHaveText("420");
+});
+
 test("nn assign wrong password", async ({ page }) => {
   test.setTimeout(timeout);
   await page.goto("/nn-assign");
@@ -65,3 +81,4 @@ test("nn assign no password", async ({ page }) => {
   await expect(page.locator("[id='alert-network-number']")).toBeHidden();
   await expect(page.locator("[id='assigned-network-number']")).toHaveText("");
 });
+

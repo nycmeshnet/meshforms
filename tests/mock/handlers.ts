@@ -155,6 +155,20 @@ export default [
     return HttpResponse.json(json, { status: 201 });
     }
 
+    if (nnAssignRequest.install_number == "30000") {
+        const message = `This Install Number ({r.install_number}) already has a Network Number ({nn_install.node.network_number}) associated with it!`
+        const json = 
+            {
+                "detail": message,
+                "building_id": 79,
+                "install_id": 79,
+                "install_number": 30000,
+                "network_number": 520,
+                "created": false,
+            };
+    return HttpResponse.json(json, { status: 200 });
+    }
+
     return HttpResponse.json(
           { detail: "Mock failure. Server Error." },
           { status: 500 },

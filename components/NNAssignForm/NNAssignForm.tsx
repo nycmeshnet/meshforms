@@ -25,6 +25,7 @@ export function NNAssignForm() {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [networkNumber, setNetworkNumber] = useState("");
+  const [nnMessage, setNnMessage] = useState("");
 
   async function submitNNAssignRequest(input: NNAssignRequestValues) {
     setIsSubmitted(true);
@@ -36,6 +37,7 @@ export function NNAssignForm() {
         if (response.ok) {
           const responseJson = await response.json();
           setNetworkNumber(responseJson.network_number);
+          setNnMessage(responseJson.detail);
         }
 
         throw response;
@@ -67,7 +69,7 @@ export function NNAssignForm() {
           <div className={styles.horizontal}>
             <input
               {...register("install_number", {
-                required: "Please enter your first name",
+                required: "Please enter a valid Install Number",
               })}
               type="number"
               placeholder="Install Number"
@@ -75,7 +77,7 @@ export function NNAssignForm() {
             />
             <input
               {...register("password", {
-                required: "Please enter your password",
+                required: "Please enter your pre-shared key",
               })}
               type="password"
               placeholder="Pre-Shared Key"
@@ -101,7 +103,7 @@ export function NNAssignForm() {
       </div>
         <div hidden={isNaN(parseInt(networkNumber))} id="alert-network-number">
           <Alert>
-            <h3 className={styles.nnLabel}>Your Network Number:</h3>
+            <h3 className={styles.nnLabel}>{nnMessage}</h3>
             <h1 id="assigned-network-number">{networkNumber}</h1>
           </Alert>
         </div>
