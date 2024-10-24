@@ -1,7 +1,5 @@
 "use client";
 import {
-  JoinFormInput,
-  JoinFormResponse,
   NNAssignFormInput,
   NNAssignFormResponse,
   QueryFormResponse,
@@ -47,9 +45,6 @@ const post = async <S extends z.Schema>(
   return schema.parse(await res.json());
 };
 
-// TODO: Env var for api token
-export const submitJoinForm = (input: JoinFormInput) =>
-  post(`/api/v1/join/`, JoinFormResponse, JoinFormInput.parse(input));
 export const submitNNAssignForm = (input: NNAssignFormInput) =>
   post(
     `/api/v1/nn-assign/`,
