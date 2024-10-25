@@ -60,7 +60,7 @@ export function NNAssignForm() {
   return (
     <>
       <div className={styles.formBody}>
-        <form action={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <h2>Request Network Number</h2>
           <p>
             Enter an install number and the Pre-Shared Key, and receive a
