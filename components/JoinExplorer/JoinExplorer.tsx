@@ -1,18 +1,22 @@
 "use client"
 import React, { useState } from "react";
 import { fetchSubmissions } from "@/app/data";
+import { Button } from "@mui/material";
 
-export async function JoinExplorer() {
-  const [submissionList, setSubmissionList] = useState({});
-  const submissions = await fetchSubmissions();
-  setSubmissionList(submissions);
+export function JoinExplorer() {
+  const [joinList, setJoinList] = useState([]);
 
+  async function loadSubmissions() {
+    console.log("Chom");
+    console.log(await fetchSubmissions());
+  }
 
   return (<>
+    <Button onClick={loadSubmissions}>Refresh</Button>
     <ul>
-      {submissionList.map((s) => (
+      {joinList.map((s) => (
         <li>
-          {s.json()}
+          {s}
         </li>
       ))}
     </ul>

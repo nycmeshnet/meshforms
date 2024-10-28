@@ -115,7 +115,10 @@ async function listAllObjects(bucketName: string) {
 
         if (getObjectResponse.Body) {
           const content = await streamToString(getObjectResponse.Body as Readable);
-          console.log(`Content of ${obj.Key}:`, content);
+          allObjects.push({
+            key: obj.Key,
+            content: content
+          });
         }
       }
 
@@ -132,12 +135,11 @@ async function listAllObjects(bucketName: string) {
   }
 }
 
+type JoinLogLine = {
+  key: string;
+  submission: JoinFormValues;
+};
 
-export async function fetchSubmissions() {
-  listAllObjects(S3_BUCKET_NAME).then(objects => {
-    objects.forEach(obj => {
-      console.log("Object Key:", obj.Key, " | Object Value: ", obj);
-    });
-    return objects;
-  });
+export async function fetchSubmissions(): Array<JoinLogLine> {
+  return listAllObjects(S3_BUCKET_NAME);
 }
