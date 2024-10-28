@@ -374,7 +374,7 @@ export default function App() {
       </div>
       <div hidden={!isSubmitted}>
         <Alert className={styles.thanks} id="alert-thank-you">
-          <h2>Thanks! Please check your email.</h2>
+          <h2 id="alert-thank-you-h2">Thanks! Please check your email.</h2>
         </Alert>
         <div className={styles.thanksBlurb}>
           <p>

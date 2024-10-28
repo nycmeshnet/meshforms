@@ -1,4 +1,3 @@
-import { JoinFormResponse } from "@/app/io";
 import { http, HttpResponse } from "msw";
 import { expectedAPIRequestData } from "../util";
 import { isDeepStrictEqual } from "util";
