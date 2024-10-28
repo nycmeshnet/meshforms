@@ -2,7 +2,7 @@ replicaCount: 3
 
 image:
   repository: willnilges/meshforms
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 imagePullSecrets: []
 nameOverride: "meshforms"
