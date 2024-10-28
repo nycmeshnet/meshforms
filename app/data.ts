@@ -1,7 +1,8 @@
 "use server";
 import { access, constants, appendFileSync, readFile } from "node:fs";
-import { S3Client, PutObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, ListObjectsV2Command, GetObjectCommand } from "@aws-sdk/client-s3";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
+import { Readable } from "node:stream";
 const JOIN_FORM_LOG = process.env.JOIN_FORM_LOG as string;
 
 const S3_REGION = process.env.S3_REGION as string;
@@ -82,24 +83,45 @@ export async function recordJoinFormSubmissionToS3(submission: JoinFormValues) {
 }
 
 
+async function streamToString(stream: Readable): Promise<string> {
+  return await new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    stream.on("data", (chunk) => chunks.push(chunk));
+    stream.on("end", () => resolve(Buffer.concat(chunks).toString("utf-8")));
+    stream.on("error", reject);
+  });
+}
+
+
 async function listAllObjects(bucketName: string) {
   let continuationToken: string | undefined = undefined;
   const allObjects = [];
 
   try {
     do {
-      const command = new ListObjectsV2Command({
+      const listCommand = new ListObjectsV2Command({
         Bucket: bucketName,
         ContinuationToken: continuationToken,
       });
       
-      const response = await s3Client.send(command);
-      if (response.Contents) {
-        allObjects.push(...response.Contents);
+      const listResponse = await s3Client.send(listCommand);
+
+      for (const obj of listResponse.Contents || []) {
+        const getObjectCommand = new GetObjectCommand({
+          Bucket: bucketName,
+          Key: obj.Key,
+        });
+        const getObjectResponse = await s3Client.send(getObjectCommand);
+
+        if (getObjectResponse.Body) {
+          const content = await streamToString(getObjectResponse.Body as Readable);
+          console.log(`Content of ${obj.Key}:`, content);
+        }
       }
 
+
       // Update the continuation token to get the next page of results
-      continuationToken = response.NextContinuationToken;
+      continuationToken = listResponse.NextContinuationToken;
 
     } while (continuationToken);
 
