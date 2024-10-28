@@ -1,6 +1,6 @@
 "use server";
 import { access, constants, appendFileSync, readFile } from "node:fs";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 const JOIN_FORM_LOG = process.env.JOIN_FORM_LOG as string;
 
@@ -10,6 +10,24 @@ const S3_BUCKET_NAME = process.env.S3_BUCKET_NAME as string;
 const S3_BASE_NAME = process.env.S3_BASE_NAME as string;
 const S3_ACCESS_KEY = process.env.S3_ACCESS_KEY as string;
 const S3_SECRET_KEY = process.env.S3_SECRET_KEY as string;
+
+if (S3_ACCESS_KEY === undefined || S3_SECRET_KEY === undefined) {
+  console.error(
+    "S3 credentials not configured. I WILL NOT SAVE THIS SUBMISSION.",
+  );
+}
+
+const s3Client = new S3Client({
+  region: S3_REGION != undefined ? S3_REGION : "us-east-1",
+  endpoint:
+    S3_ENDPOINT != undefined
+      ? S3_ENDPOINT
+      : "https://s3.us-east-1.amazonaws.com",
+  credentials: {
+    accessKeyId: S3_ACCESS_KEY,
+    secretAccessKey: S3_SECRET_KEY,
+  },
+});
 
 export async function recordJoinFormSubmissionToCSV(
   submission: JoinFormValues,
@@ -41,18 +59,6 @@ export async function recordJoinFormSubmissionToS3(submission: JoinFormValues) {
     return;
   }
 
-  const s3Client = new S3Client({
-    region: S3_REGION != undefined ? S3_REGION : "us-east-1",
-    endpoint:
-      S3_ENDPOINT != undefined
-        ? S3_ENDPOINT
-        : "https://s3.us-east-1.amazonaws.com",
-    credentials: {
-      accessKeyId: S3_ACCESS_KEY,
-      secretAccessKey: S3_SECRET_KEY,
-    },
-  });
-
   const submissionKey = new Date()
     .toISOString()
     .replace(/[-:T]/g, "/")
@@ -73,4 +79,43 @@ export async function recordJoinFormSubmissionToS3(submission: JoinFormValues) {
     recordJoinFormSubmissionToCSV(submission);
     throw err;
   }
+}
+
+
+async function listAllObjects(bucketName: string) {
+  let continuationToken: string | undefined = undefined;
+  const allObjects = [];
+
+  try {
+    do {
+      const command = new ListObjectsV2Command({
+        Bucket: bucketName,
+        ContinuationToken: continuationToken,
+      });
+      
+      const response = await s3Client.send(command);
+      if (response.Contents) {
+        allObjects.push(...response.Contents);
+      }
+
+      // Update the continuation token to get the next page of results
+      continuationToken = response.NextContinuationToken;
+
+    } while (continuationToken);
+
+    return allObjects; // Contains all objects in the bucket
+  } catch (error) {
+    console.error("Error listing S3 objects:", error);
+    throw error;
+  }
+}
+
+
+export async function fetchSubmissions() {
+  listAllObjects(S3_BUCKET_NAME).then(objects => {
+    objects.forEach(obj => {
+      console.log("Object Key:", obj.Key, " | Object Value: ", obj);
+    });
+    return objects;
+  });
 }

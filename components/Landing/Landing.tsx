@@ -13,6 +13,7 @@ const Landing = () => {
       text: "MeshDB Admin",
       link: process.env.NEXT_PUBLIC_MESHDB_URL + "/admin/",
     },
+    { text: "View Submissions", link: "/join-explorer" },
   ];
 
   return (

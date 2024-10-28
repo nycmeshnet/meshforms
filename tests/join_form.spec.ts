@@ -1,4 +1,3 @@
-import { JoinFormInput, JoinFormResponse } from "@/app/io";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { test, expect } from "@/tests/mock/test";
 
