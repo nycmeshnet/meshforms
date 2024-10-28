@@ -360,6 +360,7 @@ export default function App() {
               size="large"
               sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}
               name="submit_join_form"
+              id="button-submit-join-form"
             >
               {isLoading ? "Loading..." : isSubmitted ? "Thanks!" : "Submit"}
             </Button>
