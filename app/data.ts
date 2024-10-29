@@ -1,17 +1,8 @@
 "use server";
 import { access, constants, appendFileSync, readFile } from "node:fs";
 import { S3Client, PutObjectCommand, ListObjectsV2Command, GetObjectCommand } from "@aws-sdk/client-s3";
-import { JoinFormValues, NewJoinFormValues } from "@/components/JoinForm/JoinForm";
 import { Readable } from "node:stream";
-
-type JoinLogLine = {
-  key: string;
-  submission: JoinFormValues;
-};
-
-export async function NewJoinLogLine() {
-  return {key: "", submission: NewJoinFormValues()}
-}
+import { JoinFormValues } from "./types";
 
 const JOIN_FORM_LOG = process.env.JOIN_FORM_LOG as string;
 

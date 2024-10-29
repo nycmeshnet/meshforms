@@ -1,4 +1,4 @@
-import { JoinFormValues } from "@/components/JoinForm/JoinForm";
+import { JoinFormValues } from "@/app/types";
 import { test, expect } from "@/tests/mock/test";
 
 import {

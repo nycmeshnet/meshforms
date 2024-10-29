@@ -1,8 +1,8 @@
 "use client"
 import React, { useState } from "react";
-import { JoinLogLine, NewJoinLogLine, fetchSubmissions } from "@/app/data";
+import { fetchSubmissions } from "@/app/data";
 import { Button } from "@mui/material";
-import { NewJoinFormValues } from "../JoinForm/JoinForm";
+import { JoinLogLine, NewJoinLogLine } from "@/app/types";
 
 export function JoinExplorer() {
   const [joinList, setJoinList]: Array<JoinLogLine> = useState([NewJoinLogLine()]);
