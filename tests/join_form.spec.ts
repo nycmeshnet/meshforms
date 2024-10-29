@@ -1,4 +1,5 @@
 import { JoinFormInput, JoinFormResponse } from "@/app/io";
+import { getJoinRecordFromS3 } from "@/app/join_record";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { test, expect } from "@/tests/mock/test";
 
@@ -36,7 +37,16 @@ test("happy join form", async ({ page }) => {
 
   await submitSuccessExpected(page, unitTestTimeout);
 
-  await page.pause();
+  const joinRecordKey = await page.getAttribute(
+    '[data-testid="test-join-record-key"]',
+    "data-state",
+  );
+
+  if (joinRecordKey === null) {
+    throw new Error("Got null join record");
+  }
+
+  const joinRecord = await getJoinRecordFromS3(joinRecordKey);
 
   // Then go home
   await page.waitForTimeout(1000);
