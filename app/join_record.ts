@@ -13,14 +13,21 @@ import { Readable } from "stream";
 class JoinRecordS3 {
   private s3Client: S3Client;
 
-  private S3_REGION = process.env.S3_REGION as string;
-  private S3_ENDPOINT = process.env.S3_ENDPOINT as string;
-  private S3_BUCKET_NAME = process.env.S3_BUCKET_NAME as string;
-  private S3_BASE_NAME = process.env.S3_BASE_NAME as string;
-  private S3_ACCESS_KEY = process.env.S3_ACCESS_KEY as string;
-  private S3_SECRET_KEY = process.env.S3_SECRET_KEY as string;
+  private S3_REGION: string; 
+  private S3_ENDPOINT: string; 
+  private S3_BUCKET_NAME: string; 
+  private S3_BASE_NAME: string; 
+  private S3_ACCESS_KEY: string; 
+  private S3_SECRET_KEY: string; 
 
   constructor() {
+    this.S3_REGION      = process.env.S3_REGION as string;
+    this.S3_ENDPOINT    = process.env.S3_ENDPOINT as string;
+    this.S3_BUCKET_NAME = process.env.S3_BUCKET_NAME as string;
+    this.S3_BASE_NAME   = process.env.S3_BASE_NAME as string;
+    this.S3_ACCESS_KEY  = process.env.S3_ACCESS_KEY as string;
+    this.S3_SECRET_KEY  = process.env.S3_SECRET_KEY as string;
+
     // Setup the S3 client
     this.s3Client = new S3Client({
       region: this.S3_REGION != undefined ? this.S3_REGION : "us-east-1",
@@ -44,6 +51,8 @@ class JoinRecordS3 {
     key: string = "",
     responseCode: string = "",
   ) {
+
+    console.log(`bucket: ${this.S3_BUCKET_NAME}`);
     // Bail if there's no S3 key
     if (this.S3_ACCESS_KEY === undefined || this.S3_SECRET_KEY === undefined) {
       console.error(
@@ -90,7 +99,7 @@ class JoinRecordS3 {
 
   // Gets the contents of a JoinRecord for testing
   async get(key: string) {
-    console.log(this.S3_BUCKET_NAME);
+    console.log(`bucket: ${this.S3_BUCKET_NAME}`);
     const getObjectCommand = new GetObjectCommand({
       Bucket: this.S3_BUCKET_NAME,
       Key: key,
@@ -117,17 +126,16 @@ class JoinRecordS3 {
   }
 }
 
+const joinRecordS3 = new JoinRecordS3();
 
 export async function saveJoinRecordToS3(
     submission: JoinFormValues,
     key: string = "",
     responseCode: string = "",
 ) {
-  const joinRecordS3 = new JoinRecordS3();
   return joinRecordS3.save(submission, key, responseCode);
 }
 
 export async function getJoinRecordFromS3(key: string) {
-  const joinRecordS3 = new JoinRecordS3();
   return joinRecordS3.get(key);
 }

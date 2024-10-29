@@ -1,5 +1,6 @@
 import { JoinFormInput, JoinFormResponse } from "@/app/io";
 import { getJoinRecordFromS3 } from "@/app/join_record";
+import { JoinRecord } from "@/app/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { test, expect } from "@/tests/mock/test";
 
@@ -12,7 +13,9 @@ import {
   sampleNJData,
   submitAndCheckToast,
   expectSuccess,
+  sampleJoinRecord,
 } from "@/tests/util";
+import { isDeepStrictEqual } from "util";
 
 const joinFormTimeout = 20000;
 const unitTestTimeout = 5000;
@@ -46,7 +49,13 @@ test("happy join form", async ({ page }) => {
     throw new Error("Got null join record");
   }
 
-  const joinRecord = await getJoinRecordFromS3(joinRecordKey);
+  // This is wacky because playwright has to run this and therefore
+  // needs our dotenv.
+  const joinRecord: JoinRecord = await getJoinRecordFromS3(joinRecordKey);
+
+  if (!isDeepStrictEqual(joinRecord, sampleJoinRecord)) {
+    throw new Error("Bad JoinRecord. JoinRecord is not deeply equal.");
+  }
 
   // Then go home
   await page.waitForTimeout(1000);

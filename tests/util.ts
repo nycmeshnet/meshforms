@@ -1,4 +1,5 @@
 import { JoinFormResponse } from "@/app/io";
+import { JoinRecord } from "@/app/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { expect, Page } from "@playwright/test";
 
@@ -17,6 +18,25 @@ export const sampleData: JoinFormValues = {
   ncl: true,
   trust_me_bro: false,
 };
+
+export const sampleJoinRecord: JoinRecord = {
+  first_name: 'Jon',
+  last_name: 'Smith',
+  email_address: 'js@gmail.com',
+  phone_number: '+1 585-475-2411',
+  street_address: '197 Prospect Place',
+  apartment: '1',
+  city: 'Brooklyn',
+  state: 'NY',
+  zip_code: '11238',
+  roof_access: true,
+  referral: 'I googled it.',
+  ncl: true,
+  trust_me_bro: false,
+  code: '',
+  replayed: 0,
+  replayCode: ''
+}
 
 export const expectedTrustMeBroValues: JoinFormValues = {
   first_name: "Jon",

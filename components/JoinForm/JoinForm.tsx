@@ -154,8 +154,8 @@ export default function App() {
   async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
     // First up, before we try anything else, submit to S3 for safety.
     saveJoinRecordToS3(joinFormSubmission, joinRecordKey).then(
-      (key: string) => {
-        setJoinRecordKey(key);
+      (key) => {
+        setJoinRecordKey(key as string);
       },
     );
 
@@ -168,8 +168,8 @@ export default function App() {
       .then(async (response) => {
         // Update the submission in S3 with the status code.
         saveJoinRecordToS3(joinFormSubmission, joinRecordKey).then(
-          (key: string) => {
-            setJoinRecordKey(key);
+          (key) => {
+            setJoinRecordKey(key as string);
           },
         );
         if (response.ok) {
