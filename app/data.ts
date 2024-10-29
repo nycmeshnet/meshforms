@@ -1,8 +1,18 @@
 "use server";
 import { access, constants, appendFileSync, readFile } from "node:fs";
 import { S3Client, PutObjectCommand, ListObjectsV2Command, GetObjectCommand } from "@aws-sdk/client-s3";
-import { JoinFormValues } from "@/components/JoinForm/JoinForm";
+import { JoinFormValues, NewJoinFormValues } from "@/components/JoinForm/JoinForm";
 import { Readable } from "node:stream";
+
+type JoinLogLine = {
+  key: string;
+  submission: JoinFormValues;
+};
+
+export async function NewJoinLogLine() {
+  return {key: "", submission: NewJoinFormValues()}
+}
+
 const JOIN_FORM_LOG = process.env.JOIN_FORM_LOG as string;
 
 const S3_REGION = process.env.S3_REGION as string;
@@ -95,7 +105,7 @@ async function streamToString(stream: Readable): Promise<string> {
 
 async function listAllObjects(bucketName: string) {
   let continuationToken: string | undefined = undefined;
-  const allObjects = [];
+  const allObjects: Array<JoinLogLine> = [];
 
   try {
     do {
@@ -117,11 +127,10 @@ async function listAllObjects(bucketName: string) {
           const content = await streamToString(getObjectResponse.Body as Readable);
           allObjects.push({
             key: obj.Key,
-            content: content
+            submission: JSON.parse(content)
           });
         }
       }
-
 
       // Update the continuation token to get the next page of results
       continuationToken = listResponse.NextContinuationToken;
@@ -135,10 +144,8 @@ async function listAllObjects(bucketName: string) {
   }
 }
 
-type JoinLogLine = {
-  key: string;
-  submission: JoinFormValues;
-};
+
+export type { JoinLogLine };
 
 export async function fetchSubmissions(): Array<JoinLogLine> {
   return listAllObjects(S3_BUCKET_NAME);
