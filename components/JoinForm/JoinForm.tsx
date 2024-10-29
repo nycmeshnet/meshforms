@@ -86,7 +86,8 @@ export default function App() {
     useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
-  const [joinFormSubmissionRecordKey, setJoinFormSubmissionRecordKey] = useState("");
+  const [joinFormSubmissionRecordKey, setJoinFormSubmissionRecordKey] =
+    useState("");
   const isBeta = true;
 
   // Store the values submitted by the user or returned by the server
@@ -151,12 +152,16 @@ export default function App() {
   };
 
   async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
-    recordJoinFormSubmissionToS3(joinFormSubmission, joinFormSubmissionRecordKey)
-    .then(key => {
-        if (key !== undefined) {
-          setJoinFormSubmissionRecordKey(key);
-        }
-      });
+    // First up, before we try anything else, submit to S3 for safety.
+    recordJoinFormSubmissionToS3(
+      joinFormSubmission,
+      joinFormSubmissionRecordKey,
+    ).then((key) => {
+      console.log(`JF key: ${key}`);
+      if (key !== undefined) {
+        setJoinFormSubmissionRecordKey(key);
+      }
+    });
 
     console.debug(JSON.stringify(joinFormSubmission));
 
@@ -166,12 +171,15 @@ export default function App() {
     })
       .then(async (response) => {
         // Update the submission in S3 with the status code.
-  recordJoinFormSubmissionToS3(joinFormSubmission, joinFormSubmissionRecordKey)
-    .then(key => {
-        if (key !== undefined) {
-          setJoinFormSubmissionRecordKey(key);
-        }
-      });
+        recordJoinFormSubmissionToS3(
+          joinFormSubmission,
+          joinFormSubmissionRecordKey,
+        ).then((key) => {
+          console.log(`JF key: ${key}`);
+          if (key !== undefined) {
+            setJoinFormSubmissionRecordKey(key);
+          }
+        });
         if (response.ok) {
           console.debug("Join Form submitted successfully");
           setIsLoading(false);
