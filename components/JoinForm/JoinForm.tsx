@@ -86,6 +86,7 @@ export default function App() {
     useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
+  const [joinFormSubmissionRecordKey, setJoinFormSubmissionRecordKey] = useState("");
   const isBeta = true;
 
   // Store the values submitted by the user or returned by the server
@@ -150,6 +151,13 @@ export default function App() {
   };
 
   async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
+    recordJoinFormSubmissionToS3(joinFormSubmission, joinFormSubmissionRecordKey)
+    .then(key => {
+        if (key !== undefined) {
+          setJoinFormSubmissionRecordKey(key);
+        }
+      });
+
     console.debug(JSON.stringify(joinFormSubmission));
 
     return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
@@ -157,6 +165,13 @@ export default function App() {
       body: JSON.stringify(joinFormSubmission),
     })
       .then(async (response) => {
+        // Update the submission in S3 with the status code.
+  recordJoinFormSubmissionToS3(joinFormSubmission, joinFormSubmissionRecordKey)
+    .then(key => {
+        if (key !== undefined) {
+          setJoinFormSubmissionRecordKey(key);
+        }
+      });
         if (response.ok) {
           console.debug("Join Form submitted successfully");
           setIsLoading(false);
@@ -174,11 +189,8 @@ export default function App() {
         if (error.status == 409) {
           let needsConfirmation: Array<ConfirmationField> = [];
           const changedInfo = errorJson.changed_info;
-          console.log(joinFormSubmission);
-          console.log(errorJson.changed_info);
 
           for (const key in joinFormSubmission) {
-            console.log(key);
             if (
               joinFormSubmission.hasOwnProperty(key) &&
               changedInfo.hasOwnProperty(key)
@@ -209,7 +221,6 @@ export default function App() {
 
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
     setIsLoading(true);
-    recordJoinFormSubmissionToS3(data);
     data.trust_me_bro = false;
     submitJoinFormToMeshDB(data);
   };
