@@ -94,6 +94,8 @@ export default [
         );
         console.error("Expected the following:");
         console.error(expectedAPIRequestData);
+        console.error("Got the follwing:");
+        console.error(joinRequest);
         return HttpResponse.json(
           { detail: "Mock failure. Request does not match expected request." },
           { status: 400 },
