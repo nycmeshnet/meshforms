@@ -51,8 +51,6 @@ class JoinRecordS3 {
     submission: JoinRecord,
     key: string = "",
   ) {
-
-    console.log(`bucket: ${this.S3_BUCKET_NAME}`);
     // Bail if there's no S3 key
     if (this.S3_ACCESS_KEY === undefined || this.S3_SECRET_KEY === undefined) {
       console.error(
@@ -102,7 +100,6 @@ class JoinRecordS3 {
 
   // Gets the contents of a JoinRecord for testing
   async get(key: string) {
-    console.log(`bucket: ${this.S3_BUCKET_NAME}`);
     const getObjectCommand = new GetObjectCommand({
       Bucket: this.S3_BUCKET_NAME,
       Key: key,

@@ -154,7 +154,7 @@ export default function App() {
 
   async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
     // First up, before we try anything else, submit to S3 for safety.
-    const safetyRecord: JoinRecord = Object.assign(structuredClone(joinFormSubmission),  {code: "", replayed: 0, install_number: NaN}) as JoinRecord
+    const safetyRecord: JoinRecord = Object.assign(structuredClone(joinFormSubmission),  {code: "", replayed: 0, install_number: null}) as JoinRecord
     saveJoinRecordToS3(safetyRecord, joinRecordKey).then(
       (key) => {
         setJoinRecordKey(key as string);

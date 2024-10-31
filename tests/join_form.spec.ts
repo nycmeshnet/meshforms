@@ -55,6 +55,7 @@ test("happy join form", async ({ page }) => {
 
   if (!isDeepStrictEqual(joinRecord, sampleJoinRecord)) {
     console.log(joinRecord)
+    console.log(sampleJoinRecord)
     throw new Error("Bad JoinRecord. JoinRecord is not deeply equal.");
   }
 
