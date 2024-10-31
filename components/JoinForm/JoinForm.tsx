@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { saveJoinRecordToS3 } from "@/app/join_record";
 import { getMeshDBAPIEndpoint } from "@/app/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
+import { JoinRecord } from "@/app/types";
 
 type JoinFormValues = {
   first_name: string;
@@ -167,7 +168,8 @@ export default function App() {
     })
       .then(async (response) => {
         // Update the submission in S3 with the status code.
-        saveJoinRecordToS3(joinFormSubmission, joinRecordKey, response.status.toString()).then(
+        const record: JoinRecord = Object.assign(joinFormSubmission,  {code: response.status.toString, replayed: 0, install_number: NaN}) as JoinRecord
+        saveJoinRecordToS3(record, joinRecordKey).then(
           (key) => {
             setJoinRecordKey(key as string);
           },

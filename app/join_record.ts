@@ -7,6 +7,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { Readable } from "stream";
+import { JoinRecord } from "./types";
 
 // const JOIN_FORM_LOG = process.env.JOIN_FORM_LOG as string;
 
@@ -47,9 +48,8 @@ class JoinRecordS3 {
   // key: The S3 path we store the submission at
   // responseCode: If we have a response code for this submission, add it here.
   async save(
-    submission: JoinFormValues,
+    submission: JoinRecord,
     key: string = "",
-    responseCode: string = "",
   ) {
 
     console.log(`bucket: ${this.S3_BUCKET_NAME}`);
@@ -71,11 +71,14 @@ class JoinRecordS3 {
     key = key != "" ? key : `${this.S3_BASE_NAME}/${submissionKey}.json`;
 
     let body = JSON.stringify(
+      submission,
+      /*
       Object.assign(submission, {
         code: responseCode, // Code the server returned to us
         replayed: 0, // Number of times we've replayed it from the backend (obvs we haven't)
-        replay_code: "", // Response code when we replayed it (nothing because we're submitting for the first time)
+        install_number: NaN, // Install number if we do manage to successfully submit it
       }),
+      */
     );
 
     const command = new PutObjectCommand({
@@ -129,11 +132,10 @@ class JoinRecordS3 {
 const joinRecordS3 = new JoinRecordS3();
 
 export async function saveJoinRecordToS3(
-    submission: JoinFormValues,
+    submission: JoinRecord,
     key: string = "",
-    responseCode: string = "",
 ) {
-  return joinRecordS3.save(submission, key, responseCode);
+  return joinRecordS3.save(submission, key);
 }
 
 export async function getJoinRecordFromS3(key: string) {
