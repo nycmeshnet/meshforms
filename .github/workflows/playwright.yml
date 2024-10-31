@@ -24,8 +24,8 @@ jobs:
           - MINIO_ROOT_USER=admin
           - MINIO_ROOT_PASSWORD=admin1234
           - MINIO_DEFAULT_BUCKETS=meshdb-join-form-log
-          - MINIO_ACCESS_KEY=testaccesskey
-          - MINIO_SECRET_KEY=testsecretkey
+          - MINIO_ACCESS_KEY=sampleaccesskey
+          - MINIO_SECRET_KEY=samplesecretkey
     steps:
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
     - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6
@@ -40,6 +40,7 @@ jobs:
       env:
         NEXT_PUBLIC_MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
         MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
+        # We now check the JoinRecord stuff, so submit that too.
         S3_ENDPOINT: http://127.0.0.1:9000
         S3_BUCKET_NAME: meshdb-join-form-log
         S3_BASE_NAME: dev-join-form-submissions

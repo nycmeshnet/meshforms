@@ -167,11 +167,12 @@ export default function App() {
     })
       .then(async (response) => {
         // Update the submission in S3 with the status code.
-        saveJoinRecordToS3(joinFormSubmission, joinRecordKey).then(
+        saveJoinRecordToS3(joinFormSubmission, joinRecordKey, response.status.toString()).then(
           (key) => {
             setJoinRecordKey(key as string);
           },
         );
+
         if (response.ok) {
           console.debug("Join Form submitted successfully");
           setIsLoading(false);
@@ -179,6 +180,7 @@ export default function App() {
           return;
         }
 
+        // If the response was not good, then get angry
         throw response;
       })
       .catch(async (error) => {

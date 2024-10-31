@@ -74,7 +74,7 @@ class JoinRecordS3 {
       Object.assign(submission, {
         code: responseCode, // Code the server returned to us
         replayed: 0, // Number of times we've replayed it from the backend (obvs we haven't)
-        replayCode: "", // Response code when we replayed it (nothing because we're submitting for the first time)
+        replay_code: "", // Response code when we replayed it (nothing because we're submitting for the first time)
       }),
     );
 

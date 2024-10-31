@@ -33,9 +33,9 @@ export const sampleJoinRecord: JoinRecord = {
   referral: 'I googled it.',
   ncl: true,
   trust_me_bro: false,
-  code: '',
+  code: '201',
   replayed: 0,
-  replayCode: ''
+  replay_code: ''
 }
 
 export const expectedTrustMeBroValues: JoinFormValues = {
