@@ -153,39 +153,44 @@ export default function App() {
   };
 
   async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
-    // First up, before we try anything else, submit to S3 for safety.
-    const safetyRecord: JoinRecord = Object.assign(
+    // Before we try anything else, submit to S3 for safety.
+    let record: JoinRecord = Object.assign(
       structuredClone(joinFormSubmission),
-      { code: "", replayed: 0, install_number: null },
+      { submission_time: new Date().toISOString(), code: "", replayed: 0, install_number: null },
     ) as JoinRecord;
-    saveJoinRecordToS3(safetyRecord, joinRecordKey).then((key) => {
+
+    saveJoinRecordToS3(record, joinRecordKey).then((key) => {
       setJoinRecordKey(key as string);
     });
 
+    // Attempt to submit the join form
     return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
       method: "POST",
       body: JSON.stringify(joinFormSubmission),
     })
       .then(async (response) => {
         // Update the submission in S3 with the status code.
-        const record: JoinRecord = Object.assign(joinFormSubmission, {
-          code: response.status.toString(),
-          replayed: 0,
-          install_number: NaN,
-        }) as JoinRecord;
+        record.code = response.status.toString()
 
         if (response.ok) {
           console.debug("Join Form submitted successfully");
           setIsLoading(false);
           setIsSubmitted(true);
+
+          // Add the Install Number 
           const install_number = (await response.json()).install_number;
           record.install_number = Number(install_number);
+
+          // Update Join Record
           saveJoinRecordToS3(record, joinRecordKey).then((key) => {
             setJoinRecordKey(key as string);
           });
+
           return;
         }
 
+        // If we didn't succeed, then update the join record before handling
+        // the error
         saveJoinRecordToS3(record, joinRecordKey).then((key) => {
           setJoinRecordKey(key as string);
         });

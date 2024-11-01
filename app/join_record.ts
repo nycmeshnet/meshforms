@@ -47,7 +47,7 @@ class JoinRecordS3 {
   // submission: A Join Form Submission. We append a few things to this.
   // key: The S3 path we store the submission at
   // responseCode: If we have a response code for this submission, add it here.
-  async save(submission: JoinRecord, key: string = "") {
+  async save(joinRecord: JoinRecord, key: string = "") {
     // Bail if there's no S3 key
     if (this.S3_ACCESS_KEY === undefined || this.S3_SECRET_KEY === undefined) {
       console.error(
@@ -57,24 +57,14 @@ class JoinRecordS3 {
     }
 
     // Get the date to store this submission under (this is part of the path)
-    const submissionKey = new Date()
-      .toISOString()
+    const submissionKey = joinRecord.submission_time
       .replace(/[-:T]/g, "/")
       .slice(0, 19);
 
     // Create the path, or use the one provided.
     key = key != "" ? key : `${this.S3_BASE_NAME}/${submissionKey}.json`;
 
-    let body = JSON.stringify(
-      submission,
-      /*
-      Object.assign(submission, {
-        code: responseCode, // Code the server returned to us
-        replayed: 0, // Number of times we've replayed it from the backend (obvs we haven't)
-        install_number: NaN, // Install number if we do manage to successfully submit it
-      }),
-      */
-    );
+    let body = JSON.stringify(joinRecord);
 
     const command = new PutObjectCommand({
       Bucket: this.S3_BUCKET_NAME,
