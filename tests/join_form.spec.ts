@@ -53,6 +53,9 @@ test("happy join form", async ({ page }) => {
   // needs our dotenv.
   const joinRecord: JoinRecord = await getJoinRecordFromS3(joinRecordKey);
 
+  // This is fucked, sorry.
+  joinRecord.submission_time = sampleJoinRecord.submission_time;
+
   if (!isDeepStrictEqual(joinRecord, sampleJoinRecord)) {
     console.error("Expected:");
     console.error(sampleJoinRecord);

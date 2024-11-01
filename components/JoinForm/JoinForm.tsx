@@ -156,7 +156,12 @@ export default function App() {
     // Before we try anything else, submit to S3 for safety.
     let record: JoinRecord = Object.assign(
       structuredClone(joinFormSubmission),
-      { submission_time: new Date().toISOString(), code: "", replayed: 0, install_number: null },
+      {
+        submission_time: new Date().toISOString(),
+        code: "",
+        replayed: 0,
+        install_number: null,
+      },
     ) as JoinRecord;
 
     saveJoinRecordToS3(record, joinRecordKey).then((key) => {
@@ -170,14 +175,14 @@ export default function App() {
     })
       .then(async (response) => {
         // Update the submission in S3 with the status code.
-        record.code = response.status.toString()
+        record.code = response.status.toString();
 
         if (response.ok) {
           console.debug("Join Form submitted successfully");
           setIsLoading(false);
           setIsSubmitted(true);
 
-          // Add the Install Number 
+          // Add the Install Number
           const install_number = (await response.json()).install_number;
           record.install_number = Number(install_number);
 
