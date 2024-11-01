@@ -374,6 +374,7 @@ export default function App() {
               size="large"
               sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}
               name="submit_join_form"
+              id="button-submit-join-form"
             >
               {isLoading ? "Loading..." : isSubmitted ? "Thanks!" : "Submit"}
             </Button>
@@ -388,7 +389,7 @@ export default function App() {
       </div>
       <div hidden={!isSubmitted}>
         <Alert className={styles.thanks} id="alert-thank-you">
-          <h2>Thanks! Please check your email.</h2>
+          <h2 id="alert-thank-you-h2">Thanks! Please check your email.</h2>
         </Alert>
         <div className={styles.thanksBlurb}>
           <p>

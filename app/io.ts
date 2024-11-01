@@ -1,30 +1,5 @@
 import { z } from "zod";
 
-export const JoinFormInput = z.object({
-  first_name: z.string(),
-  last_name: z.string(),
-  email: z.string(),
-  phone: z.string(),
-  street_address: z.string(),
-  apartment: z.string(),
-  city: z.string(),
-  state: z.string(),
-  zip: z.number(),
-  roof_access: z.boolean(),
-  referral: z.string(),
-  ncl: z.boolean(),
-});
-export type JoinFormInput = z.infer<typeof JoinFormInput>;
-
-export const JoinFormResponse = z.object({
-  message: z.string().optional(),
-  building_id: z.number(),
-  member_id: z.number(),
-  install_number: z.number(),
-  member_exists: z.boolean(),
-});
-export type JoinFormResponse = z.infer<typeof JoinFormResponse>;
-
 export const NNAssignFormInput = z.object({
   install_number: z.number(),
   password: z.string(), // TODO: Salt/hash/whatever this

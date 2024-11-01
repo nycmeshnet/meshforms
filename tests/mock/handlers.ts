@@ -1,8 +1,8 @@
-import { JoinFormResponse } from "@/app/io";
 import { http, HttpResponse } from "msw";
 import { expectedAPIRequestData } from "../util";
 import { isDeepStrictEqual } from "util";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
+import { NNAssignRequestValues } from "@/components/NNAssignForm/NNAssignForm";
 
 export default [
   http.post("/api/v1/join/", async ({ request }) => {
@@ -118,5 +118,60 @@ export default [
     };
 
     return HttpResponse.json(json, { status: 201 });
+  }),
+  http.post("/api/v1/nn-assign/", async ({ request }) => {
+    console.debug("Hello from mocked NN Assign API.");
+
+    const requestJson = await request.json();
+
+    if (requestJson === undefined || requestJson === null) {
+      return HttpResponse.json(
+        { detail: "Mock: Missing request body" },
+        { status: 400 },
+      );
+    }
+
+    const nnAssignRequest: NNAssignRequestValues =
+      requestJson as NNAssignRequestValues;
+
+    // Firstly, check if we have the right password
+    if (nnAssignRequest.password != "localdev") {
+      console.debug("Mock bad password");
+      return HttpResponse.json(
+        { detail: "Mock failure. Authentication Failed." },
+        { status: 400 },
+      );
+    }
+
+    if (nnAssignRequest.install_number == "20000") {
+      const json = {
+        detail: "Network Number has been assigned!",
+        building_id: 69,
+        install_id: 69,
+        install_number: 20000,
+        network_number: 420,
+        created: true,
+      };
+
+      return HttpResponse.json(json, { status: 201 });
+    }
+
+    if (nnAssignRequest.install_number == "30000") {
+      const message = `This Install Number (30000) already has a Network Number (520) associated with it!`;
+      const json = {
+        detail: message,
+        building_id: 79,
+        install_id: 79,
+        install_number: 30000,
+        network_number: 520,
+        created: false,
+      };
+      return HttpResponse.json(json, { status: 200 });
+    }
+
+    return HttpResponse.json(
+      { detail: "Mock failure. Server Error." },
+      { status: 500 },
+    );
   }),
 ];

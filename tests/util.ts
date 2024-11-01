@@ -1,4 +1,3 @@
-import { JoinFormResponse } from "@/app/io";
 import { JoinRecord } from "@/app/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { expect, Page } from "@playwright/test";
