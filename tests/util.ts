@@ -1,3 +1,4 @@
+import { getJoinRecordFromS3 } from "@/app/join_record";
 import { JoinRecord } from "@/app/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { expect, Page } from "@playwright/test";
@@ -162,4 +163,20 @@ export async function submitConfirmationDialogExpected(
 
   await page.waitForTimeout(timeout);
   await expect(page.locator("[id='alert-dialog-title']")).toBeVisible();
+}
+
+export async function findJoinRecord(page: Page): Promise<JoinRecord> {
+  const joinRecordKey = await page.getAttribute(
+    '[data-testid="test-join-record-key"]',
+    "data-state",
+  );
+
+  if (joinRecordKey === null) {
+    throw new Error("Got null join record");
+  }
+
+  // This is wacky because playwright has to run this and therefore
+  // needs our dotenv.
+  const joinRecord: JoinRecord = await getJoinRecordFromS3(joinRecordKey);
+  return joinRecord;
 }
