@@ -54,8 +54,8 @@ test("happy join form", async ({ page }) => {
   const joinRecord: JoinRecord = await getJoinRecordFromS3(joinRecordKey);
 
   if (!isDeepStrictEqual(joinRecord, sampleJoinRecord)) {
-    console.log(joinRecord)
-    console.log(sampleJoinRecord)
+    console.log(joinRecord);
+    console.log(sampleJoinRecord);
     throw new Error("Bad JoinRecord. JoinRecord is not deeply equal.");
   }
 

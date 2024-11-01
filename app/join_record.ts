@@ -14,20 +14,20 @@ import { JoinRecord } from "./types";
 class JoinRecordS3 {
   private s3Client: S3Client;
 
-  private S3_REGION: string; 
-  private S3_ENDPOINT: string; 
-  private S3_BUCKET_NAME: string; 
-  private S3_BASE_NAME: string; 
-  private S3_ACCESS_KEY: string; 
-  private S3_SECRET_KEY: string; 
+  private S3_REGION: string;
+  private S3_ENDPOINT: string;
+  private S3_BUCKET_NAME: string;
+  private S3_BASE_NAME: string;
+  private S3_ACCESS_KEY: string;
+  private S3_SECRET_KEY: string;
 
   constructor() {
-    this.S3_REGION      = process.env.S3_REGION as string;
-    this.S3_ENDPOINT    = process.env.S3_ENDPOINT as string;
+    this.S3_REGION = process.env.S3_REGION as string;
+    this.S3_ENDPOINT = process.env.S3_ENDPOINT as string;
     this.S3_BUCKET_NAME = process.env.S3_BUCKET_NAME as string;
-    this.S3_BASE_NAME   = process.env.S3_BASE_NAME as string;
-    this.S3_ACCESS_KEY  = process.env.S3_ACCESS_KEY as string;
-    this.S3_SECRET_KEY  = process.env.S3_SECRET_KEY as string;
+    this.S3_BASE_NAME = process.env.S3_BASE_NAME as string;
+    this.S3_ACCESS_KEY = process.env.S3_ACCESS_KEY as string;
+    this.S3_SECRET_KEY = process.env.S3_SECRET_KEY as string;
 
     // Setup the S3 client
     this.s3Client = new S3Client({
@@ -47,10 +47,7 @@ class JoinRecordS3 {
   // submission: A Join Form Submission. We append a few things to this.
   // key: The S3 path we store the submission at
   // responseCode: If we have a response code for this submission, add it here.
-  async save(
-    submission: JoinRecord,
-    key: string = "",
-  ) {
+  async save(submission: JoinRecord, key: string = "") {
     // Bail if there's no S3 key
     if (this.S3_ACCESS_KEY === undefined || this.S3_SECRET_KEY === undefined) {
       console.error(
@@ -129,8 +126,8 @@ class JoinRecordS3 {
 const joinRecordS3 = new JoinRecordS3();
 
 export async function saveJoinRecordToS3(
-    submission: JoinRecord,
-    key: string = "",
+  submission: JoinRecord,
+  key: string = "",
 ) {
   return joinRecordS3.save(submission, key);
 }

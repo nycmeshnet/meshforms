@@ -19,23 +19,23 @@ export const sampleData: JoinFormValues = {
 };
 
 export const sampleJoinRecord: JoinRecord = {
-  first_name: 'Jon',
-  last_name: 'Smith',
-  email_address: 'js@gmail.com',
-  phone_number: '+1 585-475-2411',
-  street_address: '197 Prospect Place',
-  apartment: '1',
-  city: 'Brooklyn',
-  state: 'NY',
-  zip_code: '11238',
+  first_name: "Jon",
+  last_name: "Smith",
+  email_address: "js@gmail.com",
+  phone_number: "+1 585-475-2411",
+  street_address: "197 Prospect Place",
+  apartment: "1",
+  city: "Brooklyn",
+  state: "NY",
+  zip_code: "11238",
   roof_access: true,
-  referral: 'I googled it.',
+  referral: "I googled it.",
   ncl: true,
   trust_me_bro: false,
-  code: '201',
+  code: "201",
   replayed: 0,
   install_number: null,
-}
+};
 
 export const expectedTrustMeBroValues: JoinFormValues = {
   first_name: "Jon",
