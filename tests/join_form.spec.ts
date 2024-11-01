@@ -92,9 +92,11 @@ test("confirm city", async ({ page }) => {
 
   // Check that the Join Record's code is correct.
   let joinRecord = await findJoinRecord(page);
-  let code = "409"
+  let code = "409";
   if (joinRecord.code !== code) {
-    throw new Error(`JoinRecord code (${joinRecord.code}) did not match expected code (${code})`);
+    throw new Error(
+      `JoinRecord code (${joinRecord.code}) did not match expected code (${code})`,
+    );
   }
 
   await page.locator("[name='confirm']").click();
@@ -103,7 +105,9 @@ test("confirm city", async ({ page }) => {
   await page.waitForTimeout(1000);
   joinRecord = await findJoinRecord(page);
   if (joinRecord.code !== "201") {
-    throw new Error(`JoinRecord code (${joinRecord.code}) did not match expected code (201)`);
+    throw new Error(
+      `JoinRecord code (${joinRecord.code}) did not match expected code (201)`,
+    );
   }
 
   await expectSuccess(page, 1000);
@@ -376,8 +380,10 @@ test("fail nj", async ({ page }) => {
 
   // Check that the Join Record's code is correct.
   let joinRecord = await findJoinRecord(page);
-  let code = "400"
+  let code = "400";
   if (joinRecord.code !== code) {
-    throw new Error(`JoinRecord code (${joinRecord.code}) did not match expected code (${code})`);
+    throw new Error(
+      `JoinRecord code (${joinRecord.code}) did not match expected code (${code})`,
+    );
   }
 });
