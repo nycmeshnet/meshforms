@@ -34,7 +34,7 @@ export const sampleJoinRecord: JoinRecord = {
   trust_me_bro: false,
   code: "201",
   replayed: 0,
-  install_number: null,
+  install_number: 1002,
 };
 
 export const expectedTrustMeBroValues: JoinFormValues = {
