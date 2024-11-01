@@ -179,8 +179,7 @@ export default function App() {
           setIsLoading(false);
           setIsSubmitted(true);
           const install_number = (await response.json()).install_number;
-          console.log(install_number);
-          record.install_number = install_number;
+          record.install_number = Number(install_number);
           saveJoinRecordToS3(record, joinRecordKey).then((key) => {
             setJoinRecordKey(key as string);
           });
