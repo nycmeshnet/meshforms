@@ -43,7 +43,10 @@ class JoinRecordS3 {
   // responseCode: If we have a response code for this submission, add it here.
   async save(joinRecord: JoinRecord, key: string = "") {
     // Bail if there's no S3 key
-    if (this.AWS_ACCESS_KEY_ID === undefined || this.AWS_SECRET_ACCESS_KEY === undefined) {
+    if (
+      this.AWS_ACCESS_KEY_ID === undefined ||
+      this.AWS_SECRET_ACCESS_KEY === undefined
+    ) {
       console.error(
         "S3 credentials not configured. I WILL NOT SAVE THIS SUBMISSION.",
       );
