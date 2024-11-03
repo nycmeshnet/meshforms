@@ -164,51 +164,36 @@ export default function App() {
       },
     ) as JoinRecord;
 
-    saveJoinRecordToS3(record, joinRecordKey).then((key) => {
-      setJoinRecordKey(key as string);
-    });
+    setJoinRecordKey(await saveJoinRecordToS3(record, joinRecordKey) as string);
 
-    // Attempt to submit the join form
-    return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
-      method: "POST",
-      body: JSON.stringify(joinFormSubmission),
-    })
-      .then(async (response) => {
-        // Update the submission in S3 with the status code.
-        record.code = response.status.toString();
+    try {
+      const response = await fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
+        method: "POST",
+        body: JSON.stringify(joinFormSubmission),
+      });
+      const responseJson = await response.json();
 
-        if (response.ok) {
+      // Grab the code and the install_number (if we have it) for the joinRecord
+      record.code = response.status.toString();
+      record.install_number = responseJson.install_number;
+
+      // Update the join record with our data if we have it.
+      setJoinRecordKey(await saveJoinRecordToS3(record, joinRecordKey) as string);
+
+      if (response.ok) {
           console.debug("Join Form submitted successfully");
           setIsLoading(false);
           setIsSubmitted(true);
-
-          // Add the Install Number
-          const install_number = (await response.json()).install_number;
-          record.install_number = Number(install_number);
-
-          // Update Join Record
-          saveJoinRecordToS3(record, joinRecordKey).then((key) => {
-            setJoinRecordKey(key as string);
-          });
-
           return;
-        }
+      }
 
-        // If we didn't succeed, then update the join record before handling
-        // the error
-        saveJoinRecordToS3(record, joinRecordKey).then((key) => {
-          setJoinRecordKey(key as string);
-        });
-
-        // If the response was not good, then get angry
-        throw response;
-      })
-      .catch(async (error) => {
-        const errorJson = await error.json();
+      // If the response was not good, then get angry.
+      throw new Error(responseJson);
+    } catch (errorJson) {
         const detail = await errorJson.detail;
 
         // We just need to confirm some information
-        if (error.status == 409) {
+        if (record.code == "409") {
           let needsConfirmation: Array<ConfirmationField> = [];
           const changedInfo = errorJson.changed_info;
 
@@ -238,7 +223,7 @@ export default function App() {
         // There's probably a way to coax the exception out of the response somewhere
         toast.error(`Could not submit Join Form: ${detail}`);
         setIsLoading(false);
-      });
+    }
   }
 
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {

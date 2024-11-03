@@ -26,7 +26,7 @@ export default [
           message: "",
           building_id: "1000",
           member_id: "1001",
-          install_number: "1002",
+          install_number: 1002,
           member_exists: "false",
         };
 
@@ -39,7 +39,7 @@ export default [
           building_id: "",
           member_id: "",
           install_id: "",
-          install_number: "",
+          install_number: null,
           member_exists: "",
           changed_info: { street_address: "333 Chom Street" },
         },
@@ -113,7 +113,7 @@ export default [
       message: "",
       building_id: "1000",
       member_id: "1001",
-      install_number: "1002",
+      install_number: 1002,
       member_exists: "false",
     };
 
