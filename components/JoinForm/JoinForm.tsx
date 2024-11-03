@@ -19,55 +19,33 @@ import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/app/types";
 
 export class JoinFormValues {
-  first_name: string;
-  last_name: string;
-  email_address: string;
-  phone_number: string;
-  street_address: string;
-  apartment: string;
-  city: string;
-  state: string;
-  zip_code: string;
-  roof_access: boolean;
-  referral: string;
-  ncl: boolean;
-  trust_me_bro: boolean;
-
-  constructor() {
-    this.first_name = "";
-    this.last_name = "";
-    this.email_address = "";
-    this.phone_number = "";
-    this.street_address = "";
-    this.apartment = "";
-    this.city = "";
-    this.state = "";
-    this.zip_code = "";
-    this.roof_access = false;
-    this.referral = "";
-    this.ncl = false;
-    this.trust_me_bro = false;
-  }
-};
+  constructor (
+    public first_name: string = "",
+    public last_name: string = "",
+    public email_address: string = "",
+    public phone_number: string = "",
+    public street_address: string = "",
+    public apartment: string = "",
+    public city: string = "",
+    public state: string = "",
+    public zip_code: string = "",
+    public roof_access: boolean = false,
+    public referral: string = "",
+    public ncl: boolean = false,
+    public trust_me_bro: boolean = false,
+  ) {}
+}
 
 export class JoinFormResponse {
-  detail: string;
-  building_id: string; // UUID
-  member_id: string; // UUID
-  install_id: string; // UUID
-  install_number: number | null;
-  member_exists: boolean;
-  changed_info: { [id: string] : string; };
-
-  constructor() {
-    this.detail = "";
-    this.building_id = "";
-    this.member_id = "";
-    this.install_id = ""
-    this.install_number = null;
-    this.member_exists = false;
-    this.changed_info = {};
-  }
+  constructor (
+    public detail: string = "",
+    public building_id: string = "", // UUID
+    public member_id: string = "", // UUID
+    public install_id: string = "", // UUID
+    public install_number: number | null = null,
+    public member_exists: boolean = false,
+    public changed_info: { [id: string] : string; } = {},
+  ){}
 }
 
 type ConfirmationField = {
@@ -191,12 +169,21 @@ export default function App() {
         body: JSON.stringify(joinFormSubmission),
       });
       console.log("hello");
-      const responseJson = await response.json();
+      const j = await response.json();
+      const responseData = new JoinFormResponse(
+        j.detail,
+        j.building_id,
+        j.member_id,
+        j.install_id,
+        j.install_number,
+        j.member_exists,
+        j.changed_info,
+      );
       console.log("hello2");
 
       // Grab the HTTP code and the install_number (if we have it) for the joinRecord
       record.code = response.status.toString();
-      record.install_number = responseJson.install_number;
+      record.install_number = responseData.install_number;
       console.log("hello3");
 
       // Update the join record with our data if we have it.
@@ -211,13 +198,9 @@ export default function App() {
       }
 
       // If the response was not good, then get angry.
-      throw responseJson;
+      throw responseData;
     } catch (error: unknown) {
       if (error instanceof JoinFormResponse) {
-        console.log(record.code);
-        console.log(error.detail);
-        console.log(error.changed_info);
-
         // We just need to confirm some information
         if (record.code == "409") {
           let needsConfirmation: Array<ConfirmationField> = [];
@@ -260,8 +243,8 @@ export default function App() {
         return;
       }
 
-      console.error("An unknown error occurred.");
-      toast.error("An unknown error occurred.");
+      console.error(`An unknown error occurred: ${JSON.stringify(error)}`);
+      toast.error(`An unknown error occurred: ${JSON.stringify(error)}`);
       return;
     }
   }
@@ -409,13 +392,13 @@ export default function App() {
           <div className={styles.centered}>
             <Button
               type="submit"
-              disabled={
+              /*disabled={
                 isLoading ||
                 isSubmitted ||
                 isBadPhoneNumber ||
                 !isDirty ||
                 !isValid
-              }
+              }*/
               variant="contained"
               size="large"
               sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}
