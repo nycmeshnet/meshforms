@@ -86,7 +86,7 @@ export default function App() {
     useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
-  const isBeta = true;
+  const isBeta = false;
 
   // Store the values submitted by the user or returned by the server
   const [infoToConfirm, setInfoToConfirm] = useState<Array<ConfirmationField>>([
