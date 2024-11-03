@@ -392,13 +392,13 @@ export default function App() {
           <div className={styles.centered}>
             <Button
               type="submit"
-              /*disabled={
+              disabled={
                 isLoading ||
                 isSubmitted ||
                 isBadPhoneNumber ||
                 !isDirty ||
                 !isValid
-              }*/
+              }
               variant="contained"
               size="large"
               sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}
