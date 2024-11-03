@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { expectedAPIRequestData } from "../util";
 import { isDeepStrictEqual } from "util";
-import { JoinFormValues } from "@/components/JoinForm/JoinForm";
+import { JoinFormResponse, JoinFormValues, NewJoinFormResponse } from "@/components/JoinForm/JoinForm";
 import { NNAssignRequestValues } from "@/components/NNAssignForm/NNAssignForm";
 
 export default [
@@ -19,73 +19,53 @@ export default [
 
     const joinRequest: JoinFormValues = requestJson as JoinFormValues;
 
+    const good_response: JoinFormResponse = {
+      detail: "",
+      building_id: "a5b316f2-c167-40a1-8f40-dd6b54daf0fe",
+      member_id: "c9305944-80d8-4b1c-b5b9-3c9c0db0d2a1",
+      install_id: "d9e13697-8240-4c0c-be86-d9aa67617165",
+      install_number: 1002,
+      member_exists: false,
+      changed_info: {},
+    };
+
     // Special case to test "trust me bro"
     if (joinRequest.street_address === "333 chom st") {
       if (joinRequest.trust_me_bro) {
-        const json = {
-          message: "",
-          building_id: "1000",
-          member_id: "1001",
-          install_number: 1002,
-          member_exists: "false",
-        };
-
-        return HttpResponse.json(json, { status: 201 });
+        return HttpResponse.json(good_response, { status: 201 });
       }
 
-      return HttpResponse.json(
-        {
-          detail: "Mock: Please confirm a few details.",
-          building_id: "",
-          member_id: "",
-          install_id: "",
-          install_number: null,
-          member_exists: "",
-          changed_info: { street_address: "333 Chom Street" },
-        },
-        { status: 409 },
-      );
+      // Else, we're gonna return a 409.
+      let r = NewJoinFormResponse();
+      r.detail = "Mock: Please confirm a few details.";
+      r.changed_info =  { street_address: "333 Chom Street" };
+
+      return HttpResponse.json(r, { status: 409 });
     }
 
     if (!joinRequest.trust_me_bro) {
       if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
-        return HttpResponse.json(
-          {
-            detail:
-              "Mock: Non-NYC registrations are not supported at this time.",
-          },
-          { status: 400 },
-        );
+        let r = NewJoinFormResponse();
+        r.detail = "Mock: Non-NYC registrations are not supported at this time.";
+
+        return HttpResponse.json(r, { status: 400 });
       }
 
       if (joinRequest.street_address === "197 prospect pl") {
-        return HttpResponse.json(
-          {
-            detail: "Mock: Please confirm a few details.",
-            building_id: "",
-            member_id: "",
-            install_id: "",
-            install_number: "",
-            member_exists: "",
-            changed_info: { street_address: "197 Prospect Place" },
-          },
-          { status: 409 },
-        );
+
+        let r = NewJoinFormResponse();
+        r.detail = "Mock: Please confirm a few details.";
+        r.changed_info =  { street_address: "197 Prospect Place" };
+
+        return HttpResponse.json(r, { status: 409 });
       }
 
       if (joinRequest.city === "brooklyn") {
-        return HttpResponse.json(
-          {
-            detail: "Mock: Please confirm a few details.",
-            building_id: "",
-            member_id: "",
-            install_id: "",
-            install_number: "",
-            member_exists: "",
-            changed_info: { city: "Brooklyn" },
-          },
-          { status: 409 },
-        );
+
+        let r = NewJoinFormResponse();
+        r.detail = "Mock: Please confirm a few details.";
+        r.changed_info = { city: "Brooklyn" };
+        return HttpResponse.json(r, { status: 409 });
       }
 
       if (!isDeepStrictEqual(joinRequest, expectedAPIRequestData)) {
@@ -96,28 +76,23 @@ export default [
         console.error(expectedAPIRequestData);
         console.error("Got the follwing:");
         console.error(joinRequest);
-        return HttpResponse.json(
-          { detail: "Mock failure. Request does not match expected request." },
-          { status: 400 },
-        );
+
+        let r = NewJoinFormResponse();
+        r.detail = "Mock failure. Request does not match expected request.";
+        return HttpResponse.json(r, { status: 400 });
       }
     }
 
     if (joinRequest.street_address === "333 chom st") {
       // wtf we're still here? bail!!!
       // TODO: Re-write this mock server because it SUUUUCKS
-      return HttpResponse.json({ detail: "What the fuck" }, { status: 400 });
+      let r = NewJoinFormResponse();
+      r.detail = "What the fuck";
+      return HttpResponse.json(r, { status: 400 });
     }
 
-    const json = {
-      message: "",
-      building_id: "1000",
-      member_id: "1001",
-      install_number: 1002,
-      member_exists: "false",
-    };
-
-    return HttpResponse.json(json, { status: 201 });
+    // OK we're chilling. Return 200
+    return HttpResponse.json(good_response, { status: 201 });
   }),
   http.post("/api/v1/nn-assign/", async ({ request }) => {
     console.debug("Hello from mocked NN Assign API.");

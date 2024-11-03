@@ -55,6 +55,31 @@ export function NewJoinFormValues() {
 
 export type { JoinFormValues };
 
+type JoinFormResponse = {
+  detail: string;
+  building_id: string; // UUID
+  member_id: string; // UUID
+  install_id: string; // UUID
+  install_number: number;
+  member_exists: boolean;
+  changed_info: { [id: string] : string; };
+}
+
+// Fuck it
+export function NewJoinFormResponse() {
+  return {
+    detail: "",
+    building_id: "",
+    member_id:   "",
+    install_id:  "",
+    install_number: null,
+    member_exists: false,
+    changed_info: {},
+  };
+}
+
+export type { JoinFormResponse };
+
 type ConfirmationField = {
   key: keyof JoinFormValues;
   original: string;
@@ -172,6 +197,8 @@ export default function App() {
         body: JSON.stringify(joinFormSubmission),
       });
       const responseJson = await response.json();
+      console.log(responseJson);
+      console.log(responseJson.detail);
 
       // Grab the code and the install_number (if we have it) for the joinRecord
       record.code = response.status.toString();
@@ -188,41 +215,49 @@ export default function App() {
       }
 
       // If the response was not good, then get angry.
-      throw new Error(responseJson);
-    } catch (errorJson) {
-        const detail = await errorJson.detail;
+      // FIXME (wdn): Throwing the whole response is wack.
+      throw responseJson as JoinFormResponse;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.log(`An error occurred: ${error.message}`);
+        toast.error(`An error occurred: ${error.message}`);
+      }
+      //setIsLoading(false);
+      //return;
 
-        // We just need to confirm some information
-        if (record.code == "409") {
-          let needsConfirmation: Array<ConfirmationField> = [];
-          const changedInfo = errorJson.changed_info;
+      const detail = error.detail;
 
-          for (const key in joinFormSubmission) {
-            if (
-              joinFormSubmission.hasOwnProperty(key) &&
-              changedInfo.hasOwnProperty(key)
-            ) {
-              const originalValue = String(
-                joinFormSubmission[key as keyof JoinFormValues],
-              );
-              needsConfirmation.push({
-                key: key as keyof JoinFormValues,
-                original: originalValue,
-                new: changedInfo[key],
-              });
-            }
+      // We just need to confirm some information
+      if (record.code == "409") {
+        let needsConfirmation: Array<ConfirmationField> = [];
+        const changedInfo = error.changed_info;
+
+        for (const key in joinFormSubmission) {
+          if (
+            joinFormSubmission.hasOwnProperty(key) &&
+            changedInfo.hasOwnProperty(key)
+          ) {
+            const originalValue = String(
+              joinFormSubmission[key as keyof JoinFormValues],
+            );
+            needsConfirmation.push({
+              key: key as keyof JoinFormValues,
+              original: originalValue,
+              new: changedInfo[key],
+            });
           }
-
-          setInfoToConfirm(needsConfirmation);
-          setIsInfoConfirmationDialogueOpen(true);
-          toast.warning("Please confirm some information");
-          return;
         }
 
-        // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
-        // There's probably a way to coax the exception out of the response somewhere
-        toast.error(`Could not submit Join Form: ${detail}`);
-        setIsLoading(false);
+        setInfoToConfirm(needsConfirmation);
+        setIsInfoConfirmationDialogueOpen(true);
+        toast.warning("Please confirm some information");
+        return;
+      }
+
+      // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
+      // There's probably a way to coax the exception out of the response somewhere
+      toast.error(`Could not submit Join Form: ${detail}`);
+      setIsLoading(false);
     }
   }
 
