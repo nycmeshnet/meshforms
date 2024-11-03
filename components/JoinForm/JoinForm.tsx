@@ -389,6 +389,15 @@ export default function App() {
               Network Commons License
             </a>
           </label>
+          {/*
+          <div>
+            isLoading: {isLoading ? "true" : "false"}<br/>
+            isSubmitted: {isSubmitted ? "true" : "false"}<br/>
+            isBadPhoneNumber: {isBadPhoneNumber ? "true" : "false"}<br/>
+            !isDirty: {!isDirty ? "true" : "false"}<br/>
+            !isValid: {!isValid ? "true" : "false"}<br/>
+          </div>
+          */}
           <div className={styles.centered}>
             <Button
               type="submit"
@@ -396,7 +405,6 @@ export default function App() {
                 isLoading ||
                 isSubmitted ||
                 isBadPhoneNumber ||
-                !isDirty ||
                 !isValid
               }
               variant="contained"
