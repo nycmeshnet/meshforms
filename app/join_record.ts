@@ -4,6 +4,7 @@ import {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  ListBucketsCommand,
 } from "@aws-sdk/client-s3";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { Readable } from "stream";
@@ -42,16 +43,15 @@ class JoinRecordS3 {
   // key: The S3 path we store the submission at
   // responseCode: If we have a response code for this submission, add it here.
   async save(joinRecord: JoinRecord, key: string = "") {
-    // Bail if there's no S3 key
-    if (
-      this.AWS_ACCESS_KEY_ID === undefined ||
-      this.AWS_SECRET_ACCESS_KEY === undefined
-    ) {
-      console.error(
-        "S3 credentials not configured. I WILL NOT SAVE THIS SUBMISSION.",
-      );
-      return;
+    // Check if the S3 client is working and exit gracefully with a warning if it is not.
+    try {
+        const command = new ListBucketsCommand({});
+        await this.s3Client.send(command);
+    } catch (error) {
+        console.warn('S3 Client not configured properly. I WILL NOT SAVE THIS SUBMISSION.', error);
+        return;
     }
+
 
     // Get the date to store this submission under (this is part of the path)
     const submissionKey = joinRecord.submission_time
