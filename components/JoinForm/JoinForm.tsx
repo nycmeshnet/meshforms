@@ -146,7 +146,6 @@ export default function App() {
   };
 
   async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
-    console.log("entrypoint into submit function");
     // Before we try anything else, submit to S3 for safety.
     let record: JoinRecord = Object.assign(
       structuredClone(joinFormSubmission),
@@ -157,18 +156,13 @@ export default function App() {
         install_number: null,
       },
     ) as JoinRecord;
-
-
-    console.log("hello-1");
     setJoinRecordKey(await saveJoinRecordToS3(record, joinRecordKey) as string);
-    console.log("hello0");
 
     try {
       const response = await fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
         method: "POST",
         body: JSON.stringify(joinFormSubmission),
       });
-      console.log("hello");
       const j = await response.json();
       const responseData = new JoinFormResponse(
         j.detail,
@@ -179,16 +173,13 @@ export default function App() {
         j.member_exists,
         j.changed_info,
       );
-      console.log("hello2");
 
       // Grab the HTTP code and the install_number (if we have it) for the joinRecord
       record.code = response.status.toString();
       record.install_number = responseData.install_number;
-      console.log("hello3");
 
       // Update the join record with our data if we have it.
       setJoinRecordKey(await saveJoinRecordToS3(record, joinRecordKey) as string);
-      console.log("hello4");
 
       if (response.ok) {
           console.debug("Join Form submitted successfully");
@@ -250,9 +241,7 @@ export default function App() {
   }
 
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
-    console.log("hello-4");
     setIsLoading(true);
-    console.log("hello-3");
     data.trust_me_bro = false;
     submitJoinFormToMeshDB(data);
   };
