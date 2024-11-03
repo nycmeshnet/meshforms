@@ -55,7 +55,7 @@ export function NewJoinFormValues() {
 
 export type { JoinFormValues };
 
-class JoinFormResponse {
+export class JoinFormResponse {
   detail: string;
   building_id: string; // UUID
   member_id: string; // UUID
@@ -74,21 +74,6 @@ class JoinFormResponse {
     this.changed_info = {};
   }
 }
-
-// Fuck it
-export function NewJoinFormResponse() {
-  return {
-    detail: "",
-    building_id: "",
-    member_id:   "",
-    install_id:  "",
-    install_number: null,
-    member_exists: false,
-    changed_info: {},
-  };
-}
-
-export type { JoinFormResponse };
 
 type ConfirmationField = {
   key: keyof JoinFormValues;
@@ -231,41 +216,40 @@ export default function App() {
         return;
       }
 
-      if (typeof error === JoinForm
+      if (error instanceof JoinFormResponse) {
+        // We just need to confirm some information
+        if (record.code == "409") {
+          let needsConfirmation: Array<ConfirmationField> = [];
+          const changedInfo = error.changed_info;
 
-      const detail = error.detail;
-
-      // We just need to confirm some information
-      if (record.code == "409") {
-        let needsConfirmation: Array<ConfirmationField> = [];
-        const changedInfo = error.changed_info;
-
-        for (const key in joinFormSubmission) {
-          if (
-            joinFormSubmission.hasOwnProperty(key) &&
-            changedInfo.hasOwnProperty(key)
-          ) {
-            const originalValue = String(
-              joinFormSubmission[key as keyof JoinFormValues],
-            );
-            needsConfirmation.push({
-              key: key as keyof JoinFormValues,
-              original: originalValue,
-              new: changedInfo[key],
-            });
+          for (const key in joinFormSubmission) {
+            if (
+              joinFormSubmission.hasOwnProperty(key) &&
+              changedInfo.hasOwnProperty(key)
+            ) {
+              const originalValue = String(
+                joinFormSubmission[key as keyof JoinFormValues],
+              );
+              needsConfirmation.push({
+                key: key as keyof JoinFormValues,
+                original: originalValue,
+                new: changedInfo[key],
+              });
+            }
           }
+
+          setInfoToConfirm(needsConfirmation);
+          setIsInfoConfirmationDialogueOpen(true);
+          toast.warning("Please confirm some information");
+          return;
         }
 
-        setInfoToConfirm(needsConfirmation);
-        setIsInfoConfirmationDialogueOpen(true);
-        toast.warning("Please confirm some information");
-        return;
+        const detail = error.detail;
+        // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
+        // There's probably a way to coax the exception out of the response somewhere
+        toast.error(`Could not submit Join Form: ${detail}`);
+        setIsLoading(false);
       }
-
-      // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
-      // There's probably a way to coax the exception out of the response somewhere
-      toast.error(`Could not submit Join Form: ${detail}`);
-      setIsLoading(false);
     }
   }
 

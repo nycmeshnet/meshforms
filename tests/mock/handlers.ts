@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 import { expectedAPIRequestData } from "../util";
 import { isDeepStrictEqual } from "util";
-import { JoinFormResponse, JoinFormValues, NewJoinFormResponse } from "@/components/JoinForm/JoinForm";
+import { JoinFormResponse, JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { NNAssignRequestValues } from "@/components/NNAssignForm/NNAssignForm";
 
 export default [
@@ -36,7 +36,7 @@ export default [
       }
 
       // Else, we're gonna return a 409.
-      let r = NewJoinFormResponse();
+      let r = new JoinFormResponse();
       r.detail = "Mock: Please confirm a few details.";
       r.changed_info =  { street_address: "333 Chom Street" };
 
@@ -45,7 +45,7 @@ export default [
 
     if (!joinRequest.trust_me_bro) {
       if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
-        let r = NewJoinFormResponse();
+        let r = new JoinFormResponse();
         r.detail = "Mock: Non-NYC registrations are not supported at this time.";
 
         return HttpResponse.json(r, { status: 400 });
@@ -53,7 +53,7 @@ export default [
 
       if (joinRequest.street_address === "197 prospect pl") {
 
-        let r = NewJoinFormResponse();
+        let r = new JoinFormResponse();
         r.detail = "Mock: Please confirm a few details.";
         r.changed_info =  { street_address: "197 Prospect Place" };
 
@@ -62,7 +62,7 @@ export default [
 
       if (joinRequest.city === "brooklyn") {
 
-        let r = NewJoinFormResponse();
+        let r = new JoinFormResponse();
         r.detail = "Mock: Please confirm a few details.";
         r.changed_info = { city: "Brooklyn" };
         return HttpResponse.json(r, { status: 409 });
@@ -77,7 +77,7 @@ export default [
         console.error("Got the follwing:");
         console.error(joinRequest);
 
-        let r = NewJoinFormResponse();
+        let r = new JoinFormResponse();
         r.detail = "Mock failure. Request does not match expected request.";
         return HttpResponse.json(r, { status: 400 });
       }
@@ -86,7 +86,7 @@ export default [
     if (joinRequest.street_address === "333 chom st") {
       // wtf we're still here? bail!!!
       // TODO: Re-write this mock server because it SUUUUCKS
-      let r = NewJoinFormResponse();
+      let r = new JoinFormResponse();
       r.detail = "What the fuck";
       return HttpResponse.json(r, { status: 400 });
     }
