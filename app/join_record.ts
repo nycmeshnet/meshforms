@@ -14,32 +14,26 @@ import { JoinRecord } from "./types";
 class JoinRecordS3 {
   private s3Client: S3Client;
 
-  private S3_REGION: string;
+  private BUCKET_NAME: string;
+  private PREFIX: string;
+
   private S3_ENDPOINT: string;
-  private S3_BUCKET_NAME: string;
-  private S3_BASE_NAME: string;
-  private S3_ACCESS_KEY: string;
-  private S3_SECRET_KEY: string;
+  private AWS_ACCESS_KEY_ID: string;
+  private AWS_SECRET_ACCESS_KEY: string;
 
   constructor() {
-    this.S3_REGION = process.env.S3_REGION as string;
+    this.BUCKET_NAME = process.env.JOIN_RECORD_BUCKET_NAME as string;
+    this.PREFIX = process.env.JOIN_RECORD_PREFIX as string;
     this.S3_ENDPOINT = process.env.S3_ENDPOINT as string;
-    this.S3_BUCKET_NAME = process.env.S3_BUCKET_NAME as string;
-    this.S3_BASE_NAME = process.env.S3_BASE_NAME as string;
-    this.S3_ACCESS_KEY = process.env.S3_ACCESS_KEY as string;
-    this.S3_SECRET_KEY = process.env.S3_SECRET_KEY as string;
+    this.AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID as string;
+    this.AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY as string;
 
     // Setup the S3 client
     this.s3Client = new S3Client({
-      region: this.S3_REGION != undefined ? this.S3_REGION : "us-east-1",
       endpoint:
         this.S3_ENDPOINT != undefined
           ? this.S3_ENDPOINT
           : "https://s3.us-east-1.amazonaws.com",
-      credentials: {
-        accessKeyId: this.S3_ACCESS_KEY,
-        secretAccessKey: this.S3_SECRET_KEY,
-      },
     });
   }
 
@@ -49,7 +43,7 @@ class JoinRecordS3 {
   // responseCode: If we have a response code for this submission, add it here.
   async save(joinRecord: JoinRecord, key: string = "") {
     // Bail if there's no S3 key
-    if (this.S3_ACCESS_KEY === undefined || this.S3_SECRET_KEY === undefined) {
+    if (this.AWS_ACCESS_KEY_ID === undefined || this.AWS_SECRET_ACCESS_KEY === undefined) {
       console.error(
         "S3 credentials not configured. I WILL NOT SAVE THIS SUBMISSION.",
       );
@@ -62,12 +56,12 @@ class JoinRecordS3 {
       .slice(0, 19);
 
     // Create the path, or use the one provided.
-    key = key != "" ? key : `${this.S3_BASE_NAME}/${submissionKey}.json`;
+    key = key != "" ? key : `${this.PREFIX}/${submissionKey}.json`;
 
     let body = JSON.stringify(joinRecord);
 
     const command = new PutObjectCommand({
-      Bucket: this.S3_BUCKET_NAME,
+      Bucket: this.BUCKET_NAME,
       Key: key,
       Body: body,
     });
@@ -88,7 +82,7 @@ class JoinRecordS3 {
   // Gets the contents of a JoinRecord for testing
   async get(key: string) {
     const getObjectCommand = new GetObjectCommand({
-      Bucket: this.S3_BUCKET_NAME,
+      Bucket: this.BUCKET_NAME,
       Key: key,
     });
     const getObjectResponse = await this.s3Client.send(getObjectCommand);
