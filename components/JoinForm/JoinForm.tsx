@@ -55,14 +55,24 @@ export function NewJoinFormValues() {
 
 export type { JoinFormValues };
 
-type JoinFormResponse = {
+class JoinFormResponse {
   detail: string;
   building_id: string; // UUID
   member_id: string; // UUID
   install_id: string; // UUID
-  install_number: number;
+  install_number: number | null;
   member_exists: boolean;
   changed_info: { [id: string] : string; };
+
+  constructor() {
+    this.detail = "";
+    this.building_id = "";
+    this.member_id = "";
+    this.install_id = ""
+    this.install_number = null;
+    this.member_exists = false;
+    this.changed_info = {};
+  }
 }
 
 // Fuck it
@@ -197,8 +207,6 @@ export default function App() {
         body: JSON.stringify(joinFormSubmission),
       });
       const responseJson = await response.json();
-      console.log(responseJson);
-      console.log(responseJson.detail);
 
       // Grab the code and the install_number (if we have it) for the joinRecord
       record.code = response.status.toString();
@@ -215,15 +223,15 @@ export default function App() {
       }
 
       // If the response was not good, then get angry.
-      // FIXME (wdn): Throwing the whole response is wack.
       throw responseJson as JoinFormResponse;
     } catch (error: unknown) {
       if (error instanceof Error) {
         console.log(`An error occurred: ${error.message}`);
         toast.error(`An error occurred: ${error.message}`);
+        return;
       }
-      //setIsLoading(false);
-      //return;
+
+      if (typeof error === JoinForm
 
       const detail = error.detail;
 
