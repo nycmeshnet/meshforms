@@ -45,13 +45,15 @@ class JoinRecordS3 {
   async save(joinRecord: JoinRecord, key: string = "") {
     // Check if the S3 client is working and exit gracefully with a warning if it is not.
     try {
-        const command = new ListBucketsCommand({});
-        await this.s3Client.send(command);
+      const command = new ListBucketsCommand({});
+      await this.s3Client.send(command);
     } catch (error) {
-        console.warn('S3 Client not configured properly. I WILL NOT SAVE THIS SUBMISSION.', error);
-        return;
+      console.warn(
+        "S3 Client not configured properly. I WILL NOT SAVE THIS SUBMISSION.",
+        error,
+      );
+      return;
     }
-
 
     // Get the date to store this submission under (this is part of the path)
     const submissionKey = joinRecord.submission_time
