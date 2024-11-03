@@ -1,7 +1,10 @@
 import { http, HttpResponse } from "msw";
 import { expectedAPIRequestData } from "../util";
 import { isDeepStrictEqual } from "util";
-import { JoinFormResponse, JoinFormValues } from "@/components/JoinForm/JoinForm";
+import {
+  JoinFormResponse,
+  JoinFormValues,
+} from "@/components/JoinForm/JoinForm";
 import { NNAssignRequestValues } from "@/components/NNAssignForm/NNAssignForm";
 
 export default [
@@ -38,7 +41,7 @@ export default [
       // Else, we're gonna return a 409.
       let r = new JoinFormResponse();
       r.detail = "Mock: Please confirm a few details.";
-      r.changed_info =  { street_address: "333 Chom Street" };
+      r.changed_info = { street_address: "333 Chom Street" };
 
       return HttpResponse.json(r, { status: 409 });
     }
@@ -46,22 +49,21 @@ export default [
     if (!joinRequest.trust_me_bro) {
       if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
         let r = new JoinFormResponse();
-        r.detail = "Mock: Non-NYC registrations are not supported at this time.";
+        r.detail =
+          "Mock: Non-NYC registrations are not supported at this time.";
 
         return HttpResponse.json(r, { status: 400 });
       }
 
       if (joinRequest.street_address === "197 prospect pl") {
-
         let r = new JoinFormResponse();
         r.detail = "Mock: Please confirm a few details.";
-        r.changed_info =  { street_address: "197 Prospect Place" };
+        r.changed_info = { street_address: "197 Prospect Place" };
 
         return HttpResponse.json(r, { status: 409 });
       }
 
       if (joinRequest.city === "brooklyn") {
-
         let r = new JoinFormResponse();
         r.detail = "Mock: Please confirm a few details.";
         r.changed_info = { city: "Brooklyn" };

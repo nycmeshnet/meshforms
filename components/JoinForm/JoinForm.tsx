@@ -19,7 +19,7 @@ import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/app/types";
 
 export class JoinFormValues {
-  constructor (
+  constructor(
     public first_name: string = "",
     public last_name: string = "",
     public email_address: string = "",
@@ -37,15 +37,15 @@ export class JoinFormValues {
 }
 
 export class JoinFormResponse {
-  constructor (
+  constructor(
     public detail: string = "",
     public building_id: string = "", // UUID
     public member_id: string = "", // UUID
     public install_id: string = "", // UUID
     public install_number: number | null = null,
     public member_exists: boolean = false,
-    public changed_info: { [id: string] : string; } = {},
-  ){}
+    public changed_info: { [id: string]: string } = {},
+  ) {}
 }
 
 type ConfirmationField = {
@@ -156,13 +156,18 @@ export default function App() {
         install_number: null,
       },
     ) as JoinRecord;
-    setJoinRecordKey(await saveJoinRecordToS3(record, joinRecordKey) as string);
+    setJoinRecordKey(
+      (await saveJoinRecordToS3(record, joinRecordKey)) as string,
+    );
 
     try {
-      const response = await fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
-        method: "POST",
-        body: JSON.stringify(joinFormSubmission),
-      });
+      const response = await fetch(
+        `${await getMeshDBAPIEndpoint()}/api/v1/join/`,
+        {
+          method: "POST",
+          body: JSON.stringify(joinFormSubmission),
+        },
+      );
       const j = await response.json();
       const responseData = new JoinFormResponse(
         j.detail,
@@ -179,13 +184,15 @@ export default function App() {
       record.install_number = responseData.install_number;
 
       // Update the join record with our data if we have it.
-      setJoinRecordKey(await saveJoinRecordToS3(record, joinRecordKey) as string);
+      setJoinRecordKey(
+        (await saveJoinRecordToS3(record, joinRecordKey)) as string,
+      );
 
       if (response.ok) {
-          console.debug("Join Form submitted successfully");
-          setIsLoading(false);
-          setIsSubmitted(true);
-          return;
+        console.debug("Join Form submitted successfully");
+        setIsLoading(false);
+        setIsSubmitted(true);
+        return;
       }
 
       // If the response was not good, then get angry.
@@ -391,10 +398,7 @@ export default function App() {
             <Button
               type="submit"
               disabled={
-                isLoading ||
-                isSubmitted ||
-                isBadPhoneNumber ||
-                !isValid
+                isLoading || isSubmitted || isBadPhoneNumber || !isValid
               }
               variant="contained"
               size="large"
