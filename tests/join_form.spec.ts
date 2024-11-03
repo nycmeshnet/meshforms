@@ -18,7 +18,7 @@ import {
 } from "@/tests/util";
 import { isDeepStrictEqual } from "util";
 
-const joinFormTimeout = 20000;
+const joinFormTimeout = 8000;
 const unitTestTimeout = 5000;
 
 // Unit tests for the Join Form.

@@ -18,7 +18,7 @@ import { getMeshDBAPIEndpoint } from "@/app/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/app/types";
 
-type JoinFormValues = {
+export class JoinFormValues {
   first_name: string;
   last_name: string;
   email_address: string;
@@ -32,28 +32,23 @@ type JoinFormValues = {
   referral: string;
   ncl: boolean;
   trust_me_bro: boolean;
+
+  constructor() {
+    this.first_name = "";
+    this.last_name = "";
+    this.email_address = "";
+    this.phone_number = "";
+    this.street_address = "";
+    this.apartment = "";
+    this.city = "";
+    this.state = "";
+    this.zip_code = "";
+    this.roof_access = false;
+    this.referral = "";
+    this.ncl = false;
+    this.trust_me_bro = false;
+  }
 };
-
-// Coding like it's 1997
-export function NewJoinFormValues() {
-  return {
-    first_name: "",
-    last_name: "",
-    email_address: "",
-    phone_number: "",
-    street_address: "",
-    apartment: "",
-    city: "",
-    state: "",
-    zip_code: "",
-    roof_access: false,
-    referral: "",
-    ncl: false,
-    trust_me_bro: false,
-  };
-}
-
-export type { JoinFormValues };
 
 export class JoinFormResponse {
   detail: string;
@@ -89,7 +84,7 @@ const selectStateOptions = [
 ];
 
 export default function App() {
-  let defaultFormValues = NewJoinFormValues();
+  let defaultFormValues = new JoinFormValues();
   defaultFormValues.state = selectStateOptions[0].value;
   const {
     register,
@@ -173,6 +168,7 @@ export default function App() {
   };
 
   async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
+    console.log("entrypoint into submit function");
     // Before we try anything else, submit to S3 for safety.
     let record: JoinRecord = Object.assign(
       structuredClone(joinFormSubmission),
@@ -184,21 +180,28 @@ export default function App() {
       },
     ) as JoinRecord;
 
+
+    console.log("hello-1");
     setJoinRecordKey(await saveJoinRecordToS3(record, joinRecordKey) as string);
+    console.log("hello0");
 
     try {
       const response = await fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
         method: "POST",
         body: JSON.stringify(joinFormSubmission),
       });
+      console.log("hello");
       const responseJson = await response.json();
+      console.log("hello2");
 
-      // Grab the code and the install_number (if we have it) for the joinRecord
+      // Grab the HTTP code and the install_number (if we have it) for the joinRecord
       record.code = response.status.toString();
       record.install_number = responseJson.install_number;
+      console.log("hello3");
 
       // Update the join record with our data if we have it.
       setJoinRecordKey(await saveJoinRecordToS3(record, joinRecordKey) as string);
+      console.log("hello4");
 
       if (response.ok) {
           console.debug("Join Form submitted successfully");
@@ -208,15 +211,13 @@ export default function App() {
       }
 
       // If the response was not good, then get angry.
-      throw responseJson as JoinFormResponse;
+      throw responseJson;
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        console.log(`An error occurred: ${error.message}`);
-        toast.error(`An error occurred: ${error.message}`);
-        return;
-      }
-
       if (error instanceof JoinFormResponse) {
+        console.log(record.code);
+        console.log(error.detail);
+        console.log(error.changed_info);
+
         // We just need to confirm some information
         if (record.code == "409") {
           let needsConfirmation: Array<ConfirmationField> = [];
@@ -248,13 +249,27 @@ export default function App() {
         // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
         // There's probably a way to coax the exception out of the response somewhere
         toast.error(`Could not submit Join Form: ${detail}`);
+        console.error(`An error occurred: ${detail}`);
         setIsLoading(false);
+        return;
       }
+
+      if (error instanceof Error) {
+        console.error(`An error occurred: ${error.message}`);
+        toast.error(`An error occurred: ${error.message}`);
+        return;
+      }
+
+      console.error("An unknown error occurred.");
+      toast.error("An unknown error occurred.");
+      return;
     }
   }
 
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
+    console.log("hello-4");
     setIsLoading(true);
+    console.log("hello-3");
     data.trust_me_bro = false;
     submitJoinFormToMeshDB(data);
   };
