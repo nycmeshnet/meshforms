@@ -69,7 +69,7 @@ export default function App() {
     setValue,
     getValues,
     handleSubmit,
-    formState: { isDirty, isValid },
+    formState: { isValid },
   } = useForm<JoinFormValues>({
     mode: "onChange",
     defaultValues: defaultFormValues,
@@ -198,6 +198,10 @@ export default function App() {
       // If the response was not good, then get angry.
       throw responseData;
     } catch (error: unknown) {
+
+      // The error should always be a JoinFormResponse. TS insists that
+      // errors be handled as type Unknown, but this is (and should always be)
+      // the happy path of error handling
       if (error instanceof JoinFormResponse) {
         // We just need to confirm some information
         if (record.code == "409") {
@@ -226,6 +230,8 @@ export default function App() {
           return;
         }
 
+        // If it wasn't 409, something else is happening, and we should just
+        // generically report it and move on.
         const detail = error.detail;
         // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
         // There's probably a way to coax the exception out of the response somewhere
@@ -234,6 +240,9 @@ export default function App() {
         setIsLoading(false);
         return;
       }
+
+      // If for some reason we got anything that wasn't a JoinFormResponse,
+      // handle that.
 
       if (error instanceof Error) {
         console.error(`An error occurred: ${error.message}`);
@@ -387,10 +396,10 @@ export default function App() {
           </label>
           {/*
           <div>
+            <p>State Debugger</p>
             isLoading: {isLoading ? "true" : "false"}<br/>
             isSubmitted: {isSubmitted ? "true" : "false"}<br/>
             isBadPhoneNumber: {isBadPhoneNumber ? "true" : "false"}<br/>
-            !isDirty: {!isDirty ? "true" : "false"}<br/>
             !isValid: {!isValid ? "true" : "false"}<br/>
           </div>
           */}
