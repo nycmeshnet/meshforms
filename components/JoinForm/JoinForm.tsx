@@ -79,6 +79,7 @@ export default function App() {
   const [isInfoConfirmationDialogueOpen, setIsInfoConfirmationDialogueOpen] =
     useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isMeshDBProbablyDown, setIsMeshDBProbablyDown] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
   const [joinRecordKey, setJoinRecordKey] = useState("");
 
@@ -198,7 +199,6 @@ export default function App() {
       // If the response was not good, then get angry.
       throw responseData;
     } catch (error: unknown) {
-
       // The error should always be a JoinFormResponse. TS insists that
       // errors be handled as type Unknown, but this is (and should always be)
       // the happy path of error handling
@@ -241,17 +241,20 @@ export default function App() {
         return;
       }
 
-      // If for some reason we got anything that wasn't a JoinFormResponse,
-      // handle that.
+      // If we didn't get a JoinFormResponse, chances are that MeshDB is hard down.
+      // Tell the user we recorded their submission, but change the message.
+      setIsMeshDBProbablyDown(true);
+      setIsLoading(false);
+      setIsSubmitted(true);
 
+
+      // Log the message to the console.
       if (error instanceof Error) {
         console.error(`An error occurred: ${error.message}`);
-        toast.error(`An error occurred: ${error.message}`);
         return;
       }
 
       console.error(`An unknown error occurred: ${JSON.stringify(error)}`);
-      toast.error(`An unknown error occurred: ${JSON.stringify(error)}`);
       return;
     }
   }
@@ -431,11 +434,11 @@ export default function App() {
           <h2 id="alert-thank-you-h2">Thanks! Please check your email.</h2>
         </Alert>
         <div className={styles.thanksBlurb}>
-          <p>
-            You will receive an email from us in the next 5-10 minutes with next
+          <p id="p-thank-you-01">
+            You will receive an email from us in the next {isMeshDBProbablyDown ? "2-3 days" : "5-10 minutes"} with next
             steps, including how to submit panorama photos.
           </p>
-          <p>
+          <p id="p-thank-you-02">
             If you do not see the email, please check your "Spam" folder, or
             email <a href="mailto:support@nycmesh.net">support@nycmesh.net</a>{" "}
             for help.

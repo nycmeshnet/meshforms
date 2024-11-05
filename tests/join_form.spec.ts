@@ -1,4 +1,3 @@
-import { JoinFormInput, JoinFormResponse } from "@/app/io";
 import { getJoinRecordFromS3 } from "@/app/join_record";
 import { JoinRecord } from "@/app/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
