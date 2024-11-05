@@ -7,13 +7,10 @@ import { isDeepStrictEqual } from "util";
 const joinFormTimeout = 20000;
 const unitTestTimeout = 5000;
 
-
-test.beforeEach(async ({ context }) => {
-  // Pretends meshdb is hard down by having no mocked handler for the api
-  await context.route(/api\/v1\/join/, route => route.abort());
-});
-
 test("meshdb is hard down but succeed anyway", async ({ page }) => {
+  // Block access to the join form API
+  await page.route("**/api/v1/join/**", route => route.abort());
+
   test.setTimeout(joinFormTimeout);
   await page.goto("/join");
 
