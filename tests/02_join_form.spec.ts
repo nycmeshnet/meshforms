@@ -91,7 +91,7 @@ test("confirm city", async ({ page }) => {
 
   // Check that the Join Record's code is correct.
   let joinRecord = await findJoinRecord(page);
-  let code = "409";
+  let code = 409;
   if (joinRecord.code !== code) {
     throw new Error(
       `JoinRecord code (${joinRecord.code}) did not match expected code (${code})`,
@@ -103,7 +103,7 @@ test("confirm city", async ({ page }) => {
   // Make sure the JoinRecord updated properly
   await page.waitForTimeout(1000);
   joinRecord = await findJoinRecord(page);
-  if (joinRecord.code !== "201") {
+  if (joinRecord.code !== 201) {
     throw new Error(
       `JoinRecord code (${joinRecord.code}) did not match expected code (201)`,
     );
@@ -118,7 +118,7 @@ test("confirm street address", async ({ page }) => {
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
-  let data: JoinFormValues = Object.assign({}, sampleData);
+  let data = structuredClone(sampleData);
   data.street_address = "197 prospect pl";
 
   // Set up sample data.
@@ -140,7 +140,7 @@ test("street address trust me bro", async ({ page }) => {
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
-  let data: JoinFormValues = Object.assign({}, sampleData);
+  let data = structuredClone(sampleData);
   data.street_address = "333 chom st";
 
   // Set up sample data.
@@ -379,7 +379,7 @@ test("fail nj", async ({ page }) => {
 
   // Check that the Join Record's code is correct.
   let joinRecord = await findJoinRecord(page);
-  let code = "400";
+  let code = 400;
   if (joinRecord.code !== code) {
     throw new Error(
       `JoinRecord code (${joinRecord.code}) did not match expected code (${code})`,

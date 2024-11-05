@@ -47,6 +47,7 @@ export default [
     }
 
     if (!joinRequest.trust_me_bro) {
+      // Bail on New Jersey
       if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
         let r = new JoinFormResponse();
         r.detail =
@@ -55,6 +56,7 @@ export default [
         return HttpResponse.json(r, { status: 400 });
       }
 
+      // Return 409 if the street address is improperly formatted
       if (joinRequest.street_address === "197 prospect pl") {
         let r = new JoinFormResponse();
         r.detail = "Mock: Please confirm a few details.";
@@ -63,6 +65,7 @@ export default [
         return HttpResponse.json(r, { status: 409 });
       }
 
+      // Return 409 if the city is improperly formatted
       if (joinRequest.city === "brooklyn") {
         let r = new JoinFormResponse();
         r.detail = "Mock: Please confirm a few details.";
@@ -70,9 +73,10 @@ export default [
         return HttpResponse.json(r, { status: 409 });
       }
 
+      // If anything else is wrong with the form we got, then bail
       if (!isDeepStrictEqual(joinRequest, expectedAPIRequestData)) {
         console.error(
-          "Mock Join API is returning 400. (request is not deeply equal)",
+          "Mock Join API is returning 400. (request is not deeply equal to expectedAPIRequestData)",
         );
         console.error("Expected the following:");
         console.error(expectedAPIRequestData);

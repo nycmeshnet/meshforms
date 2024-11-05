@@ -152,7 +152,7 @@ export default function App() {
       structuredClone(joinFormSubmission),
       {
         submission_time: new Date().toISOString(),
-        code: "",
+        code: null,
         replayed: 0,
         install_number: null,
       },
@@ -181,7 +181,7 @@ export default function App() {
       );
 
       // Grab the HTTP code and the install_number (if we have it) for the joinRecord
-      record.code = response.status.toString();
+      record.code = response.status;
       record.install_number = responseData.install_number;
 
       // Update the join record with our data if we have it.
@@ -204,7 +204,7 @@ export default function App() {
       // the happy path of error handling
       if (error instanceof JoinFormResponse) {
         // We just need to confirm some information
-        if (record.code == "409") {
+        if (record.code == 409) {
           let needsConfirmation: Array<ConfirmationField> = [];
           const changedInfo = error.changed_info;
 
@@ -230,8 +230,19 @@ export default function App() {
           return;
         }
 
-        // If it wasn't 409, something else is happening, and we should just
-        // generically report it and move on.
+        // If it was the server's fault, then just accept the record and move
+        // on.
+        if (record.code !== null && (500 <= record.code && record.code <= 599)) {
+          setIsMeshDBProbablyDown(true);
+          setIsLoading(false);
+          setIsSubmitted(true);
+          // Log the error to the console
+          console.error(error.detail);
+          return;
+        }
+
+        // If it was another kind of 4xx, the member did something wrong and needs
+        // to fix their information (i.e. move out of nj)
         const detail = error.detail;
         // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
         // There's probably a way to coax the exception out of the response somewhere

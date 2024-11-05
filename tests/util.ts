@@ -34,7 +34,7 @@ export const sampleJoinRecord: JoinRecord = {
   ncl: true,
   trust_me_bro: false,
   submission_time: "2024-11-01T08:24:24",
-  code: "201",
+  code: 201,
   replayed: 0,
   install_number: 1002,
 };

@@ -7,6 +7,12 @@ import { isDeepStrictEqual } from "util";
 const joinFormTimeout = 20000;
 const unitTestTimeout = 5000;
 
+
+test.beforeEach(async ({ context }) => {
+  // Pretends meshdb is hard down by having no mocked handler for the api
+  await context.route(/api\/v1\/join/, route => route.abort());
+});
+
 test("meshdb is hard down but succeed anyway", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto("/join");
@@ -43,13 +49,13 @@ test("meshdb is hard down but succeed anyway", async ({ page }) => {
 
   // In this case, we know that we won't have a code or install number, so drop
   // those from the comparison
-  const hardDownSampleJoinRecord = structuredClone(sampleJoinRecord);
-  hardDownSampleJoinRecord.code = "";
+  let hardDownSampleJoinRecord = structuredClone(sampleJoinRecord);
+  hardDownSampleJoinRecord.code = null;
   hardDownSampleJoinRecord.install_number = null;
 
   if (!isDeepStrictEqual(joinRecord, hardDownSampleJoinRecord)) {
     console.error("Expected:");
-    console.error(sampleJoinRecord);
+    console.error(hardDownSampleJoinRecord);
     console.error("Got:");
     console.error(joinRecord);
     throw new Error("Bad JoinRecord. JoinRecord is not deeply equal.");
