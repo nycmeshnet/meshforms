@@ -31,6 +31,7 @@
     "react-phone-number-input": "^3.3.9",
     "react-select": "^5.8.0",
     "react-toastify": "^10.0.1",
+    "rosetta": "^1.1.0",
     "sass": "^1.70.0",
     "typescript": "5.3.3",
     "zod": "^3.22.4"
