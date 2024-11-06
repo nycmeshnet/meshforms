@@ -12,7 +12,8 @@ import { isDeepStrictEqual } from "util";
 const joinFormTimeout = 20000;
 const unitTestTimeout = 5000;
 
-const meshdbIsDownText = "You will receive an email from us in the next 2-3 days with next steps, including how to submit panorama photos.";
+const meshdbIsDownText =
+  "You will receive an email from us in the next 2-3 days with next steps, including how to submit panorama photos.";
 
 test("meshdb is hard down but succeed anyway", async ({ page }) => {
   // Block access to the join form API
@@ -33,7 +34,7 @@ test("meshdb is hard down but succeed anyway", async ({ page }) => {
   await submitSuccessExpected(page, unitTestTimeout);
 
   await expect(page.locator("[id='p-thank-you-01']")).toHaveText(
-    meshdbIsDownText
+    meshdbIsDownText,
   );
 
   const joinRecordKey = await page.getAttribute(

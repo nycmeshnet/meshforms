@@ -1,12 +1,10 @@
 import { http, HttpResponse } from "msw";
-import {
-  JoinFormResponse,
-} from "@/components/JoinForm/JoinForm";
+import { JoinFormResponse } from "@/components/JoinForm/JoinForm";
 
 export default [
   http.post("/api/v1/join/", async ({ request }) => {
     console.debug("Hello from mocked join API. I'm gonna return a 500 now :)");
-    
+
     let r = new JoinFormResponse();
     r.detail = "Mock: A server error has occurred.";
 
