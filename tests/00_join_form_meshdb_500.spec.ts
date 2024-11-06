@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "@/tests/mock_meshdb_500/test";
 import {
   fillOutJoinForm,
   sampleData,
@@ -14,10 +14,7 @@ const unitTestTimeout = 5000;
 
 const meshdbIsDownText = "You will receive an email from us in the next 2-3 days with next steps, including how to submit panorama photos.";
 
-test("meshdb is hard down but succeed anyway", async ({ page }) => {
-  // Block access to the join form API
-  await page.route("**/api/v1/join/**", (route) => route.abort());
-
+test("meshdb is 500ing but succeed anyway", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto("/join");
 
@@ -54,7 +51,7 @@ test("meshdb is hard down but succeed anyway", async ({ page }) => {
   // In this case, we know that we won't have a code or install number, so drop
   // those from the comparison
   let hardDownSampleJoinRecord = structuredClone(sampleJoinRecord);
-  hardDownSampleJoinRecord.code = null;
+  hardDownSampleJoinRecord.code = 500;
   hardDownSampleJoinRecord.install_number = null;
 
   if (!isDeepStrictEqual(joinRecord, hardDownSampleJoinRecord)) {

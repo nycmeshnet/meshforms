@@ -53,6 +53,10 @@ To appease it, run `npx prettier . --write`
 
 # Testing
 
+> [!WARNING]  
+> Make sure you run playwright from the root of the repo, otherwise you will get some
+> errors about invalid URLs.
+
 We use `playwright` to do integration tests. You can run them with the following instructions:
 
 1. Setup a dev instance of [meshdb](https://github.com/nycmeshnet/meshdb)

@@ -232,7 +232,7 @@ export default function App() {
 
         // If it was the server's fault, then just accept the record and move
         // on.
-        if (record.code !== null && (500 <= record.code && record.code <= 599)) {
+        if (record.code !== null && 500 <= record.code && record.code <= 599) {
           setIsMeshDBProbablyDown(true);
           setIsLoading(false);
           setIsSubmitted(true);
@@ -257,7 +257,6 @@ export default function App() {
       setIsMeshDBProbablyDown(true);
       setIsLoading(false);
       setIsSubmitted(true);
-
 
       // Log the message to the console.
       if (error instanceof Error) {
@@ -446,7 +445,8 @@ export default function App() {
         </Alert>
         <div className={styles.thanksBlurb}>
           <p id="p-thank-you-01">
-            You will receive an email from us in the next {isMeshDBProbablyDown ? "2-3 days" : "5-10 minutes"} with next
+            You will receive an email from us in the next{" "}
+            {isMeshDBProbablyDown ? "2-3 days" : "5-10 minutes"} with next
             steps, including how to submit panorama photos.
           </p>
           <p id="p-thank-you-02">
