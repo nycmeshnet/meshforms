@@ -8,8 +8,8 @@ import { Box } from "@mui/system";
 import Container from "@mui/material/Container";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { getMessages } from 'next-intl/server';
-import {NextIntlClientProvider} from 'next-intl';
+import { getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 
 export const metadata = {
   title: "meshdb-forms by NYC Mesh",
@@ -18,12 +18,11 @@ export const metadata = {
 
 export default async function RootLayout({
   children,
-  params: {locale}
+  params: { locale },
 }: {
   children: React.ReactNode;
-    params: {locale: string};
+  params: { locale: string };
 }) {
-
   // Ensure that the incoming `locale` is valid
   if (!routing.locales.includes(locale as any)) {
     notFound();

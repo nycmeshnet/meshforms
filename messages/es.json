@@ -1,15 +1,15 @@
 {
   "JoinForm": {
-    "title": "Join NYC Mesh",
+    "title": "Únase NYC Mesh",
     "sections": {
-      "personalInfo": "Personal Info",
-      "addressInfo": "Address Info"
+      "personalInfo": "Información Personal",
+      "addressInfo": "Información de dirección"
     },
     "fields": {
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "emailAddress": "Email Address",
-      "phoneNumber": "Phone Number",
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "emailAddress": "Dirección de correo electronico",
+      "phoneNumber": "Número de Teléfono",
       "streetAddress": "Street Address",
       "unit": "Unit / Apartment #",
       "city": "City",

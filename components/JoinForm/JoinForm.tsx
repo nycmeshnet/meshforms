@@ -17,6 +17,7 @@ import { saveJoinRecordToS3 } from "@/app/join_record";
 import { getMeshDBAPIEndpoint } from "@/app/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/app/types";
+import { useTranslations } from "next-intl";
 
 export class JoinFormValues {
   constructor(
@@ -61,7 +62,8 @@ const selectStateOptions = [
   { value: "NJ", label: "New Jersey" },
 ];
 
-export default function App() {
+export default function JoinForm() {
+  const t = useTranslations("JoinForm");
   let defaultFormValues = new JoinFormValues();
   defaultFormValues.state = selectStateOptions[0].value;
   const {
@@ -323,7 +325,7 @@ export default function App() {
     <>
       <div className={isSubmitted ? styles.hidden : styles.formBody}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h2>Join NYC Mesh</h2>
+          <h2>{t("title")}</h2>
           {isBeta ? betaDisclaimerBanner : welcomeBanner}
           <div>
             <h3>Personal Info</h3>
