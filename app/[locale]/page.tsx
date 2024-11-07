@@ -1,12 +1,15 @@
-import {useTranslations} from 'next-intl';
-import {Link} from '@/i18n/routing';
- 
-export default function HomePage() {
-  const t = useTranslations('HomePage');
+import { Header } from "@/components/Header/Header";
+import { Footer } from "@/components/Footer/Footer";
+
+import Landing from "@/components/Landing/Landing";
+import Image from "next/image";
+
+export default async function Home() {
   return (
-    <div>
-      <h1>{t('title')}</h1>
-      <Link href="/about">{t('about')}</Link>
-    </div>
+    <>
+      <main>
+        <Landing />
+      </main>
+    </>
   );
 }
