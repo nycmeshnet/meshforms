@@ -8,7 +8,7 @@ import { Box } from "@mui/system";
 import Container from "@mui/material/Container";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { getMessages } from "next-intl/server";
+import { getMessages, setRequestLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 
 export const metadata = {
@@ -30,6 +30,10 @@ export default async function RootLayout({
 
   // Provide all messages to the client
   const messages = await getMessages();
+
+  
+  // Enable static rendering
+  setRequestLocale(locale);
 
   return (
     <html lang={locale}>

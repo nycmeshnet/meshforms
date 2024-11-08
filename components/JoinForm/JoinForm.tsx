@@ -13,11 +13,12 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { saveJoinRecordToS3 } from "@/app/join_record";
-import { getMeshDBAPIEndpoint } from "@/app/endpoint";
+import { saveJoinRecordToS3 } from "@/lib/join_record";
+import { getMeshDBAPIEndpoint } from "@/lib/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
-import { JoinRecord } from "@/app/types";
+import { JoinRecord } from "@/lib/types";
 import { useTranslations } from "next-intl";
+
 
 export class JoinFormValues {
   constructor(
