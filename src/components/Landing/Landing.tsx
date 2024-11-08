@@ -1,7 +1,6 @@
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 
-import styles from "./Landing.module.scss";
 import { Box, Grid, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
 const Landing = () => {

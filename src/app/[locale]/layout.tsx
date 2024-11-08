@@ -1,15 +1,15 @@
 import "@/app/global.css";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "../../theme";
 import { Header } from "@/components/Header/Header";
 import { Footer } from "@/components/Footer/Footer";
 import { Box } from "@mui/system";
 import Container from "@mui/material/Container";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import theme from "../../../theme";
 
 export const metadata = {
   title: "meshdb-forms by NYC Mesh",
