@@ -1,6 +1,9 @@
 {
+  "Landing": {
+    "welcome": "Welcome to MeshForms!"
+  },
   "JoinForm": {
-    "title": "Join NYC Mesh",
+    "title": "Join NYC Mesh chom",
     "sections": {
       "personalInfo": "Personal Info",
       "addressInfo": "Address Info"

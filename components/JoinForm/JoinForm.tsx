@@ -19,7 +19,6 @@ import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/lib/types";
 import { useTranslations } from "next-intl";
 
-
 export class JoinFormValues {
   constructor(
     public first_name: string = "",

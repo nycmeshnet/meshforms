@@ -31,10 +31,6 @@ export default async function RootLayout({
   // Provide all messages to the client
   const messages = await getMessages();
 
-  
-  // Enable static rendering
-  setRequestLocale(locale);
-
   return (
     <html lang={locale}>
       <body style={{ backgroundColor: "#f4f4f4" }}>

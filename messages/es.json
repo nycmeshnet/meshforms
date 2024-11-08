@@ -1,4 +1,7 @@
 {
+  "Landing": {
+    "welcome": "¡Bienvenidos a MeshForms!"
+  },
   "JoinForm": {
     "title": "Únase NYC Mesh",
     "sections": {
