@@ -30,6 +30,8 @@ export default async function RootLayout({
 
   // Provide all messages to the client
   const messages = await getMessages();
+  console.log(locale);
+  console.log(messages);
 
   return (
     <html lang={locale}>

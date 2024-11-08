@@ -10,8 +10,22 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale = routing.defaultLocale;
   }
 
+  const m = await getMessages(locale);
+
   return {
     locale,
-    messages: (await import(`../../messages/${locale}.json`)).default,
+    messages: m,
   };
 });
+
+// I have no fuckignc clue why this shit doesn't work normally but I _have_
+// to have some kind of branching conditional to get the messages to import
+// correctly. I am so sorry.
+async function getMessages(locale: string) {
+  switch  (locale) {
+    case "en":
+      return (await import(`../../messages/en.json`)).default;
+    case "es":
+      return (await import(`../../messages/es.json`)).default;
+  }
+}
