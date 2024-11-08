@@ -22,7 +22,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
 // to have some kind of branching conditional to get the messages to import
 // correctly. I am so sorry.
 async function getMessages(locale: string) {
-  switch  (locale) {
+  switch (locale) {
     case "en":
       return (await import(`../../messages/en.json`)).default;
     case "es":

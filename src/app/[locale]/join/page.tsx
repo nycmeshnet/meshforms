@@ -7,10 +7,10 @@ export const metadata = {
 };
 
 type Props = {
-  params: {locale: string};
+  params: { locale: string };
 };
 
-export default function Join({params: {locale}}: Props) {
+export default function Join({ params: { locale } }: Props) {
   setRequestLocale(locale);
   return (
     <>
