@@ -1,6 +1,13 @@
 import Landing from "@/components/Landing/Landing";
+import { setRequestLocale } from "next-intl/server";
 
-export default async function Home() {
+
+type Props = {
+  params: {locale: string};
+};
+
+export default function Home({params: {locale}}: Props) {
+  setRequestLocale(locale);
   return (
     <>
       <main>
