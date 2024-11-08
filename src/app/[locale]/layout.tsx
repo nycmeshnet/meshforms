@@ -34,19 +34,19 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body style={{ backgroundColor: "#f4f4f4" }}>
+                <NextIntlClientProvider messages={messages}>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <Header />
             <Box sx={{ width: "100%", backgroundColor: "white" }}>
               <Container maxWidth="lg" sx={{ py: { md: "3rem", sm: "1rem" } }}>
-                <NextIntlClientProvider messages={messages}>
                   {children}
-                </NextIntlClientProvider>
               </Container>
             </Box>
             <Footer />
           </ThemeProvider>
         </AppRouterCacheProvider>
+                </NextIntlClientProvider>
       </body>
     </html>
   );
