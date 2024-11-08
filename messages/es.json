@@ -12,19 +12,19 @@
       "firstName": "Nombre",
       "lastName": "Apellido",
       "emailAddress": "Dirección de correo electronico",
-      "phoneNumber": "Número de Teléfono",
-      "streetAddress": "Street Address",
-      "unit": "Unit / Apartment #",
-      "city": "City",
-      "zipCode": "Zip Code",
-      "roofAccess": "Check this box if you have roof access",
-      "reference": "How did you hear about us?",
-      "ncl": "I agree to the Network Commons License",
-      "submit": "Submit"
+      "phoneNumber": "Número de teléfono",
+      "streetAddress": "Dirección",
+      "unit": "Numero de apartamento",
+      "city": "Ciudad",
+      "zipCode": "Codigo postal",
+      "roofAccess": "Marque esto si tiene acceso al techo",
+      "reference": "¿Cómo se enteró de nosotros?",
+      "ncl": "Acepto la Licencia de Red Común",
+      "submit": "Entregar"
     },
     "states": {
-      "NY": "New York",
-      "NJ": "New Jersey"
+      "NY": "Nueva York",
+      "NJ": "Nueva Jersey"
     }
   }
 }
