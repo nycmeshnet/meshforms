@@ -3,7 +3,8 @@
     "welcome": "Welcome to MeshForms!"
   },
   "JoinForm": {
-    "title": "Join NYC Mesh chom",
+    "title": "Join NYC Mesh",
+    "banner": "Join our community network! Fill out the form, and we will reach out over email shortly.",
     "sections": {
       "personalInfo": "Personal Info",
       "addressInfo": "Address Info"
@@ -12,7 +13,10 @@
       "firstName": "First Name",
       "lastName": "Last Name",
       "emailAddress": "Email Address",
-      "phoneNumber": "Phone Number",
+      "phoneNumber": {
+        "phoneNumber": "Phone Number",
+        "error": "Please enter a valid phone number."
+      },
       "streetAddress": "Street Address",
       "unit": "Unit / Apartment #",
       "city": "City",
@@ -20,7 +24,11 @@
       "roofAccess": "Check this box if you have roof access",
       "reference": "How did you hear about us?",
       "ncl": "I agree to the Network Commons License",
-      "submit": "Submit"
+      "submit": {
+        "submit": "Submit",
+        "loading": "Loading...",
+        "thanks": "Thanks!"
+      }
     },
     "states": {
       "NY": "New York",

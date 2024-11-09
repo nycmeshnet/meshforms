@@ -57,13 +57,13 @@ type ConfirmationField = {
 
 export type { ConfirmationField };
 
-const selectStateOptions = [
-  { value: "NY", label: "New York" },
-  { value: "NJ", label: "New Jersey" },
-];
 
 export default function JoinForm() {
   const t = useTranslations("JoinForm");
+  const selectStateOptions = [
+    { value: "NY", label: t("states.NY") },
+    { value: "NJ", label: t("states.NJ") },
+  ];
   let defaultFormValues = new JoinFormValues();
   defaultFormValues.state = selectStateOptions[0].value;
   const {
@@ -316,8 +316,7 @@ export default function JoinForm() {
 
   const welcomeBanner = (
     <p>
-      Join our community network! Fill out the form, and we will reach out over
-      email shortly.
+      {t("banner")}
     </p>
   );
 
@@ -360,11 +359,11 @@ export default function JoinForm() {
                 required: "Please enter your phone number",
               })}
               type="tel"
-              placeholder="Phone Number"
+              placeholder={t("fields.phoneNumber.phoneNumber")}
               onBlur={handlePhoneNumberBlur}
             />
             <p style={{ color: "red" }} hidden={!isBadPhoneNumber}>
-              Please enter a valid phone number
+              {t("fields.phoneNumber.error")}
             </p>
           </div>
 
@@ -460,7 +459,7 @@ export default function JoinForm() {
               name="submit_join_form"
               id="button-submit-join-form"
             >
-              {isLoading ? "Loading..." : isSubmitted ? "Thanks!" : t("fields.submit")}
+              {isLoading ? t("fields.submit.loading") : isSubmitted ? t("fields.submit.thanks") : t("fields.submit.submit")}
             </Button>
             <div hidden={!isLoading}>
               <CircularProgress />

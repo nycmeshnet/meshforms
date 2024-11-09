@@ -4,6 +4,7 @@
   },
   "JoinForm": {
     "title": "Únase NYC Mesh",
+    "banner": "",
     "sections": {
       "personalInfo": "Información Personal",
       "addressInfo": "Información de dirección"
@@ -12,7 +13,10 @@
       "firstName": "Nombre",
       "lastName": "Apellido",
       "emailAddress": "Dirección de correo electronico",
-      "phoneNumber": "Número de teléfono",
+      "phoneNumber": {
+        "phoneNumber": "Número de teléfono",
+        "error": "",
+      },
       "streetAddress": "Dirección de calle",
       "unit": "Numero de apartamento",
       "city": "Ciudad",
@@ -20,7 +24,11 @@
       "roofAccess": "Marque esto si tiene acceso al techo",
       "reference": "¿Cómo se enteró de nosotros?",
       "ncl": "Acepto la Licencia de Red Común",
-      "submit": "Entregar"
+      "submit": {
+        "submit": "Entregar",
+        "loading": "Cargando...",
+        "thanks": "¡Gracias!"
+      }
     },
     "states": {
       "NY": "Nueva York",
