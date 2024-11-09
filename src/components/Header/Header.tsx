@@ -139,8 +139,7 @@ export function Header(props: Props) {
                 <MenuIcon />
               </IconButton>
             </Box>
-                    <LocaleSwitcher/>
-
+            <LocaleSwitcher />
           </Toolbar>
         </Container>
       </AppBar>
