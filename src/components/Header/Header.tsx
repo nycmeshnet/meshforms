@@ -17,6 +17,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Container from "@mui/material/Container";
+import LocaleSwitcher from "../LocaleSwitcher";
 
 interface Props {
   /**
@@ -138,6 +139,8 @@ export function Header(props: Props) {
                 <MenuIcon />
               </IconButton>
             </Box>
+                    <LocaleSwitcher/>
+
           </Toolbar>
         </Container>
       </AppBar>
