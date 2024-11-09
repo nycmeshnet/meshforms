@@ -27,10 +27,7 @@ export default async function RootLayout({
           <ThemeProvider theme={theme}>
             <Header />
             <Box sx={{ width: "100%", backgroundColor: "white" }}>
-              <Container
-                maxWidth="lg"
-                sx={{ py: { md: "3rem", sm: "1rem" } }}
-              >
+              <Container maxWidth="lg" sx={{ py: { md: "3rem", sm: "1rem" } }}>
                 {children}
               </Container>
             </Box>
