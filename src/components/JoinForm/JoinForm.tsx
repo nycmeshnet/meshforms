@@ -57,7 +57,6 @@ type ConfirmationField = {
 
 export type { ConfirmationField };
 
-
 export default function JoinForm() {
   const t = useTranslations("JoinForm");
   const selectStateOptions = [
@@ -314,11 +313,7 @@ export default function JoinForm() {
     </p>
   );
 
-  const welcomeBanner = (
-    <p>
-      {t("banner")}
-    </p>
-  );
+  const welcomeBanner = <p>{t("banner")}</p>;
 
   return (
     <>
@@ -459,7 +454,11 @@ export default function JoinForm() {
               name="submit_join_form"
               id="button-submit-join-form"
             >
-              {isLoading ? t("fields.submit.loading") : isSubmitted ? t("fields.submit.thanks") : t("fields.submit.submit")}
+              {isLoading
+                ? t("fields.submit.loading")
+                : isSubmitted
+                  ? t("fields.submit.thanks")
+                  : t("fields.submit.submit")}
             </Button>
             <div hidden={!isLoading}>
               <CircularProgress />

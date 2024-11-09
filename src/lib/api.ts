@@ -3,7 +3,7 @@ import {
   NNAssignFormInput,
   NNAssignFormResponse,
   QueryFormResponse,
-} from "@/app/io";
+} from "@/lib/io";
 import { z } from "zod";
 import { getMeshDBAPIEndpoint } from "./endpoint";
 

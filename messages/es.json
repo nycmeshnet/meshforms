@@ -15,7 +15,7 @@
       "emailAddress": "Dirección de correo electronico",
       "phoneNumber": {
         "phoneNumber": "Número de teléfono",
-        "error": "",
+        "error": ""
       },
       "streetAddress": "Dirección de calle",
       "unit": "Numero de apartamento",

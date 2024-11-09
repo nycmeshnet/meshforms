@@ -1,6 +1,17 @@
-import { redirect } from "next/navigation";
+import Landing from "@/components/Landing/Landing";
+import { setRequestLocale } from "next-intl/server";
 
-// This page only renders when the app is built statically (output: 'export')
-export default function RootPage() {
-  redirect("/en");
+type Props = {
+  params: { locale: string };
+};
+
+export default function Home({ params: { locale } }: Props) {
+  setRequestLocale(locale);
+  return (
+    <>
+      <main>
+        <Landing />
+      </main>
+    </>
+  );
 }
