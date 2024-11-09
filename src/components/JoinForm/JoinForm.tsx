@@ -328,13 +328,13 @@ export default function JoinForm() {
           <h2>{t("title")}</h2>
           {isBeta ? betaDisclaimerBanner : welcomeBanner}
           <div>
-            <h3>Personal Info</h3>
+            <h3>{t("sections.personalInfo")}</h3>
             <input
               {...register("first_name", {
                 required: "Please enter your first name",
               })}
               type="text"
-              placeholder="First Name"
+              placeholder={t("fields.firstName")}
               required
             />
             <input
@@ -342,7 +342,7 @@ export default function JoinForm() {
                 required: "Please enter your last name",
               })}
               type="text"
-              placeholder="Last Name"
+              placeholder={t("fields.lastName")}
               required
             />
 
@@ -351,7 +351,7 @@ export default function JoinForm() {
                 required: "Please enter your email address",
               })}
               type="email"
-              placeholder="Email Address"
+              placeholder={t("fields.emailAddress")}
               required
             />
 
@@ -369,13 +369,13 @@ export default function JoinForm() {
           </div>
 
           <div className={styles.block}>
-            <h3>Address Info</h3>
+            <h3>{t("sections.addressInfo")}</h3>
             <input
               {...register("street_address", {
-                required: "Please enter your first name",
+                required: "Please enter your street address",
               })}
               type="text"
-              placeholder="Street Address"
+              placeholder={t("fields.streetAddress")}
               required
             />
             <input
@@ -383,13 +383,13 @@ export default function JoinForm() {
                 required: "Please enter your apartment number",
               })}
               type="text"
-              placeholder="Unit / Apartment #"
+              placeholder={t("fields.unit")}
               required
             />
             <input
               {...register("city", { required: "Please enter your city" })}
               type="text"
-              placeholder="City"
+              placeholder={t("fields.city")}
               required
             />
             <Select
@@ -410,12 +410,12 @@ export default function JoinForm() {
                 required: "Please enter your ZIP code",
               })}
               type="number"
-              placeholder="Zip Code"
+              placeholder={t("fields.zipCode")}
               required
             />
             <label>
               <input {...register("roof_access")} type="checkbox" />
-              Check this box if you have roof access
+              {t("fields.roofAccess")}
             </label>
           </div>
           <br />
@@ -460,7 +460,7 @@ export default function JoinForm() {
               name="submit_join_form"
               id="button-submit-join-form"
             >
-              {isLoading ? "Loading..." : isSubmitted ? "Thanks!" : "Submit"}
+              {isLoading ? "Loading..." : isSubmitted ? "Thanks!" : t("fields.submit")}
             </Button>
             <div hidden={!isLoading}>
               <CircularProgress />
