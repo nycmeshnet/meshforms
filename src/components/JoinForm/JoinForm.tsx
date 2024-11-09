@@ -491,7 +491,12 @@ export default function JoinForm() {
           </p>
         </div>
         <div className={styles.centered} style={{ padding: "10px" }}>
-          <Button name="home" variant="contained" size="large" href="https://nycmesh.net/">
+          <Button
+            name="home"
+            variant="contained"
+            size="large"
+            href="https://nycmesh.net/"
+          >
             Go Home
           </Button>
         </div>
