@@ -18,6 +18,7 @@ import { getMeshDBAPIEndpoint } from "@/lib/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/lib/types";
 import { useTranslations } from "next-intl";
+import LocaleSwitcher from "../LocaleSwitcher";
 
 export class JoinFormValues {
   constructor(
@@ -319,7 +320,10 @@ export default function JoinForm() {
     <>
       <div className={isSubmitted ? styles.hidden : styles.formBody}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h2>{t("title")}</h2>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h2>{t("title")}</h2>
+            <LocaleSwitcher />
+          </div>
           {isBeta ? betaDisclaimerBanner : welcomeBanner}
           <div>
             <h3>{t("sections.personalInfo")}</h3>
