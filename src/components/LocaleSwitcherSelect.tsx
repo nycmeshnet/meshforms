@@ -50,7 +50,6 @@ export default function LocaleSwitcherSelect({
       >
         {children}
       </select>
-      <span className="pointer-events-none absolute right-2 top-[8px]">⌄</span>
     </label>
   );
 }

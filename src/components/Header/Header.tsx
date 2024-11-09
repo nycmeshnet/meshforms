@@ -121,7 +121,6 @@ export function Header(props: Props) {
                   {item.text}
                 </Button>
               ))}
-
             </Box>
             <Box
               sx={{
