@@ -36,7 +36,8 @@ test("change language from english to spanish", async ({ page }) => {
     .locator("[id='joinform-locale-switcher-select']")
     .selectOption("🇪🇸 Español");
 
-  // TODO (wdn): It would be nice if we could grab the transaltion out of the json blob instead of hardcoding it here.
+  // TODO (wdn): It would be nice if we could grab the translation out of the
+  // json blob instead of hardcoding it here.
   await expect(page.locator("[id='joinform-title']")).toHaveText(
     "Únase NYC Mesh",
   );
