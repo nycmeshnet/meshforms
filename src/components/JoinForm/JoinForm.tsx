@@ -321,7 +321,7 @@ export default function JoinForm() {
       <div className={isSubmitted ? styles.hidden : styles.formBody}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h2>{t("title")}</h2>
+            <h2 id="joinform-title">{t("title")}</h2>
             <LocaleSwitcher />
           </div>
           {isBeta ? betaDisclaimerBanner : welcomeBanner}

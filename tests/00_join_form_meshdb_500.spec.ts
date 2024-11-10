@@ -1,12 +1,12 @@
-import { test, expect } from "@/tests/mock_meshdb_500/test";
+import { test, expect } from "./mock_meshdb_500/test";
 import {
   fillOutJoinForm,
   sampleData,
   sampleJoinRecord,
   submitSuccessExpected,
 } from "./util";
-import { JoinRecord } from "@/app/types";
-import { getJoinRecordFromS3 } from "@/app/join_record";
+import { JoinRecord } from "@/lib/types";
+import { getJoinRecordFromS3 } from "@/lib/join_record";
 import { isDeepStrictEqual } from "util";
 
 const joinFormTimeout = 20000;

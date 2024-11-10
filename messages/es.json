@@ -1,6 +1,6 @@
 {
   "LocaleSwitcher": {
-    "label": "Cambia idioma",
+    "label": "Idioma",
     "locale": "{locale, select, de {🇩🇪 Deutsch} en {🇺🇸 English} es {🇪🇸 Español} other {Unknown}}"
   },
   "Landing": {
