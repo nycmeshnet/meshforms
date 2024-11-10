@@ -133,7 +133,7 @@ export function QueryForm() {
         cellRenderer: (props: any) => {
           return (
             <a
-              href={`${process.env.NEXT_PUBLIC_MESHDB_URL}/admin/meshapi/install/${props.value}`}
+              href={`${process.env.NEXT_PUBLIC_MESHDB_URL}/admin/meshapi/install/?q=${props.value}`}
             >
               {props.value}
             </a>
