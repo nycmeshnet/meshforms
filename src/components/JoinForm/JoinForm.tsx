@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./JoinForm.module.scss";
+import "./hide_recaptcha_badge.css";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import {
   CircularProgress,
@@ -19,6 +20,7 @@ import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/lib/types";
 import { useTranslations } from "next-intl";
 import LocaleSwitcher from "../LocaleSwitcher";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export class JoinFormValues {
   constructor(
@@ -35,6 +37,8 @@ export class JoinFormValues {
     public referral: string = "",
     public ncl: boolean = false,
     public trust_me_bro: boolean = false,
+    public recaptcha_invisible_token: string | null = null,
+    public recaptcha_checkbox_token: string | null = null,
   ) {}
 }
 
@@ -77,7 +81,12 @@ export default function JoinForm() {
     defaultValues: defaultFormValues,
   });
 
+  const recaptchaV3Ref = React.useRef<ReCAPTCHA>(null);
+  const recaptchaV2Ref = React.useRef<ReCAPTCHA>(null);
+
   const [isLoading, setIsLoading] = useState(false);
+  const [isProbablyABot, setIsProbablyABot] = useState(false);
+  const [checkBoxCaptchaToken, setCheckBoxCaptchaToken] = useState("");
   const [isInfoConfirmationDialogueOpen, setIsInfoConfirmationDialogueOpen] =
     useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -149,6 +158,22 @@ export default function JoinForm() {
   };
 
   async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
+    // Get the captcha tokens and add them to request object.
+    // Per the google docs, the implicit token must be retrieved on form submission,
+    // so that the token doesn't expire before server side validation
+    if (checkBoxCaptchaToken) {
+      joinFormSubmission.recaptcha_checkbox_token = checkBoxCaptchaToken;
+    } else {
+      joinFormSubmission.recaptcha_checkbox_token = null;
+    }
+    if (!recaptchaV3Ref.current) {
+      throw Error(
+        "Invalid recaptcha Ref when trying to execute() on v3 captcha, is something broken with page render?",
+      );
+    }
+    joinFormSubmission.recaptcha_invisible_token =
+      await recaptchaV3Ref.current.executeAsync();
+
     // Before we try anything else, submit to S3 for safety.
     let record: JoinRecord = Object.assign(
       structuredClone(joinFormSubmission),
@@ -215,6 +240,7 @@ export default function JoinForm() {
         console.debug("Join Form submitted successfully");
         setIsLoading(false);
         setIsSubmitted(true);
+        setIsProbablyABot(false);
         return;
       }
 
@@ -250,6 +276,26 @@ export default function JoinForm() {
           return;
         }
 
+        // If the server said the recaptcha token indicates this was a bot (HTTP 401), prompt the user with the
+        // interactive "checkbox" V2 captcha. However, if they have already submitted a checkbox captcha
+        // and are still seeing a 401, something has gone wrong - fall back to the generic 4xx error handling logic below
+        if (
+          record.code == 401 &&
+          !joinFormSubmission.recaptcha_checkbox_token
+        ) {
+          toast.warning(
+            "Please complete an additional verification step to confirm your submission",
+          );
+          setIsProbablyABot(true);
+          setIsSubmitted(false);
+          setIsLoading(false);
+
+          console.error(
+            "Request failed invisible captcha verification, user can try again with checkbox validation",
+          );
+          return;
+        }
+
         if (record.code !== null && 500 <= record.code && record.code <= 599) {
           // If it was the server's fault, then just accept the record and move
           // on.
@@ -269,6 +315,13 @@ export default function JoinForm() {
         toast.error(`Could not submit Join Form: ${detail}`);
         console.error(`An error occurred: ${detail}`);
         setIsLoading(false);
+
+        // Clear the checkbox captcha if it exists, to allow the user to retry if needed
+        if (recaptchaV2Ref.current) {
+          recaptchaV2Ref.current.reset();
+          setCheckBoxCaptchaToken("");
+        }
+
         return;
       }
 
@@ -434,6 +487,25 @@ export default function JoinForm() {
               ),
             })}
           </label>
+          {/* This first captcha isn't actually displayed, it just silently collects user metrics and generates a token */}
+          <ReCAPTCHA
+            ref={recaptchaV3Ref}
+            sitekey="6LcgBnsqAAAAAOJ1d8YGQ1LkVzfc8tZFk6QzvJgU"
+            size="invisible"
+          />
+          {/* This second captcha is the traditional "I'm not a robot" checkbox,
+          only shown if the user gets 401'ed due to a low score on the above captcha */}
+          {isProbablyABot ? (
+            <ReCAPTCHA
+              className={styles.centered}
+              style={{ marginTop: "15px" }}
+              ref={recaptchaV2Ref}
+              sitekey="6LceBnsqAAAAAPl1abY972W2CK7c6BERcxC-u__U"
+              onChange={(newToken) => setCheckBoxCaptchaToken(newToken ?? "")}
+            />
+          ) : (
+            <></>
+          )}
           {/*
           <div>
             <p>State Debugger</p>
@@ -447,7 +519,11 @@ export default function JoinForm() {
             <Button
               type="submit"
               disabled={
-                isLoading || isSubmitted || isBadPhoneNumber || !isValid
+                isLoading ||
+                isSubmitted ||
+                isBadPhoneNumber ||
+                !isValid ||
+                (isProbablyABot && !checkBoxCaptchaToken)
               }
               variant="contained"
               size="large"
@@ -464,6 +540,14 @@ export default function JoinForm() {
             <div hidden={!isLoading}>
               <CircularProgress />
             </div>
+          </div>
+          <div className={styles.captchaDisclaimer}>
+            This site is protected by reCAPTCHA and the Google
+            <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+            <a href="https://policies.google.com/terms">
+              Terms of Service
+            </a>{" "}
+            apply.
           </div>
         </form>
       </div>

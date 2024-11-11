@@ -105,3 +105,15 @@
 .hidden {
   display: none;
 }
+
+.captchaDisclaimer {
+  font-size: 80%;
+  color: #9a9a9a;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.captchaDisclaimer > a {
+  color: #000;
+  margin-left: 3px;
+}
