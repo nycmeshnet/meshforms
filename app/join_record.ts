@@ -19,22 +19,18 @@ class JoinRecordS3 {
   private PREFIX: string;
 
   private S3_ENDPOINT: string;
-  private AWS_ACCESS_KEY_ID: string;
-  private AWS_SECRET_ACCESS_KEY: string;
 
   constructor() {
     this.BUCKET_NAME = process.env.JOIN_RECORD_BUCKET_NAME as string;
     this.PREFIX = process.env.JOIN_RECORD_PREFIX as string;
     this.S3_ENDPOINT = process.env.S3_ENDPOINT as string;
-    this.AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID as string;
-    this.AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY as string;
 
     // Setup the S3 client
     this.s3Client = new S3Client({
       endpoint:
         this.S3_ENDPOINT != undefined
           ? this.S3_ENDPOINT
-          : "https://s3.us-east-1.amazonaws.com",
+          : undefined,
     });
   }
 
@@ -43,18 +39,6 @@ class JoinRecordS3 {
   // key: The S3 path we store the submission at
   // responseCode: If we have a response code for this submission, add it here.
   async save(joinRecord: JoinRecord, key: string = "") {
-    // Check if the S3 client is working and exit gracefully with a warning if it is not.
-    try {
-      const command = new ListBucketsCommand({});
-      await this.s3Client.send(command);
-    } catch (error) {
-      console.warn(
-        "S3 Client not configured properly. I WILL NOT SAVE THIS SUBMISSION.",
-        error,
-      );
-      return;
-    }
-
     // Get the date to store this submission under (this is part of the path)
     const submissionKey = joinRecord.submission_time
       .replace(/[-:T]/g, "/")

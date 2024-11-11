@@ -157,10 +157,17 @@ export default function App() {
         install_number: null,
       },
     ) as JoinRecord;
-    setJoinRecordKey(
-      (await saveJoinRecordToS3(record, joinRecordKey)) as string,
-    );
 
+    try {
+      setJoinRecordKey(
+        (await saveJoinRecordToS3(record, joinRecordKey)) as string,
+      );
+    } catch (error: unknown) {
+      console.error(`Could not upload JoinRecord to S3. ${JSON.stringify(error)}`);
+      setJoinRecordKey("error");
+    }
+
+    // Attempt to submit the Join Form
     try {
       const response = await fetch(
         `${await getMeshDBAPIEndpoint()}/api/v1/join/`,
@@ -185,9 +192,16 @@ export default function App() {
       record.install_number = responseData.install_number;
 
       // Update the join record with our data if we have it.
-      setJoinRecordKey(
-        (await saveJoinRecordToS3(record, joinRecordKey)) as string,
-      );
+      // We have to catch and handle the error if this somehow fails but the join
+      // form submission succeeds.
+      try {
+        setJoinRecordKey(
+          (await saveJoinRecordToS3(record, joinRecordKey)) as string,
+        );
+      } catch (error: unknown) {
+        console.error(`Could not upload JoinRecord to S3. ${JSON.stringify(error)}`);
+        setJoinRecordKey("error"); // Is this janky? IDK maybe it works
+      }
 
       if (response.ok) {
         console.debug("Join Form submitted successfully");
@@ -199,12 +213,10 @@ export default function App() {
       // If the response was not good, then get angry.
       throw responseData;
     } catch (error: unknown) {
-      // The error should always be a JoinFormResponse. TS insists that
-      // errors be handled as type Unknown, but this is (and should always be)
-      // the happy path of error handling
+      // If MeshDB is up, the error should always be a JoinResponse
       if (error instanceof JoinFormResponse) {
-        // We just need to confirm some information
         if (record.code == 409) {
+          // We just need to confirm some information
           let needsConfirmation: Array<ConfirmationField> = [];
           const changedInfo = error.changed_info;
 
@@ -230,9 +242,9 @@ export default function App() {
           return;
         }
 
-        // If it was the server's fault, then just accept the record and move
-        // on.
         if (record.code !== null && 500 <= record.code && record.code <= 599) {
+          // If it was the server's fault, then just accept the record and move
+          // on.
           setIsMeshDBProbablyDown(true);
           setIsLoading(false);
           setIsSubmitted(true);
@@ -252,11 +264,21 @@ export default function App() {
         return;
       }
 
-      // If we didn't get a JoinFormResponse, chances are that MeshDB is hard down.
-      // Tell the user we recorded their submission, but change the message.
-      setIsMeshDBProbablyDown(true);
-      setIsLoading(false);
-      setIsSubmitted(true);
+      // If we didn't get a JoinFormResponse, we're in trouble. Make sure that
+      // we successfully recorded the submission. If we didn't... oof. 
+
+      if (joinRecordKey !== "error") {
+        // If we didn't get a JoinFormResponse, chances are that MeshDB is hard down.
+        // Tell the user we recorded their submission, but change the message.
+        setIsMeshDBProbablyDown(true);
+        setIsLoading(false);
+        setIsSubmitted(true);
+      } else {
+        // If MeshDB is down AND we failed to save the Join Record, then we should
+        // probably let the member know to try again later.
+        toast.error(`Could not submit Join Form. Please try again later, or contact support@nycmesh.net for assistance.`);
+        setIsLoading(false);
+      }
 
       // Log the message to the console.
       if (error instanceof Error) {
