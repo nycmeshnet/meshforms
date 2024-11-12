@@ -27,10 +27,7 @@ class JoinRecordS3 {
 
     // Setup the S3 client
     this.s3Client = new S3Client({
-      endpoint:
-        this.S3_ENDPOINT != undefined
-          ? this.S3_ENDPOINT
-          : undefined,
+      endpoint: this.S3_ENDPOINT != undefined ? this.S3_ENDPOINT : undefined,
     });
   }
 

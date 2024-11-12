@@ -163,7 +163,9 @@ export default function App() {
         (await saveJoinRecordToS3(record, joinRecordKey)) as string,
       );
     } catch (error: unknown) {
-      console.error(`Could not upload JoinRecord to S3. ${JSON.stringify(error)}`);
+      console.error(
+        `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
+      );
     }
 
     // Attempt to submit the Join Form
@@ -198,7 +200,9 @@ export default function App() {
           (await saveJoinRecordToS3(record, joinRecordKey)) as string,
         );
       } catch (error: unknown) {
-        console.error(`Could not upload JoinRecord to S3. ${JSON.stringify(error)}`);
+        console.error(
+          `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
+        );
       }
 
       if (response.ok) {
@@ -211,7 +215,6 @@ export default function App() {
       // If the response was not good, then get angry.
       throw responseData;
     } catch (error: unknown) {
-
       console.log(JSON.stringify(error));
       console.log(joinRecordKey);
 
@@ -267,8 +270,7 @@ export default function App() {
       }
 
       // If we didn't get a JoinFormResponse, we're in trouble. Make sure that
-      // we successfully recorded the submission. If we didn't... oof. 
-      
+      // we successfully recorded the submission. If we didn't... oof.
 
       if (joinRecordKey !== "") {
         // If we didn't get a JoinFormResponse, chances are that MeshDB is hard down.
@@ -279,7 +281,9 @@ export default function App() {
       } else {
         // If MeshDB is down AND we failed to save the Join Record, then we should
         // probably let the member know to try again later.
-        toast.error(`Could not submit Join Form. Please try again later, or contact support@nycmesh.net for assistance.`);
+        toast.error(
+          `Could not submit Join Form. Please try again later, or contact support@nycmesh.net for assistance.`,
+        );
         setIsLoading(false);
       }
 

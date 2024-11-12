@@ -18,13 +18,13 @@ const meshdbIsDownText =
 
 // TODO: Figure out how to mock an S3 failure. Gotta either do it on the backend
 // or somehow mock saveJoinRecordToS3 to always throw an error.
-test("meshdb is hard down and we could not record", async ({ page}) => {
+test("meshdb is hard down and we could not record", async ({ page }) => {
   // Block access to the join form API
   await page.route("**/api/v1/join/**", (route) => route.abort());
 
   // Block access to S3
   await page.evaluate(() => {
-    (window as any).saveJoinRecordToS3 = () => { 
+    (window as any).saveJoinRecordToS3 = () => {
       throw new Error("Mocked error in saveJoinRecordToS3");
     };
   });
