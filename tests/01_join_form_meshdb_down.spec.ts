@@ -16,26 +16,27 @@ const unitTestTimeout = 5000;
 const meshdbIsDownText =
   "You will receive an email from us in the next 2-3 days with next steps, including how to submit panorama photos.";
 
-// TODO: Figure out how to mock an S3 failure. Gotta either do it on the backend
-// or somehow mock saveJoinRecordToS3 to always throw an error.
-//test("meshdb is hard down and we could not record", async ({ page }) => {
-//  // Block access to the join form API
-//  await page.route("**/api/v1/join/**", (route) => route.abort());
-//
-//  test.setTimeout(joinFormTimeout);
-//  await page.goto("/join");
-//
-//  // Is the page title correct?
-//  await expect(page).toHaveTitle(/Join Our Community Network!/);
-//
-//  // Set up sample data.
-//  await fillOutJoinForm(page, sampleData);
-//
-//  // Uncomment this if you want to poke around after the join form has been filled out
-//  //await page.pause();
-//
-//  await submitFailureExpected(page);
-//});
+// This test will run in its own github action that does not set up MinIO. 
+// I tried for WEEKS and I could not find a way to mock a failure between
+// Node and MinIO.
+test("fail meshdb hard down and s3 hard down", async ({ page }) => {
+  // Block access to the join form API
+  await page.route("**/api/v1/join/**", (route) => route.abort());
+
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  // Set up sample data.
+  await fillOutJoinForm(page, sampleData);
+
+  // Uncomment this if you want to poke around after the join form has been filled out
+  //await page.pause();
+
+  await submitFailureExpected(page);
+});
 
 test("meshdb is hard down but succeed anyway", async ({ page }) => {
   // Block access to the join form API

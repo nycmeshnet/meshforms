@@ -15,26 +15,13 @@ jobs:
     - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6
       with:
         node-version: lts/*
-    - name: Setup Minio
-      run: |
-          docker run -d -p 9000:9000 --name minio \
-          -e "MINIO_ACCESS_KEY=sampleaccesskey" \
-          -e "MINIO_SECRET_KEY=samplesecretkey" \
-          -e "MINIO_DEFAULT_BUCKETS=meshdb-join-form-log" \
-          -v /tmp/data:/data \
-          -v /tmp/config:/root/.minio \
-          minio/minio server /data
-
-          export AWS_ACCESS_KEY_ID=sampleaccesskey
-          export AWS_SECRET_ACCESS_KEY=samplesecretkey
-          export AWS_EC2_METADATA_DISABLED=true
-          aws --endpoint-url http://127.0.0.1:9000/ s3 mb s3://meshdb-join-form-log
+    # Notably, we are NOT adding S3 here
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test --grep-invert 'fail meshdb hard down and s3 hard down'
+      run: npx playwright test --grep 'fail meshdb hard down and s3 hard down'
       env:
         NEXT_PUBLIC_MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
         MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
