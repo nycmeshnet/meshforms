@@ -25,7 +25,7 @@ class JoinRecordS3 {
     this.PREFIX = process.env.JOIN_RECORD_PREFIX as string;
     this.S3_ENDPOINT = process.env.S3_ENDPOINT as string;
 
-    // Setup the S3 client
+    // Setup the S3 client and use a ternary to allow us to talk to MinIO if we want.
     this.s3Client = new S3Client({
       endpoint: this.S3_ENDPOINT != undefined ? this.S3_ENDPOINT : undefined,
     });
