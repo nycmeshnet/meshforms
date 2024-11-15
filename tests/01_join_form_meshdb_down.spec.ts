@@ -18,31 +18,24 @@ const meshdbIsDownText =
 
 // TODO: Figure out how to mock an S3 failure. Gotta either do it on the backend
 // or somehow mock saveJoinRecordToS3 to always throw an error.
-test("meshdb is hard down and we could not record", async ({ page }) => {
-  // Block access to the join form API
-  await page.route("**/api/v1/join/**", (route) => route.abort());
-
-  // Block access to S3
-  await page.evaluate(() => {
-    (window as any).saveJoinRecordToS3 = () => {
-      throw new Error("Mocked error in saveJoinRecordToS3");
-    };
-  });
-
-  test.setTimeout(joinFormTimeout);
-  await page.goto("/join");
-
-  // Is the page title correct?
-  await expect(page).toHaveTitle(/Join Our Community Network!/);
-
-  // Set up sample data.
-  await fillOutJoinForm(page, sampleData);
-
-  // Uncomment this if you want to poke around after the join form has been filled out
-  //await page.pause();
-
-  await submitFailureExpected(page);
-});
+//test("meshdb is hard down and we could not record", async ({ page }) => {
+//  // Block access to the join form API
+//  await page.route("**/api/v1/join/**", (route) => route.abort());
+//
+//  test.setTimeout(joinFormTimeout);
+//  await page.goto("/join");
+//
+//  // Is the page title correct?
+//  await expect(page).toHaveTitle(/Join Our Community Network!/);
+//
+//  // Set up sample data.
+//  await fillOutJoinForm(page, sampleData);
+//
+//  // Uncomment this if you want to poke around after the join form has been filled out
+//  //await page.pause();
+//
+//  await submitFailureExpected(page);
+//});
 
 test("meshdb is hard down but succeed anyway", async ({ page }) => {
   // Block access to the join form API
