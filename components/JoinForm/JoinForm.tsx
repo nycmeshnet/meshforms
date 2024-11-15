@@ -158,10 +158,11 @@ export default function App() {
       },
     ) as JoinRecord;
 
+    let jrKey = "";
+
     try {
-      setJoinRecordKey(
-        (await saveJoinRecordToS3(record, joinRecordKey)) as string,
-      );
+      jrKey = await saveJoinRecordToS3(record, jrKey);
+      setJoinRecordKey(jrKey);
     } catch (error: unknown) {
       console.error(
         `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
@@ -196,9 +197,8 @@ export default function App() {
       // We have to catch and handle the error if this somehow fails but the join
       // form submission succeeds.
       try {
-        setJoinRecordKey(
-          (await saveJoinRecordToS3(record, joinRecordKey)) as string,
-        );
+        jrKey = await saveJoinRecordToS3(record, jrKey);
+        setJoinRecordKey(jrKey);
       } catch (error: unknown) {
         console.error(
           `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
@@ -215,9 +215,6 @@ export default function App() {
       // If the response was not good, then get angry.
       throw responseData;
     } catch (error: unknown) {
-      console.log(JSON.stringify(error));
-      console.log(joinRecordKey);
-
       // If MeshDB is up, the error should always be a JoinResponse
       if (error instanceof JoinFormResponse) {
         if (record.code == 409) {
@@ -272,7 +269,7 @@ export default function App() {
       // If we didn't get a JoinFormResponse, we're in trouble. Make sure that
       // we successfully recorded the submission. If we didn't... oof.
 
-      if (joinRecordKey !== "") {
+      if (jrKey !== "") {
         // If we didn't get a JoinFormResponse, chances are that MeshDB is hard down.
         // Tell the user we recorded their submission, but change the message.
         setIsMeshDBProbablyDown(true);

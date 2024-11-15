@@ -35,7 +35,7 @@ class JoinRecordS3 {
   // submission: A Join Form Submission. We append a few things to this.
   // key: The S3 path we store the submission at
   // responseCode: If we have a response code for this submission, add it here.
-  async save(joinRecord: JoinRecord, key: string = "") {
+  async save(joinRecord: JoinRecord, key: string = ""): Promise<string> {
     // Get the date to store this submission under (this is part of the path)
     const submissionKey = joinRecord.submission_time
       .replace(/[-:T]/g, "/")
@@ -66,7 +66,7 @@ class JoinRecordS3 {
   }
 
   // Gets the contents of a JoinRecord for testing
-  async get(key: string) {
+  async get(key: string): Promise<JoinRecord> {
     const getObjectCommand = new GetObjectCommand({
       Bucket: this.BUCKET_NAME,
       Key: key,
@@ -98,10 +98,10 @@ const joinRecordS3 = new JoinRecordS3();
 export async function saveJoinRecordToS3(
   submission: JoinRecord,
   key: string = "",
-) {
+): Promise<string> {
   return joinRecordS3.save(submission, key);
 }
 
-export async function getJoinRecordFromS3(key: string) {
+export async function getJoinRecordFromS3(key: string): Promise<JoinRecord> {
   return joinRecordS3.get(key);
 }
