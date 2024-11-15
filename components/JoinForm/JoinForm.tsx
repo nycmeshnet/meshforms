@@ -158,6 +158,10 @@ export default function App() {
       },
     ) as JoinRecord;
 
+    // FIXME (wdn): The useState is too slow and causes a race condition when
+    // we try to use it to determine if we successfully submitted here. I am
+    // using jrKey to store the key for later reference and the state will be
+    // for testing for now. Sorry Andrew.
     let jrKey = "";
 
     try {
