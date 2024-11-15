@@ -16,7 +16,7 @@ const unitTestTimeout = 5000;
 const meshdbIsDownText =
   "You will receive an email from us in the next 2-3 days with next steps, including how to submit panorama photos.";
 
-// This test will run in its own github action that does not set up MinIO. 
+// This test will run in its own github action that does not set up MinIO.
 // I tried for WEEKS and I could not find a way to mock a failure between
 // Node and MinIO.
 test("fail meshdb hard down and s3 hard down", async ({ page }) => {
