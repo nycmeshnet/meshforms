@@ -1,9 +1,5 @@
 import { test, expect } from "@playwright/test";
-import {
-  fillOutJoinForm,
-  sampleData,
-  submitFailureExpected,
-} from "./util";
+import { fillOutJoinForm, sampleData, submitFailureExpected } from "./util";
 
 const joinFormTimeout = 20000;
 
