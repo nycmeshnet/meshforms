@@ -1,4 +1,5 @@
-import { JoinFormInput, JoinFormResponse } from "@/app/io";
+import { getJoinRecordFromS3 } from "@/app/join_record";
+import { JoinRecord } from "@/app/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { test, expect } from "@/tests/mock/test";
 
@@ -11,7 +12,10 @@ import {
   sampleNJData,
   submitAndCheckToast,
   expectSuccess,
+  sampleJoinRecord,
+  findJoinRecord,
 } from "@/tests/util";
+import { isDeepStrictEqual } from "util";
 
 const joinFormTimeout = 20000;
 const unitTestTimeout = 5000;
@@ -36,7 +40,29 @@ test("happy join form", async ({ page }) => {
 
   await submitSuccessExpected(page, unitTestTimeout);
 
-  await page.pause();
+  const joinRecordKey = await page.getAttribute(
+    '[data-testid="test-join-record-key"]',
+    "data-state",
+  );
+
+  if (joinRecordKey === null) {
+    throw new Error("Got null join record");
+  }
+
+  // This is wacky because playwright has to run this and therefore
+  // needs our dotenv.
+  const joinRecord: JoinRecord = await getJoinRecordFromS3(joinRecordKey);
+
+  // This is fucked, sorry.
+  joinRecord.submission_time = sampleJoinRecord.submission_time;
+
+  if (!isDeepStrictEqual(joinRecord, sampleJoinRecord)) {
+    console.error("Expected:");
+    console.error(sampleJoinRecord);
+    console.error("Got:");
+    console.error(joinRecord);
+    throw new Error("Bad JoinRecord. JoinRecord is not deeply equal.");
+  }
 
   // Then go home
   await page.waitForTimeout(1000);
@@ -63,7 +89,25 @@ test("confirm city", async ({ page }) => {
 
   await submitConfirmationDialogExpected(page, 2000);
 
+  // Check that the Join Record's code is correct.
+  let joinRecord = await findJoinRecord(page);
+  let code = 409;
+  if (joinRecord.code !== code) {
+    throw new Error(
+      `JoinRecord code (${joinRecord.code}) did not match expected code (${code})`,
+    );
+  }
+
   await page.locator("[name='confirm']").click();
+
+  // Make sure the JoinRecord updated properly
+  await page.waitForTimeout(1000);
+  joinRecord = await findJoinRecord(page);
+  if (joinRecord.code !== 201) {
+    throw new Error(
+      `JoinRecord code (${joinRecord.code}) did not match expected code (201)`,
+    );
+  }
 
   await expectSuccess(page, 1000);
 });
@@ -74,7 +118,7 @@ test("confirm street address", async ({ page }) => {
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
-  let data: JoinFormValues = Object.assign({}, sampleData);
+  let data = structuredClone(sampleData);
   data.street_address = "197 prospect pl";
 
   // Set up sample data.
@@ -96,7 +140,7 @@ test("street address trust me bro", async ({ page }) => {
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
-  let data: JoinFormValues = Object.assign({}, sampleData);
+  let data = structuredClone(sampleData);
   data.street_address = "333 chom st";
 
   // Set up sample data.
@@ -332,4 +376,13 @@ test("fail nj", async ({ page }) => {
     page,
     "Non-NYC registrations are not supported at this time",
   );
+
+  // Check that the Join Record's code is correct.
+  let joinRecord = await findJoinRecord(page);
+  let code = 400;
+  if (joinRecord.code !== code) {
+    throw new Error(
+      `JoinRecord code (${joinRecord.code}) did not match expected code (${code})`,
+    );
+  }
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./JoinForm.module.scss";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
@@ -13,46 +13,40 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { recordJoinFormSubmissionToS3 } from "@/app/data";
+import { saveJoinRecordToS3 } from "@/app/join_record";
 import { getMeshDBAPIEndpoint } from "@/app/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
+import { JoinRecord } from "@/app/types";
 
-type JoinFormValues = {
-  first_name: string;
-  last_name: string;
-  email_address: string;
-  phone_number: string;
-  street_address: string;
-  apartment: string;
-  city: string;
-  state: string;
-  zip_code: string;
-  roof_access: boolean;
-  referral: string;
-  ncl: boolean;
-  trust_me_bro: boolean;
-};
-
-// Coding like it's 1997
-export function NewJoinFormValues() {
-  return {
-    first_name: "",
-    last_name: "",
-    email_address: "",
-    phone_number: "",
-    street_address: "",
-    apartment: "",
-    city: "",
-    state: "",
-    zip_code: "",
-    roof_access: false,
-    referral: "",
-    ncl: false,
-    trust_me_bro: false,
-  };
+export class JoinFormValues {
+  constructor(
+    public first_name: string = "",
+    public last_name: string = "",
+    public email_address: string = "",
+    public phone_number: string = "",
+    public street_address: string = "",
+    public apartment: string = "",
+    public city: string = "",
+    public state: string = "",
+    public zip_code: string = "",
+    public roof_access: boolean = false,
+    public referral: string = "",
+    public ncl: boolean = false,
+    public trust_me_bro: boolean = false,
+  ) {}
 }
 
-export type { JoinFormValues };
+export class JoinFormResponse {
+  constructor(
+    public detail: string = "",
+    public building_id: string = "", // UUID
+    public member_id: string = "", // UUID
+    public install_id: string = "", // UUID
+    public install_number: number | null = null,
+    public member_exists: boolean = false,
+    public changed_info: { [id: string]: string } = {},
+  ) {}
+}
 
 type ConfirmationField = {
   key: keyof JoinFormValues;
@@ -68,14 +62,14 @@ const selectStateOptions = [
 ];
 
 export default function App() {
-  let defaultFormValues = NewJoinFormValues();
+  let defaultFormValues = new JoinFormValues();
   defaultFormValues.state = selectStateOptions[0].value;
   const {
     register,
     setValue,
     getValues,
     handleSubmit,
-    formState: { isDirty, isValid },
+    formState: { isValid },
   } = useForm<JoinFormValues>({
     mode: "onChange",
     defaultValues: defaultFormValues,
@@ -85,7 +79,10 @@ export default function App() {
   const [isInfoConfirmationDialogueOpen, setIsInfoConfirmationDialogueOpen] =
     useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isMeshDBProbablyDown, setIsMeshDBProbablyDown] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
+  const [joinRecordKey, setJoinRecordKey] = useState("");
+
   const isBeta = true;
 
   // Store the values submitted by the user or returned by the server
@@ -150,35 +147,86 @@ export default function App() {
   };
 
   async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
-    console.debug(JSON.stringify(joinFormSubmission));
+    // Before we try anything else, submit to S3 for safety.
+    let record: JoinRecord = Object.assign(
+      structuredClone(joinFormSubmission),
+      {
+        submission_time: new Date().toISOString(),
+        code: null,
+        replayed: 0,
+        install_number: null,
+      },
+    ) as JoinRecord;
 
-    return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/join/`, {
-      method: "POST",
-      body: JSON.stringify(joinFormSubmission),
-    })
-      .then(async (response) => {
-        if (response.ok) {
-          console.debug("Join Form submitted successfully");
-          setIsLoading(false);
-          setIsSubmitted(true);
-          return;
-        }
+    // FIXME (wdn): The useState is too slow and causes a race condition when
+    // we try to use it to determine if we successfully submitted here. I am
+    // using jrKey to store the key for later reference and the state will be
+    // for testing for now. Sorry Andrew.
+    let jrKey = "";
 
-        throw response;
-      })
-      .catch(async (error) => {
-        const errorJson = await error.json();
-        const detail = await errorJson.detail;
+    try {
+      jrKey = await saveJoinRecordToS3(record, jrKey);
+      setJoinRecordKey(jrKey);
+    } catch (error: unknown) {
+      console.error(
+        `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
+      );
+    }
 
-        // We just need to confirm some information
-        if (error.status == 409) {
+    // Attempt to submit the Join Form
+    try {
+      const response = await fetch(
+        `${await getMeshDBAPIEndpoint()}/api/v1/join/`,
+        {
+          method: "POST",
+          body: JSON.stringify(joinFormSubmission),
+        },
+      );
+      const j = await response.json();
+      const responseData = new JoinFormResponse(
+        j.detail,
+        j.building_id,
+        j.member_id,
+        j.install_id,
+        j.install_number,
+        j.member_exists,
+        j.changed_info,
+      );
+
+      // Grab the HTTP code and the install_number (if we have it) for the joinRecord
+      record.code = response.status;
+      record.install_number = responseData.install_number;
+
+      // Update the join record with our data if we have it.
+      // We have to catch and handle the error if this somehow fails but the join
+      // form submission succeeds.
+      try {
+        jrKey = await saveJoinRecordToS3(record, jrKey);
+        setJoinRecordKey(jrKey);
+      } catch (error: unknown) {
+        console.error(
+          `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
+        );
+      }
+
+      if (response.ok) {
+        console.debug("Join Form submitted successfully");
+        setIsLoading(false);
+        setIsSubmitted(true);
+        return;
+      }
+
+      // If the response was not good, then get angry.
+      throw responseData;
+    } catch (error: unknown) {
+      // If MeshDB is up, the error should always be a JoinResponse
+      if (error instanceof JoinFormResponse) {
+        if (record.code == 409) {
+          // We just need to confirm some information
           let needsConfirmation: Array<ConfirmationField> = [];
-          const changedInfo = errorJson.changed_info;
-          console.log(joinFormSubmission);
-          console.log(errorJson.changed_info);
+          const changedInfo = error.changed_info;
 
           for (const key in joinFormSubmission) {
-            console.log(key);
             if (
               joinFormSubmission.hasOwnProperty(key) &&
               changedInfo.hasOwnProperty(key)
@@ -200,16 +248,59 @@ export default function App() {
           return;
         }
 
+        if (record.code !== null && 500 <= record.code && record.code <= 599) {
+          // If it was the server's fault, then just accept the record and move
+          // on.
+          setIsMeshDBProbablyDown(true);
+          setIsLoading(false);
+          setIsSubmitted(true);
+          // Log the error to the console
+          console.error(error.detail);
+          return;
+        }
+
+        // If it was another kind of 4xx, the member did something wrong and needs
+        // to fix their information (i.e. move out of nj)
+        const detail = error.detail;
         // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
         // There's probably a way to coax the exception out of the response somewhere
         toast.error(`Could not submit Join Form: ${detail}`);
+        console.error(`An error occurred: ${detail}`);
         setIsLoading(false);
-      });
+        return;
+      }
+
+      // If we didn't get a JoinFormResponse, we're in trouble. Make sure that
+      // we successfully recorded the submission. If we didn't... oof.
+
+      if (jrKey !== "") {
+        // If we didn't get a JoinFormResponse, chances are that MeshDB is hard down.
+        // Tell the user we recorded their submission, but change the message.
+        setIsMeshDBProbablyDown(true);
+        setIsLoading(false);
+        setIsSubmitted(true);
+      } else {
+        // If MeshDB is down AND we failed to save the Join Record, then we should
+        // probably let the member know to try again later.
+        toast.error(
+          `Could not submit Join Form. Please try again later, or contact support@nycmesh.net for assistance.`,
+        );
+        setIsLoading(false);
+      }
+
+      // Log the message to the console.
+      if (error instanceof Error) {
+        console.error(`An error occurred: ${error.message}`);
+        return;
+      }
+
+      console.error(`An unknown error occurred: ${JSON.stringify(error)}`);
+      return;
+    }
   }
 
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
     setIsLoading(true);
-    recordJoinFormSubmissionToS3(data);
     data.trust_me_bro = false;
     submitJoinFormToMeshDB(data);
   };
@@ -346,15 +437,20 @@ export default function App() {
               Network Commons License
             </a>
           </label>
+          {/*
+          <div>
+            <p>State Debugger</p>
+            isLoading: {isLoading ? "true" : "false"}<br/>
+            isSubmitted: {isSubmitted ? "true" : "false"}<br/>
+            isBadPhoneNumber: {isBadPhoneNumber ? "true" : "false"}<br/>
+            !isValid: {!isValid ? "true" : "false"}<br/>
+          </div>
+          */}
           <div className={styles.centered}>
             <Button
               type="submit"
               disabled={
-                isLoading ||
-                isSubmitted ||
-                isBadPhoneNumber ||
-                !isDirty ||
-                !isValid
+                isLoading || isSubmitted || isBadPhoneNumber || !isValid
               }
               variant="contained"
               size="large"
@@ -378,11 +474,12 @@ export default function App() {
           <h2 id="alert-thank-you-h2">Thanks! Please check your email.</h2>
         </Alert>
         <div className={styles.thanksBlurb}>
-          <p>
-            You will receive an email from us in the next 5-10 minutes with next
+          <p id="p-thank-you-01">
+            You will receive an email from us in the next{" "}
+            {isMeshDBProbablyDown ? "2-3 days" : "5-10 minutes"} with next
             steps, including how to submit panorama photos.
           </p>
-          <p>
+          <p id="p-thank-you-02">
             If you do not see the email, please check your "Spam" folder, or
             email <a href="mailto:support@nycmesh.net">support@nycmesh.net</a>{" "}
             for help.
@@ -401,6 +498,7 @@ export default function App() {
         handleClickReject={handleClickReject}
         handleClickCancel={handleClickCancel}
       />
+      <div data-testid="test-join-record-key" data-state={joinRecordKey}></div>
     </>
   );
 }
