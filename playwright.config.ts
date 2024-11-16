@@ -33,9 +33,6 @@ export default defineConfig({
     trace: "on-first-retry",
   },
 
-  /* Exclude tests not meant to use S3. */
-  testIgnore: '**/*s3_down*',
-
   /* Configure projects for major browsers */
   // XXX (willnilges): I don't care so much about testing per-browser functionality
   // right now as much as I care about testing basic logic and such, so I'm gonna
