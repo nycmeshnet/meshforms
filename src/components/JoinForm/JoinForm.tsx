@@ -428,14 +428,11 @@ export default function JoinForm() {
               type="checkbox"
               required
             />
-            I agree to the{" "}
-            <a
-              href="https://www.nycmesh.net/ncl.pdf"
-              target="_blank"
-              style={{ color: "black" }}
-            >
-              Network Commons License
-            </a>
+            {t.rich("fields.ncl", {
+              ncl: (chunks) => (
+                <a href="https://www.nycmesh.net/ncl.pdf">{chunks}</a>
+              ),
+            })}
           </label>
           {/*
           <div>

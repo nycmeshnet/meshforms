@@ -29,6 +29,8 @@ async function getMessages(locale: string) {
       return (await import(`../../messages/es.json`)).default;
     case "fr":
       return (await import(`../../messages/fr.json`)).default;
+    case "ht":
+      return (await import(`../../messages/ht.json`)).default;
     case "zh":
       return (await import(`../../messages/zh.json`)).default;
   }

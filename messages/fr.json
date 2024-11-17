@@ -1,7 +1,7 @@
 {
   "LocaleSwitcher": {
     "label": "Langue",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} zh {🇨🇳 中文} other {Unknown}}"
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"
   },
   "Landing": {
     "welcome": "Bienvenue dans MeshForms !"
@@ -27,7 +27,7 @@
       "zipCode": "Code Postal / ZIP",
       "roofAccess": "Confirmez vous avez accès à votre toit",
       "reference": "Comment avez-vous découvert notre réseau?",
-      "ncl": "J'accepte la Licence Du Réseau Communautaire",
+      "ncl": "J'accepte la <ncl>Licence Du Réseau Communautaire</ncl>",
       "submit": {
         "submit": "Soumettre",
         "loading": "Chargement...",
