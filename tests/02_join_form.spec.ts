@@ -58,16 +58,16 @@ test("happy join form", async ({ page }) => {
 
   await submitSuccessExpected(page, unitTestTimeout);
 
+  // Hardcoding the translation messages to ensure that translation is actually working.
+  // If it breaks, it'll display the message key instead.
   const thankYouTitle = "Thanks! Please check your email.";
   const thankYouText =
-  "You will receive an email from us in the next 5-10 minutes with next steps, including how to submit panorama photos.";
+    "You will receive an email from us in the next 5-10 minutes with next steps, including how to submit panorama photos.";
 
   await expect(page.locator("[id='alert-thank-you-h2']")).toHaveText(
     thankYouTitle,
   );
-  await expect(page.locator("[id='p-thank-you-01']")).toHaveText(
-    thankYouText,
-  );
+  await expect(page.locator("[id='p-thank-you-01']")).toHaveText(thankYouText);
 
   const joinRecordKey = await page.getAttribute(
     '[data-testid="test-join-record-key"]',
