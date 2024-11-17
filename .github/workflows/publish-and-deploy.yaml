@@ -15,7 +15,7 @@ jobs:
     with:
       environment: dev3
     secrets: inherit
-    #if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
 
   deploy_to_dev3:
     name: Deploy to dev3
