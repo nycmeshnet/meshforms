@@ -45,6 +45,7 @@ jobs:
         --set meshforms_app_namespace="${{ vars.APP_NAMESPACE }}" \
         --set aws.access_key="${{ secrets.S3_ACCESS_KEY }}" \
         --set aws.secret_key="${{ secrets.S3_SECRET_KEY }}" \
+        --set aws.region="${{ vars.S3_REGION }}" \
         --set meshforms.s3_bucket_name="${{ secrets.S3_BUCKET_NAME }}" \
         --set meshforms.s3_base_name="${{ secrets.S3_BASE_NAME }}" \
         --set image.tag="${{ inputs.environment }}" \
