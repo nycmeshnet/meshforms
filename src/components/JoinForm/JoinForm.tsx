@@ -420,7 +420,7 @@ export default function JoinForm() {
           <input
             {...register("referral")}
             type="text"
-            placeholder="How did you hear about us?"
+            placeholder={t("fields.reference")}
           />
           <label>
             <input

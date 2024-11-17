@@ -8,7 +8,7 @@
   },
   "JoinForm": {
     "title": "Únase NYC Mesh",
-    "banner": "",
+    "banner": "¡Únase nuestra red communidad! Completa la forma, y contatarémosle por correo electrónico pronto.",
     "sections": {
       "personalInfo": "Información Personal",
       "addressInfo": "Información de dirección"
@@ -19,7 +19,7 @@
       "emailAddress": "Dirección de correo electronico",
       "phoneNumber": {
         "phoneNumber": "Número de teléfono",
-        "error": ""
+        "error": "Por favor introduzca un número de telefono valido."
       },
       "streetAddress": "Dirección de calle",
       "unit": "Numero de apartamento",
