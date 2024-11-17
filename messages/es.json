@@ -8,7 +8,7 @@
   },
   "JoinForm": {
     "title": "Únase NYC Mesh",
-    "banner": "¡Únase nuestra red communidad! Completa la forma, y contatarémosle por correo electrónico pronto.",
+	  "banner": "¡Únase nuestra red comunidad! Completa la forma, y contactaremos por correo electrónico pronto.",
     "sections": {
       "personalInfo": "Información Personal",
       "addressInfo": "Información de dirección"
