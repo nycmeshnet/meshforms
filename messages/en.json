@@ -1,7 +1,7 @@
 {
   "LocaleSwitcher": {
     "label": "Language",
-    "locale": "{locale, select, de {🇩🇪 Deutsch} en {🇺🇸 English} es {🇪🇸 Español} other {Unbekannt}}"
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} zh {🇨🇳 中文} other {Unknown}}"
   },
   "Landing": {
     "welcome": "Welcome to MeshForms!"

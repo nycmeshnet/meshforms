@@ -103,3 +103,13 @@ Error: Process from config.webServer was not able to start. Exit code: 1
 ```
 
 Try running `npm run build`
+
+## Internationalization
+
+We use `next-intl` as a library for internationalization. 
+
+To add a new language:
+- Copy an existing language from `messages/` directory
+- Translate the messages into your language
+- Add your [language code](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) to `middleware.ts` and `src/i18n/routing.ts`
+- Add a case to the switch statement in `src/i18n/request.ts`
