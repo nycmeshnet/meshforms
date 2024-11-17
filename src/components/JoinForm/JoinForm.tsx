@@ -479,11 +479,17 @@ export default function JoinForm() {
         </Alert>
         <div className={styles.thanksBlurb}>
           <p id="p-thank-you-01">
-            {t("thankYou.thankYou", {slo: isMeshDBProbablyDown ? t("thankYou.days") : t("thankYou.minutes")})}
+            {t("thankYou.thankYou", {
+              slo: isMeshDBProbablyDown
+                ? t("thankYou.days")
+                : t("thankYou.minutes"),
+            })}
           </p>
           <p id="p-thank-you-02">
             {t.rich("thankYou.support", {
-              support: (chunks) => <a href="mailto:support@nycmesh.net">{chunks}</a>
+              support: (chunks) => (
+                <a href="mailto:support@nycmesh.net">{chunks}</a>
+              ),
             })}
           </p>
         </div>
