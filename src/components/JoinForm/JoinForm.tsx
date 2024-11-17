@@ -80,7 +80,7 @@ export default function JoinForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isInfoConfirmationDialogueOpen, setIsInfoConfirmationDialogueOpen] =
     useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(true);
   const [isMeshDBProbablyDown, setIsMeshDBProbablyDown] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
   const [joinRecordKey, setJoinRecordKey] = useState("");
@@ -475,18 +475,16 @@ export default function JoinForm() {
       </div>
       <div hidden={!isSubmitted}>
         <Alert className={styles.thanks} id="alert-thank-you">
-          <h2 id="alert-thank-you-h2">Thanks! Please check your email.</h2>
+          <h2 id="alert-thank-you-h2">{t("thankYou.header")}</h2>
         </Alert>
         <div className={styles.thanksBlurb}>
           <p id="p-thank-you-01">
-            You will receive an email from us in the next{" "}
-            {isMeshDBProbablyDown ? "2-3 days" : "5-10 minutes"} with next
-            steps, including how to submit panorama photos.
+            {t("thankYou.thankYou", {slo: isMeshDBProbablyDown ? t("thankYou.days") : t("thankYou.minutes")})}
           </p>
           <p id="p-thank-you-02">
-            If you do not see the email, please check your "Spam" folder, or
-            email <a href="mailto:support@nycmesh.net">support@nycmesh.net</a>{" "}
-            for help.
+            {t.rich("thankYou.support", {
+              support: (chunks) => <a href="mailto:support@nycmesh.net">{chunks}</a>
+            })}
           </p>
         </div>
         <div className={styles.centered} style={{ padding: "10px" }}>

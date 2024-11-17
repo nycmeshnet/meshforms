@@ -37,6 +37,12 @@
     "states": {
       "NY": "New York",
       "NJ": "New Jersey"
+    },
+    "thankYou": {
+      "thankYou": "You will receive an email from us in the next {slo} with next steps, including how to submit panorama photos.",
+      "minutes": "5-10 minutes",
+      "days": "2-3 days",
+      "support": "If you do not see the email, please check your \"Spam\" folder, or email <support>support@nycmesh.net</support> for help."
     }
   }
 }

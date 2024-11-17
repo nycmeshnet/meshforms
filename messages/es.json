@@ -37,6 +37,13 @@
     "states": {
       "NY": "Nueva York",
       "NJ": "Nueva Jersey"
+    },
+    "thankYou": {
+      "header": "¡Gracias! Revisa su correo electronico, por favor.",
+      "thankYou": "Recibirá un correo electronico de nosotros en {slo} con instrucciónes, incluyendo cómo entregar fotos panoramicos.",
+      "minutes": "5-10 minutos",
+      "days": "2-3 dias",
+      "support": "Si no vista el correco electronico, por favor revisa su carpeta de \"Spam\", o envia un correo electronico a <support>support@nycmesh.net</support> por ayuda."
     }
   }
 }
