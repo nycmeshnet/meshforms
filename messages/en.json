@@ -39,6 +39,7 @@
       "NJ": "New Jersey"
     },
     "thankYou": {
+      "header": "Thanks! Please check your email.",
       "thankYou": "You will receive an email from us in the next {slo} with next steps, including how to submit panorama photos.",
       "minutes": "5-10 minutes",
       "days": "2-3 days",
