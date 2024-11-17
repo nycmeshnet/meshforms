@@ -24,7 +24,7 @@ jobs:
       environment: dev3
     secrets: inherit
     needs: push_to_registry_dev
-    #if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
 
   push_to_registry_prod:
     name: Push to prod1
