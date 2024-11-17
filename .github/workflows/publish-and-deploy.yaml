@@ -3,7 +3,7 @@ permissions: read-all
 
 on:
   push:
-    branches: [ main, james/npm_audit_fix ]
+    branches: [ main ]
   workflow_dispatch:
     branches:
       - main
