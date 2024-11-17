@@ -1,0 +1,49 @@
+{
+  "LocaleSwitcher": {
+    "label": "Language",
+    "locale": "{locale, select, de {🇩🇪 Deutsch} en {🇺🇸 English} es {🇪🇸 Español} other {Unbekannt}}"
+  },
+  "Landing": {
+    "welcome": "Welcome to MeshForms!"
+  },
+  "JoinForm": {
+    "title": "Join NYC Mesh",
+    "banner": "Join our community network! Fill out the form, and we will reach out over email shortly.",
+    "sections": {
+      "personalInfo": "Personal Info",
+      "addressInfo": "Address Info"
+    },
+    "fields": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "emailAddress": "Email Address",
+      "phoneNumber": {
+        "phoneNumber": "Phone Number",
+        "error": "Please enter a valid phone number."
+      },
+      "streetAddress": "Street Address",
+      "unit": "Unit / Apartment #",
+      "city": "City",
+      "zipCode": "Zip Code",
+      "roofAccess": "Check this box if you have roof access",
+      "reference": "How did you hear about us?",
+      "ncl": "I agree to the Network Commons License",
+      "submit": {
+        "submit": "Submit",
+        "loading": "Loading...",
+        "thanks": "Thanks!"
+      }
+    },
+    "states": {
+      "NY": "New York",
+      "NJ": "New Jersey"
+    },
+    "thankYou": {
+      "header": "Thanks! Please check your email.",
+      "thankYou": "You will receive an email from us in the next {slo} with next steps, including how to submit panorama photos.",
+      "minutes": "5-10 minutes",
+      "days": "2-3 days",
+      "support": "If you do not see the email, please check your \"Spam\" folder, or email <support>support@nycmesh.net</support> for help."
+    }
+  }
+}

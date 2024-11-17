@@ -1,5 +1,5 @@
-import { getJoinRecordFromS3 } from "@/app/join_record";
-import { JoinRecord } from "@/app/types";
+import { getJoinRecordFromS3 } from "@/lib/join_record";
+import { JoinRecord } from "@/lib/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { expect, Page } from "@playwright/test";
 

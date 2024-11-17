@@ -13,10 +13,12 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { saveJoinRecordToS3 } from "@/app/join_record";
-import { getMeshDBAPIEndpoint } from "@/app/endpoint";
+import { saveJoinRecordToS3 } from "@/lib/join_record";
+import { getMeshDBAPIEndpoint } from "@/lib/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
-import { JoinRecord } from "@/app/types";
+import { JoinRecord } from "@/lib/types";
+import { useTranslations } from "next-intl";
+import LocaleSwitcher from "../LocaleSwitcher";
 
 export class JoinFormValues {
   constructor(
@@ -56,12 +58,12 @@ type ConfirmationField = {
 
 export type { ConfirmationField };
 
-const selectStateOptions = [
-  { value: "NY", label: "New York" },
-  { value: "NJ", label: "New Jersey" },
-];
-
-export default function App() {
+export default function JoinForm() {
+  const t = useTranslations("JoinForm");
+  const selectStateOptions = [
+    { value: "NY", label: t("states.NY") },
+    { value: "NJ", label: t("states.NJ") },
+  ];
   let defaultFormValues = new JoinFormValues();
   defaultFormValues.state = selectStateOptions[0].value;
   const {
@@ -312,27 +314,25 @@ export default function App() {
     </p>
   );
 
-  const welcomeBanner = (
-    <p>
-      Join our community network! Fill out the form, and we will reach out over
-      email shortly.
-    </p>
-  );
+  const welcomeBanner = <p>{t("banner")}</p>;
 
   return (
     <>
       <div className={isSubmitted ? styles.hidden : styles.formBody}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <h2>Join NYC Mesh</h2>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <h2 id="joinform-title">{t("title")}</h2>
+            <LocaleSwitcher />
+          </div>
           {isBeta ? betaDisclaimerBanner : welcomeBanner}
           <div>
-            <h3>Personal Info</h3>
+            <h3>{t("sections.personalInfo")}</h3>
             <input
               {...register("first_name", {
                 required: "Please enter your first name",
               })}
               type="text"
-              placeholder="First Name"
+              placeholder={t("fields.firstName")}
               required
             />
             <input
@@ -340,7 +340,7 @@ export default function App() {
                 required: "Please enter your last name",
               })}
               type="text"
-              placeholder="Last Name"
+              placeholder={t("fields.lastName")}
               required
             />
 
@@ -349,7 +349,7 @@ export default function App() {
                 required: "Please enter your email address",
               })}
               type="email"
-              placeholder="Email Address"
+              placeholder={t("fields.emailAddress")}
               required
             />
 
@@ -358,22 +358,22 @@ export default function App() {
                 required: "Please enter your phone number",
               })}
               type="tel"
-              placeholder="Phone Number"
+              placeholder={t("fields.phoneNumber.phoneNumber")}
               onBlur={handlePhoneNumberBlur}
             />
             <p style={{ color: "red" }} hidden={!isBadPhoneNumber}>
-              Please enter a valid phone number
+              {t("fields.phoneNumber.error")}
             </p>
           </div>
 
           <div className={styles.block}>
-            <h3>Address Info</h3>
+            <h3>{t("sections.addressInfo")}</h3>
             <input
               {...register("street_address", {
-                required: "Please enter your first name",
+                required: "Please enter your street address",
               })}
               type="text"
-              placeholder="Street Address"
+              placeholder={t("fields.streetAddress")}
               required
             />
             <input
@@ -381,13 +381,13 @@ export default function App() {
                 required: "Please enter your apartment number",
               })}
               type="text"
-              placeholder="Unit / Apartment #"
+              placeholder={t("fields.unit")}
               required
             />
             <input
               {...register("city", { required: "Please enter your city" })}
               type="text"
-              placeholder="City"
+              placeholder={t("fields.city")}
               required
             />
             <Select
@@ -408,19 +408,19 @@ export default function App() {
                 required: "Please enter your ZIP code",
               })}
               type="number"
-              placeholder="Zip Code"
+              placeholder={t("fields.zipCode")}
               required
             />
             <label>
               <input {...register("roof_access")} type="checkbox" />
-              Check this box if you have roof access
+              {t("fields.roofAccess")}
             </label>
           </div>
           <br />
           <input
             {...register("referral")}
             type="text"
-            placeholder="How did you hear about us?"
+            placeholder={t("fields.reference")}
           />
           <label>
             <input
@@ -458,7 +458,11 @@ export default function App() {
               name="submit_join_form"
               id="button-submit-join-form"
             >
-              {isLoading ? "Loading..." : isSubmitted ? "Thanks!" : "Submit"}
+              {isLoading
+                ? t("fields.submit.loading")
+                : isSubmitted
+                  ? t("fields.submit.thanks")
+                  : t("fields.submit.submit")}
             </Button>
             <div hidden={!isLoading}>
               <CircularProgress />
@@ -471,18 +475,22 @@ export default function App() {
       </div>
       <div hidden={!isSubmitted}>
         <Alert className={styles.thanks} id="alert-thank-you">
-          <h2 id="alert-thank-you-h2">Thanks! Please check your email.</h2>
+          <h2 id="alert-thank-you-h2">{t("thankYou.header")}</h2>
         </Alert>
         <div className={styles.thanksBlurb}>
           <p id="p-thank-you-01">
-            You will receive an email from us in the next{" "}
-            {isMeshDBProbablyDown ? "2-3 days" : "5-10 minutes"} with next
-            steps, including how to submit panorama photos.
+            {t("thankYou.thankYou", {
+              slo: isMeshDBProbablyDown
+                ? t("thankYou.days")
+                : t("thankYou.minutes"),
+            })}
           </p>
           <p id="p-thank-you-02">
-            If you do not see the email, please check your "Spam" folder, or
-            email <a href="mailto:support@nycmesh.net">support@nycmesh.net</a>{" "}
-            for help.
+            {t.rich("thankYou.support", {
+              support: (chunks) => (
+                <a href="mailto:support@nycmesh.net">{chunks}</a>
+              ),
+            })}
           </p>
         </div>
         <div className={styles.centered} style={{ padding: "10px" }}>

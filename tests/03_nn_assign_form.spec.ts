@@ -1,15 +1,4 @@
-import { test, expect } from "@/tests/mock/test";
-
-import {
-  sampleData,
-  fillOutJoinForm,
-  submitSuccessExpected,
-  submitFailureExpected,
-  submitConfirmationDialogExpected,
-  sampleNJData,
-  submitAndCheckToast,
-  expectSuccess,
-} from "@/tests/util";
+import { test, expect } from "./mock/test";
 
 const timeout = 10000;
 const clickTimeout = 1000;

@@ -1,7 +1,7 @@
-import { getJoinRecordFromS3 } from "@/app/join_record";
-import { JoinRecord } from "@/app/types";
+import { getJoinRecordFromS3 } from "@/lib/join_record";
+import { JoinRecord } from "@/lib/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
-import { test, expect } from "@/tests/mock/test";
+import { test, expect } from "./mock/test";
 
 import {
   sampleData,
@@ -14,7 +14,7 @@ import {
   expectSuccess,
   sampleJoinRecord,
   findJoinRecord,
-} from "@/tests/util";
+} from "./util";
 import { isDeepStrictEqual } from "util";
 
 const joinFormTimeout = 20000;
@@ -24,6 +24,24 @@ const unitTestTimeout = 5000;
 //
 // These tests will mock a connection to MeshDB. It is simply making sure that
 // the form creates a good-looking payload and can hit a mock API.
+
+test("change language from english to spanish", async ({ page }) => {
+  test.setTimeout(10000);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  await page
+    .locator("[id='joinform-locale-switcher-select']")
+    .selectOption("🇪🇸 Español");
+
+  // TODO (wdn): It would be nice if we could grab the translation out of the
+  // json blob instead of hardcoding it here.
+  await expect(page.locator("[id='joinform-title']")).toHaveText(
+    "Únase NYC Mesh",
+  );
+});
 
 test("happy join form", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
@@ -39,6 +57,17 @@ test("happy join form", async ({ page }) => {
   //await page.pause();
 
   await submitSuccessExpected(page, unitTestTimeout);
+
+  // Hardcoding the translation messages to ensure that translation is actually working.
+  // If it breaks, it'll display the message key instead.
+  const thankYouTitle = "Thanks! Please check your email.";
+  const thankYouText =
+    "You will receive an email from us in the next 5-10 minutes with next steps, including how to submit panorama photos.";
+
+  await expect(page.locator("[id='alert-thank-you-h2']")).toHaveText(
+    thankYouTitle,
+  );
+  await expect(page.locator("[id='p-thank-you-01']")).toHaveText(thankYouText);
 
   const joinRecordKey = await page.getAttribute(
     '[data-testid="test-join-record-key"]',

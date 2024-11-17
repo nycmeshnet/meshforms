@@ -1,0 +1,49 @@
+{
+  "LocaleSwitcher": {
+    "label": "Idioma",
+    "locale": "{locale, select, de {🇩🇪 Deutsch} en {🇺🇸 English} es {🇪🇸 Español} other {Unknown}}"
+  },
+  "Landing": {
+    "welcome": "¡Bienvenidos a MeshForms!"
+  },
+  "JoinForm": {
+    "title": "Únase NYC Mesh",
+    "banner": "¡Únase nuestra red communidad! Completa la forma, y contatarémosle por correo electrónico pronto.",
+    "sections": {
+      "personalInfo": "Información Personal",
+      "addressInfo": "Información de dirección"
+    },
+    "fields": {
+      "firstName": "Nombre",
+      "lastName": "Apellido",
+      "emailAddress": "Dirección de correo electronico",
+      "phoneNumber": {
+        "phoneNumber": "Número de teléfono",
+        "error": "Por favor introduzca un número de telefono valido."
+      },
+      "streetAddress": "Dirección de calle",
+      "unit": "Numero de apartamento",
+      "city": "Ciudad",
+      "zipCode": "Codigo postal",
+      "roofAccess": "Marque esto si tiene acceso al techo",
+      "reference": "¿Cómo se enteró de nosotros?",
+      "ncl": "Acepto la Licencia de Red Común",
+      "submit": {
+        "submit": "Entregar",
+        "loading": "Cargando...",
+        "thanks": "¡Gracias!"
+      }
+    },
+    "states": {
+      "NY": "Nueva York",
+      "NJ": "Nueva Jersey"
+    },
+    "thankYou": {
+      "header": "¡Gracias! Revisa su correo electronico, por favor.",
+      "thankYou": "Recibirá un correo electronico de nosotros en {slo} con instrucciónes, incluyendo cómo entregar fotos panoramicos.",
+      "minutes": "5-10 minutos",
+      "days": "2-3 dias",
+      "support": "Si no vista el correco electronico, por favor revisa su carpeta de \"Spam\", o envia un correo electronico a <support>support@nycmesh.net</support> por ayuda."
+    }
+  }
+}

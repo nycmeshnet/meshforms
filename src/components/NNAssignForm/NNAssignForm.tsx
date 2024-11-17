@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./NNAssignForm.module.scss";
 import { Alert } from "@mui/material";
-import { getMeshDBAPIEndpoint } from "@/app/endpoint";
+import { getMeshDBAPIEndpoint } from "@/lib/endpoint";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
