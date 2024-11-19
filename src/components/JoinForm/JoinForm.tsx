@@ -196,13 +196,12 @@ export default function JoinForm() {
 
     // Get the v3 captcha token. Per the google docs, the implicit token must be retrieved on form submission,
     // so that the token doesn't expire before server side validation
-    if (!recaptchaV3Ref?.current) {
-      throw Error(
-        "Invalid recaptcha Ref when trying to execute() on v3 captcha, is something broken with page render?",
-      );
+    let recaptchaInvisibleToken = "";
+    if (recaptchaV3Ref?.current) {
+      recaptchaInvisibleToken = await recaptchaV3Ref.current.executeAsync() ?? "";
+    } else {
+      console.warn("No ref found for the recaptchaV3 component, not including captcha token in HTTP request")
     }
-    const recaptchaInvisibleToken = await recaptchaV3Ref.current.executeAsync();
-    console.log(recaptchaInvisibleToken);
 
     // Attempt to submit the Join Form
     try {
