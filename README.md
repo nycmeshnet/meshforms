@@ -61,7 +61,7 @@ We use `playwright` to do integration tests. You can run them with the following
 
 1. Setup a dev instance of [meshdb](https://github.com/nycmeshnet/meshdb)
 
-2. Copy `.env.sample` into `.env.local` and fill it out
+2. Copy `.env.sample` into `.env.local` (`.env` will not work!) and fill it out
 
 3. Run the integration tests with `npx playwright test`
 
