@@ -15,7 +15,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { saveJoinRecordToS3 } from "@/lib/join_record";
-import { getMeshDBAPIEndpoint } from "@/lib/endpoint";
+import {getMeshDBAPIEndpoint, getRecaptchaKeys} from "@/lib/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/lib/types";
 import { useTranslations } from "next-intl";
@@ -91,8 +91,20 @@ export default function JoinForm() {
   const [isMeshDBProbablyDown, setIsMeshDBProbablyDown] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
   const [joinRecordKey, setJoinRecordKey] = useState("");
+  
+  const [recaptchaV2Key, setRecaptchaV2Key] = useState<string | undefined>(undefined);
+  const [recaptchaV3Key, setRecaptchaV3Key] =useState<string | undefined>(undefined);
 
   const isBeta = true;
+
+
+  useEffect(() => {
+    (async () => {
+      const [v2_key, v3_key] = await getRecaptchaKeys();
+      setRecaptchaV2Key(v2_key);
+      setRecaptchaV3Key(v3_key);
+    })()
+  }, [setRecaptchaV2Key, setRecaptchaV3Key]);
 
   // Store the values submitted by the user or returned by the server
   const [infoToConfirm, setInfoToConfirm] = useState<Array<ConfirmationField>>([
@@ -483,19 +495,21 @@ export default function JoinForm() {
             })}
           </label>
           {/* This first captcha isn't actually displayed, it just silently collects user metrics and generates a token */}
-          <ReCAPTCHA
-            ref={recaptchaV3Ref}
-            sitekey="6LcgBnsqAAAAAOJ1d8YGQ1LkVzfc8tZFk6QzvJgU"
-            size="invisible"
-          />
+          { recaptchaV3Key ?
+            <ReCAPTCHA
+              ref={recaptchaV3Ref}
+              sitekey={recaptchaV3Key}
+              size="invisible"
+            /> : <></>
+          }
           {/* This second captcha is the traditional "I'm not a robot" checkbox,
           only shown if the user gets 401'ed due to a low score on the above captcha */}
-          {isProbablyABot ? (
+          {isProbablyABot && recaptchaV2Key ? (
             <ReCAPTCHA
               className={styles.centered}
               style={{ marginTop: "15px" }}
               ref={recaptchaV2Ref}
-              sitekey="6LceBnsqAAAAAPl1abY972W2CK7c6BERcxC-u__U"
+              sitekey={recaptchaV2Key}
               onChange={(newToken) => setCheckBoxCaptchaToken(newToken ?? "")}
             />
           ) : (

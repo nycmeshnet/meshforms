@@ -7,3 +7,8 @@ export async function getMeshDBAPIEndpoint() {
   }
   return process.env.MESHDB_URL;
 }
+
+// Literally just ask the server what captcha keys to use
+export async function getRecaptchaKeys() {
+  return [process.env.RECAPTCHA_V2_KEY, process.env.RECAPTCHA_V3_KEY];
+}
