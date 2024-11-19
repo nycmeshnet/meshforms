@@ -26,7 +26,7 @@ To get started with this package, first, create your own copy of the `.env` file
 cp .env.sample .env
 ```
 
-Edit the `MESHDB_URL` and `NEXT_PUBLIC_MESHDB_URL` values based on your choice above in your favorite text editor. For example:
+Edit the `MESHDB_URL` value based on your choice above in your favorite text editor. For example:
 
 ```
 nano .env
