@@ -15,7 +15,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { saveJoinRecordToS3 } from "@/lib/join_record";
-import {getMeshDBAPIEndpoint, getRecaptchaKeys} from "@/lib/endpoint";
+import { getMeshDBAPIEndpoint, getRecaptchaKeys } from "@/lib/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/lib/types";
 import { useTranslations } from "next-intl";
@@ -91,19 +91,22 @@ export default function JoinForm() {
   const [isMeshDBProbablyDown, setIsMeshDBProbablyDown] = useState(false);
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
   const [joinRecordKey, setJoinRecordKey] = useState("");
-  
-  const [recaptchaV2Key, setRecaptchaV2Key] = useState<string | undefined>(undefined);
-  const [recaptchaV3Key, setRecaptchaV3Key] =useState<string | undefined>(undefined);
+
+  const [recaptchaV2Key, setRecaptchaV2Key] = useState<string | undefined>(
+    undefined,
+  );
+  const [recaptchaV3Key, setRecaptchaV3Key] = useState<string | undefined>(
+    undefined,
+  );
 
   const isBeta = true;
-
 
   useEffect(() => {
     (async () => {
       const [v2_key, v3_key] = await getRecaptchaKeys();
       setRecaptchaV2Key(v2_key);
       setRecaptchaV3Key(v3_key);
-    })()
+    })();
   }, [setRecaptchaV2Key, setRecaptchaV3Key]);
 
   // Store the values submitted by the user or returned by the server
@@ -194,26 +197,33 @@ export default function JoinForm() {
       );
     }
 
-    // Get the v3 captcha token. Per the google docs, the implicit token must be retrieved on form submission,
-    // so that the token doesn't expire before server side validation
-    let recaptchaInvisibleToken = "";
-    if (recaptchaV3Ref?.current) {
-      recaptchaInvisibleToken = await recaptchaV3Ref.current.executeAsync() ?? "";
-    } else {
-      console.warn("No ref found for the recaptchaV3 component, not including captcha token in HTTP request")
-    }
-
     // Attempt to submit the Join Form
     try {
+      // Get the v3 captcha token. Per the google docs, the implicit token must be retrieved on form submission,
+      // so that the token doesn't expire before server side validation
+      let recaptchaInvisibleToken = "";
+      if (recaptchaV3Ref?.current) {
+        recaptchaInvisibleToken =
+          (await recaptchaV3Ref.current.executeAsync()) ?? "";
+      } else {
+        console.warn(
+          "No ref found for the recaptchaV3 component, not including captcha token in HTTP request",
+        );
+      }
+
       const response = await fetch(
         `${await getMeshDBAPIEndpoint()}/api/v1/join/`,
         {
           method: "POST",
           body: JSON.stringify(joinFormSubmission),
           headers: {
-            "X-Recaptcha-V2-Token": checkBoxCaptchaToken ? checkBoxCaptchaToken : "",
-            "X-Recaptcha-V3-Token": recaptchaInvisibleToken ? recaptchaInvisibleToken : "",
-          }
+            "X-Recaptcha-V2-Token": checkBoxCaptchaToken
+              ? checkBoxCaptchaToken
+              : "",
+            "X-Recaptcha-V3-Token": recaptchaInvisibleToken
+              ? recaptchaInvisibleToken
+              : "",
+          },
         },
       );
       const j = await response.json();
@@ -286,9 +296,7 @@ export default function JoinForm() {
         // If the server said the recaptcha token indicates this was a bot (HTTP 401), prompt the user with the
         // interactive "checkbox" V2 captcha. However, if they have already submitted a checkbox captcha
         // and are still seeing a 401, something has gone wrong - fall back to the generic 4xx error handling logic below
-        if (
-          record.code == 401 && !checkBoxCaptchaToken
-        ) {
+        if (record.code == 401 && !checkBoxCaptchaToken) {
           toast.warning(
             "Please complete an additional verification step to confirm your submission",
           );
@@ -494,13 +502,15 @@ export default function JoinForm() {
             })}
           </label>
           {/* This first captcha isn't actually displayed, it just silently collects user metrics and generates a token */}
-          { recaptchaV3Key ?
+          {recaptchaV3Key ? (
             <ReCAPTCHA
               ref={recaptchaV3Ref}
               sitekey={recaptchaV3Key}
               size="invisible"
-            /> : <></>
-          }
+            />
+          ) : (
+            <></>
+          )}
           {/* This second captcha is the traditional "I'm not a robot" checkbox,
           only shown if the user gets 401'ed due to a low score on the above captcha */}
           {isProbablyABot && recaptchaV2Key ? (
