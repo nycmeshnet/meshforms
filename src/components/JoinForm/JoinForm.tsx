@@ -37,8 +37,6 @@ export class JoinFormValues {
     public referral: string = "",
     public ncl: boolean = false,
     public trust_me_bro: boolean = false,
-    public recaptcha_invisible_token: string | null = null,
-    public recaptcha_checkbox_token: string | null = null,
   ) {}
 }
 
@@ -158,22 +156,6 @@ export default function JoinForm() {
   };
 
   async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
-    // Get the captcha tokens and add them to request object.
-    // Per the google docs, the implicit token must be retrieved on form submission,
-    // so that the token doesn't expire before server side validation
-    if (checkBoxCaptchaToken) {
-      joinFormSubmission.recaptcha_checkbox_token = checkBoxCaptchaToken;
-    } else {
-      joinFormSubmission.recaptcha_checkbox_token = null;
-    }
-    if (!recaptchaV3Ref.current) {
-      throw Error(
-        "Invalid recaptcha Ref when trying to execute() on v3 captcha, is something broken with page render?",
-      );
-    }
-    joinFormSubmission.recaptcha_invisible_token =
-      await recaptchaV3Ref.current.executeAsync();
-
     // Before we try anything else, submit to S3 for safety.
     let record: JoinRecord = Object.assign(
       structuredClone(joinFormSubmission),
@@ -200,6 +182,16 @@ export default function JoinForm() {
       );
     }
 
+    // Get the v3 captcha token. Per the google docs, the implicit token must be retrieved on form submission,
+    // so that the token doesn't expire before server side validation
+    if (!recaptchaV3Ref?.current) {
+      throw Error(
+        "Invalid recaptcha Ref when trying to execute() on v3 captcha, is something broken with page render?",
+      );
+    }
+    const recaptchaInvisibleToken = await recaptchaV3Ref.current.executeAsync();
+    console.log(recaptchaInvisibleToken);
+
     // Attempt to submit the Join Form
     try {
       const response = await fetch(
@@ -207,6 +199,10 @@ export default function JoinForm() {
         {
           method: "POST",
           body: JSON.stringify(joinFormSubmission),
+          headers: {
+            "X-Recaptcha-V2-Token": checkBoxCaptchaToken ? checkBoxCaptchaToken : "",
+            "X-Recaptcha-V3-Token": recaptchaInvisibleToken ? recaptchaInvisibleToken : "",
+          }
         },
       );
       const j = await response.json();
@@ -280,8 +276,7 @@ export default function JoinForm() {
         // interactive "checkbox" V2 captcha. However, if they have already submitted a checkbox captcha
         // and are still seeing a 401, something has gone wrong - fall back to the generic 4xx error handling logic below
         if (
-          record.code == 401 &&
-          !joinFormSubmission.recaptcha_checkbox_token
+          record.code == 401 && !checkBoxCaptchaToken
         ) {
           toast.warning(
             "Please complete an additional verification step to confirm your submission",
