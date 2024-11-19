@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Select from "react-select";
-import {useState, useMemo, FormEvent, useEffect} from "react";
+import { useState, useMemo, FormEvent, useEffect } from "react";
 const options = [
   { value: "street_address", label: "Address" },
   { value: "email_address", label: "Email" },
@@ -23,7 +23,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 
 import styles from "./QueryForm.module.scss";
-import {getMeshDBAPIEndpoint} from "@/lib/endpoint";
+import { getMeshDBAPIEndpoint } from "@/lib/endpoint";
 
 export function QueryForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -129,7 +129,7 @@ export function QueryForm() {
   useEffect(() => {
     (async () => {
       setMeshDBUrl(await getMeshDBAPIEndpoint());
-    })()
+    })();
   }, [setMeshDBUrl]);
 
   // Column Definitions: Defines & controls grid columns.
@@ -140,9 +140,7 @@ export function QueryForm() {
         headerName: "Install #",
         cellRenderer: (props: any) => {
           return (
-            <a
-              href={`${meshDBUrl}/admin/meshapi/install/q=${props.value}`}
-            >
+            <a href={`${meshDBUrl}/admin/meshapi/install/q=${props.value}`}>
               {props.value}
             </a>
           );
@@ -188,9 +186,7 @@ export function QueryForm() {
         headerName: "NN",
         cellRenderer: (props: any) => {
           return (
-            <a
-              href={`${meshDBUrl}/admin/meshapi/node/q=${props.value}`}
-            >
+            <a href={`${meshDBUrl}/admin/meshapi/node/q=${props.value}`}>
               {props.value}
             </a>
           );
