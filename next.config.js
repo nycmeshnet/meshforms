@@ -30,7 +30,7 @@ const nextConfig = {
           },
           {
             key: "Strict-Transport-Security",
-            value: "max-age=30",
+            value: "max-age=31536000",
           },
         ],
       },
