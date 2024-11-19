@@ -98,6 +98,7 @@ export default function JoinForm() {
   const [recaptchaV3Key, setRecaptchaV3Key] = useState<string | undefined>(
     undefined,
   );
+  const [reCaptchaError, setReCaptchaError] = useState<boolean>(false);
 
   const isBeta = true;
 
@@ -202,12 +203,13 @@ export default function JoinForm() {
       // Get the v3 captcha token. Per the google docs, the implicit token must be retrieved on form submission,
       // so that the token doesn't expire before server side validation
       let recaptchaInvisibleToken = "";
-      if (recaptchaV3Ref?.current) {
+      if (recaptchaV3Ref?.current && !reCaptchaError) {
         recaptchaInvisibleToken =
           (await recaptchaV3Ref.current.executeAsync()) ?? "";
+        recaptchaV3Ref.current.reset();
       } else {
         console.warn(
-          "No ref found for the recaptchaV3 component, not including captcha token in HTTP request",
+          "No ref found for the recaptchaV3 component, or component is in error state, not including captcha token in HTTP request",
         );
       }
 
@@ -507,6 +509,14 @@ export default function JoinForm() {
               ref={recaptchaV3Ref}
               sitekey={recaptchaV3Key}
               size="invisible"
+              onErrored={() => {
+                console.error(
+                  "Encountered an error while initializing or querying captcha. " +
+                    "Disabling some frontend captcha features to avoid hangs. " +
+                    "Are the recaptcha keys set correctly in the env variables?",
+                );
+                setReCaptchaError(true);
+              }}
             />
           ) : (
             <></>
@@ -520,6 +530,14 @@ export default function JoinForm() {
               ref={recaptchaV2Ref}
               sitekey={recaptchaV2Key}
               onChange={(newToken) => setCheckBoxCaptchaToken(newToken ?? "")}
+              onErrored={() => {
+                console.error(
+                  "Encountered an error while initializing or querying captcha. " +
+                    "Disabling all frontend captcha features to avoid hangs. " +
+                    "Are the recaptcha keys set correctly in the env variables?",
+                );
+                setReCaptchaError(true);
+              }}
             />
           ) : (
             <></>
