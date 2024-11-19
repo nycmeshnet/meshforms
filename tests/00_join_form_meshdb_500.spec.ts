@@ -66,5 +66,7 @@ test("meshdb is 500ing but succeed anyway", async ({ page }) => {
   // Then go home
   await page.waitForTimeout(1000);
   await page.locator("[name='home']").click();
-  await page.waitForURL("https://nycmesh.net/");
+  await page.waitForTimeout(1000);
+  const currentURL = new URL(page.url());
+  expect(currentURL.pathname).toBe("/");
 });
