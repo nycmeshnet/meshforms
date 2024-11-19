@@ -1,0 +1,49 @@
+{
+  "LocaleSwitcher": {
+    "label": "Langue",
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"
+  },
+  "Landing": {
+    "welcome": "Bienvenue dans MeshForms !"
+  },
+  "JoinForm": {
+    "title": "Joignez NYC Mesh",
+    "banner": "Joignez notre réseau communautaire! Remplissez le formulaire et nous vous contacterons par courriel dans quelque moments.",
+    "sections": {
+      "personalInfo": "Information personnelle",
+      "addressInfo": "Information de l'adresse"
+    },
+    "fields": {
+      "firstName": "Prénom",
+      "lastName": "Nom de famille",
+      "emailAddress": "Courriel",
+      "phoneNumber": {
+        "phoneNumber": "Numéro de téléphone",
+        "error": "Veuillez saisir un numéro de téléphone valide."
+      },
+      "streetAddress": "Adresse",
+      "unit": "N° d'unité/appartement",
+      "city": "Ville",
+      "zipCode": "Code Postal / ZIP",
+      "roofAccess": "Confirmez vous avez accès à votre toit",
+      "reference": "Comment avez-vous découvert notre réseau?",
+      "ncl": "J'accepte la <ncl>Licence Du Réseau Communautaire</ncl>",
+      "submit": {
+        "submit": "Soumettre",
+        "loading": "Chargement...",
+        "thanks": "Merci!"
+      }
+    },
+    "states": {
+      "NY": "New York",
+      "NJ": "New Jersey"
+    },
+    "thankYou": {
+      "header": "Merci! Veuillez vérifier votre courriel.",
+      "thankYou": "Vous recevrez un courriel de notre part dans {slo} avec les prochaines étapes, notamment comment soumettre des photos panoramiques.",
+      "minutes": "5-10 minutes",
+      "days": "2-3 jours",
+      "support": "Si vous ne voyez pas un courriel de nous, veuillez vérifier votre dossier \"Spam\" ou envoyer un message à <support>support@nycmesh.net</support> pour obtenir de l'aide."
+    }
+  }
+}

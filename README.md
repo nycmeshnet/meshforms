@@ -103,3 +103,25 @@ Error: Process from config.webServer was not able to start. Exit code: 1
 ```
 
 Try running `npm run build`
+
+## Internationalization
+
+> [!NOTE]
+> Do you speak a language we already have? Feel free to validate the translation,
+> offer feedback, or help translate more of Meshforms!
+
+We use `next-intl` as a library for internationalization. 
+
+To add a new language:
+- Copy an existing language from `messages/` directory
+- Translate the messages into your language
+- Add your [language code](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) to `middleware.ts` and `src/i18n/routing.ts`
+- Add a case to the switch statement in `src/i18n/request.ts`
+- Update the "locale" key in every file in the `messages/` directory (this one: `"locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"`)
+- Add some tests to ensure that your language shows up in the Join Form properly
+
+> [!WARN]
+> Please keep the language codes alphabetical!
+
+Thank you for helping us reach more people by adding your language. Your contributions
+as an interpreter are invaluable and we very much appreciate it!
