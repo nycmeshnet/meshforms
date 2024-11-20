@@ -3,6 +3,7 @@ import Link from "@mui/material/Link";
 
 import { Box, Grid, Typography } from "@mui/material";
 import { useTranslations } from "next-intl";
+
 const Landing = () => {
   const t = useTranslations("Landing");
   const buttons = [
@@ -11,7 +12,7 @@ const Landing = () => {
     { text: "Query Form", link: "/query" },
     {
       text: "MeshDB Admin",
-      link: process.env.NEXT_PUBLIC_MESHDB_URL + "/admin/",
+      link: process.env.MESHDB_URL + "/admin/",
     },
   ];
 
