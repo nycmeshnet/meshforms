@@ -34,7 +34,7 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test --grep-invert 'fail meshdb hard down and s3 hard down'
+      run: npx playwright test
       env:
         NEXT_PUBLIC_MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
         MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
