@@ -14,6 +14,7 @@ import {
   expectSuccess,
   sampleJoinRecord,
   findJoinRecord,
+  triggerCapchaV2Response,
 } from "./util";
 import { isDeepStrictEqual } from "util";
 
@@ -183,6 +184,22 @@ test("street address trust me bro", async ({ page }) => {
   await page.locator("[name='reject']").click();
 
   await expectSuccess(page, unitTestTimeout);
+});
+
+test("user triggered captchaV2", async ({page}) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  // Set up sample data.
+  let botTriggeringData: JoinFormValues = Object.assign({}, sampleData);
+  botTriggeringData.referral = triggerCapchaV2Response;
+
+  await fillOutJoinForm(page, botTriggeringData);
+
+  await submitAndCheckToast(page, "Please complete an additional verification step to confirm your submission");
 });
 
 // TODO: Add a garbage testcase

@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { expectedAPIRequestData } from "../util";
+import { expectedAPIRequestData, triggerCapchaV2Response } from "../util";
 import { isDeepStrictEqual } from "util";
 import {
   JoinFormResponse,
@@ -71,6 +71,11 @@ export default [
         r.detail = "Mock: Please confirm a few details.";
         r.changed_info = { city: "Brooklyn" };
         return HttpResponse.json(r, { status: 409 });
+      }
+
+      // Mock response for if we want to trigger a capchaV2 response
+      if (joinRequest.referral === triggerCapchaV2Response) {
+        return HttpResponse.json({"detail": "Captcha verification failed"}, { status: 401 });
       }
 
       // If anything else is wrong with the form we got, then bail
