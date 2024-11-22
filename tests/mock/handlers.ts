@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { expectedAPIRequestData } from "../util";
+import { chomSt, chomStreet, expectedAPIRequestData } from "../util";
 import { isDeepStrictEqual } from "util";
 import {
   JoinFormResponse,
@@ -20,6 +20,17 @@ export default [
       );
     }
 
+    // First thing we should do is check captcha if it's enabled
+    if (
+      request.headers.get("X-Recaptcha-V2-Token") === "" &&
+      process.env.RECAPTCHA_V2_KEY
+    ) {
+      return HttpResponse.json(
+        { detail: "Captcha verification failed" },
+        { status: 401 },
+      );
+    }
+
     const joinRequest: JoinFormValues = requestJson as JoinFormValues;
 
     const good_response: JoinFormResponse = {
@@ -33,7 +44,7 @@ export default [
     };
 
     // Special case to test "trust me bro"
-    if (joinRequest.street_address === "333 chom st") {
+    if (joinRequest.street_address === chomSt) {
       if (joinRequest.trust_me_bro) {
         return HttpResponse.json(good_response, { status: 201 });
       }
@@ -41,7 +52,7 @@ export default [
       // Else, we're gonna return a 409.
       let r = new JoinFormResponse();
       r.detail = "Mock: Please confirm a few details.";
-      r.changed_info = { street_address: "333 Chom Street" };
+      r.changed_info = { street_address: chomStreet };
 
       return HttpResponse.json(r, { status: 409 });
     }
@@ -71,17 +82,6 @@ export default [
         r.detail = "Mock: Please confirm a few details.";
         r.changed_info = { city: "Brooklyn" };
         return HttpResponse.json(r, { status: 409 });
-      }
-
-      // Mock response for if we want to trigger a captchaV2 response
-      if (
-        request.headers.get("X-Recaptcha-V2-Token") === "" &&
-        process.env.RECAPTCHA_V2_KEY
-      ) {
-        return HttpResponse.json(
-          { detail: "Captcha verification failed" },
-          { status: 401 },
-        );
       }
 
       // If anything else is wrong with the form we got, then bail

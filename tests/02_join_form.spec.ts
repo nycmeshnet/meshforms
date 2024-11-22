@@ -14,6 +14,7 @@ import {
   expectSuccess,
   sampleJoinRecord,
   findJoinRecord,
+  chomSt,
 } from "./util";
 import { isDeepStrictEqual } from "util";
 
@@ -169,8 +170,8 @@ test("street address trust me bro", async ({ page }) => {
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
-  let data = structuredClone(sampleData);
-  data.street_address = "333 chom st";
+  let data: JoinFormValues = Object.assign({}, sampleData);
+  data.street_address = chomSt;
 
   // Set up sample data.
   await fillOutJoinForm(page, data);
@@ -447,4 +448,40 @@ test.describe("user triggered captchaV2", () => {
 
     await submitSuccessExpected(page, unitTestTimeout);
   });
+
+  test("user triggered captchaV2 and trust me bro", async ({ page }) => {
+    test.setTimeout(joinFormTimeout * 2); // This is a really long test
+    await page.goto("/join");
+
+    // Is the page title correct?
+    await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+    // Set up sample data.
+    let botTriggeringData: JoinFormValues = Object.assign({}, sampleData);
+    botTriggeringData.street_address = chomSt;
+
+    await fillOutJoinForm(page, botTriggeringData);
+
+    await submitAndCheckToast(
+      page,
+      "Please complete an additional verification step to confirm your submission",
+    );
+
+    await page.waitForTimeout(1000);
+
+    // Make the robot check the "I'm not a robot" button (commit voter fraud)
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(1)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await submitConfirmationDialogExpected(page, 2000);
+
+    await page.locator("[name='reject']").click();
+
+    await expectSuccess(page, unitTestTimeout);
+  });
+  
 });

@@ -3,6 +3,9 @@ import { JoinRecord } from "@/lib/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { expect, Page } from "@playwright/test";
 
+export const chomSt = "333 chom st";
+export const chomStreet = "333 Chom Street";
+
 export const sampleData: JoinFormValues = {
   first_name: "Jon",
   last_name: "Smith",
