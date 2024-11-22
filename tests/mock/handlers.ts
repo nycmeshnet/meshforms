@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { expectedAPIRequestData, triggerCapchaV2Response } from "../util";
+import { expectedAPIRequestData } from "../util";
 import { isDeepStrictEqual } from "util";
 import {
   JoinFormResponse,
@@ -75,7 +75,6 @@ export default [
 
       // Mock response for if we want to trigger a capchaV2 response
       if (request.headers.get("X-Recaptcha-V2-Token") === "") {
-      //if (joinRequest.referral === triggerCapchaV2Response) {
         return HttpResponse.json({"detail": "Captcha verification failed"}, { status: 401 });
       }
 

@@ -3,8 +3,6 @@ import { JoinRecord } from "@/lib/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { expect, Page } from "@playwright/test";
 
-export const triggerCapchaV2Response = "Mock I Am A Robot Beep Boop.";
-
 export const sampleData: JoinFormValues = {
   first_name: "Jon",
   last_name: "Smith",
