@@ -73,9 +73,12 @@ export default [
         return HttpResponse.json(r, { status: 409 });
       }
 
-      // Mock response for if we want to trigger a capchaV2 response
-      if (request.headers.get("X-Recaptcha-V2-Token") === "") {
-        return HttpResponse.json({"detail": "Captcha verification failed"}, { status: 401 });
+      // Mock response for if we want to trigger a captchaV2 response
+      if (request.headers.get("X-Recaptcha-V2-Token") === "" && process.env.RECAPTCHA_V2_KEY) {
+        return HttpResponse.json(
+          { detail: "Captcha verification failed" },
+          { status: 401 },
+        );
       }
 
       // If anything else is wrong with the form we got, then bail
