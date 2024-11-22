@@ -301,9 +301,7 @@ export default function JoinForm() {
         // interactive "checkbox" V2 captcha. However, if they have already submitted a checkbox captcha
         // and are still seeing a 401, something has gone wrong - fall back to the generic 4xx error handling logic below
         if (record.code == 401 && !checkBoxCaptchaToken) {
-          toast.warning(
-            t("errors.captchaFail")
-          );
+          toast.warning(t("errors.captchaFail"));
           setIsProbablyABot(true);
           setIsSubmitted(false);
           setIsLoading(false);

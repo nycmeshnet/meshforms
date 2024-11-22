@@ -18,8 +18,8 @@ export default async function RootLayout({
   }
 
   // Provide all messages to the client
-  const localeMessages = await getMessages({locale});
-  const defaultMessages = await getMessages({locale: 'en'});
+  const localeMessages = await getMessages({ locale });
+  const defaultMessages = await getMessages({ locale: "en" });
   const messages = deepmerge(defaultMessages, localeMessages);
 
   return (
