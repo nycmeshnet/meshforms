@@ -195,11 +195,18 @@ test("user triggered captchaV2", async ({page}) => {
 
   // Set up sample data.
   let botTriggeringData: JoinFormValues = Object.assign({}, sampleData);
-  botTriggeringData.referral = triggerCapchaV2Response;
+  //botTriggeringData.referral = triggerCapchaV2Response;
 
   await fillOutJoinForm(page, botTriggeringData);
 
   await submitAndCheckToast(page, "Please complete an additional verification step to confirm your submission");
+
+  await page.waitForTimeout(1000);
+  
+  // Make the robot check the "I'm not a robot" button (commit voter fraud)
+  await page.locator("[title='reCAPTCHA']").nth(1).contentFrame().locator("[id='recaptcha-anchor']").click();
+
+  await submitSuccessExpected(page, unitTestTimeout);
 });
 
 // TODO: Add a garbage testcase
