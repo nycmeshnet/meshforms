@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Select from "react-select";
-import { useState, useMemo, FormEvent } from "react";
+import { useState, useMemo, FormEvent, useEffect } from "react";
 const options = [
   { value: "street_address", label: "Address" },
   { value: "email_address", label: "Email" },
@@ -23,6 +23,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 
 import styles from "./QueryForm.module.scss";
+import { getMeshDBAPIEndpoint } from "@/lib/endpoint";
 
 export function QueryForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +33,7 @@ export function QueryForm() {
   >([]);
   const [queryLabel, setQueryLabel] = useState("Select Query Type");
   const [queryResult, setQueryResult] = useState<unknown>([]);
+  const [meshDBUrl, setMeshDBUrl] = useState<string>("");
 
   function parseForm(event: FormEvent<HTMLFormElement>) {
     const formData = new FormData(event.currentTarget);
@@ -124,6 +126,12 @@ export function QueryForm() {
     }
   }
 
+  useEffect(() => {
+    (async () => {
+      setMeshDBUrl(await getMeshDBAPIEndpoint());
+    })();
+  }, [setMeshDBUrl]);
+
   // Column Definitions: Defines & controls grid columns.
   const colDefs: ColDef[] = useMemo(
     () => [
@@ -132,9 +140,7 @@ export function QueryForm() {
         headerName: "Install #",
         cellRenderer: (props: any) => {
           return (
-            <a
-              href={`${process.env.NEXT_PUBLIC_MESHDB_URL}/admin/meshapi/install/${props.value}`}
-            >
+            <a href={`${meshDBUrl}/admin/meshapi/install/q=${props.value}`}>
               {props.value}
             </a>
           );
@@ -180,9 +186,7 @@ export function QueryForm() {
         headerName: "NN",
         cellRenderer: (props: any) => {
           return (
-            <a
-              href={`${process.env.NEXT_PUBLIC_MESHDB_URL}/admin/meshapi/node/${props.value}`}
-            >
+            <a href={`${meshDBUrl}/admin/meshapi/node/q=${props.value}`}>
               {props.value}
             </a>
           );
@@ -191,7 +195,7 @@ export function QueryForm() {
       { field: "status", headerName: "Install Status" },
       { field: "notes", headerName: "Notes", width: 400 },
     ],
-    [],
+    [meshDBUrl],
   );
 
   // a default column definition with properties that get applied to every column

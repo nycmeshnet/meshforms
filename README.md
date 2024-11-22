@@ -16,9 +16,9 @@ This repo currently powers three separate forms:
 You will either need a copy of `meshdb` running locally, or point your local copy of this package to the beta/production
 endpoints in order to do development:
 
-- To setup against beta/prod, continue to the next section and use `https://db.nycmesh.net` as the value for `NEXT_PUBLIC_MESHDB_URL`
+- To setup against beta/prod, continue to the next section and use `https://devdb.nycmesh.net` as the value for `MESHDB_URL`
 - To setup a local copy of meshdb, follow the instructions in the readme [there](https://github.com/nycmeshnet/meshdb) first.  
-   Then continue to the next section below and use the value `http://127.0.0.1:8000` for `NEXT_PUBLIC_MESHDB_URL`
+   Then continue to the next section below and use the value `http://127.0.0.1:8000` for `MESHDB_URL`
 
 To get started with this package, first, create your own copy of the `.env` file:
 
@@ -26,7 +26,7 @@ To get started with this package, first, create your own copy of the `.env` file
 cp .env.sample .env
 ```
 
-Edit the `NEXT_PUBLIC_MESHDB_URL` based on your choice above in your favorite text editor. For example:
+Edit the `MESHDB_URL` value based on your choice above in your favorite text editor. For example:
 
 ```
 nano .env
@@ -61,7 +61,7 @@ We use `playwright` to do integration tests. You can run them with the following
 
 1. Setup a dev instance of [meshdb](https://github.com/nycmeshnet/meshdb)
 
-2. Copy `.env.sample` into `.env.local` and fill it out
+2. Copy `.env.sample` into `.env.local` (`.env` will not work!) and fill it out
 
 3. Run the integration tests with `npx playwright test`
 
