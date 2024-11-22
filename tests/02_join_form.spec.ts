@@ -415,3 +415,36 @@ test("fail nj", async ({ page }) => {
     );
   }
 });
+
+test.describe("user triggered captchaV2", () => {
+  test.skip(process.env.RUN_CAPTCHA !== "true");
+  test("user triggered captchaV2", async ({ page }) => {
+    test.setTimeout(joinFormTimeout);
+    await page.goto("/join");
+
+    // Is the page title correct?
+    await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+    // Set up sample data.
+    let botTriggeringData: JoinFormValues = Object.assign({}, sampleData);
+
+    await fillOutJoinForm(page, botTriggeringData);
+
+    await submitAndCheckToast(
+      page,
+      "Please complete an additional verification step to confirm your submission",
+    );
+
+    await page.waitForTimeout(1000);
+
+    // Make the robot check the "I'm not a robot" button (commit voter fraud)
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(1)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await submitSuccessExpected(page, unitTestTimeout);
+  });
+});

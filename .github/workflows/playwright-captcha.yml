@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Playwright reCAPTCHA Tests
 permissions: read-all
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 jobs:
   test:
-    name: Run Playwright Tests
+    name: Run Playwright reCAPTCHA Tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -34,8 +34,9 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: npx playwright test
+      run: RUN_CAPTCHA=true npx playwright test -g 'user triggered captchaV2'
       env:
+        NEXT_PUBLIC_MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
         MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
         # We now check the JoinRecord stuff, so submit that too.
         JOIN_RECORD_BUCKET_NAME: meshdb-join-form-log
@@ -44,6 +45,10 @@ jobs:
         AWS_ACCESS_KEY_ID: sampleaccesskey 
         AWS_SECRET_ACCESS_KEY: samplesecretkey
         AWS_REGION: us-east-1
+        # This is an invisible key that says the user is a robot
+        RECAPTCHA_V3_KEY: ${{ secrets.TESTING_RECAPTCHA_V3_KEY }}
+        RECAPTCHA_V2_KEY: ${{ secrets.TESTING_RECAPTCHA_V2_KEY }}
+
     - uses: actions/upload-artifact@v4
       if: always()
       with:

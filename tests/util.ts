@@ -14,7 +14,7 @@ export const sampleData: JoinFormValues = {
   state: "NY",
   zip_code: "11238",
   roof_access: true,
-  referral: "I googled it.",
+  referral: "Mock Sample Data",
   ncl: true,
   trust_me_bro: false,
 };
@@ -30,7 +30,7 @@ export const sampleJoinRecord: JoinRecord = {
   state: "NY",
   zip_code: "11238",
   roof_access: true,
-  referral: "I googled it.",
+  referral: "Mock Sample Data",
   ncl: true,
   trust_me_bro: false,
   submission_time: "2024-11-01T08:24:24",
@@ -50,7 +50,7 @@ export const expectedTrustMeBroValues: JoinFormValues = {
   state: "NY",
   zip_code: "11238",
   roof_access: true,
-  referral: "I googled it.",
+  referral: "Mock Sample Data",
   ncl: true,
   trust_me_bro: false,
 };
@@ -66,7 +66,7 @@ export const sampleNJData: JoinFormValues = {
   zip_code: "07030",
   apartment: "1",
   roof_access: true,
-  referral: "I googled it.",
+  referral: "Mock Sample Data",
   ncl: true,
   trust_me_bro: false,
 };

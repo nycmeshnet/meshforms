@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import styles from "./JoinForm.module.scss";
+import "./hide_recaptcha_badge.css";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import {
   CircularProgress,
@@ -14,11 +15,12 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { saveJoinRecordToS3 } from "@/lib/join_record";
-import { getMeshDBAPIEndpoint } from "@/lib/endpoint";
+import { getMeshDBAPIEndpoint, getRecaptchaKeys } from "@/lib/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/lib/types";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import LocaleSwitcher from "../LocaleSwitcher";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export class JoinFormValues {
   constructor(
@@ -77,7 +79,14 @@ export default function JoinForm() {
     defaultValues: defaultFormValues,
   });
 
+  const recaptchaV3Ref = React.useRef<ReCAPTCHA>(null);
+  const recaptchaV2Ref = React.useRef<ReCAPTCHA>(null);
+
+  const locale = useLocale();
+
   const [isLoading, setIsLoading] = useState(false);
+  const [isProbablyABot, setIsProbablyABot] = useState(false);
+  const [checkBoxCaptchaToken, setCheckBoxCaptchaToken] = useState("");
   const [isInfoConfirmationDialogueOpen, setIsInfoConfirmationDialogueOpen] =
     useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -85,7 +94,23 @@ export default function JoinForm() {
   const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
   const [joinRecordKey, setJoinRecordKey] = useState("");
 
+  const [recaptchaV2Key, setRecaptchaV2Key] = useState<string | undefined>(
+    undefined,
+  );
+  const [recaptchaV3Key, setRecaptchaV3Key] = useState<string | undefined>(
+    undefined,
+  );
+  const [reCaptchaError, setReCaptchaError] = useState<boolean>(false);
+
   const isBeta = true;
+
+  useEffect(() => {
+    (async () => {
+      const [v2_key, v3_key] = await getRecaptchaKeys();
+      setRecaptchaV2Key(v2_key);
+      setRecaptchaV3Key(v3_key);
+    })();
+  }, [setRecaptchaV2Key, setRecaptchaV3Key]);
 
   // Store the values submitted by the user or returned by the server
   const [infoToConfirm, setInfoToConfirm] = useState<Array<ConfirmationField>>([
@@ -177,11 +202,32 @@ export default function JoinForm() {
 
     // Attempt to submit the Join Form
     try {
+      // Get the v3 captcha token. Per the google docs, the implicit token must be retrieved on form submission,
+      // so that the token doesn't expire before server side validation
+      let recaptchaInvisibleToken = "";
+      if (recaptchaV3Ref?.current && !reCaptchaError) {
+        recaptchaInvisibleToken =
+          (await recaptchaV3Ref.current.executeAsync()) ?? "";
+        recaptchaV3Ref.current.reset();
+      } else {
+        console.warn(
+          "No ref found for the recaptchaV3 component, or component is in error state, not including captcha token in HTTP request",
+        );
+      }
+
       const response = await fetch(
         `${await getMeshDBAPIEndpoint()}/api/v1/join/`,
         {
           method: "POST",
           body: JSON.stringify(joinFormSubmission),
+          headers: {
+            "X-Recaptcha-V2-Token": checkBoxCaptchaToken
+              ? checkBoxCaptchaToken
+              : "",
+            "X-Recaptcha-V3-Token": recaptchaInvisibleToken
+              ? recaptchaInvisibleToken
+              : "",
+          },
         },
       );
       const j = await response.json();
@@ -215,6 +261,7 @@ export default function JoinForm() {
         console.debug("Join Form submitted successfully");
         setIsLoading(false);
         setIsSubmitted(true);
+        setIsProbablyABot(false);
         return;
       }
 
@@ -246,7 +293,22 @@ export default function JoinForm() {
 
           setInfoToConfirm(needsConfirmation);
           setIsInfoConfirmationDialogueOpen(true);
-          toast.warning("Please confirm some information");
+          toast.warning(t("errors.confirm"));
+          return;
+        }
+
+        // If the server said the recaptcha token indicates this was a bot (HTTP 401), prompt the user with the
+        // interactive "checkbox" V2 captcha. However, if they have already submitted a checkbox captcha
+        // and are still seeing a 401, something has gone wrong - fall back to the generic 4xx error handling logic below
+        if (record.code == 401 && !checkBoxCaptchaToken) {
+          toast.warning(t("errors.captchaFail"));
+          setIsProbablyABot(true);
+          setIsSubmitted(false);
+          setIsLoading(false);
+
+          console.error(
+            "Request failed invisible captcha verification, user can try again with checkbox validation",
+          );
           return;
         }
 
@@ -266,9 +328,16 @@ export default function JoinForm() {
         const detail = error.detail;
         // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
         // There's probably a way to coax the exception out of the response somewhere
-        toast.error(`Could not submit Join Form: ${detail}`);
+        toast.error(t("errors.error") + " " + detail.toString());
         console.error(`An error occurred: ${detail}`);
         setIsLoading(false);
+
+        // Clear the checkbox captcha if it exists, to allow the user to retry if needed
+        if (recaptchaV2Ref.current) {
+          recaptchaV2Ref.current.reset();
+          setCheckBoxCaptchaToken("");
+        }
+
         return;
       }
 
@@ -284,9 +353,7 @@ export default function JoinForm() {
       } else {
         // If MeshDB is down AND we failed to save the Join Record, then we should
         // probably let the member know to try again later.
-        toast.error(
-          `Could not submit Join Form. Please try again later, or contact support@nycmesh.net for assistance.`,
-        );
+        toast.error(t("errors.errorTryAgain"));
         setIsLoading(false);
       }
 
@@ -434,6 +501,47 @@ export default function JoinForm() {
               ),
             })}
           </label>
+          {/* This first captcha isn't actually displayed, it just silently collects user metrics and generates a token */}
+          {recaptchaV3Key ? (
+            <ReCAPTCHA
+              ref={recaptchaV3Ref}
+              sitekey={recaptchaV3Key}
+              size="invisible"
+              hl={locale}
+              onErrored={() => {
+                console.error(
+                  "Encountered an error while initializing or querying captcha. " +
+                    "Disabling some frontend captcha features to avoid hangs. " +
+                    "Are the recaptcha keys set correctly in the env variables?",
+                );
+                setReCaptchaError(true);
+              }}
+            />
+          ) : (
+            <></>
+          )}
+          {/* This second captcha is the traditional "I'm not a robot" checkbox,
+          only shown if the user gets 401'ed due to a low score on the above captcha */}
+          {isProbablyABot && recaptchaV2Key ? (
+            <ReCAPTCHA
+              className={styles.centered}
+              style={{ marginTop: "15px" }}
+              ref={recaptchaV2Ref}
+              sitekey={recaptchaV2Key}
+              hl={locale}
+              onChange={(newToken) => setCheckBoxCaptchaToken(newToken ?? "")}
+              onErrored={() => {
+                console.error(
+                  "Encountered an error while initializing or querying captcha. " +
+                    "Disabling all frontend captcha features to avoid hangs. " +
+                    "Are the recaptcha keys set correctly in the env variables?",
+                );
+                setReCaptchaError(true);
+              }}
+            />
+          ) : (
+            <></>
+          )}
           {/*
           <div>
             <p>State Debugger</p>
@@ -447,7 +555,11 @@ export default function JoinForm() {
             <Button
               type="submit"
               disabled={
-                isLoading || isSubmitted || isBadPhoneNumber || !isValid
+                isLoading ||
+                isSubmitted ||
+                isBadPhoneNumber ||
+                !isValid ||
+                (isProbablyABot && !checkBoxCaptchaToken)
               }
               variant="contained"
               size="large"
@@ -464,6 +576,14 @@ export default function JoinForm() {
             <div hidden={!isLoading}>
               <CircularProgress />
             </div>
+          </div>
+          <div className={styles.captchaDisclaimer}>
+            This site is protected by reCAPTCHA and the Google
+            <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+            <a href="https://policies.google.com/terms">
+              Terms of Service
+            </a>{" "}
+            apply.
           </div>
         </form>
       </div>
@@ -497,7 +617,7 @@ export default function JoinForm() {
             size="large"
             href="https://nycmesh.net/"
           >
-            Go Home
+            {t("fields.submit.goHome")}
           </Button>
         </div>
       </div>
