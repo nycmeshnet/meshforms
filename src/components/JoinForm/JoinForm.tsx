@@ -18,7 +18,7 @@ import { saveJoinRecordToS3 } from "@/lib/join_record";
 import { getMeshDBAPIEndpoint, getRecaptchaKeys } from "@/lib/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/lib/types";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import LocaleSwitcher from "../LocaleSwitcher";
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -81,6 +81,8 @@ export default function JoinForm() {
 
   const recaptchaV3Ref = React.useRef<ReCAPTCHA>(null);
   const recaptchaV2Ref = React.useRef<ReCAPTCHA>(null);
+
+  const locale = useLocale();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isProbablyABot, setIsProbablyABot] = useState(false);
@@ -291,7 +293,7 @@ export default function JoinForm() {
 
           setInfoToConfirm(needsConfirmation);
           setIsInfoConfirmationDialogueOpen(true);
-          toast.warning("Please confirm some information");
+          toast.warning(t("errors.confirm"));
           return;
         }
 
@@ -300,7 +302,7 @@ export default function JoinForm() {
         // and are still seeing a 401, something has gone wrong - fall back to the generic 4xx error handling logic below
         if (record.code == 401 && !checkBoxCaptchaToken) {
           toast.warning(
-            "Please complete an additional verification step to confirm your submission",
+            t("errors.captchaFail")
           );
           setIsProbablyABot(true);
           setIsSubmitted(false);
@@ -328,7 +330,7 @@ export default function JoinForm() {
         const detail = error.detail;
         // This looks disgusting when Debug is on in MeshDB because it replies with HTML.
         // There's probably a way to coax the exception out of the response somewhere
-        toast.error(`Could not submit Join Form: ${detail}`);
+        toast.error(t("errors.error") + " " + detail.toString());
         console.error(`An error occurred: ${detail}`);
         setIsLoading(false);
 
@@ -353,9 +355,7 @@ export default function JoinForm() {
       } else {
         // If MeshDB is down AND we failed to save the Join Record, then we should
         // probably let the member know to try again later.
-        toast.error(
-          `Could not submit Join Form. Please try again later, or contact support@nycmesh.net for assistance.`,
-        );
+        toast.error(t("errors.errorTryAgain"));
         setIsLoading(false);
       }
 
@@ -509,6 +509,7 @@ export default function JoinForm() {
               ref={recaptchaV3Ref}
               sitekey={recaptchaV3Key}
               size="invisible"
+              hl={locale}
               onErrored={() => {
                 console.error(
                   "Encountered an error while initializing or querying captcha. " +
@@ -529,6 +530,7 @@ export default function JoinForm() {
               style={{ marginTop: "15px" }}
               ref={recaptchaV2Ref}
               sitekey={recaptchaV2Key}
+              hl={locale}
               onChange={(newToken) => setCheckBoxCaptchaToken(newToken ?? "")}
               onErrored={() => {
                 console.error(
@@ -612,7 +614,7 @@ export default function JoinForm() {
         </div>
         <div className={styles.centered} style={{ padding: "10px" }}>
           <Button name="home" variant="contained" size="large" href="/">
-            Go Home
+            {t("fields.submit.goHome")}
           </Button>
         </div>
       </div>

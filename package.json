@@ -19,6 +19,7 @@
     "ag-grid-react": "^31.0.3",
     "aws-sdk": "^2.1659.0",
     "bootstrap": "^5.3.2",
+    "deepmerge": "^4.3.1",
     "libphonenumber-js": "^1.11.11",
     "msw": "^2.3.5",
     "next": "latest",
