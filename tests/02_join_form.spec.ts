@@ -483,5 +483,4 @@ test.describe("user triggered captchaV2", () => {
 
     await expectSuccess(page, unitTestTimeout);
   });
-  
 });

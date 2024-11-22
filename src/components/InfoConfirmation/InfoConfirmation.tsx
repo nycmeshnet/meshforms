@@ -7,13 +7,18 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import styles from "./InfoConfirmation.module.scss";
 import { ConfirmationField, JoinFormValues } from "../JoinForm/JoinForm";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 
 interface InfoConfirmationDialogProps {
   infoToConfirm: Array<ConfirmationField>;
   isDialogOpened: boolean;
-  handleClickConfirm: () => void;
-  handleClickReject: () => void;
+  handleClickConfirm: (recaptchaCheckboxToken: string) => void;
+  handleClickReject: (recaptchaCheckboxToken: string) => void;
   handleClickCancel: () => void;
+  isProbablyABot: boolean;
+  recaptchaV2Key: string | undefined;
 }
 
 // https://mui.com/material-ui/react-dialog/#alerts
@@ -23,30 +28,43 @@ export default function InfoConfirmationDialog({
   handleClickConfirm,
   handleClickReject,
   handleClickCancel,
+  isProbablyABot,
+  recaptchaV2Key,
 }: InfoConfirmationDialogProps) {
+  const locale = useLocale();
+  const t = useTranslations("InfoConfirmation");
+
+  const recaptchaV2Ref = React.useRef<ReCAPTCHA>(null);
+  const [checkBoxCaptchaToken, setCheckBoxCaptchaToken] = useState("");
+
+  const dialogClosed = () => {
+    recaptchaV2Ref?.current?.reset();
+    setCheckBoxCaptchaToken("");
+    handleClickCancel();
+  };
+
   return (
     <React.Fragment>
       <Dialog
         open={isDialogOpened}
-        onClose={handleClickCancel}
+        onClose={dialogClosed}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle color="warning" id="alert-dialog-title">
-          {"Please confirm some information"}
+          {t("pleaseConfirmHeader")}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            We needed to re-format some of your information. Please ensure that
-            the below fields are accurate.
+            {t("pleaseConfirmBody")}
           </DialogContentText>
           <br />
           <div className={styles.alertTable}>
             <table>
               <thead>
                 <tr key="headers">
-                  <th>Original</th>
-                  <th>New</th>
+                  <th>{t("originalInformationColumnHeader")}</th>
+                  <th>{t("newInformationColumnHeader")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -59,22 +77,40 @@ export default function InfoConfirmationDialog({
               </tbody>
             </table>
           </div>
+          {isProbablyABot && recaptchaV2Key ? (
+            <ReCAPTCHA
+              className={styles.centered}
+              style={{ marginTop: "15px" }}
+              ref={recaptchaV2Ref}
+              sitekey={recaptchaV2Key}
+              hl={locale}
+              onChange={(newToken) => setCheckBoxCaptchaToken(newToken ?? "")}
+            />
+          ) : (
+            <></>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button name="cancel" color="primary" onClick={handleClickCancel}>
-            Go Back
+          <Button name="cancel" color="primary" onClick={dialogClosed}>
+            {t("goBack")}
           </Button>
-          <Button name="reject" color="warning" onClick={handleClickReject}>
-            Use Original
+          <Button
+            name="reject"
+            color="warning"
+            onClick={() => handleClickReject(checkBoxCaptchaToken)}
+            disabled={isProbablyABot && checkBoxCaptchaToken == ""}
+          >
+            {t("useOriginal")}
           </Button>
           <Button
             name="confirm"
             color="success"
             variant="contained"
-            onClick={handleClickConfirm}
+            onClick={() => handleClickConfirm(checkBoxCaptchaToken)}
+            disabled={isProbablyABot && checkBoxCaptchaToken == ""}
             autoFocus
           >
-            Accept Changes
+            {t("acceptChanges")}
           </Button>
         </DialogActions>
       </Dialog>
