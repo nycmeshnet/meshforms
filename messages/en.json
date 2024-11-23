@@ -4,7 +4,7 @@
   },
   "LocaleSwitcher": {
     "label": "Language",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Kreyòl ayisyen} zh {🇨🇳 中文} other {Unknown}}"
   },
   "Landing": {
     "welcome": "Welcome to MeshForms!"

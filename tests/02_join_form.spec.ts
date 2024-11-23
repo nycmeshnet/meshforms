@@ -27,7 +27,7 @@ const unitTestTimeout = 5000;
 // the form creates a good-looking payload and can hit a mock API.
 
 test("change language from english to spanish", async ({ page }) => {
-  test.setTimeout(10000);
+  test.setTimeout(20000);
   await page.goto("/join");
 
   // Is the page title correct?
@@ -41,6 +41,14 @@ test("change language from english to spanish", async ({ page }) => {
   // json blob instead of hardcoding it here.
   await expect(page.locator("[id='joinform-title']")).toHaveText(
     "Únase NYC Mesh",
+  );
+
+  // Set up sample data.
+  await fillOutJoinForm(page, sampleData);
+
+  await submitSuccessExpected(page, unitTestTimeout);
+  await expect(page.locator("[id='alert-thank-you-h2']")).toHaveText(
+    "¡Gracias! Por favor revisa su correo electronico.",
   );
 });
 

@@ -1,7 +1,7 @@
 {
   "LocaleSwitcher": {
     "label": "Idioma",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Kreyòl ayisyen} zh {🇨🇳 中文} other {Unknown}}"
   },
   "Landing": {
     "welcome": "¡Bienvenidos a MeshForms!"
@@ -39,11 +39,26 @@
       "NJ": "Nueva Jersey"
     },
     "thankYou": {
-      "header": "¡Gracias! Revisa su correo electronico, por favor.",
+      "header": "¡Gracias! Por favor revisa su correo electronico.",
       "thankYou": "Recibirá un correo electronico de nosotros en {slo} con instrucciónes, incluyendo cómo entregar fotos panoramicos.",
       "minutes": "5-10 minutos",
       "days": "2-3 dias",
       "support": "Si no vista el correco electronico, por favor revisa su carpeta de \"Spam\", o envia un correo electronico a <support>support@nycmesh.net</support> por ayuda."
+    },
+    "errors": {
+      "error": "No pudó entregar el Join Form:",
+      "errorTryAgain": "No pudó entregar el Join Form. Por favor intentar otra vez más tarde, o contata support@nycmesh.net por ayuda.",
+      "confirm": "Por favor confirma algo información",
+      "captchaFail": "Por favor completa una etapa adicional para confirmar su entrega."
     }
+  },
+  "InfoConfirmation": {
+    "goBack": "Regresar",
+    "useOriginal": "Usa original",
+    "acceptChanges": "Acceptar los cambios",
+    "pleaseConfirmHeader": "Por favor confirma algo información",
+    "pleaseConfirmBody": "Debíamos que reformatear algunos de sus datos. Por favor asegurar que los campos abajos son ascertados.",
+    "originalInformationColumnHeader": "Original",
+    "newInformationColumnHeader": "Nuevo"
   }
 }

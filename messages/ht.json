@@ -1,7 +1,7 @@
 {
   "LocaleSwitcher": {
     "label": "Lang",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Kreyòl ayisyen} zh {🇨🇳 中文} other {Unknown}}"
   },
   "Landing": {
     "welcome": "Byenveni nan MeshForms!"
@@ -44,6 +44,21 @@
       "minutes": "5-10 minit",
       "days": "2-3 jou",
       "support": "Si ou pa wè imèl la, tanpri tcheke dosye \"Spam\" ou a, oswa voye yon imèl ba <support>support@nycmesh.net</support> pou jwenn èd."
+    },
+    "errors": {
+      "error": "Pa t 'kapab soumèt Fòm Join:",
+      "errorTryAgain": "Pa t 'kapab soumèt Fòm Join. Tanpri eseye ankò pita, oswa kontakte support@nycmesh.net pou asistans.",
+      "confirm": "Tanpri konfime kèk enfòmasyon",
+      "captchaFail": "Tanpri ranpli yon etap verifikasyon adisyonèl pou konfime soumèt ou a"
     }
+  },
+  "InfoConfirmation": {
+    "goBack": "Tounen",
+    "useOriginal": "Sèvi ak orijinal",
+    "acceptChanges": "Aksepte Chanjman",
+    "pleaseConfirmHeader": "Tanpri konfime kèk enfòmasyon",
+    "pleaseConfirmBody": "Nou te bezwen re-fòma kèk nan enfòmasyon ou yo. Tanpri asire ke jaden ki anba yo egzat.",
+    "originalInformationColumnHeader": "Original",
+    "newInformationColumnHeader": "Nouvo"
   }
 }

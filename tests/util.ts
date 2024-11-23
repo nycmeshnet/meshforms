@@ -83,22 +83,20 @@ export async function fillOutJoinForm(page: Page, sampleData: JoinFormValues) {
   // Set up some sample data
 
   // Personal info
-  await page.getByPlaceholder("First Name").fill(sampleData.first_name);
-  await page.getByPlaceholder("Last Name").fill(sampleData.last_name);
-  await page.getByPlaceholder("Email Address").fill(sampleData.email_address);
-  await page.getByPlaceholder("Phone Number").fill(sampleData.phone_number);
+  await page.locator("[name='first_name']").fill(sampleData.first_name);
+  await page.locator("[name='last_name']").fill(sampleData.last_name);
+  await page.locator("[name='email_address']").fill(sampleData.email_address);
+  await page.locator("[name='phone_number']").fill(sampleData.phone_number);
 
   // Address Info
-  await page.getByPlaceholder("Street Address").fill(sampleData.street_address);
-  await page.getByPlaceholder("Unit / Apartment #").fill(sampleData.apartment);
-  await page.getByPlaceholder("City").fill(sampleData.city);
-  await page.getByPlaceholder("State").fill(sampleData.state);
-  await page.getByPlaceholder("Zip Code").fill(sampleData.zip_code.toString());
+  await page.locator("[name='street_address']").fill(sampleData.street_address);
+  await page.locator("[name='apartment']").fill(sampleData.apartment);
+  await page.locator("[name='city']").fill(sampleData.city);
+  await page.locator("[name='state']").fill(sampleData.state);
+  await page.locator("[name='zip_code']").fill(sampleData.zip_code.toString());
 
   // How did you hear about us?
-  await page
-    .getByPlaceholder("How did you hear about us?")
-    .fill(sampleData.referral);
+  await page.locator("[name='referral']").fill(sampleData.referral);
 
   // Agree to the NCL
   if (sampleData.ncl) {
@@ -114,7 +112,7 @@ export async function fillOutJoinForm(page: Page, sampleData: JoinFormValues) {
 export async function submitFailureExpected(page: Page) {
   await page.waitForTimeout(1000);
   // Submit the join form
-  await page.getByRole("button", { name: /Submit/i }).click();
+  await page.locator("[name='submit_join_form']").click();
 
   await page.waitForTimeout(1000);
 
@@ -125,7 +123,7 @@ export async function submitFailureExpected(page: Page) {
 export async function submitAndCheckToast(page: Page, toastMessage: string) {
   await page.waitForTimeout(1000);
   // Submit the join form
-  await page.getByRole("button", { name: /Submit/i }).click();
+  await page.locator("[name='submit_join_form']").click();
 
   await page.waitForTimeout(1000);
 
@@ -143,7 +141,7 @@ export async function submitSuccessExpected(
   page.on("console", (msg) => console.log(msg.text()));
 
   // Submit the join form
-  await page.getByRole("button", { name: /Submit/i }).click();
+  await page.locator("[name='submit_join_form']").click();
 
   await expectSuccess(page, timeout);
 }
@@ -162,7 +160,7 @@ export async function submitConfirmationDialogExpected(
   page.on("console", (msg) => console.log(msg.text()));
 
   // Submit the join form
-  await page.getByRole("button", { name: /Submit/i }).click();
+  await page.locator("[name='submit_join_form']").click();
 
   await page.waitForTimeout(timeout);
   await expect(page.locator("[id='alert-dialog-title']")).toBeVisible();

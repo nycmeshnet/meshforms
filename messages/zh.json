@@ -1,7 +1,7 @@
 {
   "LocaleSwitcher": {
     "label": "语言",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Kreyòl ayisyen} zh {🇨🇳 中文} other {Unknown}}"
   },
   "Landing": {
     "welcome": "欢迎来到 MeshForms！"
@@ -44,6 +44,21 @@
       "minutes": "5-10 分钟",
       "days": "2-3 天",
       "support": "如果您没有看到电子邮件,请检查您的\"垃圾邮件\"文件夹,或发送电子邮件至 <support>support@nycmesh.net</support> 寻求帮助。"
+    },
+    "errors": {
+      "error": "无法提交加入表单：",
+      "errorTryAgain": "无法提交加入表单。请稍后重试，或联系 support@nycmesh.net 寻求帮助。",
+      "confirm": "请确认一些信息",
+      "captchaFail": "请完成额外的验证步骤以确认您的提交"
     }
+  },
+  "InfoConfirmation": {
+    "goBack": "返回",
+    "useOriginal": "使用原始信息",
+    "acceptChanges": "接受更改",
+    "pleaseConfirmHeader": "请确认一些信息",
+    "pleaseConfirmBody": "我们需要重新格式化您的一些信息。请确保以下字段准确无误。",
+    "originalInformationColumnHeader": "原始信息",
+    "newInformationColumnHeader": "新信息"
   }
 }
