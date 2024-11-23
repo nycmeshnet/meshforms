@@ -35,7 +35,9 @@ test("es confirm street address", async ({ page }) => {
   await submitConfirmationDialogExpected(page, 2000);
 
   // Ensure the dialogue is translated
-  await expect(page.locator("[id='alert-dialog-description']")).toHaveText("Debíamos que reformatear algunos de sus datos. Por favor asegurar que los campos abajos son ascertados.");
+  await expect(page.locator("[id='alert-dialog-description']")).toHaveText(
+    "Debíamos que reformatear algunos de sus datos. Por favor asegurar que los campos abajos son ascertados.",
+  );
 
   await page.locator("[name='confirm']").click();
 

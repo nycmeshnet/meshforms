@@ -51,5 +51,14 @@
       "confirm": "请确认一些信息",
       "captchaFail": "请完成额外的验证步骤以确认您的提交"
     }
+  },
+  "InfoConfirmation": {
+    "goBack": "返回",
+    "useOriginal": "使用原始信息",
+    "acceptChanges": "接受更改",
+    "pleaseConfirmHeader": "请确认一些信息",
+    "pleaseConfirmBody": "我们需要重新格式化您的一些信息。请确保以下字段准确无误。",
+    "originalInformationColumnHeader": "原始信息",
+    "newInformationColumnHeader": "新信息"
   }
 }
