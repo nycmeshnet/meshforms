@@ -44,6 +44,12 @@
       "minutes": "5-10 分钟",
       "days": "2-3 天",
       "support": "如果您没有看到电子邮件,请检查您的\"垃圾邮件\"文件夹,或发送电子邮件至 <support>support@nycmesh.net</support> 寻求帮助。"
+    },
+    "errors": {
+      "error": "无法提交加入表单：",
+      "errorTryAgain": "无法提交加入表单。请稍后重试，或联系 support@nycmesh.net 寻求帮助。",
+      "confirm": "请确认一些信息",
+      "captchaFail": "请完成额外的验证步骤以确认您的提交"
     }
   }
 }
