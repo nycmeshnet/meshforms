@@ -1,0 +1,39 @@
+name: Playwright Tests Without S3
+permissions: read-all
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  test:
+    name: Run Playwright Tests Without S3
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+    - uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6
+      with:
+        node-version: lts/*
+    # Notably, we are NOT adding S3 here
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    - name: Run Playwright tests
+      run: RUN_SKIPPED=true npx playwright test -g 'fail meshdb is hard down and s3 is hard down'
+      env:
+        MESHDB_URL: https://127.0.0.1:8000 # Throwaway to make the mock work
+        # We now check the JoinRecord stuff, so submit that too.
+        JOIN_RECORD_BUCKET_NAME: meshdb-join-form-log
+        JOIN_RECORD_PREFIX: dev-join-form-submissions
+        S3_ENDPOINT: http://127.0.0.1:9000
+        AWS_ACCESS_KEY_ID: sampleaccesskey 
+        AWS_SECRET_ACCESS_KEY: samplesecretkey
+        AWS_REGION: us-east-1
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report
+        path: playwright-report/
+        retention-days: 30

@@ -27,12 +27,6 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# PSA: This is publically readable in the docker registry. Not a problem, since
-# it's a public URL anyway, but definitely don't do this with actually sensitive
-# data like an API key.
-ARG MESHDB_URL 
-ENV NEXT_PUBLIC_MESHDB_URL=${MESHDB_URL}
-
 RUN yarn build
 
 # Production image, copy all the files and run next

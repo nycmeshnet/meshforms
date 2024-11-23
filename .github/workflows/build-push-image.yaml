@@ -37,7 +37,3 @@ jobs:
           push: true
           tags: willnilges/meshforms:${{ inputs.environment }}
           labels: ${{ steps.meta.outputs.labels }}
-          # Hardcoding the URL of meshdb into the image we build... There is probably
-          # a better way to do this.
-          build-args: |
-            "MESHDB_URL=${{ vars.MESHDB_URL }}"

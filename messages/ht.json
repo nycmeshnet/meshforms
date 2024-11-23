@@ -1,0 +1,49 @@
+{
+  "LocaleSwitcher": {
+    "label": "Lang",
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"
+  },
+  "Landing": {
+    "welcome": "Byenveni nan MeshForms!"
+  },
+  "JoinForm": {
+    "title": "Antre NYC Mesh",
+    "banner": "Antre rezo kominotè nou an! Ranpli fòm nan, epi n ap kontakte imel la yon ti tan.",
+    "sections": {
+      "personalInfo": "Enfòmasyon pèsonèl",
+      "addressInfo": "Enfòmasyon adrès"
+    },
+    "fields": {
+      "firstName": "Prenon",
+      "lastName": "Siyati",
+      "emailAddress": "Adrès Imèl",
+      "phoneNumber": {
+        "phoneNumber": "Nimewo Telefòn",
+        "error": "Tanpri antre yon nimewo telefòn valab."
+      },
+      "streetAddress": "Adrès lari",
+      "unit": "Inite / Apatman #",
+      "city": "Vil",
+      "zipCode": "Kod Postal",
+      "roofAccess": "Mwen konfime aksè sou do kay",
+      "reference": "Ki jan ou te tande pale de nou?",
+      "ncl": "Mwen dakò ak <ncl>Network Commons License</ncl>",
+      "submit": {
+        "submit": "Soumèt",
+        "loading": "Chaje...",
+        "thanks": "Mèsi!"
+      }
+    },
+    "states": {
+      "NY": "New York",
+      "NJ": "New Jersey"
+    },
+    "thankYou": {
+      "header": "Mèsi! Tanpri tcheke imel ou a.",
+      "thankYou": "W ap resevwa yon imèl nan men nou nan pwochen {slo} la ak pwochen etap yo.",
+      "minutes": "5-10 minit",
+      "days": "2-3 jou",
+      "support": "Si ou pa wè imèl la, tanpri tcheke dosye \"Spam\" ou a, oswa voye yon imèl ba <support>support@nycmesh.net</support> pou jwenn èd."
+    }
+  }
+}

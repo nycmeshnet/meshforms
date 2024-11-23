@@ -16,9 +16,9 @@ This repo currently powers three separate forms:
 You will either need a copy of `meshdb` running locally, or point your local copy of this package to the beta/production
 endpoints in order to do development:
 
-- To setup against beta/prod, continue to the next section and use `https://db.nycmesh.net` as the value for `NEXT_PUBLIC_MESHDB_URL`
+- To setup against beta/prod, continue to the next section and use `https://devdb.nycmesh.net` as the value for `MESHDB_URL`
 - To setup a local copy of meshdb, follow the instructions in the readme [there](https://github.com/nycmeshnet/meshdb) first.  
-   Then continue to the next section below and use the value `http://127.0.0.1:8000` for `NEXT_PUBLIC_MESHDB_URL`
+   Then continue to the next section below and use the value `http://127.0.0.1:8000` for `MESHDB_URL`
 
 To get started with this package, first, create your own copy of the `.env` file:
 
@@ -26,7 +26,7 @@ To get started with this package, first, create your own copy of the `.env` file
 cp .env.sample .env
 ```
 
-Edit the `NEXT_PUBLIC_MESHDB_URL` based on your choice above in your favorite text editor. For example:
+Edit the `MESHDB_URL` value based on your choice above in your favorite text editor. For example:
 
 ```
 nano .env
@@ -53,11 +53,15 @@ To appease it, run `npx prettier . --write`
 
 # Testing
 
+> [!WARNING]  
+> Make sure you run playwright from the root of the repo, otherwise you will get some
+> errors about invalid URLs.
+
 We use `playwright` to do integration tests. You can run them with the following instructions:
 
 1. Setup a dev instance of [meshdb](https://github.com/nycmeshnet/meshdb)
 
-2. Copy `.env.sample` into `.env.local` and fill it out
+2. Copy `.env.sample` into `.env.local` (`.env` will not work!) and fill it out
 
 3. Run the integration tests with `npx playwright test`
 
@@ -99,3 +103,25 @@ Error: Process from config.webServer was not able to start. Exit code: 1
 ```
 
 Try running `npm run build`
+
+## Internationalization
+
+> [!NOTE]
+> Do you speak a language we already have? Feel free to validate the translation,
+> offer feedback, or help translate more of Meshforms!
+
+We use `next-intl` as a library for internationalization. 
+
+To add a new language:
+- Copy an existing language from `messages/` directory
+- Translate the messages into your language
+- Add your [language code](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) to `middleware.ts` and `src/i18n/routing.ts`
+- Add a case to the switch statement in `src/i18n/request.ts`
+- Update the "locale" key in every file in the `messages/` directory (this one: `"locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"`)
+- Add some tests to ensure that your language shows up in the Join Form properly
+
+> [!WARN]
+> Please keep the language codes alphabetical!
+
+Thank you for helping us reach more people by adding your language. Your contributions
+as an interpreter are invaluable and we very much appreciate it!

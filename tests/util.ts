@@ -1,3 +1,5 @@
+import { getJoinRecordFromS3 } from "@/lib/join_record";
+import { JoinRecord } from "@/lib/types";
 import { JoinFormValues } from "@/components/JoinForm/JoinForm";
 import { expect, Page } from "@playwright/test";
 
@@ -12,9 +14,29 @@ export const sampleData: JoinFormValues = {
   state: "NY",
   zip_code: "11238",
   roof_access: true,
-  referral: "I googled it.",
+  referral: "Mock Sample Data",
   ncl: true,
   trust_me_bro: false,
+};
+
+export const sampleJoinRecord: JoinRecord = {
+  first_name: "Jon",
+  last_name: "Smith",
+  email_address: "js@gmail.com",
+  phone_number: "+1 585-475-2411",
+  street_address: "197 Prospect Place",
+  apartment: "1",
+  city: "Brooklyn",
+  state: "NY",
+  zip_code: "11238",
+  roof_access: true,
+  referral: "Mock Sample Data",
+  ncl: true,
+  trust_me_bro: false,
+  submission_time: "2024-11-01T08:24:24",
+  code: 201,
+  replayed: 0,
+  install_number: 1002,
 };
 
 export const expectedTrustMeBroValues: JoinFormValues = {
@@ -28,7 +50,7 @@ export const expectedTrustMeBroValues: JoinFormValues = {
   state: "NY",
   zip_code: "11238",
   roof_access: true,
-  referral: "I googled it.",
+  referral: "Mock Sample Data",
   ncl: true,
   trust_me_bro: false,
 };
@@ -44,7 +66,7 @@ export const sampleNJData: JoinFormValues = {
   zip_code: "07030",
   apartment: "1",
   roof_access: true,
-  referral: "I googled it.",
+  referral: "Mock Sample Data",
   ncl: true,
   trust_me_bro: false,
 };
@@ -141,4 +163,20 @@ export async function submitConfirmationDialogExpected(
 
   await page.waitForTimeout(timeout);
   await expect(page.locator("[id='alert-dialog-title']")).toBeVisible();
+}
+
+export async function findJoinRecord(page: Page): Promise<JoinRecord> {
+  const joinRecordKey = await page.getAttribute(
+    '[data-testid="test-join-record-key"]',
+    "data-state",
+  );
+
+  if (joinRecordKey === null) {
+    throw new Error("Got null join record");
+  }
+
+  // This is wacky because playwright has to run this and therefore
+  // needs our dotenv.
+  const joinRecord: JoinRecord = await getJoinRecordFromS3(joinRecordKey);
+  return joinRecord;
 }
