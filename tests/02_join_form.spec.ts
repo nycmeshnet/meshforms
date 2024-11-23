@@ -47,7 +47,9 @@ test("change language from english to spanish", async ({ page }) => {
   await fillOutJoinForm(page, sampleData);
 
   await submitSuccessExpected(page, unitTestTimeout);
-  await expect(page.locator("[id='alert-thank-you-h2']")).toHaveText("¡Gracias! Por favor revisa su correo electronico.");
+  await expect(page.locator("[id='alert-thank-you-h2']")).toHaveText(
+    "¡Gracias! Por favor revisa su correo electronico.",
+  );
 });
 
 test("happy join form", async ({ page }) => {
