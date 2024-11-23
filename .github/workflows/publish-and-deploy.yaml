@@ -9,11 +9,9 @@ on:
       - main
 
 jobs:
-  push_to_registry_dev:
-    name: Push to dev3
+  push_to_registry:
+    name: Push to docker hub
     uses: ./.github/workflows/build-push-image.yaml
-    with:
-      environment: dev3
     secrets: inherit
     if: github.ref == 'refs/heads/main'
 
@@ -23,16 +21,7 @@ jobs:
     with:
       environment: dev3
     secrets: inherit
-    needs: push_to_registry_dev
-    if: github.ref == 'refs/heads/main'
-
-  push_to_registry_prod:
-    name: Push to prod1
-    uses: ./.github/workflows/build-push-image.yaml
-    with:
-      environment: prod1
-    secrets: inherit
-    needs: deploy_to_dev3
+    needs: push_to_registry
     if: github.ref == 'refs/heads/main'
 
   deploy_to_prod1:
@@ -41,16 +30,7 @@ jobs:
     with:
       environment: prod1
     secrets: inherit
-    needs: push_to_registry_prod
-    if: github.ref == 'refs/heads/main'
-  
-  push_to_registry_prod2:
-    name: Push to prod2
-    uses: ./.github/workflows/build-push-image.yaml
-    with:
-      environment: prod2
-    secrets: inherit
-    needs: deploy_to_prod1
+    needs: deploy_to_dev3
     if: github.ref == 'refs/heads/main'
 
   deploy_to_prod2:
@@ -59,5 +39,5 @@ jobs:
     with:
       environment: prod2
     secrets: inherit
-    needs: push_to_registry_prod2
+    needs: deploy_to_prod1
     if: github.ref == 'refs/heads/main'
