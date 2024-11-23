@@ -48,7 +48,7 @@ jobs:
         --set aws.region="${{ vars.S3_REGION }}" \
         --set meshforms.s3_bucket_name="${{ secrets.S3_BUCKET_NAME }}" \
         --set meshforms.s3_base_name="${{ secrets.S3_BASE_NAME }}" \
-        --set image.tag="${{ inputs.environment }}" \
+        --set image.tag="latest" \
         --set ingress.hosts[0].host="${{ vars.INGRESS_HOST }}",ingress.hosts[0].paths[0].path=/,ingress.hosts[0].paths[0].pathType=Prefix \
         --set meshforms.recaptcha_v2_key="${{ secrets.RECAPTCHA_V2_KEY }}" \
         --set meshforms.recaptcha_v3_key="${{ secrets.RECAPTCHA_V3_KEY }}"
