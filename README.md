@@ -107,8 +107,8 @@ Try running `npm run build`
 ## Internationalization
 
 > [!NOTE]
-> Do you speak a language we already have? Feel free to validate the translation,
-> offer feedback, or help translate more of Meshforms!
+> Do you speak a language besides English? Please help us by adding more languages,
+> validating our existing translations, or translating more of Meshforms!
 
 We use `next-intl` as a library for internationalization. 
 
@@ -120,8 +120,7 @@ To add a new language:
 - Update the "locale" key in every file in the `messages/` directory (this one: `"locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"`)
 - Add some tests to ensure that your language shows up in the Join Form properly
 
-> [!WARN]
+> [!WARNING]
 > Please keep the language codes alphabetical!
 
-Thank you for helping us reach more people by adding your language. Your contributions
-as an interpreter are invaluable and we very much appreciate it!
+Thank you for your contributions!
