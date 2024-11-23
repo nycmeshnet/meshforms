@@ -491,4 +491,107 @@ test.describe("user triggered captchaV2", () => {
 
     await expectSuccess(page, unitTestTimeout);
   });
+
+  test("user triggered captchaV2 and trust me bro and reject changes", async ({ page }) => {
+    test.setTimeout(joinFormTimeout * 2); // This is a really long test
+    await page.goto("/join");
+
+    // Is the page title correct?
+    await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+    // Set up sample data.
+    let botTriggeringData: JoinFormValues = Object.assign({}, sampleData);
+    botTriggeringData.street_address = chomSt;
+
+    await fillOutJoinForm(page, botTriggeringData);
+
+    await submitAndCheckToast(
+      page,
+      "Please complete an additional verification step to confirm your submission",
+    );
+
+    await page.waitForTimeout(1000);
+
+    // Make the robot check the "I'm not a robot" button (commit voter fraud)
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(1)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await submitConfirmationDialogExpected(page, 2000);
+
+    // 2 counts of voter fraud
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(2)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await page.locator("[name='reject']").click();
+
+    await expectSuccess(page, unitTestTimeout);
+  });
+
+  test("user triggered captchaV2 and trust me bro and cancel and try again", async ({ page }) => {
+    test.setTimeout(joinFormTimeout * 2); // This is a really long test
+    await page.goto("/join");
+
+    // Is the page title correct?
+    await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+    // Set up sample data.
+    let botTriggeringData: JoinFormValues = Object.assign({}, sampleData);
+    botTriggeringData.street_address = chomSt;
+
+    // Fill out the form with our data
+    await fillOutJoinForm(page, botTriggeringData);
+
+    // Expect a warning asking us to do a captcha
+    await submitAndCheckToast(
+      page,
+      "Please complete an additional verification step to confirm your submission",
+    );
+
+    // Make the robot check the "I'm not a robot" button (commit voter fraud)
+    await page.waitForTimeout(1000);
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(1)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    // Expect the dialogue to show up
+    await submitConfirmationDialogExpected(page, 2000);
+
+    // dismiss it
+    await page.waitForTimeout(1000);
+    await page.locator("[name='cancel']").click();
+
+    // Do the captcha again
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(1)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    // Try submitting again 
+    await submitConfirmationDialogExpected(page, 2000);
+
+    // 2 counts of voter fraud
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(2)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await page.locator("[name='confirm']").click();
+
+    await expectSuccess(page, unitTestTimeout);
+  });
 });
