@@ -492,7 +492,9 @@ test.describe("user triggered captchaV2", () => {
     await expectSuccess(page, unitTestTimeout);
   });
 
-  test("user triggered captchaV2 and trust me bro and reject changes", async ({ page }) => {
+  test("user triggered captchaV2 and trust me bro and reject changes", async ({
+    page,
+  }) => {
     test.setTimeout(joinFormTimeout * 2); // This is a really long test
     await page.goto("/join");
 
@@ -535,7 +537,9 @@ test.describe("user triggered captchaV2", () => {
     await expectSuccess(page, unitTestTimeout);
   });
 
-  test("user triggered captchaV2 and trust me bro and cancel and try again", async ({ page }) => {
+  test("user triggered captchaV2 and trust me bro and cancel and try again", async ({
+    page,
+  }) => {
     test.setTimeout(joinFormTimeout * 2); // This is a really long test
     await page.goto("/join");
 
@@ -579,7 +583,7 @@ test.describe("user triggered captchaV2", () => {
       .locator("[id='recaptcha-anchor']")
       .click();
 
-    // Try submitting again 
+    // Try submitting again
     await submitConfirmationDialogExpected(page, 2000);
 
     // 2 counts of voter fraud
