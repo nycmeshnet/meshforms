@@ -160,7 +160,7 @@ export async function submitConfirmationDialogExpected(
   page.on("console", (msg) => console.log(msg.text()));
 
   // Submit the join form
-  await page.getByRole("button", { name: /Submit/i }).click();
+  await page.locator("[name='submit_join_form']").click();
 
   await page.waitForTimeout(timeout);
   await expect(page.locator("[id='alert-dialog-title']")).toBeVisible();
