@@ -55,5 +55,14 @@
       "confirm": "Please confirm some information",
       "captchaFail": "Please complete an additional verification step to confirm your submission"
     }
+  },
+  "InfoConfirmation": {
+    "goBack": "Go Back",
+    "useOriginal": "Use Original",
+    "acceptChanges": "Accept Changes",
+    "pleaseConfirmHeader": "Please confirm some information",
+    "pleaseConfirmBody": "We needed to re-format some of your information. Please ensure that the below fields are accurate.",
+    "originalInformationColumnHeader": "Original",
+    "newInformationColumnHeader": "New"
   }
 }
