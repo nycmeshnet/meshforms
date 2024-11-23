@@ -586,7 +586,7 @@ test.describe("user triggered captchaV2", () => {
     // Try submitting again
     await submitConfirmationDialogExpected(page, 2000);
 
-    // 2 counts of voter fraud
+    // 3 counts of voter fraud
     await page
       .locator("[title='reCAPTCHA']")
       .nth(2)
