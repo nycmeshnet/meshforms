@@ -479,7 +479,15 @@ test.describe("user triggered captchaV2", () => {
 
     await submitConfirmationDialogExpected(page, 2000);
 
-    await page.locator("[name='reject']").click();
+    // 2 counts of voter fraud
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(2)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await page.locator("[name='confirm']").click();
 
     await expectSuccess(page, unitTestTimeout);
   });
