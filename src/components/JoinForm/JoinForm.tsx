@@ -139,7 +139,7 @@ export default function JoinForm() {
   };
 
   // Closes dialog, updates the values, and tries the submission again
-  const handleClickConfirm = () => {
+  const handleClickConfirm = (checkBoxCaptchaTokenFromDialog: string) => {
     setIsInfoConfirmationDialogueOpen(false);
     let joinFormSubmission: JoinFormValues = getValues();
 
@@ -154,17 +154,17 @@ export default function JoinForm() {
       trust_me_bro: true,
     };
 
-    submitJoinFormToMeshDB(joinFormSubmission);
+    submitJoinFormToMeshDB(joinFormSubmission, checkBoxCaptchaTokenFromDialog);
   };
 
   // Closes the dialog and just sends it
-  const handleClickReject = () => {
+  const handleClickReject = (checkBoxCaptchaTokenFromDialog: string) => {
     setIsInfoConfirmationDialogueOpen(false);
     let joinFormSubmission: JoinFormValues = getValues();
 
     joinFormSubmission.trust_me_bro = true;
 
-    submitJoinFormToMeshDB(joinFormSubmission);
+    submitJoinFormToMeshDB(joinFormSubmission, checkBoxCaptchaTokenFromDialog);
   };
 
   // Closes the dupe dialog and allows the user to make chances
@@ -173,7 +173,10 @@ export default function JoinForm() {
     setIsLoading(false);
   };
 
-  async function submitJoinFormToMeshDB(joinFormSubmission: JoinFormValues) {
+  async function submitJoinFormToMeshDB(
+    joinFormSubmission: JoinFormValues,
+    checkboxToken: string,
+  ) {
     // Before we try anything else, submit to S3 for safety.
     let record: JoinRecord = Object.assign(
       structuredClone(joinFormSubmission),
@@ -221,9 +224,7 @@ export default function JoinForm() {
           method: "POST",
           body: JSON.stringify(joinFormSubmission),
           headers: {
-            "X-Recaptcha-V2-Token": checkBoxCaptchaToken
-              ? checkBoxCaptchaToken
-              : "",
+            "X-Recaptcha-V2-Token": checkboxToken ? checkboxToken : "",
             "X-Recaptcha-V3-Token": recaptchaInvisibleToken
               ? recaptchaInvisibleToken
               : "",
@@ -268,6 +269,10 @@ export default function JoinForm() {
       // If the response was not good, then get angry.
       throw responseData;
     } catch (error: unknown) {
+      // Reset the checkbox captcha, if applicable, since tokens are only valid for one submission
+      recaptchaV2Ref?.current?.reset();
+      setCheckBoxCaptchaToken("");
+
       // If MeshDB is up, the error should always be a JoinResponse
       if (error instanceof JoinFormResponse) {
         if (record.code == 409) {
@@ -300,7 +305,7 @@ export default function JoinForm() {
         // If the server said the recaptcha token indicates this was a bot (HTTP 401), prompt the user with the
         // interactive "checkbox" V2 captcha. However, if they have already submitted a checkbox captcha
         // and are still seeing a 401, something has gone wrong - fall back to the generic 4xx error handling logic below
-        if (record.code == 401 && !checkBoxCaptchaToken) {
+        if (record.code == 401 && !checkboxToken) {
           toast.warning(t("errors.captchaFail"));
           setIsProbablyABot(true);
           setIsSubmitted(false);
@@ -331,12 +336,6 @@ export default function JoinForm() {
         toast.error(t("errors.error") + " " + detail.toString());
         console.error(`An error occurred: ${detail}`);
         setIsLoading(false);
-
-        // Clear the checkbox captcha if it exists, to allow the user to retry if needed
-        if (recaptchaV2Ref.current) {
-          recaptchaV2Ref.current.reset();
-          setCheckBoxCaptchaToken("");
-        }
 
         return;
       }
@@ -371,7 +370,7 @@ export default function JoinForm() {
   const onSubmit: SubmitHandler<JoinFormValues> = (data) => {
     setIsLoading(true);
     data.trust_me_bro = false;
-    submitJoinFormToMeshDB(data);
+    submitJoinFormToMeshDB(data, checkBoxCaptchaToken);
   };
 
   const betaDisclaimerBanner = (
@@ -559,7 +558,7 @@ export default function JoinForm() {
                 isSubmitted ||
                 isBadPhoneNumber ||
                 !isValid ||
-                (isProbablyABot && !checkBoxCaptchaToken)
+                (isProbablyABot && !checkBoxCaptchaToken && !reCaptchaError)
               }
               variant="contained"
               size="large"
@@ -627,6 +626,8 @@ export default function JoinForm() {
         handleClickConfirm={handleClickConfirm}
         handleClickReject={handleClickReject}
         handleClickCancel={handleClickCancel}
+        isProbablyABot={isProbablyABot}
+        recaptchaV2Key={recaptchaV2Key}
       />
       <div data-testid="test-join-record-key" data-state={joinRecordKey}></div>
     </>

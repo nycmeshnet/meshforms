@@ -1,7 +1,7 @@
 {
   "LocaleSwitcher": {
     "label": "Langue",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Kreyòl ayisyen} zh {🇨🇳 中文} other {Unknown}}"
   },
   "Landing": {
     "welcome": "Bienvenue dans MeshForms !"
@@ -44,6 +44,21 @@
       "minutes": "5-10 minutes",
       "days": "2-3 jours",
       "support": "Si vous ne voyez pas un courriel de nous, veuillez vérifier votre dossier \"Spam\" ou envoyer un message à <support>support@nycmesh.net</support> pour obtenir de l'aide."
+    },
+    "errors": {
+      "error": "Impossible de soumettre le formulaire d'inscription :",
+      "errorTryAgain": "Impossible de soumettre le formulaire d'inscription. Veuillez réessayer plus tard ou contacter support@nycmesh.net pour obtenir de l'aide.",
+      "confirm": "Veuillez confirmer certaines informations",
+      "captchaFail": "Veuillez effectuer une étape de vérification supplémentaire pour confirmer votre soumission"
     }
+  },
+  "InfoConfirmation": {
+    "goBack": "Revenir en arrière",
+    "useOriginal": "Utiliser l'original",
+    "acceptChanges": "Accepter les modifications",
+    "pleaseConfirmHeader": "Veuillez confirmer certaines informations",
+    "pleaseConfirmBody": "Nous avons dû reformater certaines de vos informations. Veuillez vous assurer que les champs ci-dessous sont exacts.",
+    "originalInformationColumnHeader": "Original",
+    "newInformationColumnHeader": "Nouveau"
   }
 }

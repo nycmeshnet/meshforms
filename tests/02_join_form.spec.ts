@@ -14,6 +14,7 @@ import {
   expectSuccess,
   sampleJoinRecord,
   findJoinRecord,
+  chomSt,
 } from "./util";
 import { isDeepStrictEqual } from "util";
 
@@ -26,7 +27,7 @@ const unitTestTimeout = 5000;
 // the form creates a good-looking payload and can hit a mock API.
 
 test("change language from english to spanish", async ({ page }) => {
-  test.setTimeout(10000);
+  test.setTimeout(20000);
   await page.goto("/join");
 
   // Is the page title correct?
@@ -40,6 +41,14 @@ test("change language from english to spanish", async ({ page }) => {
   // json blob instead of hardcoding it here.
   await expect(page.locator("[id='joinform-title']")).toHaveText(
     "Únase NYC Mesh",
+  );
+
+  // Set up sample data.
+  await fillOutJoinForm(page, sampleData);
+
+  await submitSuccessExpected(page, unitTestTimeout);
+  await expect(page.locator("[id='alert-thank-you-h2']")).toHaveText(
+    "¡Gracias! Por favor revisa su correo electronico.",
   );
 });
 
@@ -169,8 +178,8 @@ test("street address trust me bro", async ({ page }) => {
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Join Our Community Network!/);
-  let data = structuredClone(sampleData);
-  data.street_address = "333 chom st";
+  let data: JoinFormValues = Object.assign({}, sampleData);
+  data.street_address = chomSt;
 
   // Set up sample data.
   await fillOutJoinForm(page, data);
@@ -446,5 +455,155 @@ test.describe("user triggered captchaV2", () => {
       .click();
 
     await submitSuccessExpected(page, unitTestTimeout);
+  });
+
+  test("user triggered captchaV2 and trust me bro", async ({ page }) => {
+    test.setTimeout(joinFormTimeout * 2); // This is a really long test
+    await page.goto("/join");
+
+    // Is the page title correct?
+    await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+    // Set up sample data.
+    let botTriggeringData: JoinFormValues = Object.assign({}, sampleData);
+    botTriggeringData.street_address = chomSt;
+
+    await fillOutJoinForm(page, botTriggeringData);
+
+    await submitAndCheckToast(
+      page,
+      "Please complete an additional verification step to confirm your submission",
+    );
+
+    await page.waitForTimeout(1000);
+
+    // Make the robot check the "I'm not a robot" button (commit voter fraud)
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(1)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await submitConfirmationDialogExpected(page, 2000);
+
+    // 2 counts of voter fraud
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(2)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await page.locator("[name='confirm']").click();
+
+    await expectSuccess(page, unitTestTimeout);
+  });
+
+  test("user triggered captchaV2 and trust me bro and reject changes", async ({
+    page,
+  }) => {
+    test.setTimeout(joinFormTimeout * 2); // This is a really long test
+    await page.goto("/join");
+
+    // Is the page title correct?
+    await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+    // Set up sample data.
+    let botTriggeringData: JoinFormValues = Object.assign({}, sampleData);
+    botTriggeringData.street_address = chomSt;
+
+    await fillOutJoinForm(page, botTriggeringData);
+
+    await submitAndCheckToast(
+      page,
+      "Please complete an additional verification step to confirm your submission",
+    );
+
+    await page.waitForTimeout(1000);
+
+    // Make the robot check the "I'm not a robot" button (commit voter fraud)
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(1)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await submitConfirmationDialogExpected(page, 2000);
+
+    // 2 counts of voter fraud
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(2)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await page.locator("[name='reject']").click();
+
+    await expectSuccess(page, unitTestTimeout);
+  });
+
+  test("user triggered captchaV2 and trust me bro and cancel and try again", async ({
+    page,
+  }) => {
+    test.setTimeout(joinFormTimeout * 2); // This is a really long test
+    await page.goto("/join");
+
+    // Is the page title correct?
+    await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+    // Set up sample data.
+    let botTriggeringData: JoinFormValues = Object.assign({}, sampleData);
+    botTriggeringData.street_address = chomSt;
+
+    // Fill out the form with our data
+    await fillOutJoinForm(page, botTriggeringData);
+
+    // Expect a warning asking us to do a captcha
+    await submitAndCheckToast(
+      page,
+      "Please complete an additional verification step to confirm your submission",
+    );
+
+    // Make the robot check the "I'm not a robot" button (commit voter fraud)
+    await page.waitForTimeout(1000);
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(1)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    // Expect the dialogue to show up
+    await submitConfirmationDialogExpected(page, 2000);
+
+    // dismiss it
+    await page.waitForTimeout(1000);
+    await page.locator("[name='cancel']").click();
+
+    // Do the captcha again
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(1)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    // Try submitting again
+    await submitConfirmationDialogExpected(page, 2000);
+
+    // 3 counts of voter fraud
+    await page
+      .locator("[title='reCAPTCHA']")
+      .nth(2)
+      .contentFrame()
+      .locator("[id='recaptcha-anchor']")
+      .click();
+
+    await page.locator("[name='confirm']").click();
+
+    await expectSuccess(page, unitTestTimeout);
   });
 });

@@ -4,7 +4,7 @@
   },
   "LocaleSwitcher": {
     "label": "Language",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Haitian Creole} zh {🇨🇳 中文} other {Unknown}}"
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Kreyòl ayisyen} zh {🇨🇳 中文} other {Unknown}}"
   },
   "Landing": {
     "welcome": "Welcome to MeshForms!"
@@ -55,5 +55,14 @@
       "confirm": "Please confirm some information",
       "captchaFail": "Please complete an additional verification step to confirm your submission"
     }
+  },
+  "InfoConfirmation": {
+    "goBack": "Go Back",
+    "useOriginal": "Use Original",
+    "acceptChanges": "Accept Changes",
+    "pleaseConfirmHeader": "Please confirm some information",
+    "pleaseConfirmBody": "We needed to re-format some of your information. Please ensure that the below fields are accurate.",
+    "originalInformationColumnHeader": "Original",
+    "newInformationColumnHeader": "New"
   }
 }
