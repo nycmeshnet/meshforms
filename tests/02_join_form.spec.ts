@@ -211,7 +211,10 @@ test("fail missing first name", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingNameData);
 
-  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+  page.locator("[name='submit_join_form']").click();
+
+  await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
+  await expect(page.locator("[id='error_first_name']")).toBeVisible();
 });
 
 test("fail missing last name", async ({ page }) => {
@@ -225,7 +228,11 @@ test("fail missing last name", async ({ page }) => {
   let missingNameData: JoinFormValues = Object.assign({}, sampleData);
   missingNameData.last_name = "";
   await fillOutJoinForm(page, missingNameData);
-  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+
+  page.locator("[name='submit_join_form']").click();
+
+  await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
+  await expect(page.locator("[id='error_last_name']")).toBeVisible();
 });
 
 // Tests missing email
@@ -242,11 +249,14 @@ test("fail missing email", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+  page.locator("[name='submit_join_form']").click();
+
+  await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
+  await expect(page.locator("[id='error_email_address']")).toBeVisible();
 });
 
 // Tests missing phone
-test("fail missing phone", async ({ page }) => {
+test("pass missing phone", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto("/join");
 
@@ -258,12 +268,7 @@ test("fail missing phone", async ({ page }) => {
 
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
-
-  await expect(
-    page.getByText("Please enter a valid phone number"),
-  ).toBeVisible();
-
-  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+  await submitSuccessExpected(page);
 });
 
 // Tests missing email + phone
@@ -281,11 +286,11 @@ test("fail missing email and phone", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  await expect(
-    page.getByText("Please enter a valid phone number"),
-  ).toBeVisible();
+  page.locator("[name='submit_join_form']").click();
 
-  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+  await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
+  await expect(page.locator("[id='error_email_address']")).toBeVisible();
+  await expect(page.locator("[id='error_phone_number']")).toBeHidden()
 });
 
 // Give a bad email address
@@ -302,8 +307,10 @@ test("fail bad email", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  // Shouldn't go through
-  await submitFailureExpected(page);
+  page.locator("[name='submit_join_form']").click();
+
+  await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
+  await expect(page.locator("[id='error_email_address']")).toBeVisible();
 });
 
 test("fail bad email 2", async ({ page }) => {
@@ -314,7 +321,9 @@ test("fail bad email 2", async ({ page }) => {
   await expect(page).toHaveTitle(/Join Our Community Network!/);
 
   let missingData: JoinFormValues = Object.assign({}, sampleData);
-  missingData.email_address = "18";
+
+  // This email is bad, in way that our basic validation doesn't catch but the backend does
+  missingData.email_address = "a@b";
   await fillOutJoinForm(page, missingData);
   await submitFailureExpected(page);
 });
@@ -333,8 +342,10 @@ test("fail bad phone", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  // Shouldn't go through
-  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+  page.locator("[name='submit_join_form']").click();
+
+  await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
+  await expect(page.locator("[id='error_phone_number']")).toBeVisible();
 });
 
 test("fail bad phone 2", async ({ page }) => {
@@ -361,7 +372,10 @@ test("fail missing address", async ({ page }) => {
   missingAddressData.street_address = "";
   await fillOutJoinForm(page, missingAddressData);
 
-  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+  page.locator("[name='submit_join_form']").click();
+
+  await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
+  await expect(page.locator("[id='error_street_address']")).toBeVisible();
 });
 
 test("fail missing city", async ({ page }) => {
@@ -375,7 +389,10 @@ test("fail missing city", async ({ page }) => {
   missingAddressData.city = "";
   await fillOutJoinForm(page, missingAddressData);
 
-  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+  page.locator("[name='submit_join_form']").click();
+
+  await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
+  await expect(page.locator("[id='error_city']")).toBeVisible();
 });
 
 // This one should fail and here's why: It's really annoying when people
@@ -394,7 +411,10 @@ test("fail missing unit number", async ({ page }) => {
   missingAddressData.apartment = "";
   await fillOutJoinForm(page, missingAddressData);
 
-  await expect(page.locator("[name='submit_join_form']")).toBeDisabled();
+  page.locator("[name='submit_join_form']").click();
+
+  await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
+  await expect(page.locator("[id='error_apartment']")).toBeVisible();
 });
 
 test("fail nj", async ({ page }) => {
