@@ -405,7 +405,9 @@ export default function JoinForm() {
                 }
               />
               {errors.first_name && (
-                <p id="error_first_name" className={styles.errorText}>{errors.first_name.message}</p>
+                <p id="error_first_name" className={styles.errorText}>
+                  {errors.first_name.message}
+                </p>
               )}
             </div>
 
@@ -421,7 +423,9 @@ export default function JoinForm() {
                 }
               />
               {errors.last_name && (
-                <p id="error_last_name"  className={styles.errorText}>{errors.last_name.message}</p>
+                <p id="error_last_name" className={styles.errorText}>
+                  {errors.last_name.message}
+                </p>
               )}
             </div>
 
@@ -441,7 +445,7 @@ export default function JoinForm() {
                 }
               />
               {errors.email_address && (
-                <p  id="error_email_address" className={styles.errorText}>
+                <p id="error_email_address" className={styles.errorText}>
                   {errors.email_address.message}
                 </p>
               )}
@@ -461,7 +465,7 @@ export default function JoinForm() {
                 }
               />
               {errors.phone_number && (
-                <p  id="error_phone_number"  className={styles.errorText}>
+                <p id="error_phone_number" className={styles.errorText}>
                   {t("fields.phoneNumber.error")}
                 </p>
               )}
@@ -483,7 +487,7 @@ export default function JoinForm() {
                 }
               />
               {errors.street_address && (
-                <p  id="error_street_address"  className={styles.errorText}>
+                <p id="error_street_address" className={styles.errorText}>
                   {errors.street_address.message}
                 </p>
               )}
@@ -501,7 +505,9 @@ export default function JoinForm() {
                 }
               />
               {errors.apartment && (
-                <p  id="error_apartment"  className={styles.errorText}>{errors.apartment.message}</p>
+                <p id="error_apartment" className={styles.errorText}>
+                  {errors.apartment.message}
+                </p>
               )}
             </div>
             <div className={styles.inputGroup}>
@@ -512,7 +518,9 @@ export default function JoinForm() {
                 className={errors.city ? styles.errorField : styles.happyField}
               />
               {errors.city && (
-                <p  id="error_city"  className={styles.errorText}>{errors.city.message}</p>
+                <p id="error_city" className={styles.errorText}>
+                  {errors.city.message}
+                </p>
               )}
             </div>
 
@@ -531,7 +539,9 @@ export default function JoinForm() {
                 ))}
               </Select>
               {errors.state && (
-                <p  id="error_state"  className={styles.errorText}>{errors.state.message}</p>
+                <p id="error_state" className={styles.errorText}>
+                  {errors.state.message}
+                </p>
               )}
             </div>
 
@@ -555,7 +565,9 @@ export default function JoinForm() {
                 }
               />
               {errors.zip_code && (
-                <p  id="error_zip_code"  className={styles.errorText}>{errors.zip_code.message}</p>
+                <p id="error_zip_code" className={styles.errorText}>
+                  {errors.zip_code.message}
+                </p>
               )}
             </div>
 
@@ -577,7 +589,9 @@ export default function JoinForm() {
               }
             />
             {errors.referral && (
-              <p  id="error_first_name"  className={styles.errorText}>{errors.referral.message}</p>
+              <p id="error_first_name" className={styles.errorText}>
+                {errors.referral.message}
+              </p>
             )}
           </div>
 
@@ -595,7 +609,9 @@ export default function JoinForm() {
               })}
             </label>
             {errors.ncl && (
-              <p id="error_ncl"  className={styles.errorText}>{errors.ncl.message}</p>
+              <p id="error_ncl" className={styles.errorText}>
+                {errors.ncl.message}
+              </p>
             )}
           </div>
 

@@ -290,7 +290,7 @@ test("fail missing email and phone", async ({ page }) => {
 
   await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
   await expect(page.locator("[id='error_email_address']")).toBeVisible();
-  await expect(page.locator("[id='error_phone_number']")).toBeHidden()
+  await expect(page.locator("[id='error_phone_number']")).toBeHidden();
 });
 
 // Give a bad email address
