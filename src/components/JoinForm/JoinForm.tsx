@@ -62,9 +62,7 @@ export type { ConfirmationField };
 
 export default function JoinForm() {
   const t = useTranslations("JoinForm");
-  const selectStateOptions = [
-    { value: "NY", label: t("states.NY") },
-  ];
+  const selectStateOptions = [{ value: "NY", label: t("states.NY") }];
   let defaultFormValues = new JoinFormValues();
   defaultFormValues.state = selectStateOptions[0].value;
   const {
@@ -388,9 +386,9 @@ export default function JoinForm() {
     <>
       <div className={isSubmitted ? styles.hidden : styles.formBody}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div style={{display: "flex", justifyContent: "space-between"}}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             <h2 id="joinform-title">{t("title")}</h2>
-            <LocaleSwitcher/>
+            <LocaleSwitcher />
           </div>
           {isBeta ? betaDisclaimerBanner : welcomeBanner}
           <div>
@@ -398,25 +396,33 @@ export default function JoinForm() {
             <div className={styles.inputGroup}>
               <input
                 {...register("first_name", {
-                  required: t("fields.firstName.error")
+                  required: t("fields.firstName.error"),
                 })}
                 type="text"
                 placeholder={t("fields.firstName.firstName")}
-                className={errors.first_name ? styles.errorField : styles.happyField}
+                className={
+                  errors.first_name ? styles.errorField : styles.happyField
+                }
               />
-              {errors.first_name && <p className={styles.errorText}>{errors.first_name.message}</p>}
+              {errors.first_name && (
+                <p className={styles.errorText}>{errors.first_name.message}</p>
+              )}
             </div>
 
             <div className={styles.inputGroup}>
               <input
                 {...register("last_name", {
-                  required: t("fields.lastName.error")
+                  required: t("fields.lastName.error"),
                 })}
                 type="text"
                 placeholder={t("fields.lastName.lastName")}
-                className={errors.last_name ? styles.errorField : styles.happyField}
+                className={
+                  errors.last_name ? styles.errorField : styles.happyField
+                }
               />
-              {errors.last_name && <p className={styles.errorText}>{errors.last_name.message}</p>}
+              {errors.last_name && (
+                <p className={styles.errorText}>{errors.last_name.message}</p>
+              )}
             </div>
 
             <div className={styles.inputGroup}>
@@ -426,26 +432,39 @@ export default function JoinForm() {
                   pattern: {
                     value: /.+@.+/i, // Very simple validation, basically just looking for "@". The backend does a bit more
                     message: t("fields.emailAddress.error"),
-                  }
+                  },
                 })}
                 type="email"
                 placeholder={t("fields.emailAddress.emailAddress")}
-                className={errors.email_address ? styles.errorField : styles.happyField}
+                className={
+                  errors.email_address ? styles.errorField : styles.happyField
+                }
               />
-              {errors.email_address && <p className={styles.errorText}>{errors.email_address.message}</p>}
+              {errors.email_address && (
+                <p className={styles.errorText}>
+                  {errors.email_address.message}
+                </p>
+              )}
             </div>
 
             <div className={styles.inputGroup}>
               <input
                 {...register("phone_number", {
                   required: false,
-                  validate: validatePhoneNumber || t("fields.phoneNumber.error"),
+                  validate:
+                    validatePhoneNumber || t("fields.phoneNumber.error"),
                 })}
                 type="tel"
                 placeholder={t("fields.phoneNumber.phoneNumber")}
-                className={errors.phone_number ? styles.errorField : styles.happyField}
+                className={
+                  errors.phone_number ? styles.errorField : styles.happyField
+                }
               />
-              {errors.phone_number && <p className={styles.errorText}>{t("fields.phoneNumber.error")}</p>}
+              {errors.phone_number && (
+                <p className={styles.errorText}>
+                  {t("fields.phoneNumber.error")}
+                </p>
+              )}
             </div>
           </div>
 
@@ -459,9 +478,15 @@ export default function JoinForm() {
                 })}
                 type="text"
                 placeholder={t("fields.streetAddress.streetAddress")}
-                className={errors.street_address ? styles.errorField : styles.happyField}
+                className={
+                  errors.street_address ? styles.errorField : styles.happyField
+                }
               />
-              {errors.street_address && <p className={styles.errorText}>{errors.street_address.message}</p>}
+              {errors.street_address && (
+                <p className={styles.errorText}>
+                  {errors.street_address.message}
+                </p>
+              )}
             </div>
 
             <div className={styles.inputGroup}>
@@ -471,18 +496,24 @@ export default function JoinForm() {
                 })}
                 type="text"
                 placeholder={t("fields.unit.unit")}
-                className={errors.apartment ? styles.errorField : styles.happyField}
+                className={
+                  errors.apartment ? styles.errorField : styles.happyField
+                }
               />
-              {errors.apartment && <p className={styles.errorText}>{errors.apartment.message}</p>}
+              {errors.apartment && (
+                <p className={styles.errorText}>{errors.apartment.message}</p>
+              )}
             </div>
             <div className={styles.inputGroup}>
               <input
-                {...register("city", {required: t("fields.city.error")})}
+                {...register("city", { required: t("fields.city.error") })}
                 type="text"
                 placeholder={t("fields.city.city")}
                 className={errors.city ? styles.errorField : styles.happyField}
               />
-              {errors.city && <p className={styles.errorText}>{errors.city.message}</p>}
+              {errors.city && (
+                <p className={styles.errorText}>{errors.city.message}</p>
+              )}
             </div>
 
             <div className={styles.inputGroup}>
@@ -499,7 +530,9 @@ export default function JoinForm() {
                   </MenuItem>
                 ))}
               </Select>
-              {errors.state && <p className={styles.errorText}>{errors.state.message}</p>}
+              {errors.state && (
+                <p className={styles.errorText}>{errors.state.message}</p>
+              )}
             </div>
 
             <div className={styles.inputGroup}>
@@ -517,14 +550,18 @@ export default function JoinForm() {
                 })}
                 type="number"
                 placeholder={t("fields.zipCode.zipCode")}
-                className={errors.zip_code ? styles.errorField : styles.happyField}
+                className={
+                  errors.zip_code ? styles.errorField : styles.happyField
+                }
               />
-              {errors.zip_code && <p className={styles.errorText}>{errors.zip_code.message}</p>}
+              {errors.zip_code && (
+                <p className={styles.errorText}>{errors.zip_code.message}</p>
+              )}
             </div>
 
             <div className={styles.extraSpaceBelow}>
               <label>
-                <input {...register("roof_access")} type="checkbox"/>
+                <input {...register("roof_access")} type="checkbox" />
                 {t("fields.roofAccess")}
               </label>
             </div>
@@ -535,15 +572,19 @@ export default function JoinForm() {
               {...register("referral")}
               type="text"
               placeholder={t("fields.reference")}
-              className={errors.referral ? styles.errorField : styles.happyField}
+              className={
+                errors.referral ? styles.errorField : styles.happyField
+              }
             />
-            {errors.referral && <p className={styles.errorText}>{errors.referral.message}</p>}
+            {errors.referral && (
+              <p className={styles.errorText}>{errors.referral.message}</p>
+            )}
           </div>
 
           <div className={styles.inputGroup}>
             <label>
               <input
-                {...register("ncl", {required: t("fields.ncl.error")})}
+                {...register("ncl", { required: t("fields.ncl.error") })}
                 type="checkbox"
                 className={errors.ncl ? styles.errorField : styles.happyField}
               />
@@ -553,7 +594,9 @@ export default function JoinForm() {
                 ),
               })}
             </label>
-            {errors.ncl && <p className={styles.errorText}>{errors.ncl.message}</p>}
+            {errors.ncl && (
+              <p className={styles.errorText}>{errors.ncl.message}</p>
+            )}
           </div>
 
           <div className={styles.inputGroup}>
@@ -567,8 +610,8 @@ export default function JoinForm() {
                 onErrored={() => {
                   console.error(
                     "Encountered an error while initializing or querying captcha. " +
-                    "Disabling some frontend captcha features to avoid hangs. " +
-                    "Are the recaptcha keys set correctly in the env variables?",
+                      "Disabling some frontend captcha features to avoid hangs. " +
+                      "Are the recaptcha keys set correctly in the env variables?",
                   );
                   setReCaptchaError(true);
                 }}
@@ -581,7 +624,7 @@ export default function JoinForm() {
             {isProbablyABot && recaptchaV2Key ? (
               <ReCAPTCHA
                 className={styles.centered}
-                style={{marginTop: "15px"}}
+                style={{ marginTop: "15px" }}
                 ref={recaptchaV2Ref}
                 sitekey={recaptchaV2Key}
                 hl={locale}
@@ -589,8 +632,8 @@ export default function JoinForm() {
                 onErrored={() => {
                   console.error(
                     "Encountered an error while initializing or querying captcha. " +
-                    "Disabling all frontend captcha features to avoid hangs. " +
-                    "Are the recaptcha keys set correctly in the env variables?",
+                      "Disabling all frontend captcha features to avoid hangs. " +
+                      "Are the recaptcha keys set correctly in the env variables?",
                   );
                   setReCaptchaError(true);
                 }}
@@ -599,7 +642,7 @@ export default function JoinForm() {
               <></>
             )}
           </div>
-            {/*
+          {/*
           <div>
             <p>State Debugger</p>
             isLoading: {isLoading ? "true" : "false"}<br/>
@@ -608,38 +651,38 @@ export default function JoinForm() {
             !isValid: {!isValid ? "true" : "false"}<br/>
           </div>
           */}
-            <div className={styles.centered}>
-              <Button
-                type="submit"
-                disabled={
-                  isLoading ||
-                  isSubmitted ||
-                  (isProbablyABot && !checkBoxCaptchaToken && !reCaptchaError)
-                }
-                variant="contained"
-                size="large"
-                sx={{width: "12rem", fontSize: "1rem", m: "1rem"}}
-                name="submit_join_form"
-                id="button-submit-join-form"
-              >
-                {isLoading
-                  ? t("fields.submit.loading")
-                  : isSubmitted
-                    ? t("fields.submit.thanks")
-                    : t("fields.submit.submit")}
-              </Button>
-              <div hidden={!isLoading}>
-                <CircularProgress/>
-              </div>
+          <div className={styles.centered}>
+            <Button
+              type="submit"
+              disabled={
+                isLoading ||
+                isSubmitted ||
+                (isProbablyABot && !checkBoxCaptchaToken && !reCaptchaError)
+              }
+              variant="contained"
+              size="large"
+              sx={{ width: "12rem", fontSize: "1rem", m: "1rem" }}
+              name="submit_join_form"
+              id="button-submit-join-form"
+            >
+              {isLoading
+                ? t("fields.submit.loading")
+                : isSubmitted
+                  ? t("fields.submit.thanks")
+                  : t("fields.submit.submit")}
+            </Button>
+            <div hidden={!isLoading}>
+              <CircularProgress />
             </div>
-            <div className={styles.captchaDisclaimer}>
-              This site is protected by reCAPTCHA and the Google
-              <a href="https://policies.google.com/privacy">Privacy Policy</a> and
-              <a href="https://policies.google.com/terms">
-                Terms of Service
-              </a>{" "}
-              apply.
-            </div>
+          </div>
+          <div className={styles.captchaDisclaimer}>
+            This site is protected by reCAPTCHA and the Google
+            <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+            <a href="https://policies.google.com/terms">
+              Terms of Service
+            </a>{" "}
+            apply.
+          </div>
         </form>
       </div>
       <div data-testid="toasty" className="toasty">
