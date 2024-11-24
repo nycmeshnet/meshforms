@@ -110,7 +110,7 @@ export default function JoinForm() {
   );
   const [reCaptchaError, setReCaptchaError] = useState<boolean>(false);
 
-  const isBeta = true;
+  const isBeta = false;
 
   useEffect(() => {
     (async () => {
