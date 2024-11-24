@@ -110,7 +110,6 @@ test("happy join form", async ({ page }) => {
   expect(currentURL.pathname).toBe("/");
 });
 
-
 // Tests missing phone
 test("happy join form missing phone", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
@@ -124,7 +123,7 @@ test("happy join form missing phone", async ({ page }) => {
 
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
-  await submitSuccessExpected(page ,unitTestTimeout);
+  await submitSuccessExpected(page, unitTestTimeout);
 });
 
 test("confirm city", async ({ page }) => {
