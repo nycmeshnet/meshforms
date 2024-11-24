@@ -211,7 +211,7 @@ test("fail missing first name", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingNameData);
 
-  page.locator("[name='submit_join_form']").click();
+  await page.locator("[name='submit_join_form']").click();
 
   await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
   await expect(page.locator("[id='error_first_name']")).toBeVisible();
@@ -229,7 +229,7 @@ test("fail missing last name", async ({ page }) => {
   missingNameData.last_name = "";
   await fillOutJoinForm(page, missingNameData);
 
-  page.locator("[name='submit_join_form']").click();
+  await page.locator("[name='submit_join_form']").click();
 
   await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
   await expect(page.locator("[id='error_last_name']")).toBeVisible();
@@ -249,7 +249,7 @@ test("fail missing email", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  page.locator("[name='submit_join_form']").click();
+  await page.locator("[name='submit_join_form']").click();
 
   await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
   await expect(page.locator("[id='error_email_address']")).toBeVisible();
@@ -286,7 +286,7 @@ test("fail missing email and phone", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  page.locator("[name='submit_join_form']").click();
+  await page.locator("[name='submit_join_form']").click();
 
   await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
   await expect(page.locator("[id='error_email_address']")).toBeVisible();
@@ -307,7 +307,7 @@ test("fail bad email", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  page.locator("[name='submit_join_form']").click();
+  await page.locator("[name='submit_join_form']").click();
 
   await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
   await expect(page.locator("[id='error_email_address']")).toBeVisible();
@@ -342,7 +342,7 @@ test("fail bad phone", async ({ page }) => {
   // Set up sample data.
   await fillOutJoinForm(page, missingData);
 
-  page.locator("[name='submit_join_form']").click();
+  await page.locator("[name='submit_join_form']").click();
 
   await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
   await expect(page.locator("[id='error_phone_number']")).toBeVisible();
@@ -372,7 +372,7 @@ test("fail missing address", async ({ page }) => {
   missingAddressData.street_address = "";
   await fillOutJoinForm(page, missingAddressData);
 
-  page.locator("[name='submit_join_form']").click();
+  await page.locator("[name='submit_join_form']").click();
 
   await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
   await expect(page.locator("[id='error_street_address']")).toBeVisible();
@@ -411,7 +411,7 @@ test("fail missing unit number", async ({ page }) => {
   missingAddressData.apartment = "";
   await fillOutJoinForm(page, missingAddressData);
 
-  page.locator("[name='submit_join_form']").click();
+  await page.locator("[name='submit_join_form']").click();
 
   await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
   await expect(page.locator("[id='error_apartment']")).toBeVisible();
