@@ -8,12 +8,10 @@
 .formBody input[type="email"],
 .formBody input[type="tel"],
 .formBody input[type="number"] {
-  border: 1px solid #ccc;
   padding: 10px;
   font-size: 16px;
   width: 100%;
   box-sizing: border-box;
-  margin-bottom: 10px;
   border-radius: 4px;
   outline-offset: 4px;
 }
@@ -69,12 +67,8 @@
 }
 
 .drop {
-  /* border: 1px solid #ccc; */
-  /* padding: 10px; */
   font-size: 16px;
   width: 100%;
-  /* box-sizing: border-box; */
-  margin-bottom: 10px;
   border-radius: 4px;
   outline-offset: 4px;
 }
@@ -116,4 +110,28 @@
 .captchaDisclaimer > a {
   color: #000;
   margin-left: 3px;
+}
+
+.errorText {
+  color: red;
+  margin: 0;
+  margin-top: 5px;
+  padding-left: 7px;
+}
+
+.errorField {
+  border: 1px solid red;
+  box-shadow: 0 0 4px red;
+}
+
+.happyField {
+  border: 1px solid #ccc;
+}
+
+.inputGroup {
+  margin-bottom: 10px;
+}
+
+.extraSpaceBelow {
+  margin-bottom: 20px;
 }
