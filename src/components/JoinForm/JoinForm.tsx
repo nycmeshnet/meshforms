@@ -21,6 +21,8 @@ import { JoinRecord } from "@/lib/types";
 import { useTranslations, useLocale } from "next-intl";
 import LocaleSwitcher from "../LocaleSwitcher";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useIsDeveloper } from "@/lib/AckDevProvider";
+import { useEnvContext } from "@/lib/EnvProvider";
 
 export class JoinFormValues {
   constructor(
@@ -83,6 +85,12 @@ export default function JoinForm() {
   const recaptchaV2Ref = React.useRef<ReCAPTCHA>(null);
 
   const locale = useLocale();
+
+  const env = useEnvContext();
+  const [isDeveloper, showIsDeveloperDialog] = useIsDeveloper();
+  if (env?.includes("dev") && !isDeveloper) {
+    showIsDeveloperDialog();
+  }
 
   const [isLoading, setIsLoading] = useState(false);
   const [isProbablyABot, setIsProbablyABot] = useState(false);

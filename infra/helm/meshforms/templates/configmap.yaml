@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: meshforms-config
 data:
+  MESHFORMS_ENVIRONMENT: {{ .Values.meshforms.environment }}
   JOIN_RECORD_BUCKET_NAME: {{ .Values.meshforms.s3_bucket_name }}
   JOIN_RECORD_PREFIX: {{ .Values.meshforms.s3_base_name }}
   AWS_REGION: {{ .Values.aws.region }}

@@ -24,6 +24,8 @@ import "ag-grid-community/styles/ag-theme-quartz.css"; // Theme
 
 import styles from "./QueryForm.module.scss";
 import { getMeshDBAPIEndpoint } from "@/lib/endpoint";
+import { useEnvContext } from "@/lib/EnvProvider";
+import { useIsDeveloper } from "@/lib/AckDevProvider";
 
 export function QueryForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +36,12 @@ export function QueryForm() {
   const [queryLabel, setQueryLabel] = useState("Select Query Type");
   const [queryResult, setQueryResult] = useState<unknown>([]);
   const [meshDBUrl, setMeshDBUrl] = useState<string>("");
+
+  const env = useEnvContext();
+  const [isDeveloper, showIsDeveloperDialog] = useIsDeveloper();
+  if (env?.includes("dev") && !isDeveloper) {
+    showIsDeveloperDialog();
+  }
 
   function parseForm(event: FormEvent<HTMLFormElement>) {
     const formData = new FormData(event.currentTarget);

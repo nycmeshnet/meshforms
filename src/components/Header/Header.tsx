@@ -17,7 +17,9 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Link from "@mui/material/Link";
 import Container from "@mui/material/Container";
-import LocaleSwitcher from "../LocaleSwitcher";
+import { useEnvContext } from "@/lib/EnvProvider";
+import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 interface Props {
   /**
@@ -39,12 +41,16 @@ const navItems = [
 ];
 
 export function Header(props: Props) {
+  const t = useTranslations("Header");
+
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+
+  const env = useEnvContext();
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
@@ -83,85 +89,113 @@ export function Header(props: Props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
+  const currentPath = usePathname();
+
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar
-        component="nav"
-        elevation={0}
-        sx={{ backgroundColor: "#f4f4f4", color: "black", padding: "none" }}
-        position="sticky"
-      >
-        <Container maxWidth="lg" disableGutters id="container">
-          <Toolbar
-            sx={{
-              height: "4rem",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <a href="/" style={styles.a}>
-              <img src="/logo.svg" style={{ width: "2rem" }} alt="" />
-              <Typography
-                variant="h6"
-                component="div"
-                sx={{
-                  flexGrow: 1,
-                  marginLeft: "1rem",
-                  display: { xs: "none", sm: "block" },
-                }}
-              >
-                <span style={{ fontWeight: 600 }}>NYC Mesh</span>{" "}
-                <span style={{ fontWeight: 400 }}>| Forms</span>
-              </Typography>
-            </a>
-            <Box sx={{ display: { xs: "none", md: "block" } }}>
-              {navItems.map((item) => (
-                <Button component={Link} key={item.text} href={item.link}>
-                  {item.text}
-                </Button>
-              ))}
-            </Box>
-            <Box
-              sx={{
-                display: { xs: "flex", md: "none" },
-                flex: 1,
-                justifyContent: "flex-end",
-              }}
-            >
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                edge="start"
-                onClick={handleDrawerToggle}
-                // sx={{ mr: 2, display: { sm: "none" } }}
-              >
-                <MenuIcon />
-              </IconButton>
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
-      <nav>
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
+    <>
+      {env?.includes("dev") ? (
+        <Box
           sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
+            width: "100%",
+            backgroundColor: "header.main",
+            color: "primary.main",
+            padding: "10px 20px",
           }}
         >
-          {drawer}
-        </Drawer>
-      </nav>
-    </Box>
+          <Typography variant="body1" align="center">
+            {t.rich("developersOnlyWarning", {
+              strong: (chunk) => <b>{chunk}</b>,
+              link: (chunk) => (
+                <a href={"https://forms.nycmesh.net" + currentPath}>{chunk}</a>
+              ),
+            })}
+          </Typography>
+        </Box>
+      ) : (
+        <></>
+      )}
+      <Box sx={{ display: "flex" }}>
+        <AppBar
+          component="nav"
+          elevation={0}
+          sx={{
+            backgroundColor: "header.main",
+            color: "black",
+            padding: "none",
+          }}
+          position="sticky"
+        >
+          <Container maxWidth="lg" disableGutters id="container">
+            <Toolbar
+              sx={{
+                height: "4rem",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <a href="/" style={styles.a}>
+                <img src="/logo.svg" style={{ width: "2rem" }} alt="" />
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{
+                    flexGrow: 1,
+                    marginLeft: "1rem",
+                    display: { xs: "none", sm: "block" },
+                  }}
+                >
+                  <span style={{ fontWeight: 600 }}>NYC Mesh</span>{" "}
+                  <span style={{ fontWeight: 400 }}>| Forms</span>
+                </Typography>
+              </a>
+              <Box sx={{ display: { xs: "none", md: "block" } }}>
+                {navItems.map((item) => (
+                  <Button component={Link} key={item.text} href={item.link}>
+                    {item.text}
+                  </Button>
+                ))}
+              </Box>
+              <Box
+                sx={{
+                  display: { xs: "flex", md: "none" },
+                  flex: 1,
+                  justifyContent: "flex-end",
+                }}
+              >
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={handleDrawerToggle}
+                  // sx={{ mr: 2, display: { sm: "none" } }}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Box>
+            </Toolbar>
+          </Container>
+        </AppBar>
+        <nav>
+          <Drawer
+            container={container}
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </nav>
+      </Box>
+    </>
   );
 }
