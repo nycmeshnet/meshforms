@@ -110,6 +110,23 @@ test("happy join form", async ({ page }) => {
   expect(currentURL.pathname).toBe("/");
 });
 
+
+// Tests missing phone
+test("happy join form missing phone", async ({ page }) => {
+  test.setTimeout(joinFormTimeout);
+  await page.goto("/join");
+
+  // Is the page title correct?
+  await expect(page).toHaveTitle(/Join Our Community Network!/);
+
+  let missingData: JoinFormValues = Object.assign({}, sampleData);
+  missingData.phone_number = "";
+
+  // Set up sample data.
+  await fillOutJoinForm(page, missingData);
+  await submitSuccessExpected(page ,unitTestTimeout);
+});
+
 test("confirm city", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
   await page.goto("/join");
@@ -255,22 +272,6 @@ test("fail missing email", async ({ page }) => {
   await expect(page.locator("[id='error_email_address']")).toBeVisible();
 });
 
-// Tests missing phone
-test("pass missing phone", async ({ page }) => {
-  test.setTimeout(joinFormTimeout);
-  await page.goto("/join");
-
-  // Is the page title correct?
-  await expect(page).toHaveTitle(/Join Our Community Network!/);
-
-  let missingData: JoinFormValues = Object.assign({}, sampleData);
-  missingData.phone_number = "";
-
-  // Set up sample data.
-  await fillOutJoinForm(page, missingData);
-  await submitSuccessExpected(page);
-});
-
 // Tests missing email + phone
 test("fail missing email and phone", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
@@ -389,7 +390,7 @@ test("fail missing city", async ({ page }) => {
   missingAddressData.city = "";
   await fillOutJoinForm(page, missingAddressData);
 
-  page.locator("[name='submit_join_form']").click();
+  await page.locator("[name='submit_join_form']").click();
 
   await expect(page.locator("[name='submit_join_form']")).toBeEnabled();
   await expect(page.locator("[id='error_city']")).toBeVisible();

@@ -59,7 +59,7 @@ export default [
 
     if (!joinRequest.trust_me_bro) {
       // Bail on New Jersey
-      if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
+      if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey" || joinRequest.zip_code === "07030") {
         let r = new JoinFormResponse();
         r.detail =
           "Mock: Non-NYC registrations are not supported at this time.";
