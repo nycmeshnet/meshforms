@@ -255,8 +255,11 @@ export default function JoinForm() {
       // FYI: The pre and post keys should be identical, except one of them will
       // have the "pre/" prefix and one will have the "post/" prefix
       try {
-        await saveJoinRecordToS3(record, false);
+        const postJoinRecordKey = await saveJoinRecordToS3(record, false);
         postJoinRecordFailed = false;
+        if (postJoinRecordKey !== "") {
+          setJoinRecordKey(postJoinRecordKey); // Might as well have the good one
+        }
       } catch (error: unknown) {
         console.error(
           `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
