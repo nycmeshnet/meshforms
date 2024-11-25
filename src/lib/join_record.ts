@@ -109,10 +109,16 @@ export async function getJoinRecordFromS3(key: string): Promise<JoinRecord> {
   return joinRecordS3.get(key);
 }
 
-export async function maybeLogJoinRecordFailure(joinRecord: JoinRecord, preJoinRecordFailed: boolean, postJoinRecordFailed: boolean) {
+export async function maybeLogJoinRecordFailure(
+  joinRecord: JoinRecord,
+  preJoinRecordFailed: boolean,
+  postJoinRecordFailed: boolean,
+) {
   if (!preJoinRecordFailed && !postJoinRecordFailed) {
     return;
   }
 
-  console.error(`JoinRecord failed to be submitted in S3 (pre failed: ${preJoinRecordFailed}) (post failed: ${postJoinRecordFailed}): ${joinRecord}`);
+  console.error(
+    `JoinRecord failed to be submitted in S3 (pre failed: ${preJoinRecordFailed}) (post failed: ${postJoinRecordFailed}): ${joinRecord}`,
+  );
 }

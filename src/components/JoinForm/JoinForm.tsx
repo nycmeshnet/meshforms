@@ -14,7 +14,10 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { maybeLogJoinRecordFailure, saveJoinRecordToS3 } from "@/lib/join_record";
+import {
+  maybeLogJoinRecordFailure,
+  saveJoinRecordToS3,
+} from "@/lib/join_record";
 import { getMeshDBAPIEndpoint, getRecaptchaKeys } from "@/lib/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/lib/types";
@@ -192,13 +195,11 @@ export default function JoinForm() {
 
     let preJoinRecordFailed = true;
     let postJoinRecordFailed = true;
-    
+
     // Before we try anything else, submit the record to the pre-submission
     // S3 bucket for safety.
     try {
-      setJoinRecordKey(
-        await saveJoinRecordToS3(record, true),
-      );
+      setJoinRecordKey(await saveJoinRecordToS3(record, true));
       preJoinRecordFailed = false; // We got at least one joinRecord.
     } catch (error: unknown) {
       console.error(
@@ -349,7 +350,11 @@ export default function JoinForm() {
       }
 
       // If either JoinRecord failed to save, then we should log that.
-      maybeLogJoinRecordFailure(record, preJoinRecordFailed, postJoinRecordFailed);
+      maybeLogJoinRecordFailure(
+        record,
+        preJoinRecordFailed,
+        postJoinRecordFailed,
+      );
 
       // If we didn't get a JoinFormResponse, we're in trouble. Make sure that
       // we successfully saved the join record. If we didn't... oof.
