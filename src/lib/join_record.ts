@@ -35,14 +35,17 @@ class JoinRecordS3 {
   // submission: A Join Form Submission. We append a few things to this.
   // key: The S3 path we store the submission at
   // responseCode: If we have a response code for this submission, add it here.
-  async save(joinRecord: JoinRecord, key: string = ""): Promise<string> {
+  async save(
+    joinRecord: JoinRecord,
+    preSubmission: boolean = false,
+  ): Promise<string> {
     // Get the date to store this submission under (this is part of the path)
     const submissionKey = joinRecord.submission_time
       .replace(/[-:T]/g, "/")
       .slice(0, 19);
 
-    // Create the path, or use the one provided.
-    key = key != "" ? key : `${this.PREFIX}/${submissionKey}.json`;
+    // Create the path
+    const key = `${this.PREFIX}${preSubmission ? "/pre" : "/post"}/${submissionKey}.json`;
 
     let body = JSON.stringify(joinRecord);
 
@@ -97,11 +100,19 @@ const joinRecordS3 = new JoinRecordS3();
 
 export async function saveJoinRecordToS3(
   submission: JoinRecord,
-  key: string = "",
+  preSubmission: boolean = false,
 ): Promise<string> {
-  return joinRecordS3.save(submission, key);
+  return joinRecordS3.save(submission, preSubmission);
 }
 
 export async function getJoinRecordFromS3(key: string): Promise<JoinRecord> {
   return joinRecordS3.get(key);
+}
+
+export async function maybeLogJoinRecordFailure(joinRecord: JoinRecord, preJoinRecordFailed: boolean, postJoinRecordFailed: boolean) {
+  if (!preJoinRecordFailed && !postJoinRecordFailed) {
+    return;
+  }
+
+  console.error(`JoinRecord failed to be submitted in S3 (pre failed: ${preJoinRecordFailed}) (post failed: ${postJoinRecordFailed}): ${joinRecord}`);
 }

@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { saveJoinRecordToS3 } from "@/lib/join_record";
+import { maybeLogJoinRecordFailure, saveJoinRecordToS3 } from "@/lib/join_record";
 import { getMeshDBAPIEndpoint, getRecaptchaKeys } from "@/lib/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/lib/types";
@@ -177,10 +177,12 @@ export default function JoinForm() {
     joinFormSubmission: JoinFormValues,
     checkboxToken: string,
   ) {
-    // Before we try anything else, submit to S3 for safety.
+    // Make a Join Record with this info
     let record: JoinRecord = Object.assign(
       structuredClone(joinFormSubmission),
       {
+        version: 2,
+        uuid: self.crypto.randomUUID(),
         submission_time: new Date().toISOString(),
         code: null,
         replayed: 0,
@@ -188,15 +190,16 @@ export default function JoinForm() {
       },
     ) as JoinRecord;
 
-    // FIXME (wdn): The useState is too slow and causes a race condition when
-    // we try to use it to determine if we successfully submitted here. I am
-    // using jrKey to store the key for later reference and the state will be
-    // for testing for now. Sorry Andrew.
-    let jrKey = "";
-
+    let preJoinRecordFailed = true;
+    let postJoinRecordFailed = true;
+    
+    // Before we try anything else, submit the record to the pre-submission
+    // S3 bucket for safety.
     try {
-      jrKey = await saveJoinRecordToS3(record, jrKey);
-      setJoinRecordKey(jrKey);
+      setJoinRecordKey(
+        await saveJoinRecordToS3(record, true),
+      );
+      preJoinRecordFailed = false; // We got at least one joinRecord.
     } catch (error: unknown) {
       console.error(
         `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
@@ -246,12 +249,14 @@ export default function JoinForm() {
       record.code = response.status;
       record.install_number = responseData.install_number;
 
-      // Update the join record with our data if we have it.
+      // Write to the post-submisison bucket with our data if we have it.
       // We have to catch and handle the error if this somehow fails but the join
       // form submission succeeds.
+      // FYI: The pre and post keys should be identical, except one of them will
+      // have the "pre/" prefix and one will have the "post/" prefix
       try {
-        jrKey = await saveJoinRecordToS3(record, jrKey);
-        setJoinRecordKey(jrKey);
+        await saveJoinRecordToS3(record, false);
+        postJoinRecordFailed = false;
       } catch (error: unknown) {
         console.error(
           `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
@@ -340,20 +345,23 @@ export default function JoinForm() {
         return;
       }
 
-      // If we didn't get a JoinFormResponse, we're in trouble. Make sure that
-      // we successfully recorded the submission. If we didn't... oof.
+      // If either JoinRecord failed to save, then we should log that.
+      maybeLogJoinRecordFailure(record, preJoinRecordFailed, postJoinRecordFailed);
 
-      if (jrKey !== "") {
+      // If we didn't get a JoinFormResponse, we're in trouble. Make sure that
+      // we successfully saved the join record. If we didn't... oof.
+      if (preJoinRecordFailed && postJoinRecordFailed) {
+        // If MeshDB is down AND we failed to save the Join Record, then let the
+        // member know to try again later.
+        toast.error(t("errors.errorTryAgain"));
+        setIsLoading(false);
+      } else {
         // If we didn't get a JoinFormResponse, chances are that MeshDB is hard down.
-        // Tell the user we recorded their submission, but change the message.
+        // But at least we saved the JoinRecord. Tell the user we recorded their
+        // submission, but change the message.
         setIsMeshDBProbablyDown(true);
         setIsLoading(false);
         setIsSubmitted(true);
-      } else {
-        // If MeshDB is down AND we failed to save the Join Record, then we should
-        // probably let the member know to try again later.
-        toast.error(t("errors.errorTryAgain"));
-        setIsLoading(false);
       }
 
       // Log the message to the console.
