@@ -52,6 +52,7 @@ test("meshdb is hard down but succeed anyway", async ({ page }) => {
   const joinRecord: JoinRecord = await getJoinRecordFromS3(joinRecordKey);
 
   joinRecord.submission_time = sampleJoinRecord.submission_time;
+  joinRecord.uuid = sampleJoinRecord.uuid;
 
   // In this case, we know that we won't have a code or install number, so drop
   // those from the comparison
