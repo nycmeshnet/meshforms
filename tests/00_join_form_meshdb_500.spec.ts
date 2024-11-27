@@ -47,7 +47,9 @@ test("meshdb is 500ing but succeed anyway", async ({ page }) => {
   // needs our dotenv.
   const joinRecord: JoinRecord = await getJoinRecordFromS3(joinRecordKey);
 
+  // Crappy hack
   joinRecord.submission_time = sampleJoinRecord.submission_time;
+  joinRecord.uuid = sampleJoinRecord.uuid;
 
   // In this case, we know that we won't have a code or install number, so drop
   // those from the comparison
