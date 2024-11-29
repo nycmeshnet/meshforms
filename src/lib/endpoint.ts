@@ -23,5 +23,5 @@ export async function getRecaptchaKeys() {
 
 // Literally just ask the server what env we're in
 export async function getEnvironment() {
-  return process.env.MESHFORMS_ENVIRONMENT;
+  return process.env.MESHFORMS_ENVIRONMENT ?? "";
 }
