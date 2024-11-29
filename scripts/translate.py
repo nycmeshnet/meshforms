@@ -1,9 +1,12 @@
 import json
+import logging
 from os import listdir
 from typing import Any
 from jsondiff import diff
 import jsondiff
+from googletrans import Translator
 
+logging.basicConfig(level=logging.INFO)
 
 def strip_values(d: dict[str, Any]) -> dict[str, Any]:
     r = {}
@@ -15,8 +18,21 @@ def strip_values(d: dict[str, Any]) -> dict[str, Any]:
 
     return r
 
-def translate_diff():
-    pass
+def auto_translate_parent_locale_into_patched_locale(patched_locale, parent_locale) -> dict[Any, Any]:
+    r = {}
+    translator = Translator()
+    for k, v in patched_locale.items():
+        if type(v) == dict:
+            r[k] = auto_translate_parent_locale_into_patched_locale(v, parent_locale[k])
+        elif v == "":
+            # TODO: pass locale
+            auto_translated_text = translator.translate(parent_locale[k], src="en", dest="es").text
+            logging.info(f"Translated missing text: '{parent_locale[k]}' -> '{auto_translated_text}'")
+            r[k] = auto_translated_text
+        else:
+            r[k] = v
+
+    return r
 
 def main():
     # TODO: Argparse and logging
@@ -34,18 +50,16 @@ def main():
     for locale_file in locale_files:
         locale = json.load(open(f"./messages/{locale_file}"))
 
+        # FIXME (wdn): There's a bug in here where it won't preserve values that have
+        # moved.
         locale_stripped = strip_values(locale)
         d = diff(locale_stripped, parent_locale_stripped)
 
-        patched = jsondiff.patch(locale, d)
+        patched_locale = jsondiff.patch(locale, d)
 
-        print(patched)
+        translated_locale = auto_translate_parent_locale_into_patched_locale(patched_locale, parent_locale)
+        print(json.dumps(translated_locale))
         break # TODO: Remove break
-
-        # Maybe i could just merge the json and call the google translate API.
-        #merged = {**parent_locale, **locale}
-        #print(json.dumps(merged))
-        break
 
 
     
