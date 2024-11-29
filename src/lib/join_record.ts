@@ -48,7 +48,7 @@ class JoinRecordS3 {
     // - dev vs prod join record
     // - pre vs post-join form submission
     // - 2nd quartet of join record UUID (random but not too long)
-    const key = `${this.PREFIX}${preSubmission ? "/pre" : "/post"}/${submissionKey}/${joinRecord.uuid.split("-")[1]}.json`;
+    const key = `${this.PREFIX}/v3/${preSubmission ? "/pre" : "/post"}/${submissionKey}/${joinRecord.uuid.split("-")[1]}.json`;
 
     let body = JSON.stringify(joinRecord);
 
