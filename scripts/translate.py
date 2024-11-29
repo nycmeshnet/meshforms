@@ -100,13 +100,13 @@ def main():
         if args.write or args.git_commits:
             logging.info("Writing translations to file...")
             with open(locale_path, 'w') as f:
-                json.dump(translated_locale, f, ensure_ascii=False, indent=4)
+                json.dump(translated_locale, f, ensure_ascii=False, indent=2)
             
             if args.git_commits:
-                repo.index.add(locale_path)
+                repo.index.add(locale_path.strip("./"))
                 repo.index.commit(f"Add translations to {locale_file}")
         else:
-            print(json.dumps(translated_locale, ensure_ascii=False, indent=4))
+            print(json.dumps(translated_locale, ensure_ascii=False, indent=2))
 
 if __name__ == "__main__":
     main()
