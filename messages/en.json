@@ -6,6 +6,9 @@
     "label": "Language",
     "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Kreyòl ayisyen} zh {🇨🇳 中文} other {Unknown}}"
   },
+  "Header": {
+    "developersOnlyWarning": "This site is for developers only. <strong>Do not submit these forms</strong> unless you are a developer. <link>Click here</link> instead to go to the correct version"
+  },
   "Landing": {
     "welcome": "Welcome to MeshForms!"
   },
@@ -88,5 +91,11 @@
     "pleaseConfirmBody": "We needed to re-format some of your information. Please ensure that the below fields are accurate.",
     "originalInformationColumnHeader": "Original",
     "newInformationColumnHeader": "New"
+  },
+  "DeveloperMode": {
+    "devlopersOnlyDialogHeader": "Warning: This form is for developers only",
+    "devlopersOnlyDialogContent": "This site is <strong>only</strong> for developers to test their code changes. <strong>Any changes you make here will not be kept. Any data you access via this form is likely fake</strong> and should not be trusted. If you are not a developer, please click below to proceed to the non-development copy of this website.",
+    "iAmADeveloperButton": "I am a developer. Do not ask again",
+    "iAmNotADeveloperButton": " I am not a developer. Take me to safety"
   }
 }

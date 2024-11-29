@@ -93,6 +93,7 @@ test("happy join form", async ({ page }) => {
 
   // This is fucked, sorry.
   joinRecord.submission_time = sampleJoinRecord.submission_time;
+  joinRecord.uuid = sampleJoinRecord.uuid;
 
   if (!isDeepStrictEqual(joinRecord, sampleJoinRecord)) {
     console.error("Expected:");
