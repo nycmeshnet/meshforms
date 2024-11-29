@@ -14,7 +14,12 @@ export const EnvThemeProvider: React.FC<EnvThemeProviderProps> = ({
   const env = useEnvContext();
 
   let theme = localTheme;
-  if (env?.includes("prod")) {
+  if (env === undefined) {
+    // This is the case where we haven't loaded the env var from the backend yet. We use prod themes here to prevent
+    // a flicker in prod before the env vars load from the backend. The other stages will flicker but that's fine
+    // Once we have any comms with the backend, env will be "" instead, so if the env var is unset we will use localTheme
+    theme = prodTheme;
+  } else if (env?.includes("prod")) {
     theme = prodTheme;
   } else if (env?.includes("dev")) {
     theme = devTheme;
