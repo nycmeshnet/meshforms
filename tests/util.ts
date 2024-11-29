@@ -36,7 +36,7 @@ export const sampleJoinRecord: JoinRecord = {
   referral: "Mock Sample Data",
   ncl: true,
   trust_me_bro: false,
-  version: 2,
+  version: 3,
   uuid: "1a55b949-0490-4b78-a2e8-10aea41d6f1d",
   submission_time: "2024-11-01T08:24:24",
   code: 201,
