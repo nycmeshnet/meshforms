@@ -44,6 +44,8 @@ def main():
     # TODO: Argparse and logging
     # Parse the en.json (TODO optionally pass another locale to use as source
     # of truth)
+
+    # TODO: Print translations instead of wirting to file
     parent_locale_file = "en.json"
     parent_locale_name = pathlib.Path(parent_locale_file).stem
     locale_files = listdir("./messages")
@@ -72,7 +74,7 @@ def main():
 
         logging.info("Writing translations to file...")
         with open(f"./messages/{locale_file}", 'w') as f:
-            json.dump(translated_locale, f)
+            json.dump(translated_locale, f, ensure_ascii=False)
 
         break # TODO: Remove break
 

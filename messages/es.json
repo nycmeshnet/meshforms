@@ -1,54 +1,71 @@
 {
   "LocaleSwitcher": {
     "label": "Idioma",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} fr {🇫🇷 Français} ht {🇭🇹 Kreyòl ayisyen} zh {🇨🇳 中文} other {Unknown}}"
+    "locale": "{locale, select, en {\ud83c\uddfa\ud83c\uddf8 English} es {\ud83c\uddea\ud83c\uddf8 Espa\u00f1ol} fr {\ud83c\uddeb\ud83c\uddf7 Fran\u00e7ais} ht {\ud83c\udded\ud83c\uddf9 Krey\u00f2l ayisyen} zh {\ud83c\udde8\ud83c\uddf3 \u4e2d\u6587} other {Unknown}}"
   },
-  "Landing": {
-    "welcome": "¡Bienvenidos a MeshForms!"
-  },
+  "Landing": { "welcome": "\u00a1Bienvenidos a MeshForms!" },
   "JoinForm": {
-    "title": "Únase NYC Mesh",
-    "banner": "¡Únase nuestra red comunidad! Completa la forma, y contactaremos por correo electrónico pronto.",
+    "title": "\u00danase NYC Mesh",
+    "banner": "\u00a1\u00danase nuestra red comunidad! Completa la forma, y contactaremos por correo electr\u00f3nico pronto.",
     "sections": {
-      "personalInfo": "Información Personal",
-      "addressInfo": "Información de dirección"
+      "personalInfo": "Informaci\u00f3n Personal",
+      "addressInfo": "Informaci\u00f3n de direcci\u00f3n"
     },
     "fields": {
-      "firstName": "Nombre",
-      "lastName": "Apellido",
-      "emailAddress": "Dirección de correo electronico",
-      "phoneNumber": {
-        "phoneNumber": "Número de teléfono",
-        "error": "Por favor introduzca un número de telefono valido."
+      "firstName": {
+        "firstName": "Nombre de pila",
+        "error": "Por favor ingresa tu nombre"
       },
-      "streetAddress": "Dirección de calle",
-      "unit": "Numero de apartamento",
-      "city": "Ciudad",
-      "zipCode": "Codigo postal",
+      "lastName": {
+        "lastName": "Apellido",
+        "error": "Por favor ingresa tu apellido"
+      },
+      "emailAddress": {
+        "emailAddress": "Direcci\u00f3n de correo electr\u00f3nico",
+        "error": "Por favor, introduce una direcci\u00f3n de correo electr\u00f3nico v\u00e1lida"
+      },
+      "phoneNumber": {
+        "phoneNumber": "N\u00famero de tel\u00e9fono",
+        "error": "Por favor introduzca un n\u00famero de telefono valido."
+      },
+      "streetAddress": {
+        "streetAddress": "Direcci\u00f3n",
+        "error": "Por favor ingrese su direcci\u00f3n postal"
+      },
+      "unit": {
+        "unit": "Unidad / Apartamento #",
+        "error": "Por favor ingrese su n\u00famero de apartamento, o \"N/A\" si no tiene uno"
+      },
+      "city": { "city": "Ciudad", "error": "Por favor ingresa tu ciudad" },
+      "zipCode": {
+        "zipCode": "C\u00f3digo postal",
+        "error": "Por favor ingresa un c\u00f3digo postal v\u00e1lido"
+      },
       "roofAccess": "Marque esto si tiene acceso al techo",
-      "reference": "¿Cómo se enteró de nosotros?",
-      "ncl": "Acepto la <ncl>Licencia de Red Común</ncl>",
+      "reference": "\u00bfC\u00f3mo se enter\u00f3 de nosotros?",
+      "ncl": {
+        "ncl": "Acepto la <ncl>Licencia Network Commons</ncl>",
+        "error": "\u00a1Acepte la licencia Network Commons!"
+      },
       "submit": {
         "submit": "Entregar",
         "loading": "Cargando...",
-        "thanks": "¡Gracias!"
+        "thanks": "\u00a1Gracias!",
+        "goHome": "Ir a casa"
       }
     },
-    "states": {
-      "NY": "Nueva York",
-      "NJ": "Nueva Jersey"
-    },
+    "states": { "NY": "Nueva York", "NJ": "Nueva Jersey" },
     "thankYou": {
-      "header": "¡Gracias! Por favor revisa su correo electronico.",
-      "thankYou": "Recibirá un correo electronico de nosotros en {slo} con instrucciónes, incluyendo cómo entregar fotos panoramicos.",
+      "header": "\u00a1Gracias! Por favor revisa su correo electronico.",
+      "thankYou": "Recibir\u00e1 un correo electronico de nosotros en {slo} con instrucci\u00f3nes, incluyendo c\u00f3mo entregar fotos panoramicos.",
       "minutes": "5-10 minutos",
       "days": "2-3 dias",
       "support": "Si no vista el correco electronico, por favor revisa su carpeta de \"Spam\", o envia un correo electronico a <support>support@nycmesh.net</support> por ayuda."
     },
     "errors": {
-      "error": "No pudó entregar el Join Form:",
-      "errorTryAgain": "No pudó entregar el Join Form. Por favor intentar otra vez más tarde, o contata support@nycmesh.net por ayuda.",
-      "confirm": "Por favor confirma algo información",
+      "error": "No pud\u00f3 entregar el Join Form:",
+      "errorTryAgain": "No pud\u00f3 entregar el Join Form. Por favor intentar otra vez m\u00e1s tarde, o contata support@nycmesh.net por ayuda.",
+      "confirm": "Por favor confirma algo informaci\u00f3n",
       "captchaFail": "Por favor completa una etapa adicional para confirmar su entrega."
     }
   },
@@ -56,9 +73,10 @@
     "goBack": "Regresar",
     "useOriginal": "Usa original",
     "acceptChanges": "Acceptar los cambios",
-    "pleaseConfirmHeader": "Por favor confirma algo información",
-    "pleaseConfirmBody": "Debíamos que reformatear algunos de sus datos. Por favor asegurar que los campos abajos son ascertados.",
+    "pleaseConfirmHeader": "Por favor confirma algo informaci\u00f3n",
+    "pleaseConfirmBody": "Deb\u00edamos que reformatear algunos de sus datos. Por favor asegurar que los campos abajos son ascertados.",
     "originalInformationColumnHeader": "Original",
     "newInformationColumnHeader": "Nuevo"
-  }
+  },
+  "Manifest": { "name": "Formas de malla de malla de Nueva York" }
 }
