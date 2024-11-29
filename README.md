@@ -124,3 +124,35 @@ To add a new language:
 > Please keep the language codes alphabetical!
 
 Thank you for your contributions!
+
+### `translate.py`
+
+We have a script located at `scripts/translate.py` that will use Google Translate
+to automatically translate additional strings added in (by default) `en.json`.
+
+To use it,
+
+1. Make a venv
+
+```
+python -m venv .venv
+source .venv/bin/activate"
+```
+
+2. Install dependencies
+
+```
+pip install -r requirements.txt
+```
+
+3. Create translation commits
+```
+python scripts/translate.py -g
+```
+
+4. Push to your GitHub branch
+```
+git push
+```
+
+5. Work with translators to validate Google's translations.

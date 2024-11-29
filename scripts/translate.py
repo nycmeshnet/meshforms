@@ -106,9 +106,9 @@ def main():
     # translation file. More on that later.
     parent_locale_stripped = strip_values(parent_locale)
 
-    # Optionally set up Git
-    if args.git_commits:
-        repo = Repo()
+    # Set up Git (might go unused)
+    repo = Repo()
+    urls = {}
 
     # If there's a target locale specified, then limit the list to that one.
     if args.target_locale:
@@ -163,10 +163,18 @@ def main():
 
             if args.git_commits:
                 repo.index.add(locale_path.strip("./"))
-                repo.index.commit(f"Add translations to {locale_file}")
+                commit = repo.index.commit(f"Add translations to {locale_file}")
+                urls[locale_name] = f"https://github.com/nycmeshnet/meshforms/commit/{commit.hexsha}"
+
         else:
             print(json.dumps(translated_locale, ensure_ascii=False, indent=2))
 
+    logging.info("Done.")
+
+    if args.git_commits:
+        for locale_name, link in urls.items():
+            logging.info("Send the following links to your translators for verification:")
+            logging.info(f"{locale_name} -> {link}")
 
 if __name__ == "__main__":
     main()
