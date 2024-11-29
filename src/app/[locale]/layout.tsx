@@ -4,6 +4,15 @@ import { routing } from "@/i18n/routing";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import deepmerge from "deepmerge";
+import { EnvThemeProvider } from "@/lib/EnvThemeProvider";
+import { IsDeveloperProvider } from "@/lib/AckDevProvider";
+import CssBaseline from "@mui/material/CssBaseline";
+import { Header } from "@/components/Header/Header";
+import { Box } from "@mui/system";
+import Container from "@mui/material/Container";
+import { Footer } from "@/components/Footer/Footer";
+import { EnvProvider } from "@/lib/EnvProvider";
+import * as React from "react";
 
 export default async function RootLayout({
   children,
@@ -24,7 +33,20 @@ export default async function RootLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
-      {children}
+      <EnvProvider>
+        <EnvThemeProvider>
+          <IsDeveloperProvider>
+            <CssBaseline />
+            <Header />
+            <Box sx={{ width: "100%", backgroundColor: "background.default" }}>
+              <Container maxWidth="lg" sx={{ py: { md: "3rem", sm: "1rem" } }}>
+                {children}
+              </Container>
+            </Box>
+            <Footer />
+          </IsDeveloperProvider>
+        </EnvThemeProvider>
+      </EnvProvider>
     </NextIntlClientProvider>
   );
 }

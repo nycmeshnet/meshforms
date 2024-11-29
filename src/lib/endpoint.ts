@@ -20,3 +20,8 @@ export async function getRecaptchaKeys() {
 
   return [process.env.RECAPTCHA_V2_KEY, process.env.RECAPTCHA_V3_KEY];
 }
+
+// Literally just ask the server what env we're in
+export async function getEnvironment() {
+  return process.env.MESHFORMS_ENVIRONMENT;
+}

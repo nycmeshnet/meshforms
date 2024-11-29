@@ -8,6 +8,8 @@ import { Alert } from "@mui/material";
 import { getMeshDBAPIEndpoint } from "@/lib/endpoint";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEnvContext } from "@/lib/EnvProvider";
+import { useIsDeveloper } from "@/lib/AckDevProvider";
 
 type NNAssignRequestValues = {
   install_number: string;
@@ -26,6 +28,12 @@ export function NNAssignForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [networkNumber, setNetworkNumber] = useState("");
   const [nnMessage, setNnMessage] = useState("");
+
+  const env = useEnvContext();
+  const [isDeveloper, showIsDeveloperDialog] = useIsDeveloper();
+  if (env?.includes("dev") && !isDeveloper) {
+    showIsDeveloperDialog();
+  }
 
   async function submitNNAssignRequest(input: NNAssignRequestValues) {
     setIsSubmitted(true);
