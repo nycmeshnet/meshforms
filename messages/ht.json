@@ -14,24 +14,49 @@
       "addressInfo": "Enfòmasyon adrès"
     },
     "fields": {
-      "firstName": "Prenon",
-      "lastName": "Siyati",
-      "emailAddress": "Adrès Imèl",
+      "firstName": {
+        "firstName": "Premye Non",
+        "error": "Tanpri antre non ou"
+      },
+      "lastName": {
+        "lastName": "Siyati",
+        "error": "Tanpri antre siyati ou"
+      },
+      "emailAddress": {
+        "emailAddress": "Adrès Imèl",
+        "error": "Tanpri antre yon adrès imel ki valab"
+      },
       "phoneNumber": {
         "phoneNumber": "Nimewo Telefòn",
         "error": "Tanpri antre yon nimewo telefòn valab."
       },
-      "streetAddress": "Adrès lari",
-      "unit": "Inite / Apatman #",
-      "city": "Vil",
-      "zipCode": "Kod Postal",
+      "streetAddress": {
+        "streetAddress": "Adrès Ri",
+        "error": "Tanpri antre adrès lari ou"
+      },
+      "unit": {
+        "unit": "Unit / Apatman #",
+        "error": "Tanpri antre nimewo apatman w lan, oswa \"N/A\" si w pa genyen youn"
+      },
+      "city": {
+        "city": "Vil",
+        "error": "Tanpri antre nan vil ou a"
+      },
+      "zipCode": {
+        "zipCode": "Kòd postal",
+        "error": "Tanpri antre yon kòd postal ki valab"
+      },
       "roofAccess": "Mwen konfime aksè sou do kay",
       "reference": "Ki jan ou te tande pale de nou?",
-      "ncl": "Mwen dakò ak <ncl>Network Commons License</ncl>",
+      "ncl": {
+        "ncl": "Mwen dakò ak <ncl>Network Commons License</ncl>",
+        "error": "Tanpri dakò ak Network Commons License!"
+      },
       "submit": {
         "submit": "Soumèt",
         "loading": "Chaje...",
-        "thanks": "Mèsi!"
+        "thanks": "Mèsi!",
+        "goHome": "Ale lakay ou"
       }
     },
     "states": {
@@ -60,5 +85,8 @@
     "pleaseConfirmBody": "Nou te bezwen re-fòma kèk nan enfòmasyon ou yo. Tanpri asire ke jaden ki anba yo egzat.",
     "originalInformationColumnHeader": "Original",
     "newInformationColumnHeader": "Nouvo"
+  },
+  "Manifest": {
+    "name": "NYC Mesh MeshForms"
   }
 }
