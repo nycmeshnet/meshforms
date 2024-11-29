@@ -74,7 +74,7 @@ def main():
 
         logging.info("Writing translations to file...")
         with open(f"./messages/{locale_file}", 'w') as f:
-            json.dump(translated_locale, f, ensure_ascii=False)
+            json.dump(translated_locale, f, ensure_ascii=False, indent=4)
 
         break # TODO: Remove break
 
