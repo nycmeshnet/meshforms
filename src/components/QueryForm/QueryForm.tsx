@@ -148,7 +148,7 @@ export function QueryForm() {
         headerName: "Install #",
         cellRenderer: (props: any) => {
           return (
-            <a href={`${meshDBUrl}/admin/meshapi/install/q=${props.value}`}>
+            <a href={`${meshDBUrl}/admin/meshapi/install/?q=${props.value}`}>
               {props.value}
             </a>
           );
@@ -194,7 +194,7 @@ export function QueryForm() {
         headerName: "NN",
         cellRenderer: (props: any) => {
           return (
-            <a href={`${meshDBUrl}/admin/meshapi/node/q=${props.value}`}>
+            <a href={`${meshDBUrl}/admin/meshapi/node/?q=${props.value}`}>
               {props.value}
             </a>
           );
