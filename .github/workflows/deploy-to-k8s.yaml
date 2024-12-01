@@ -52,7 +52,9 @@ jobs:
         --set image.tag="${{ inputs.environment }}" \
         --set ingress.hosts[0].host="${{ vars.INGRESS_HOST }}",ingress.hosts[0].paths[0].path=/,ingress.hosts[0].paths[0].pathType=Prefix \
         --set meshforms.recaptcha_v2_key="${{ secrets.RECAPTCHA_V2_KEY }}" \
-        --set meshforms.recaptcha_v3_key="${{ secrets.RECAPTCHA_V3_KEY }}"
+        --set meshforms.recaptcha_v3_key="${{ secrets.RECAPTCHA_V3_KEY }}" \
+        --set meshforms.rum_application_id="${{ secrets.RUM_APPLICATION_ID }}" \
+        --set meshforms.rum_client_token="${{ secrets.RUM_CLIENT_TOKEN }}"
 
         # Rolling restart
         kubectl --kubeconfig ./config --server https://${{ secrets.SSH_TARGET_IP }}:6443 -n ${{ vars.APP_NAMESPACE }} rollout restart deploy
