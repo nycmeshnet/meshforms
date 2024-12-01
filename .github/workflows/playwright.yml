@@ -44,6 +44,8 @@ jobs:
         AWS_ACCESS_KEY_ID: sampleaccesskey 
         AWS_SECRET_ACCESS_KEY: samplesecretkey
         AWS_REGION: us-east-1
+        RUM_APPLICATION_ID: fake
+        RUM_CLIENT_TOKEN: alsofake
     - uses: actions/upload-artifact@v4
       if: always()
       with:

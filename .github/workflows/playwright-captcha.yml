@@ -48,6 +48,8 @@ jobs:
         # This is an invisible key that says the user is a robot
         RECAPTCHA_V3_KEY: ${{ secrets.TESTING_RECAPTCHA_V3_KEY }}
         RECAPTCHA_V2_KEY: ${{ secrets.TESTING_RECAPTCHA_V2_KEY }}
+        RUM_APPLICATION_ID: fake
+        RUM_CLIENT_TOKEN: alsofake
 
     - uses: actions/upload-artifact@v4
       if: always()
