@@ -28,9 +28,9 @@ export async function getEnvironment() {
 
 // Get RUM environment variables
 export async function getRumApplicationID() {
-  return process.env.MESHFORMS_RUM_APPLICATION_ID ?? "";
+  return process.env.RUM_APPLICATION_ID ?? "";
 }
 
 export async function getRumClientToken() {
-  return process.env.MESHFORMS_RUM_CLIENT_TOKEN ?? "";
+  return process.env.RUM_CLIENT_TOKEN ?? "";
 }
