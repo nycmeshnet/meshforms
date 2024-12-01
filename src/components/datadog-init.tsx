@@ -1,7 +1,11 @@
 // Necessary if using App Router to ensure this file runs on the client
 "use client";
 
-import { getEnvironment, getRumApplicationID, getRumClientToken } from "@/lib/endpoint";
+import {
+  getEnvironment,
+  getRumApplicationID,
+  getRumClientToken,
+} from "@/lib/endpoint";
 import { datadogRum } from "@datadog/browser-rum";
 
 datadogRum.init({

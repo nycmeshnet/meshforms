@@ -41,7 +41,7 @@ export default async function RootLayout({
             <Header />
             <Box sx={{ width: "100%", backgroundColor: "background.default" }}>
               <Container maxWidth="lg" sx={{ py: { md: "3rem", sm: "1rem" } }}>
-                <DatadogInit/>
+                <DatadogInit />
                 {children}
               </Container>
             </Box>
