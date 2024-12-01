@@ -121,7 +121,7 @@ export function Footer() {
       <footer>
         <Box
           sx={{
-            backgroundColor: "#f4f4f4",
+            backgroundColor: "secondary.main",
             color: "black",
             padding: "none",
             width: "100%",

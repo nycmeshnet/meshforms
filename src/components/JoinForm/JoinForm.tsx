@@ -24,6 +24,8 @@ import { JoinRecord } from "@/lib/types";
 import { useTranslations, useLocale } from "next-intl";
 import LocaleSwitcher from "../LocaleSwitcher";
 import ReCAPTCHA from "react-google-recaptcha";
+import { useIsDeveloper } from "@/lib/AckDevProvider";
+import { useEnvContext } from "@/lib/EnvProvider";
 
 export class JoinFormValues {
   constructor(
@@ -86,6 +88,12 @@ export default function JoinForm() {
   const recaptchaV2Ref = React.useRef<ReCAPTCHA>(null);
 
   const locale = useLocale();
+
+  const env = useEnvContext();
+  const [isDeveloper, showIsDeveloperDialog] = useIsDeveloper();
+  if (env?.includes("dev") && !isDeveloper) {
+    showIsDeveloperDialog();
+  }
 
   const [isLoading, setIsLoading] = useState(false);
   const [isProbablyABot, setIsProbablyABot] = useState(false);
@@ -184,7 +192,7 @@ export default function JoinForm() {
     let record: JoinRecord = Object.assign(
       structuredClone(joinFormSubmission),
       {
-        version: 2,
+        version: 3,
         uuid: self.crypto.randomUUID(),
         submission_time: new Date().toISOString(),
         code: null,
@@ -594,7 +602,9 @@ export default function JoinForm() {
           </div>
           <div className={styles.captchaDisclaimer}>
             This site is protected by reCAPTCHA and the Google
-            <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+            <a href="https://policies.google.com/privacy">
+              Privacy Policy
+            </a> and
             <a href="https://policies.google.com/terms">
               Terms of Service
             </a>{" "}

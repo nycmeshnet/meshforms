@@ -1,8 +1,10 @@
 // src/theme.ts
 "use client";
-import { createTheme } from "@mui/material/styles";
+import { createTheme, ThemeOptions } from "@mui/material/styles";
 
 import { Roboto } from "next/font/google";
+import { SimplePaletteColorOptions } from "@mui/material/styles/createPalette";
+import { PaletteColor, PaletteColorOptions } from "@mui/material";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -10,13 +12,31 @@ const roboto = Roboto({
   display: "swap",
 });
 
-const theme = createTheme({
+declare module "@mui/material/styles" {
+  interface Palette {
+    header: PaletteColor;
+  }
+  interface PaletteOptions {
+    header?: PaletteColorOptions;
+  }
+}
+
+const prodThemeOptions: ThemeOptions = {
   typography: {
     fontFamily: roboto.style.fontFamily,
   },
   palette: {
     primary: {
       main: "#000000",
+    },
+    secondary: {
+      main: "#f4f4f4",
+    },
+    background: {
+      default: "#ffffff",
+    },
+    header: {
+      main: "#f4f4f4",
     },
   },
   components: {
@@ -38,6 +58,15 @@ const theme = createTheme({
       },
     },
   },
-});
+};
 
-export default theme;
+const devThemeOptions: ThemeOptions = structuredClone(prodThemeOptions);
+(devThemeOptions.palette!.header as SimplePaletteColorOptions).main = "#ffc981";
+
+const localThemeOptions: ThemeOptions = structuredClone(devThemeOptions);
+(localThemeOptions.palette!.header as SimplePaletteColorOptions).main =
+  "#d4f9ff";
+
+export const prodTheme = createTheme(prodThemeOptions);
+export const devTheme = createTheme(devThemeOptions);
+export const localTheme = createTheme(localThemeOptions);
