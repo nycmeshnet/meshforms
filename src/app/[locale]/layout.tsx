@@ -13,7 +13,6 @@ import Container from "@mui/material/Container";
 import { Footer } from "@/components/Footer/Footer";
 import { EnvProvider } from "@/lib/EnvProvider";
 import * as React from "react";
-import DatadogInit from "@/components/datadog-init";
 
 export default async function RootLayout({
   children,
@@ -41,7 +40,6 @@ export default async function RootLayout({
             <Header />
             <Box sx={{ width: "100%", backgroundColor: "background.default" }}>
               <Container maxWidth="lg" sx={{ py: { md: "3rem", sm: "1rem" } }}>
-                <DatadogInit />
                 {children}
               </Container>
             </Box>
