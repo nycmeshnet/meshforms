@@ -91,8 +91,11 @@ export default [
       if (joinRequest.phone_number === "") {
         // This is probably the wrong way to do this, but the empty phone number case was
         // failing the strict equality check below
-        
-        let expectedData: JoinFormValues = Object.assign({}, expectedAPIRequestData);
+
+        let expectedData: JoinFormValues = Object.assign(
+          {},
+          expectedAPIRequestData,
+        );
         expectedData.phone_number = "";
         if (isDeepStrictEqual(joinRequest, expectedData)) {
           return HttpResponse.json(good_response, { status: 201 });
