@@ -25,3 +25,12 @@ export async function getRecaptchaKeys() {
 export async function getEnvironment() {
   return process.env.MESHFORMS_ENVIRONMENT ?? "";
 }
+
+// Get RUM environment variables
+export async function getRumApplicationID() {
+  return process.env.MESHFORMS_RUM_APPLICATION_ID ?? "";
+}
+
+export async function getRumClientToken() {
+  return process.env.MESHFORMS_RUM_CLIENT_TOKEN ?? "";
+}
