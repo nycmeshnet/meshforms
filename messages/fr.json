@@ -14,24 +14,49 @@
       "addressInfo": "Information de l'adresse"
     },
     "fields": {
-      "firstName": "Prénom",
-      "lastName": "Nom de famille",
-      "emailAddress": "Courriel",
+      "firstName": {
+        "firstName": "Prénom",
+        "error": "Veuillez entrer votre prénom"
+      },
+      "lastName": {
+        "lastName": "Nom de famille",
+        "error": "Veuillez entrer votre nom de famille"
+      },
+      "emailAddress": {
+        "emailAddress": "Adresse email",
+        "error": "S'il vous plaît, mettez une adresse email valide"
+      },
       "phoneNumber": {
         "phoneNumber": "Numéro de téléphone",
         "error": "Veuillez saisir un numéro de téléphone valide."
       },
-      "streetAddress": "Adresse",
-      "unit": "N° d'unité/appartement",
-      "city": "Ville",
-      "zipCode": "Code Postal / ZIP",
+      "streetAddress": {
+        "streetAddress": "Adresse de la rue",
+        "error": "Veuillez entrer votre adresse postale"
+      },
+      "unit": {
+        "unit": "Unité / Appartement #",
+        "error": "Veuillez saisir votre numéro d'appartement, ou \"N/A\" si vous n'en avez pas"
+      },
+      "city": {
+        "city": "Ville",
+        "error": "Veuillez entrer votre ville"
+      },
+      "zipCode": {
+        "zipCode": "Code postal",
+        "error": "Veuillez entrer un code postal valide"
+      },
       "roofAccess": "Confirmez vous avez accès à votre toit",
       "reference": "Comment avez-vous découvert notre réseau?",
-      "ncl": "J'accepte la <ncl>Licence Du Réseau Communautaire</ncl>",
+      "ncl": {
+        "ncl": "J'accepte la <ncl>Licence Network Commons</ncl>",
+        "error": "Veuillez accepter la licence Network Commons !"
+      },
       "submit": {
         "submit": "Soumettre",
         "loading": "Chargement...",
-        "thanks": "Merci!"
+        "thanks": "Merci!",
+        "goHome": "Rentrer à la maison"
       }
     },
     "states": {
@@ -60,5 +85,8 @@
     "pleaseConfirmBody": "Nous avons dû reformater certaines de vos informations. Veuillez vous assurer que les champs ci-dessous sont exacts.",
     "originalInformationColumnHeader": "Original",
     "newInformationColumnHeader": "Nouveau"
+  },
+  "Manifest": {
+    "name": "NYC Mesh MeshForms"
   }
 }

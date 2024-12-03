@@ -14,24 +14,49 @@
       "addressInfo": "Información de dirección"
     },
     "fields": {
-      "firstName": "Nombre",
-      "lastName": "Apellido",
-      "emailAddress": "Dirección de correo electronico",
+      "firstName": {
+        "firstName": "Nombre de pila",
+        "error": "Por favor ingresa tu nombre"
+      },
+      "lastName": {
+        "lastName": "Apellido",
+        "error": "Por favor ingresa tu apellido"
+      },
+      "emailAddress": {
+        "emailAddress": "Dirección de correo electrónico",
+        "error": "Por favor, introduce una dirección de correo electrónico válida"
+      },
       "phoneNumber": {
         "phoneNumber": "Número de teléfono",
         "error": "Por favor introduzca un número de telefono valido."
       },
-      "streetAddress": "Dirección de calle",
-      "unit": "Numero de apartamento",
-      "city": "Ciudad",
-      "zipCode": "Codigo postal",
+      "streetAddress": {
+        "streetAddress": "Dirección",
+        "error": "Por favor ingrese su dirección postal"
+      },
+      "unit": {
+        "unit": "Unidad / Apartamento #",
+        "error": "Por favor ingrese su número de apartamento, o \"N/A\" si no tiene uno"
+      },
+      "city": {
+        "city": "Ciudad",
+        "error": "Por favor ingresa tu ciudad"
+      },
+      "zipCode": {
+        "zipCode": "Código postal",
+        "error": "Por favor ingresa un código postal válido"
+      },
       "roofAccess": "Marque esto si tiene acceso al techo",
       "reference": "¿Cómo se enteró de nosotros?",
-      "ncl": "Acepto la <ncl>Licencia de Red Común</ncl>",
+      "ncl": {
+        "ncl": "Acepto la <ncl>Licencia Network Commons</ncl>",
+        "error": "¡Acepte la licencia Network Commons!"
+      },
       "submit": {
         "submit": "Entregar",
         "loading": "Cargando...",
-        "thanks": "¡Gracias!"
+        "thanks": "¡Gracias!",
+        "goHome": "Ir a casa"
       }
     },
     "states": {
@@ -60,5 +85,8 @@
     "pleaseConfirmBody": "Debíamos que reformatear algunos de sus datos. Por favor asegurar que los campos abajos son ascertados.",
     "originalInformationColumnHeader": "Original",
     "newInformationColumnHeader": "Nuevo"
+  },
+  "Manifest": {
+    "name": "Formas de malla de malla de Nueva York"
   }
 }

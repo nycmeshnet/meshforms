@@ -67,10 +67,7 @@ export type { ConfirmationField };
 
 export default function JoinForm() {
   const t = useTranslations("JoinForm");
-  const selectStateOptions = [
-    { value: "NY", label: t("states.NY") },
-    { value: "NJ", label: t("states.NJ") },
-  ];
+  const selectStateOptions = [{ value: "NY", label: t("states.NY") }];
   let defaultFormValues = new JoinFormValues();
   defaultFormValues.state = selectStateOptions[0].value;
   const {
@@ -78,9 +75,9 @@ export default function JoinForm() {
     setValue,
     getValues,
     handleSubmit,
-    formState: { isValid },
+    formState: { errors },
   } = useForm<JoinFormValues>({
-    mode: "onChange",
+    mode: "onBlur",
     defaultValues: defaultFormValues,
   });
 
@@ -102,7 +99,6 @@ export default function JoinForm() {
     useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isMeshDBProbablyDown, setIsMeshDBProbablyDown] = useState(false);
-  const [isBadPhoneNumber, setIsBadPhoneNumber] = useState(false);
   const [joinRecordKey, setJoinRecordKey] = useState("");
 
   const [recaptchaV2Key, setRecaptchaV2Key] = useState<string | undefined>(
@@ -128,15 +124,18 @@ export default function JoinForm() {
     { key: "" as keyof JoinFormValues, original: "", new: "" },
   ]);
 
-  const handlePhoneNumberBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const inputPhoneNumber = e.target.value;
+  const validatePhoneNumber = (inputPhoneNumber: string) => {
+    // Allow empty submissions for phone number
+    if (inputPhoneNumber === "") {
+      return true;
+    }
+
     const parsedPhoneNumber = parsePhoneNumberFromString(
       inputPhoneNumber,
       "US",
     ); // Adjust the country code as needed
 
     if (parsedPhoneNumber) {
-      setIsBadPhoneNumber(false);
       // Format the number and set the formatted value in react-hook-form
       setValue(
         "phone_number",
@@ -144,9 +143,10 @@ export default function JoinForm() {
           .formatInternational()
           .replace(/ (\d{3}) (\d{4})$/, "-$1-$2"),
       );
-    } else {
-      setIsBadPhoneNumber(true);
+      return true;
     }
+
+    return false;
   };
 
   // Closes dialog, updates the values, and tries the submission again
@@ -417,154 +417,271 @@ export default function JoinForm() {
           {isBeta ? betaDisclaimerBanner : welcomeBanner}
           <div>
             <h3>{t("sections.personalInfo")}</h3>
-            <input
-              {...register("first_name", {
-                required: "Please enter your first name",
-              })}
-              type="text"
-              placeholder={t("fields.firstName")}
-              required
-            />
-            <input
-              {...register("last_name", {
-                required: "Please enter your last name",
-              })}
-              type="text"
-              placeholder={t("fields.lastName")}
-              required
-            />
+            <div className={styles.inputGroup}>
+              <input
+                {...register("first_name", {
+                  required: t("fields.firstName.error"),
+                })}
+                type="text"
+                placeholder={t("fields.firstName.firstName")}
+                className={
+                  errors.first_name ? styles.errorField : styles.happyField
+                }
+              />
+              {errors.first_name && (
+                <p id="error_first_name" className={styles.errorText}>
+                  {errors.first_name.message}
+                </p>
+              )}
+            </div>
 
-            <input
-              {...register("email_address", {
-                required: "Please enter your email address",
-              })}
-              type="email"
-              placeholder={t("fields.emailAddress")}
-              required
-            />
+            <div className={styles.inputGroup}>
+              <input
+                {...register("last_name", {
+                  required: t("fields.lastName.error"),
+                })}
+                type="text"
+                placeholder={t("fields.lastName.lastName")}
+                className={
+                  errors.last_name ? styles.errorField : styles.happyField
+                }
+              />
+              {errors.last_name && (
+                <p id="error_last_name" className={styles.errorText}>
+                  {errors.last_name.message}
+                </p>
+              )}
+            </div>
 
-            <input
-              {...register("phone_number", {
-                required: "Please enter your phone number",
-              })}
-              type="tel"
-              placeholder={t("fields.phoneNumber.phoneNumber")}
-              onBlur={handlePhoneNumberBlur}
-            />
-            <p style={{ color: "red" }} hidden={!isBadPhoneNumber}>
-              {t("fields.phoneNumber.error")}
-            </p>
+            <div className={styles.inputGroup}>
+              <input
+                {...register("email_address", {
+                  required: t("fields.emailAddress.error"),
+                  pattern: {
+                    value: /.+@.+/i, // Very simple validation, basically just looking for "@". The backend does a bit more
+                    message: t("fields.emailAddress.error"),
+                  },
+                })}
+                type="email"
+                placeholder={t("fields.emailAddress.emailAddress")}
+                className={
+                  errors.email_address ? styles.errorField : styles.happyField
+                }
+              />
+              {errors.email_address && (
+                <p id="error_email_address" className={styles.errorText}>
+                  {errors.email_address.message}
+                </p>
+              )}
+            </div>
+
+            <div className={styles.inputGroup}>
+              <input
+                {...register("phone_number", {
+                  required: false,
+                  validate:
+                    validatePhoneNumber || t("fields.phoneNumber.error"),
+                })}
+                type="tel"
+                placeholder={t("fields.phoneNumber.phoneNumber")}
+                className={
+                  errors.phone_number ? styles.errorField : styles.happyField
+                }
+              />
+              {errors.phone_number && (
+                <p id="error_phone_number" className={styles.errorText}>
+                  {t("fields.phoneNumber.error")}
+                </p>
+              )}
+            </div>
           </div>
 
           <div className={styles.block}>
             <h3>{t("sections.addressInfo")}</h3>
-            <input
-              {...register("street_address", {
-                required: "Please enter your street address",
-              })}
-              type="text"
-              placeholder={t("fields.streetAddress")}
-              required
-            />
-            <input
-              {...register("apartment", {
-                required: "Please enter your apartment number",
-              })}
-              type="text"
-              placeholder={t("fields.unit")}
-              required
-            />
-            <input
-              {...register("city", { required: "Please enter your city" })}
-              type="text"
-              placeholder={t("fields.city")}
-              required
-            />
-            <Select
-              {...register("state")}
-              placeholder="State"
-              defaultValue={selectStateOptions[0].value}
-              className={styles.drop}
-              required
-            >
-              {selectStateOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
-            <input
-              {...register("zip_code", {
-                required: "Please enter your ZIP code",
-              })}
-              type="number"
-              placeholder={t("fields.zipCode")}
-              required
-            />
-            <label>
-              <input {...register("roof_access")} type="checkbox" />
-              {t("fields.roofAccess")}
-            </label>
+
+            <div className={styles.inputGroup}>
+              <input
+                {...register("street_address", {
+                  required: t("fields.streetAddress.error"),
+                })}
+                type="text"
+                placeholder={t("fields.streetAddress.streetAddress")}
+                className={
+                  errors.street_address ? styles.errorField : styles.happyField
+                }
+              />
+              {errors.street_address && (
+                <p id="error_street_address" className={styles.errorText}>
+                  {errors.street_address.message}
+                </p>
+              )}
+            </div>
+
+            <div className={styles.inputGroup}>
+              <input
+                {...register("apartment", {
+                  required: t("fields.unit.error"),
+                })}
+                type="text"
+                placeholder={t("fields.unit.unit")}
+                className={
+                  errors.apartment ? styles.errorField : styles.happyField
+                }
+              />
+              {errors.apartment && (
+                <p id="error_apartment" className={styles.errorText}>
+                  {errors.apartment.message}
+                </p>
+              )}
+            </div>
+            <div className={styles.inputGroup}>
+              <input
+                {...register("city", { required: t("fields.city.error") })}
+                type="text"
+                placeholder={t("fields.city.city")}
+                className={errors.city ? styles.errorField : styles.happyField}
+              />
+              {errors.city && (
+                <p id="error_city" className={styles.errorText}>
+                  {errors.city.message}
+                </p>
+              )}
+            </div>
+
+            <div className={styles.inputGroup}>
+              <Select
+                {...register("state")}
+                placeholder="State"
+                defaultValue={selectStateOptions[0].value}
+                className={styles.drop}
+                required
+              >
+                {selectStateOptions.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.state && (
+                <p id="error_state" className={styles.errorText}>
+                  {errors.state.message}
+                </p>
+              )}
+            </div>
+
+            <div className={styles.inputGroup}>
+              <input
+                {...register("zip_code", {
+                  required: t("fields.zipCode.error"),
+                  minLength: {
+                    message: t("fields.zipCode.error"),
+                    value: 5,
+                  },
+                  maxLength: {
+                    message: t("fields.zipCode.error"),
+                    value: 5,
+                  },
+                })}
+                type="number"
+                placeholder={t("fields.zipCode.zipCode")}
+                className={
+                  errors.zip_code ? styles.errorField : styles.happyField
+                }
+              />
+              {errors.zip_code && (
+                <p id="error_zip_code" className={styles.errorText}>
+                  {errors.zip_code.message}
+                </p>
+              )}
+            </div>
+
+            <div className={styles.extraSpaceBelow}>
+              <label>
+                <input {...register("roof_access")} type="checkbox" />
+                {t("fields.roofAccess")}
+              </label>
+            </div>
           </div>
-          <br />
-          <input
-            {...register("referral")}
-            type="text"
-            placeholder={t("fields.reference")}
-          />
-          <label>
+
+          <div className={styles.inputGroup}>
             <input
-              {...register("ncl", { required: "Please agree to the NCL!" })}
-              type="checkbox"
-              required
+              {...register("referral")}
+              type="text"
+              placeholder={t("fields.reference")}
+              className={
+                errors.referral ? styles.errorField : styles.happyField
+              }
             />
-            {t.rich("fields.ncl", {
-              ncl: (chunks) => (
-                <a href="https://www.nycmesh.net/ncl.pdf">{chunks}</a>
-              ),
-            })}
-          </label>
-          {/* This first captcha isn't actually displayed, it just silently collects user metrics and generates a token */}
-          {recaptchaV3Key ? (
-            <ReCAPTCHA
-              ref={recaptchaV3Ref}
-              sitekey={recaptchaV3Key}
-              size="invisible"
-              hl={locale}
-              onErrored={() => {
-                console.error(
-                  "Encountered an error while initializing or querying captcha. " +
-                    "Disabling some frontend captcha features to avoid hangs. " +
-                    "Are the recaptcha keys set correctly in the env variables?",
-                );
-                setReCaptchaError(true);
-              }}
-            />
-          ) : (
-            <></>
-          )}
-          {/* This second captcha is the traditional "I'm not a robot" checkbox,
+            {errors.referral && (
+              <p id="error_first_name" className={styles.errorText}>
+                {errors.referral.message}
+              </p>
+            )}
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label>
+              <input
+                {...register("ncl", { required: t("fields.ncl.error") })}
+                type="checkbox"
+                className={errors.ncl ? styles.errorField : styles.happyField}
+              />
+              {t.rich("fields.ncl.ncl", {
+                ncl: (chunks) => (
+                  <a href="https://www.nycmesh.net/ncl.pdf">{chunks}</a>
+                ),
+              })}
+            </label>
+            {errors.ncl && (
+              <p id="error_ncl" className={styles.errorText}>
+                {errors.ncl.message}
+              </p>
+            )}
+          </div>
+
+          <div className={styles.inputGroup}>
+            {/* This first captcha isn't actually displayed, it just silently collects user metrics and generates a token */}
+            {recaptchaV3Key ? (
+              <ReCAPTCHA
+                ref={recaptchaV3Ref}
+                sitekey={recaptchaV3Key}
+                size="invisible"
+                hl={locale}
+                onErrored={() => {
+                  console.error(
+                    "Encountered an error while initializing or querying captcha. " +
+                      "Disabling some frontend captcha features to avoid hangs. " +
+                      "Are the recaptcha keys set correctly in the env variables?",
+                  );
+                  setReCaptchaError(true);
+                }}
+              />
+            ) : (
+              <></>
+            )}
+            {/* This second captcha is the traditional "I'm not a robot" checkbox,
           only shown if the user gets 401'ed due to a low score on the above captcha */}
-          {isProbablyABot && recaptchaV2Key ? (
-            <ReCAPTCHA
-              className={styles.centered}
-              style={{ marginTop: "15px" }}
-              ref={recaptchaV2Ref}
-              sitekey={recaptchaV2Key}
-              hl={locale}
-              onChange={(newToken) => setCheckBoxCaptchaToken(newToken ?? "")}
-              onErrored={() => {
-                console.error(
-                  "Encountered an error while initializing or querying captcha. " +
-                    "Disabling all frontend captcha features to avoid hangs. " +
-                    "Are the recaptcha keys set correctly in the env variables?",
-                );
-                setReCaptchaError(true);
-              }}
-            />
-          ) : (
-            <></>
-          )}
+            {isProbablyABot && recaptchaV2Key ? (
+              <ReCAPTCHA
+                className={styles.centered}
+                style={{ marginTop: "15px" }}
+                ref={recaptchaV2Ref}
+                sitekey={recaptchaV2Key}
+                hl={locale}
+                onChange={(newToken) => setCheckBoxCaptchaToken(newToken ?? "")}
+                onErrored={() => {
+                  console.error(
+                    "Encountered an error while initializing or querying captcha. " +
+                      "Disabling all frontend captcha features to avoid hangs. " +
+                      "Are the recaptcha keys set correctly in the env variables?",
+                  );
+                  setReCaptchaError(true);
+                }}
+              />
+            ) : (
+              <></>
+            )}
+          </div>
           {/*
           <div>
             <p>State Debugger</p>
@@ -580,8 +697,6 @@ export default function JoinForm() {
               disabled={
                 isLoading ||
                 isSubmitted ||
-                isBadPhoneNumber ||
-                !isValid ||
                 (isProbablyABot && !checkBoxCaptchaToken && !reCaptchaError)
               }
               variant="contained"

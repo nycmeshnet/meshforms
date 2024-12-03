@@ -14,24 +14,49 @@
       "addressInfo": "地址信息"
     },
     "fields": {
-      "firstName": "名字",
-      "lastName": "姓氏",
-      "emailAddress": "电子邮件地址",
+      "firstName": {
+        "firstName": "名",
+        "error": "请输入您的名字"
+      },
+      "lastName": {
+        "lastName": "姓",
+        "error": "请输入您的姓氏"
+      },
+      "emailAddress": {
+        "emailAddress": "电子邮件",
+        "error": "请输入有效的电子邮件地址"
+      },
       "phoneNumber": {
         "phoneNumber": "电话号码",
         "error": "请输入有效的电话号码。"
       },
-      "streetAddress": "街道地址",
-      "unit": "单元/公寓编号",
-      "city": "城市",
-      "zipCode": "邮政编码",
+      "streetAddress": {
+        "streetAddress": "街道地址",
+        "error": "请输入您的街道地址"
+      },
+      "unit": {
+        "unit": "单位/公寓#",
+        "error": "请输入您的公寓号码，如果没有，请输入“N/A”"
+      },
+      "city": {
+        "city": "城市",
+        "error": "请输入您的城市"
+      },
+      "zipCode": {
+        "zipCode": "邮政编码",
+        "error": "请输入有效的邮政编码"
+      },
       "roofAccess": "如果您有屋顶通道,请勾选此框",
       "reference": "您是如何知道我们的？",
-      "ncl": "我同意<ncl>网络共享许可</ncl>",
+      "ncl": {
+        "ncl": "我同意<ncl>网络共享许可证</ncl>",
+        "error": "请同意网络共享许可证！"
+      },
       "submit": {
         "submit": "提交",
         "loading": "正在加载...",
-        "thanks": "谢谢！"
+        "thanks": "谢谢！",
+        "goHome": "回家"
       }
     },
     "states": {
@@ -60,5 +85,8 @@
     "pleaseConfirmBody": "我们需要重新格式化您的一些信息。请确保以下字段准确无误。",
     "originalInformationColumnHeader": "原始信息",
     "newInformationColumnHeader": "新信息"
+  },
+  "Manifest": {
+    "name": "纽约市网格 MeshForms"
   }
 }
