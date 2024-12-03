@@ -192,7 +192,7 @@ export default function JoinForm() {
     let record: JoinRecord = Object.assign(
       structuredClone(joinFormSubmission),
       {
-        version: 2,
+        version: 3,
         uuid: self.crypto.randomUUID(),
         submission_time: new Date().toISOString(),
         code: null,
