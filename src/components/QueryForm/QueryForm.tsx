@@ -200,6 +200,7 @@ export function QueryForm() {
           );
         },
       },
+      { field: "status", headerName: "Node Status" },
       { field: "status", headerName: "Install Status" },
       { field: "notes", headerName: "Notes", width: 400 },
     ],
@@ -280,7 +281,7 @@ export function QueryForm() {
       >
         <strong>
           Install # / Address / City / State / ZIP / Unit / Name / Email Address
-          / Stripe Email / Phone / NN / Status
+          / Stripe Email / Phone / NN / Node Status / Install Status
         </strong>
         <ul style={{ listStyleType: "none" }}>
           {legacyQueryResults.map((r, key) => {
@@ -296,7 +297,7 @@ export function QueryForm() {
                   {r.stripe_email_address}
                 </a>
                 , <a href={"tel:" + r.phone_number}>{r.phone_number}</a>,{" "}
-                {r.network_number}, {r.status}
+                {r.network_number}, {r.network_number}, {r.status}
               </li>
             );
           })}

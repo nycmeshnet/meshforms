@@ -43,6 +43,7 @@ export const QueryFormResponse = z.object({
       additional_email_addresses: z.array(z.string()).nullable(),
       notes: z.string(),
       network_number: z.number().nullable(),
+      network_number_status: z.string(),
       status: z.string(),
     }),
   ),
