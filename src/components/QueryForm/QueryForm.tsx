@@ -15,6 +15,7 @@ const options = [
   { value: "network_number", label: "Network Number (NN)" },
   { value: "install_number", label: "Install Number (#)" },
   { value: "bin", label: "BIN" },
+  { value: "name", label: "Member Name" },
 ];
 
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
@@ -67,6 +68,7 @@ export function QueryForm() {
 
       switch (queryForm.query_type) {
         case "email_address":
+        case "name":
           route = "members";
           break;
         case "street_address":
@@ -200,6 +202,7 @@ export function QueryForm() {
           );
         },
       },
+      { field: "status", headerName: "Node Status" },
       { field: "status", headerName: "Install Status" },
       { field: "notes", headerName: "Notes", width: 400 },
     ],
@@ -280,7 +283,7 @@ export function QueryForm() {
       >
         <strong>
           Install # / Address / City / State / ZIP / Unit / Name / Email Address
-          / Stripe Email / Phone / NN / Status
+          / Stripe Email / Phone / NN / Node Status / Install Status
         </strong>
         <ul style={{ listStyleType: "none" }}>
           {legacyQueryResults.map((r, key) => {
@@ -296,7 +299,7 @@ export function QueryForm() {
                   {r.stripe_email_address}
                 </a>
                 , <a href={"tel:" + r.phone_number}>{r.phone_number}</a>,{" "}
-                {r.network_number}, {r.status}
+                {r.network_number}, {r.network_number}, {r.status}
               </li>
             );
           })}
