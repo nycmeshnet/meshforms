@@ -15,6 +15,7 @@ const options = [
   { value: "network_number", label: "Network Number (NN)" },
   { value: "install_number", label: "Install Number (#)" },
   { value: "bin", label: "BIN" },
+  { value: "name", label: "Member Name" },
 ];
 
 import { AgGridReact } from "ag-grid-react"; // React Grid Logic
@@ -67,6 +68,7 @@ export function QueryForm() {
 
       switch (queryForm.query_type) {
         case "email_address":
+        case "name":
           route = "members";
           break;
         case "street_address":
