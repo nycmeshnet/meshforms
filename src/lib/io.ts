@@ -32,7 +32,7 @@ export const QueryFormResponse = z.object({
     z.object({
       install_number: z.number(),
       street_address: z.string().nullable(),
-      unit: z.string(),
+      unit: z.string().nullable(),
       city: z.string(),
       state: z.string(),
       zip_code: z.string(),

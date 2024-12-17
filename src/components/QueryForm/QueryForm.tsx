@@ -287,7 +287,7 @@ export function QueryForm() {
             return (
               <li>
                 {r.install_number}, {r.street_address}, {r.city}, {r.state},{" "}
-                {r.zip_code}, {r.unit}, {r.name},{" "}
+                {r.zip_code}, {r.unit ?? ""}, {r.name},{" "}
                 <a href={"mailto:" + r.primary_email_address}>
                   {r.primary_email_address}
                 </a>
