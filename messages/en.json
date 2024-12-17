@@ -20,20 +20,44 @@
       "addressInfo": "Address Info"
     },
     "fields": {
-      "firstName": "First Name",
-      "lastName": "Last Name",
-      "emailAddress": "Email Address",
+      "firstName": {
+        "firstName": "First Name",
+        "error": "Please enter your first name"
+      },
+      "lastName": {
+        "lastName": "Last Name",
+        "error": "Please enter your last name"
+      },
+      "emailAddress": {
+        "emailAddress": "Email Address",
+        "error": "Please enter a valid email address"
+      },
       "phoneNumber": {
         "phoneNumber": "Phone Number",
         "error": "Please enter a valid phone number."
       },
-      "streetAddress": "Street Address",
-      "unit": "Unit / Apartment #",
-      "city": "City",
-      "zipCode": "Zip Code",
+      "streetAddress": {
+        "streetAddress": "Street Address",
+        "error": "Please enter your street address"
+      },
+      "unit": {
+        "unit": "Unit / Apartment #",
+        "error": "Please enter your apartment number, or \"N/A\" if you don't have one"
+      },
+      "city": {
+        "city": "City",
+        "error": "Please enter your city"
+      },
+      "zipCode": {
+        "zipCode": "Zip Code",
+        "error": "Please enter a valid ZIP code"
+      },
       "roofAccess": "Check this box if you have roof access",
       "reference": "How did you hear about us?",
-      "ncl": "I agree to the <ncl>Network Commons License</ncl>",
+      "ncl": {
+        "ncl": "I agree to the <ncl>Network Commons License</ncl>",
+        "error": "Please agree to the Network Commons License!"
+      },
       "submit": {
         "submit": "Submit",
         "loading": "Loading...",

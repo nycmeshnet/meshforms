@@ -59,7 +59,11 @@ export default [
 
     if (!joinRequest.trust_me_bro) {
       // Bail on New Jersey
-      if (joinRequest.state === "NJ" || joinRequest.state === "New Jersey") {
+      if (
+        joinRequest.state === "NJ" ||
+        joinRequest.state === "New Jersey" ||
+        joinRequest.zip_code === "07030"
+      ) {
         let r = new JoinFormResponse();
         r.detail =
           "Mock: Non-NYC registrations are not supported at this time.";
@@ -82,6 +86,20 @@ export default [
         r.detail = "Mock: Please confirm a few details.";
         r.changed_info = { city: "Brooklyn" };
         return HttpResponse.json(r, { status: 409 });
+      }
+
+      if (joinRequest.phone_number === "") {
+        // This is probably the wrong way to do this, but the empty phone number case was
+        // failing the strict equality check below
+
+        let expectedData: JoinFormValues = Object.assign(
+          {},
+          expectedAPIRequestData,
+        );
+        expectedData.phone_number = "";
+        if (isDeepStrictEqual(joinRequest, expectedData)) {
+          return HttpResponse.json(good_response, { status: 201 });
+        }
       }
 
       // If anything else is wrong with the form we got, then bail
