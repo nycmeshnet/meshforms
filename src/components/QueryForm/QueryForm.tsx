@@ -299,7 +299,7 @@ export function QueryForm() {
                   {r.stripe_email_address}
                 </a>
                 , <a href={"tel:" + r.phone_number}>{r.phone_number}</a>,{" "}
-                {r.network_number}, {r.network_number}, {r.status}
+                {r.network_number}, {r.network_number_status}, {r.status}
               </li>
             );
           })}
