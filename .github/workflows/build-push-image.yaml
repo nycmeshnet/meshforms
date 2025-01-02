@@ -3,16 +3,11 @@ permissions: read-all
 
 on:
   workflow_call:
-    inputs:
-      environment:
-        required: true
-        type: string
 
 jobs:
-  push_to_registry_env:
+  push_to_registry:
     name: Push Docker Image to Docker Hub
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
@@ -35,5 +30,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: willnilges/meshforms:${{ inputs.environment }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
