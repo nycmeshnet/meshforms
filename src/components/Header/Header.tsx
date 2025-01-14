@@ -133,7 +133,7 @@ export function Header(props: Props) {
                 justifyContent: "space-between",
               }}
             >
-              <a href="/" style={styles.a}>
+              <a href="https://nycmesh.net" style={styles.a}>
                 <img src="/logo.svg" style={{ width: "2rem" }} alt="" />
                 <Typography
                   variant="h6"
