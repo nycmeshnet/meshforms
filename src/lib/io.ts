@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const NNAssignFormInput = z.object({
   install_number: z.number(),
-  password: z.string(), // TODO: Salt/hash/whatever this
 });
 export type NNAssignFormInput = z.infer<typeof NNAssignFormInput>;
 
@@ -20,7 +19,6 @@ export const QueryFormInput = z.object({
   legacy: z.string().optional(),
   query_type: z.string(),
   data: z.string(),
-  password: z.string(), // TODO: Salt/hash/whatever this
 });
 export type QueryFormInput = z.infer<typeof QueryFormInput>;
 

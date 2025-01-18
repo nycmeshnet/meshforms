@@ -54,6 +54,7 @@ export function QueryForm() {
     return QueryFormInput.parse(data);
   }
 
+  // TODO: Check if we need to log in the user
   async function sendForm(event: FormEvent<HTMLFormElement>) {
     // Clear previous query results
     setLegacyQueryResults([]);
@@ -90,7 +91,6 @@ export function QueryForm() {
         route,
         queryForm.query_type,
         queryForm.data,
-        queryForm.password,
       );
       console.log("response is:");
       console.log(resp);
@@ -252,12 +252,6 @@ export function QueryForm() {
           />
           <div className={styles.horizontal}>
             <input type="text" name="data" placeholder={queryLabel} required />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              required
-            />
           </div>
           <div className={styles.centered}>
             <label>
