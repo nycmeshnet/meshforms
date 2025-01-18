@@ -1,6 +1,6 @@
 "use client";
 
-import { submitQueryForm } from "@/lib/api";
+import { checkIfLoggedIn, submitQueryForm } from "@/lib/api";
 import { QueryFormInput, QueryFormResponse } from "@/lib/io";
 import Button from "@mui/material/Button";
 import { toastErrorMessage } from "@/components/toastErrorMessage";
@@ -42,6 +42,17 @@ export function QueryForm() {
   const [isDeveloper, showIsDeveloperDialog] = useIsDeveloper();
   if (env?.includes("dev") && !isDeveloper) {
     showIsDeveloperDialog();
+  }
+
+  async function redirectToLoginIfNecessary() {
+    const loggedIn = await checkIfLoggedIn();
+    console.log(`logged in: ${loggedIn}`);
+
+    if (!loggedIn) {
+      const api_base = new URL(`${await getMeshDBAPIEndpoint()}/api/v1/`);
+      // Not ideal to redirect back to mesh homepage.
+      window.location.href = new URL("/auth/login?next=/", api_base);
+    }
   }
 
   function parseForm(event: FormEvent<HTMLFormElement>) {
@@ -230,6 +241,8 @@ export function QueryForm() {
       colIds: exceptNotes,
     },
   };
+
+  redirectToLoginIfNecessary();
 
   return (
     <>
