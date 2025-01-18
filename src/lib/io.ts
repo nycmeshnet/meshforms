@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const NNAssignFormInput = z.object({
   install_number: z.number(),
+  password: z.string(),
 });
 export type NNAssignFormInput = z.infer<typeof NNAssignFormInput>;
 
