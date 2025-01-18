@@ -1,6 +1,6 @@
 "use client";
 
-import { submitQueryForm } from "@/lib/api";
+import { checkIfLoggedIn, submitQueryForm } from "@/lib/api";
 import { QueryFormInput, QueryFormResponse } from "@/lib/io";
 import Button from "@mui/material/Button";
 import { toastErrorMessage } from "@/components/toastErrorMessage";
@@ -44,6 +44,17 @@ export function QueryForm() {
     showIsDeveloperDialog();
   }
 
+  async function redirectToLoginIfNecessary() {
+    const loggedIn = await checkIfLoggedIn();
+    console.log(`logged in: ${loggedIn}`);
+
+    if (!loggedIn) {
+      const api_base = new URL(`${await getMeshDBAPIEndpoint()}/api/v1/`);
+      // Not ideal to redirect back to mesh homepage.
+      window.location.href = new URL("/auth/login?next=/", api_base);
+    }
+  }
+
   function parseForm(event: FormEvent<HTMLFormElement>) {
     const formData = new FormData(event.currentTarget);
     const data: Record<string, string | Blob> = {};
@@ -54,6 +65,7 @@ export function QueryForm() {
     return QueryFormInput.parse(data);
   }
 
+  // TODO: Check if we need to log in the user
   async function sendForm(event: FormEvent<HTMLFormElement>) {
     // Clear previous query results
     setLegacyQueryResults([]);
@@ -90,7 +102,6 @@ export function QueryForm() {
         route,
         queryForm.query_type,
         queryForm.data,
-        queryForm.password,
       );
       console.log("response is:");
       console.log(resp);
@@ -231,6 +242,8 @@ export function QueryForm() {
     },
   };
 
+  redirectToLoginIfNecessary();
+
   return (
     <>
       <div className={styles.formBody}>
@@ -252,12 +265,6 @@ export function QueryForm() {
           />
           <div className={styles.horizontal}>
             <input type="text" name="data" placeholder={queryLabel} required />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              required
-            />
           </div>
           <div className={styles.centered}>
             <label>

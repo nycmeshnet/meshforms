@@ -6,6 +6,7 @@ import {
 } from "@/lib/io";
 import { z } from "zod";
 import { getMeshDBAPIEndpoint } from "./endpoint";
+import { parse } from "path";
 
 const get = async <S extends z.Schema>(
   url: string,
@@ -15,51 +16,33 @@ const get = async <S extends z.Schema>(
 ): Promise<ReturnType<S["parse"]>> => {
   const api_base = new URL(`${await getMeshDBAPIEndpoint()}/api/v1/`);
   const res = await fetch(new URL(url, api_base), {
-    headers: {
-      ...(auth && { Authorization: `Bearer ${auth}` }),
-    },
+    credentials: "include",
     next: nextOptions,
   }).catch(console.warn);
   if (!res?.ok) throw res;
   return schema.parse(await res.json());
 };
 
-const post = async <S extends z.Schema>(
-  url: string,
-  schema: S,
-  input: unknown,
-  auth?: string,
-  method = "POST",
-): Promise<ReturnType<S["parse"]>> => {
-  console.log("Will POST: " + input);
-  const api_base = new URL(`${await getMeshDBAPIEndpoint()}/api/v1/`);
-  const res = await fetch(new URL(url, api_base), {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...(auth && { Authorization: `Bearer ${auth}` }),
-    },
-    body: JSON.stringify(input),
-  }).catch(console.warn);
-  if (!res?.ok) throw res;
-  return schema.parse(await res.json());
-};
-
-export const submitNNAssignForm = (input: NNAssignFormInput) =>
-  post(
-    `/api/v1/nn-assign/`,
-    NNAssignFormResponse,
-    NNAssignFormInput.parse(input),
-  );
-
-export const submitQueryForm = (
+export const submitQueryForm = async (
   route: string,
   input_type: string,
   input: string,
-  password: string,
-) =>
-  get(
-    `/api/v1/query/${route}/?${input_type}=${input}`,
-    QueryFormResponse,
-    password,
-  );
+) => get(`/api/v1/query/${route}/?${input_type}=${input}`, QueryFormResponse);
+
+
+// FIXME (wdn): This is terrible. It won't work for members who have meshdb accounts
+// but don't have permission to use this-or-that form.
+export const checkIfLoggedIn = async () => {
+  // Check if we're logged in
+  const api_base = new URL(`${await getMeshDBAPIEndpoint()}/api/v1/`);
+  const checkAuthedRoute = await fetch(new URL("/api/v1/nodes/3", api_base), {
+    credentials: "include",
+  });
+  if (checkAuthedRoute.ok) {
+    return true;
+  }
+
+  if (checkAuthedRoute.status === 403) {
+    return false;
+  }
+};
