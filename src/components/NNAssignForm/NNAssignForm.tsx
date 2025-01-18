@@ -39,11 +39,6 @@ export function NNAssignForm() {
     setIsSubmitted(true);
     return fetch(`${await getMeshDBAPIEndpoint()}/api/v1/nn-assign/`, {
       method: "POST",
-      mode: "cors",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify(input),
     })
       .then(async (response) => {
@@ -57,7 +52,6 @@ export function NNAssignForm() {
         throw response;
       })
       .catch(async (error) => {
-        console.log(JSON.stringify(error));
         const errorJson = await error.json();
         const detail = await errorJson.detail;
         console.error(`Could not assign NN: ${detail}`);
@@ -88,6 +82,14 @@ export function NNAssignForm() {
               })}
               type="number"
               placeholder="Install Number"
+              required
+            />
+            <input
+              {...register("password", {
+                required: "Please enter your pre-shared key",
+              })}
+              type="password"
+              placeholder="Pre-Shared Key"
               required
             />
           </div>
