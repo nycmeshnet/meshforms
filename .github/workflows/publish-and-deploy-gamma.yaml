@@ -1,4 +1,4 @@
-name: Publish and Deploy
+name: Publish and Deploy (Gamma)
 permissions: read-all
 
 on:
