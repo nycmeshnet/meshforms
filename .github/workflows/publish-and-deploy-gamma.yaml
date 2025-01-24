@@ -15,7 +15,7 @@ jobs:
     with:
       environment: gamma1
     secrets: inherit
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/dev'
 
   deploy_to_gamma1:
     name: Deploy to gamma1
@@ -24,4 +24,4 @@ jobs:
       environment: gamma1
     secrets: inherit
     needs: push_to_registry_gamma
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/dev'
