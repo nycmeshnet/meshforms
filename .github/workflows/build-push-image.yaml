@@ -7,6 +7,9 @@ on:
       environment:
         required: true
         type: string
+      image_tag:
+        required: true
+        type: string
 
 jobs:
   push_to_registry_env:
