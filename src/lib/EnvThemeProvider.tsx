@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from "@mui/material/styles";
 import { useEnvContext } from "@/lib/EnvProvider";
-import { devTheme, localTheme, prodTheme } from "../../theme";
+import { devTheme, gammaTheme, localTheme, prodTheme } from "../../theme";
 
 export interface EnvThemeProviderProps {
   children?: React.ReactNode;
@@ -23,6 +23,8 @@ export const EnvThemeProvider: React.FC<EnvThemeProviderProps> = ({
     theme = prodTheme;
   } else if (env?.includes("dev")) {
     theme = devTheme;
+  } else if (env?.includes("gamma")) {
+    theme = gammaTheme;
   }
 
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
