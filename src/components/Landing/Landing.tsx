@@ -18,6 +18,7 @@ const Landing = () => {
 
   return (
     <>
+      <h1>hello world</h1>
       <Box sx={{ textAlign: "center", py: { md: "7vw", sm: 0 } }}>
         <Typography variant="h2" sx={{ pb: 3 }}>
           {t("welcome")}
