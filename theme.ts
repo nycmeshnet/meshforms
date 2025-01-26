@@ -68,7 +68,7 @@ const localThemeOptions: ThemeOptions = structuredClone(devThemeOptions);
   "#d4f9ff";
 
 const gammaThemeOptions: ThemeOptions = structuredClone(devThemeOptions);
-(localThemeOptions.palette!.header as SimplePaletteColorOptions).main =
+(gammaThemeOptions.palette!.header as SimplePaletteColorOptions).main =
   "#d4f9ff";
 
 export const prodTheme = createTheme(prodThemeOptions);

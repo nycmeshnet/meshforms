@@ -13,8 +13,6 @@ export const EnvThemeProvider: React.FC<EnvThemeProviderProps> = ({
 }) => {
   const env = useEnvContext();
 
-  console.log(env);
-
   let theme = localTheme;
   if (env === undefined) {
     // This is the case where we haven't loaded the env var from the backend yet. We use prod themes here to prevent
