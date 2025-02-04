@@ -1,0 +1,46 @@
+.formBody {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+}
+
+.formBody input[type="number"] {
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 16px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  outline-offset: 4px;
+}
+
+.formBody button {
+  margin-top: 2px; /* Graphic Design Is My Passion */
+}
+
+.formBody button:hover {
+  opacity: 0.8;
+}
+
+.formBody button[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.panoramaList {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+    gap: 10px; /* Optional: add gap between items */
+}
+
+.image img {
+  max-width: 100%;
+}
+
+.imageMetadata {
+}
+
+.imageMetadata li {
+  list-style: none;
+}

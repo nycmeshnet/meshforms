@@ -9,5 +9,4 @@ test("happy panorama form", async ({ page }) => {
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Upload Panoramas and other Install Photos/);
-
 });

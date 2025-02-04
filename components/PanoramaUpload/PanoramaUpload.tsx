@@ -108,7 +108,9 @@ function PanoramaUploader() {
           return;
         }
         if (response.status == 413) {
-          toast.error(`File size limit exceeded! Try splitting into multiple submissions.`);
+          toast.error(
+            `File size limit exceeded! Try splitting into multiple submissions.`,
+          );
           setIsLoading(false);
         }
       })
@@ -151,16 +153,13 @@ function PanoramaUploader() {
               {isLoading ? "Loading..." : "Submit"}
             </Button>
             <div hidden={!isLoading}>
-            <CircularProgress/>
+              <CircularProgress />
             </div>
           </div>
         </form>
       </div>
       <div className="toasty">
-        <ToastContainer
-          hideProgressBar={true}
-          theme={"colored"}
-        />
+        <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
       <PanoramaDuplicateDialog
         formSubmission={formSubmission}
