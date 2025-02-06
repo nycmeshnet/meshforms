@@ -44,6 +44,7 @@ function PanoramaViewer() {
   return (
     <>
       <h2>Image Viewer</h2>
+      <p>Enter an install number, and Pano will fetch all relevant images for you.
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formBody}>
           <input
