@@ -88,10 +88,20 @@ function PanoramaUploader() {
     // Upload possibly duplicate images
     formData.append("trustMeBro", trustMeBro ? "true" : "false");
 
+    // Temporary dev token
+    formData.append(
+      "token",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
+    );
+
     console.log(formData);
 
-    fetch("http://127.0.0.1:8089/api/v1/upload", {
+    fetch("http://127.0.0.1:8001/api/v1/upload", {
       method: "POST",
+      headers: {
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
+      },
       body: formData,
     })
       .then(async (response) => {
@@ -113,10 +123,13 @@ function PanoramaUploader() {
           );
           setIsLoading(false);
         }
+        throw response;
       })
-      .catch((error) => {
-        console.error("File upload error:", error);
-        toast.error(`File upload error: ${error}`);
+      .catch(async (error) => {
+        const j = await error.json();
+        const msg = `File upload error: ${j.detail}`;
+        console.error(msg);
+        toast.error(msg);
         setIsLoading(false);
       });
   }

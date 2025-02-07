@@ -1,8 +1,8 @@
 import PanoramaViewer from "@/components/PanoramaViewer/PanoramaViewer";
 
 export const metadata = {
-  title: "Upload Panoramas and other Install Photos",
-  description: "Submit photos taken from rooftops or other documentation",
+  title: "View Images on pano",
+  description: "View photos taken from rooftops or other install documentation",
 };
 
 export default async function PanoramaUpload() {

@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import styles from "./PanoramaViewer.module.scss";
 import { Button, CircularProgress } from "@mui/material";
 import { useForm } from "react-hook-form";
+import PanoramaViewerCard from "../PanoramaViewerCard/PanoramaViewerCard";
 
 type FormValues = {
   installNumber: number;
@@ -24,14 +25,17 @@ function PanoramaViewer() {
   const [images, setImages] = React.useState([{}]);
 
   function getImages(installNumber: number) {
-    fetch(`http://127.0.0.1:8089/api/v1/install/${installNumber}`).then(
-      async (response) => {
-        const images = await response.json();
-        console.log(images);
-        setImages(images);
-        setIsLoading(false);
+    fetch(`http://127.0.0.1:8001/api/v1/install/${installNumber}`, {
+      headers: {
+        token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
       },
-    );
+    }).then(async (response) => {
+      const images = await response.json();
+      console.log(images);
+      setImages(images);
+      setIsLoading(false);
+    });
   }
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
@@ -44,7 +48,10 @@ function PanoramaViewer() {
   return (
     <>
       <h2>Image Viewer</h2>
-      <p>Enter an install number, and Pano will fetch all relevant images for you.
+      <p>
+        Enter an install number, and Pano will fetch all relevant images for
+        you.
+      </p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formBody}>
           <input
@@ -67,20 +74,28 @@ function PanoramaViewer() {
         </div>
       </form>
       <div className={styles.panoramaList}>
-        {
-          images.map((image, index) => (
-            <div>
-              <div className={styles.imageMetadata}>
-                <ul>
-                  <li>{image.original_filename}</li>
-                  <li>{image.timestamp}</li>
-                  <li>{image.category}</li>
-                </ul>
-              </div>
-              <div className={styles.image}><img src={image.url}/></div>
+        {images.map((image, index) => (
+          <div>
+            {/*
+            <div className={styles.imageMetadata}>
+              <ul>
+                <li>{image.original_filename}</li>
+                <li>{image.timestamp}</li>
+                <li>{image.category}</li>
+              </ul>
             </div>
-          ))
-        }
+            <div className={styles.image}>
+              <img src={image.url} />
+            </div>*/}
+
+            <PanoramaViewerCard
+              originalFilename={image.original_filename}
+              timestamp={image.timestamp}
+              category={image.category}
+              url={image.url}
+            />
+          </div>
+        ))}
       </div>
     </>
   );
