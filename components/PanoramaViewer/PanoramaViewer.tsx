@@ -22,7 +22,7 @@ function PanoramaViewer() {
   } = useForm<FormValues>();
 
   const [isLoading, setIsLoading] = React.useState(false);
-  const [images, setImages] = React.useState([{}]);
+  const [images, setImages] = React.useState([]);
 
   function getImages(installNumber: number) {
     fetch(`http://127.0.0.1:8001/api/v1/install/${installNumber}`, {
@@ -74,21 +74,10 @@ function PanoramaViewer() {
         </div>
       </form>
       <div className={styles.panoramaList}>
-        {images.map((image, index) => (
+        {images.length > 0 && images.map((image, index) => (
           <div>
-            {/*
-            <div className={styles.imageMetadata}>
-              <ul>
-                <li>{image.original_filename}</li>
-                <li>{image.timestamp}</li>
-                <li>{image.category}</li>
-              </ul>
-            </div>
-            <div className={styles.image}>
-              <img src={image.url} />
-            </div>*/}
-
             <PanoramaViewerCard
+              id={image.id}
               originalFilename={image.original_filename}
               timestamp={image.timestamp}
               category={image.category}

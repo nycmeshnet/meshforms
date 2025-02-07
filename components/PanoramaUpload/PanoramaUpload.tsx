@@ -89,10 +89,10 @@ function PanoramaUploader() {
     formData.append("trustMeBro", trustMeBro ? "true" : "false");
 
     // Temporary dev token
-    formData.append(
-      "token",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
-    );
+    //formData.append(
+    //  "token",
+    //  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
+    //);
 
     console.log(formData);
 
