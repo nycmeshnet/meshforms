@@ -88,19 +88,13 @@ function PanoramaUploader() {
     // Upload possibly duplicate images
     formData.append("trustMeBro", trustMeBro ? "true" : "false");
 
-    // Temporary dev token
-    //formData.append(
-    //  "token",
-    //  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
-    //);
-
     console.log(formData);
 
     fetch("http://127.0.0.1:8001/api/v1/upload", {
       method: "POST",
       headers: {
         token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
+          process.env.NEXT_PUBLIC_PANO_TOKEN,
       },
       body: formData,
     })

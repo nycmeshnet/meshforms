@@ -52,7 +52,7 @@ function handleUpdateCategory(event) {
       method: "POST",
       headers: {
         token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
+          process.env.NEXT_PUBLIC_PANO_TOKEN,
       },
       body: formData, 
     }).then(async (response) => {
