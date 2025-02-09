@@ -15,3 +15,13 @@
 .imageMetadata li {
   list-style: none;
 }
+
+.imageActions {
+  display: flex;
+  justify-content: center;
+}
+
+.imageActions a {
+  padding: 10px;
+  filter: opacity(0.4);
+}

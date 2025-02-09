@@ -88,6 +88,10 @@ function handleUpdateCategory(event) {
             </Select>
           </ul>
         </div>
+        <div className={styles.imageActions}>
+          <a href={url}><img src="/download_icon.png" width={24}/></a>
+          <img src="/edit_icon.png" width={24} onClick={handleReplace}/>
+        </div>
         <div className={styles.image}>
           <img src={url} />
         </div>
