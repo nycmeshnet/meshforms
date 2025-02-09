@@ -116,6 +116,7 @@ function PanoramaUploader() {
             `File size limit exceeded! Try splitting into multiple submissions.`,
           );
           setIsLoading(false);
+          return;
         }
         throw response;
       })
