@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 
 import styles from "./PanoramaViewerCard.module.scss";
-import { MenuItem, Select } from "@mui/material";
+import { CircularProgress, MenuItem, Select } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 
@@ -70,6 +70,8 @@ function handleUpdateCategory(event) {
   const [isReplaceImageDropzoneOpen, setIsReplaceImageDropzoneOpen] =
     React.useState(false);
 
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const onFileDrop = (dropzoneImages: File[]) => {
     console.log(dropzoneImages[0].name);
     let formData = new FormData();
@@ -93,6 +95,7 @@ function handleUpdateCategory(event) {
         if (response.ok) {
           console.log("Files uploaded successfully");
           alert("Upload Successful!");
+          setIsLoading(false);
           return;
         }
         throw response;
@@ -101,12 +104,14 @@ function handleUpdateCategory(event) {
         const j = await error.json();
         const msg = `File upload error: ${j.detail}`;
         alert(msg);
+        setIsLoading(false);
       });
   };
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      onFileDrop(acceptedFiles); // Pass files to main form via callback
+      onFileDrop(acceptedFiles);
+      setIsLoading(true);
     },
     [onFileDrop],
   );
@@ -159,6 +164,10 @@ function handleUpdateCategory(event) {
         </div>
         </div>
         </div>
+        <div hidden={!isLoading}>
+        <div id={styles.loading}>
+          <CircularProgress />
+        </div></div>
       </div>
     </React.Fragment>
   );

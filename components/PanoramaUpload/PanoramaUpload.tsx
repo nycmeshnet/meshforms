@@ -66,7 +66,6 @@ function PanoramaUploader() {
     React.useState(false);
 
   // Disables the submit button and shows the throbber when a request is being processed.
-  // TODO (wdn): Implement this
   const [isLoading, setIsLoading] = React.useState(false);
 
   // Closes dupe dialog and tries the submission again
