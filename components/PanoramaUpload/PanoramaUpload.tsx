@@ -7,12 +7,23 @@ import "react-toastify/dist/ReactToastify.css";
 import PanoramaDropzone from "./PanoramaDropzone";
 import { Button, CircularProgress } from "@mui/material";
 import styles from "./PanoramaUpload.module.scss";
-import PanoramaDuplicateDialog from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
+import PanoramaDuplicateDialog, { PossibleDuplicate } from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
 
 type FormValues = {
   installNumber: number;
   dropzoneImages: File[];
 };
+
+interface Image {
+  category: "panorama";
+  id: string;
+  install_number: number;
+  order: number;
+  original_filename: string;
+  signature: string;
+  timestamp: string; // Consider using Date if parsing it later
+  url: string;
+}
 
 export type { FormValues };
 
@@ -25,7 +36,7 @@ function PanoramaUploader() {
     formState: { errors },
   } = useForm<FormValues>();
 
-  // Most recently submitted user form
+  // Mostrecently submitted user form
   const [formSubmission, setFormSubmission] = React.useState<FormValues>({
     installNumber: 0,
     dropzoneImages: [],
@@ -41,8 +52,14 @@ function PanoramaUploader() {
 
   // Titles and Links to images on the server that we think are duplicates
   const [possibleDuplicates, setPossibleDuplicates] = React.useState<
-    Array<[string, string]>
+    Array<PossibleDuplicate>
   >([]);
+
+  useEffect(() => {
+    if (possibleDuplicates.length > 0) {
+      setIsDuplicateDialogOpen(true);
+    }
+  }, [possibleDuplicates]);
 
   // Shows and hides the duplicate dialog
   const [isDuplicateDialogOpen, setIsDuplicateDialogOpen] =
@@ -88,8 +105,6 @@ function PanoramaUploader() {
     // Upload possibly duplicate images
     formData.append("trustMeBro", trustMeBro ? "true" : "false");
 
-    console.log(formData);
-
     fetch("http://127.0.0.1:8001/api/v1/upload", {
       method: "POST",
       headers: {
@@ -105,10 +120,34 @@ function PanoramaUploader() {
           setIsLoading(false);
         }
         if (response.status == 409) {
-          const imagesDuplicated = Object.entries(await response.json()); // Await the text() promise here
-          console.debug(imagesDuplicated);
-          setPossibleDuplicates(imagesDuplicated);
-          setIsDuplicateDialogOpen(true);
+          const j = await response.json();
+          
+          // Pano has just returned us a map of uploaded files to
+          // duplicate files. Not all the info in the uploaded file is useful,
+          // because it hasn't made it into the database yet (like the ID or the order)
+          // Use the names to locate the uploaded Files
+          // that match.
+          let pds: Array<PossibleDuplicate> = [];
+          j.possible_duplicates.forEach((dupe: {uploaded_file: Image, existing_file: Image}) => {
+            // Use the name of the uploaded file to find 
+            const matchedFile: File | undefined = formSubmission.dropzoneImages.find((file: File) => file.name === dupe.uploaded_file.original_filename);
+
+            if (matchedFile === undefined) {
+              // Sanity check. This should never happen.
+              console.error(`Did not find a matched file for ${dupe.uploaded_file.original_filename}`);
+              // Skip this iteration if we didn't find a file.
+              return;
+            }
+
+            const pd: PossibleDuplicate = {
+              fileName: dupe.existing_file.original_filename,
+              existingFileURL: dupe.existing_file.url,
+              uploadedFile: matchedFile,
+            }
+            pds.push(pd);
+          });
+          //console.log(pds);
+          setPossibleDuplicates(pds);
           return;
         }
         if (response.status == 413) {
@@ -170,7 +209,7 @@ function PanoramaUploader() {
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
       <PanoramaDuplicateDialog
-        formSubmission={formSubmission}
+        installNumber={formSubmission.installNumber}
         possibleDuplicates={possibleDuplicates}
         isDialogOpened={isDuplicateDialogOpen}
         handleClickUpload={handleClickUpload}

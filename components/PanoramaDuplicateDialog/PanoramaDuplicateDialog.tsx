@@ -8,9 +8,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 import styles from "./PanoramaDuplicateDialog.module.scss";
 import { FormValues } from "../PanoramaUpload/PanoramaUpload";
 
+export type PossibleDuplicate = {
+  fileName: string;
+  existingFileURL: string;
+  uploadedFile: File;
+};
+
 interface PanoramaDuplicateDialogProps {
-  formSubmission: FormValues;
-  possibleDuplicates: Array<[string, string]>;
+  installNumber: number,
+  possibleDuplicates: Array<PossibleDuplicate>;
   isDialogOpened: boolean;
   handleClickUpload: () => void;
   handleClickCancel: () => void;
@@ -18,12 +24,15 @@ interface PanoramaDuplicateDialogProps {
 
 // https://mui.com/material-ui/react-dialog/#alerts
 export default function PanoramaDuplicateDialog({
-  formSubmission,
+  installNumber,
   possibleDuplicates,
   isDialogOpened,
   handleClickUpload,
   handleClickCancel,
 }: PanoramaDuplicateDialogProps) {
+  possibleDuplicates.forEach((dupe: PossibleDuplicate) => {
+    console.log(dupe);
+  });
   return (
     <React.Fragment>
       <Dialog
@@ -38,7 +47,7 @@ export default function PanoramaDuplicateDialog({
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             The following images submitted seem to be duplicates of existing
-            images for Install #{formSubmission.installNumber}. Would you like
+            images for Install #{installNumber}. Would you like
             to upload these anyway?
             <br />
             <div className={styles.alertTable}>
@@ -47,7 +56,7 @@ export default function PanoramaDuplicateDialog({
                   <th>Uploaded</th>
                   <th>Existing Image</th>
                 </tr>
-                {possibleDuplicates.map(([k, v], _) => (
+                {possibleDuplicates.map((dupe: PossibleDuplicate) => (
                   <tr>
                     <td>
                       <div
@@ -58,11 +67,7 @@ export default function PanoramaDuplicateDialog({
                         }}
                       >
                         <img
-                          src={URL.createObjectURL(
-                            formSubmission.dropzoneImages.find(
-                              (file: File) => file.name === k,
-                            ),
-                          )}
+                          src={URL.createObjectURL(dupe.uploadedFile)}
                           style={{
                             display: "block",
                             marginLeft: "auto",
@@ -70,11 +75,7 @@ export default function PanoramaDuplicateDialog({
                             height: "100px",
                           }}
                         />
-                        {
-                          formSubmission.dropzoneImages.find(
-                            (file: File) => file.name === k,
-                          ).name
-                        }
+                        {dupe.uploadedFile.name}
                       </div>
                     </td>
                     <td>
@@ -86,7 +87,7 @@ export default function PanoramaDuplicateDialog({
                         }}
                       >
                         <img
-                          src={v}
+                          src={dupe.existingFileURL}
                           style={{
                             display: "block",
                             marginLeft: "auto",
@@ -94,8 +95,8 @@ export default function PanoramaDuplicateDialog({
                             height: "100px",
                           }}
                         />
-                        <a href={new URL(v).origin + new URL(v).pathname}>
-                          {new URL(v).origin + new URL(v).pathname}
+                        <a href={dupe.existingFileURL}>
+                          {dupe.fileName}
                         </a>
                       </div>
                     </td>
