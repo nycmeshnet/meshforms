@@ -63,7 +63,6 @@ function handleUpdateCategory(event) {
 }
 
   function handleClickReplaceImage() {
-    console.log(`The ID is ${id}`);
     setIsReplaceImageDropzoneOpen(!isReplaceImageDropzoneOpen);
   }
 
@@ -94,6 +93,7 @@ function handleUpdateCategory(event) {
         if (response.ok) {
           console.log("Files uploaded successfully");
           alert("Upload Successful!");
+          return;
         }
         throw response;
       })
@@ -103,9 +103,6 @@ function handleUpdateCategory(event) {
         alert(msg);
       });
   };
-
-  // XXX (wdn): Need to accept only one file and throw an error if we get more
-  const [files, setFiles] = useState<File[]>([]);
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -121,7 +118,7 @@ function handleUpdateCategory(event) {
       <div className={styles.card}>
         <div className={styles.imageMetadata}>
           <ul>
-            <li>{originalFilename}</li>
+            <li><strong>{originalFilename}</strong></li>
             <li>{timestamp}</li>
 
             <Select
