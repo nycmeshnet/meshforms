@@ -47,6 +47,12 @@ export default function PanoramaViewerCard({
   const [imageURL, setImageURL] =
     React.useState(url);
 
+  // FIXME (wdn): I should just pass in an Image object instead of passing each
+  // field in
+  const [imageTitle, setImageTitle] =
+    React.useState(originalFilename);
+
+
 function handleUpdateCategory(event) {
     const newCategory = event.target.value;
 
@@ -100,6 +106,23 @@ function handleUpdateCategory(event) {
         if (response.ok) {
           console.log("Files uploaded successfully");
           toast.success("Upload Successful!");
+
+          fetch(`http://127.0.0.1:8001/api/v1/image/${id}`)
+          .then(async (response) => {
+            if (!response.ok) {
+                throw response;
+              }
+              const j = await response.json();
+              setImageTitle(j.original_filename);
+          })
+          .catch(async (error) => {
+
+          const j = await error.json();
+          const msg = `Could not update image: ${j.detail}`;
+          toast.error(msg);
+            });
+
+          // Refresh the image by adding a random hash
           setImageURL(`${url}?${Math.random().toString(36)}`);
           setIsReplaceImageDropzoneOpen(false);
           setIsLoading(false);
@@ -131,8 +154,8 @@ function handleUpdateCategory(event) {
       <div className={styles.card}>
         <div className={styles.imageMetadata}>
           <ul>
-            <li><strong>{originalFilename}</strong></li>
-            <li>{timestamp}</li>
+            <li><strong>{imageTitle}</strong></li>
+            <li>{timestamp}</li> {/*XXX (wdn): Do I wanna update the timestamp?*/}
 
             <Select
               {...register("category")}
