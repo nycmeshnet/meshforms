@@ -47,8 +47,6 @@ export default function PanoramaViewerCard({
   const [imageURL, setImageURL] =
     React.useState(url);
 
-  const [imageKey, setImageKey] = React.useState(Date.now());
-
 function handleUpdateCategory(event) {
     const newCategory = event.target.value;
 
@@ -102,24 +100,9 @@ function handleUpdateCategory(event) {
         if (response.ok) {
           console.log("Files uploaded successfully");
           toast.success("Upload Successful!");
-          setIsLoading(false);
+          setImageURL(`${url}?${Math.random().toString(36)}`);
           setIsReplaceImageDropzoneOpen(false);
-
-          fetch(`http://127.0.0.1:8001/api/v1/image/${id}`)
-          .then(async (response) => {
-            if (!response.ok) {
-                throw response;
-              }
-              const j = await response.json();
-            setImageURL(j.url);
-            setImageKey(Date.now());
-          })
-          .catch(async (error) => {
-
-          const j = await error.json();
-          const msg = `Could not update image: ${j.detail}`;
-          toast.error(msg);
-            });
+          setIsLoading(false);
           return;
         }
         throw response;
@@ -128,8 +111,8 @@ function handleUpdateCategory(event) {
         const j = await error.json();
         const msg = `File upload error: ${j.detail}`;
         toast.error(msg);
+        // Not closing the dropzone to invite another attempt at uploading an image
         setIsLoading(false);
-        setIsReplaceImageDropzoneOpen(false);
       });
   };
 
@@ -176,7 +159,7 @@ function handleUpdateCategory(event) {
         </div>
         <div className={styles.image}>
           <div hidden={isReplaceImageDropzoneOpen}>
-          <img key={imageKey} src={imageURL} />
+          <img src={imageURL} />
           </div>
         <div hidden={!isReplaceImageDropzoneOpen}>
         <div {...getRootProps({ className: styles.dropzone })}>
