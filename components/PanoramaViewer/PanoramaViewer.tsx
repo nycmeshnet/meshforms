@@ -5,6 +5,7 @@ import styles from "./PanoramaViewer.module.scss";
 import { Button, CircularProgress } from "@mui/material";
 import { useForm } from "react-hook-form";
 import PanoramaViewerCard from "../PanoramaViewerCard/PanoramaViewerCard";
+import { ToastContainer, toast } from "react-toastify";
 
 type FormValues = {
   installNumber: number;
@@ -31,9 +32,18 @@ function PanoramaViewer() {
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
       },
     }).then(async (response) => {
+      if (!response.ok) {
+        throw response;
+      }
       const images = await response.json();
       console.log(images);
       setImages(images);
+      setIsLoading(false);
+    })
+    .catch(async (error) => {
+      const j = await error.json();
+      const msg = `File upload error: ${j.detail}`;
+      toast.error(msg);
       setIsLoading(false);
     });
   }
@@ -85,6 +95,9 @@ function PanoramaViewer() {
             />
           </div>
         ))}
+      </div>
+      <div className="toasty">
+        <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
     </>
   );

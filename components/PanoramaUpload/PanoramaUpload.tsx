@@ -117,6 +117,7 @@ function PanoramaUploader() {
           console.log("Files uploaded successfully");
           toast.success("Upload Successful!");
           setIsLoading(false);
+          return;
         }
         if (response.status == 409) {
           const j = await response.json();

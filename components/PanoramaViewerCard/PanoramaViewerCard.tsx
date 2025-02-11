@@ -4,6 +4,7 @@ import styles from "./PanoramaViewerCard.module.scss";
 import { CircularProgress, MenuItem, Select } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
+import { ToastContainer, toast } from "react-toastify";
 
 type FormValues = {
   category: string;
@@ -41,6 +42,12 @@ export default function PanoramaViewerCard({
     { value: "MISCELLANEOUS", label: "Miscellaneous" },
     { value: "UNCATEGORIZED", label: "Uncategorized" },
   ];
+
+
+  const [imageURL, setImageURL] =
+    React.useState(url);
+
+  const [imageKey, setImageKey] = React.useState(Date.now());
 
 function handleUpdateCategory(event) {
     const newCategory = event.target.value;
@@ -94,8 +101,25 @@ function handleUpdateCategory(event) {
       .then(async (response) => {
         if (response.ok) {
           console.log("Files uploaded successfully");
-          alert("Upload Successful!");
+          toast.success("Upload Successful!");
           setIsLoading(false);
+          setIsReplaceImageDropzoneOpen(false);
+
+          fetch(`http://127.0.0.1:8001/api/v1/image/${id}`)
+          .then(async (response) => {
+            if (!response.ok) {
+                throw response;
+              }
+              const j = await response.json();
+            setImageURL(j.url);
+            setImageKey(Date.now());
+          })
+          .catch(async (error) => {
+
+          const j = await error.json();
+          const msg = `Could not update image: ${j.detail}`;
+          toast.error(msg);
+            });
           return;
         }
         throw response;
@@ -103,8 +127,9 @@ function handleUpdateCategory(event) {
       .catch(async (error) => {
         const j = await error.json();
         const msg = `File upload error: ${j.detail}`;
-        alert(msg);
+        toast.error(msg);
         setIsLoading(false);
+        setIsReplaceImageDropzoneOpen(false);
       });
   };
 
@@ -146,12 +171,12 @@ function handleUpdateCategory(event) {
           </ul>
         </div>
         <div className={styles.imageActions}>
-          <a href={url}><img src="/download_icon.png" width={24}/></a>
+          <a href={imageURL}><img src="/download_icon.png" width={24}/></a>
           <a onClick={handleClickReplaceImage}><img src="/edit_icon.png" width={24}/></a>
         </div>
         <div className={styles.image}>
           <div hidden={isReplaceImageDropzoneOpen}>
-          <img src={url} />
+          <img key={imageKey} src={imageURL} />
           </div>
         <div hidden={!isReplaceImageDropzoneOpen}>
         <div {...getRootProps({ className: styles.dropzone })}>
@@ -168,6 +193,9 @@ function handleUpdateCategory(event) {
         <div id={styles.loading}>
           <CircularProgress />
         </div></div>
+      </div>
+      <div className="toasty">
+        <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
     </React.Fragment>
   );
