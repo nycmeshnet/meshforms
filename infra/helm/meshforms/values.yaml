@@ -33,11 +33,11 @@ ingress:
 
 livenessProbe:
   httpGet:
-    path: /
+    path: /en/
     port: http
 readinessProbe:
   httpGet:
-    path: /
+    path: /en/
     port: http
 
 resources:
