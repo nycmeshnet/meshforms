@@ -34,3 +34,8 @@ export async function getRumApplicationID() {
 export async function getRumClientToken() {
   return process.env.RUM_CLIENT_TOKEN ?? "";
 }
+
+export async function shouldSendJoinRecord() {
+  // Should always default to sending join records.
+  return process.env.SEND_JOIN_RECORD ?? true;
+}

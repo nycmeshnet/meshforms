@@ -18,7 +18,7 @@ import {
   maybeLogJoinRecordFailure,
   saveJoinRecordToS3,
 } from "@/lib/join_record";
-import { getMeshDBAPIEndpoint, getRecaptchaKeys } from "@/lib/endpoint";
+import { getMeshDBAPIEndpoint, getRecaptchaKeys, shouldSendJoinRecord } from "@/lib/endpoint";
 import InfoConfirmationDialog from "../InfoConfirmation/InfoConfirmation";
 import { JoinRecord } from "@/lib/types";
 import { useTranslations, useLocale } from "next-intl";
@@ -204,15 +204,17 @@ export default function JoinForm() {
     let preJoinRecordFailed = true;
     let postJoinRecordFailed = true;
 
-    // Before we try anything else, submit the record to the pre-submission
-    // S3 bucket for safety.
-    try {
-      setJoinRecordKey(await saveJoinRecordToS3(record, true));
-      preJoinRecordFailed = false; // We got at least one joinRecord.
-    } catch (error: unknown) {
-      console.error(
-        `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
-      );
+    if (await shouldSendJoinRecord()) {
+      // Before we try anything else, submit the record to the pre-submission
+      // S3 bucket for safety.
+      try {
+        setJoinRecordKey(await saveJoinRecordToS3(record, true));
+        preJoinRecordFailed = false; // We got at least one joinRecord.
+      } catch (error: unknown) {
+        console.error(
+          `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
+        );
+      }
     }
 
     // Attempt to submit the Join Form
@@ -258,21 +260,23 @@ export default function JoinForm() {
       record.code = response.status;
       record.install_number = responseData.install_number;
 
-      // Write to the post-submisison bucket with our data if we have it.
-      // We have to catch and handle the error if this somehow fails but the join
-      // form submission succeeds.
-      // FYI: The pre and post keys should be identical, except one of them will
-      // have the "pre/" prefix and one will have the "post/" prefix
-      try {
-        const postJoinRecordKey = await saveJoinRecordToS3(record, false);
-        postJoinRecordFailed = false;
-        if (postJoinRecordKey !== "") {
-          setJoinRecordKey(postJoinRecordKey); // Might as well have the good one
+      if (await shouldSendJoinRecord()) {
+        // Write to the post-submisison bucket with our data if we have it.
+        // We have to catch and handle the error if this somehow fails but the join
+        // form submission succeeds.
+        // FYI: The pre and post keys should be identical, except one of them will
+        // have the "pre/" prefix and one will have the "post/" prefix
+        try {
+          const postJoinRecordKey = await saveJoinRecordToS3(record, false);
+          postJoinRecordFailed = false;
+          if (postJoinRecordKey !== "") {
+            setJoinRecordKey(postJoinRecordKey); // Might as well have the good one
+          }
+        } catch (error: unknown) {
+          console.error(
+            `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
+          );
         }
-      } catch (error: unknown) {
-        console.error(
-          `Could not upload JoinRecord to S3. ${JSON.stringify(error)}`,
-        );
       }
 
       if (response.ok) {
