@@ -21,9 +21,9 @@ spec:
         {{- end }}
     spec:
       replicas: {{ .Values.replicaCount }}
-      {{- with .Values.imagePullSecrets }}
+      {{- if .Values.imageCredentials }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+        - name: pull-secret
       {{- end }}
       serviceAccountName: {{ include "meshforms.serviceAccountName" . }}
       securityContext:
