@@ -27,7 +27,6 @@
   filter: opacity(0.4);
 }
 
-
 .dropzone {
   flex: 1;
   display: flex;
@@ -57,15 +56,14 @@
   opacity: 0.6;
 }
 
-
 #loading {
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  z-index:10;
-  display:flex; 
+  z-index: 10;
+  display: flex;
   justify-content: center;
   background-color: #00000022;
   align-items: center;

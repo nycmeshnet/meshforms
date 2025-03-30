@@ -9,7 +9,7 @@ export const metadata = {
 export default async function ViewByInstallNumber({
   params,
 }: {
-  params: Promise<{ installNumber: number }>
+  params: Promise<{ installNumber: number }>;
 }) {
   const { installNumber } = await params;
   return (
@@ -21,13 +21,12 @@ export default async function ViewByInstallNumber({
   );
 }
 
-
 export default async function Page({
   params,
 }: {
-  params: Promise<{ install_number: string }>
+  params: Promise<{ install_number: string }>;
 }) {
-  const { install_number } = await params
+  const { install_number } = await params;
   return (
     <>
       <main>

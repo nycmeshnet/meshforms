@@ -13,7 +13,7 @@ type FormValues = {
 export type { FormValues };
 
 interface PanoramaViewerCardProps {
-  id: string,
+  id: string;
   originalFilename: string;
   timestamp: string;
   category: string;
@@ -43,36 +43,31 @@ export default function PanoramaViewerCard({
     { value: "UNCATEGORIZED", label: "Uncategorized" },
   ];
 
-
-  const [imageURL, setImageURL] =
-    React.useState(url);
+  const [imageURL, setImageURL] = React.useState(url);
 
   // FIXME (wdn): I should just pass in an Image object instead of passing each
   // field in
-  const [imageTitle, setImageTitle] =
-    React.useState(originalFilename);
+  const [imageTitle, setImageTitle] = React.useState(originalFilename);
 
-
-function handleUpdateCategory(event) {
+  function handleUpdateCategory(event) {
     const newCategory = event.target.value;
 
-  let formData = new FormData();
+    let formData = new FormData();
     formData.append("id", id);
     formData.append("new_category", newCategory);
-  console.log(event.target.value);
-  fetch(`http://127.0.0.1:8081/api/v1/update`, {
+    console.log(event.target.value);
+    fetch(`http://127.0.0.1:8081/api/v1/update`, {
       method: "POST",
       credentials: "include",
       headers: {
-        token:
-          process.env.NEXT_PUBLIC_PANO_TOKEN,
+        token: process.env.NEXT_PUBLIC_PANO_TOKEN,
       },
-      body: formData, 
+      body: formData,
     }).then(async (response) => {
       const j = await response.json();
       console.log(j);
     });
-}
+  }
 
   function handleClickReplaceImage() {
     setIsReplaceImageDropzoneOpen(!isReplaceImageDropzoneOpen);
@@ -99,8 +94,7 @@ function handleUpdateCategory(event) {
       method: "POST",
       credentials: "include",
       headers: {
-        token:
-          process.env.NEXT_PUBLIC_PANO_TOKEN,
+        token: process.env.NEXT_PUBLIC_PANO_TOKEN,
       },
       body: formData,
     })
@@ -109,17 +103,19 @@ function handleUpdateCategory(event) {
           console.log("Files uploaded successfully");
           toast.success("Upload Successful!");
 
-          fetch(`http://127.0.0.1:8081/api/v1/image/${id}`, {credentials: "include"})
-          .then(async (response) => {
-            if (!response.ok) {
+          fetch(`http://127.0.0.1:8081/api/v1/image/${id}`, {
+            credentials: "include",
+          })
+            .then(async (response) => {
+              if (!response.ok) {
                 throw response;
               }
               const j = await response.json();
               setImageTitle(j.original_filename);
-          })
-          .catch(async (error) => {
-          const msg = `Could not update image: ${error}`;
-          toast.error(msg);
+            })
+            .catch(async (error) => {
+              const msg = `Could not update image: ${error}`;
+              toast.error(msg);
             });
 
           // Refresh the image by adding a random hash
@@ -145,7 +141,7 @@ function handleUpdateCategory(event) {
     },
     [onFileDrop],
   );
-  
+
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
@@ -153,16 +149,20 @@ function handleUpdateCategory(event) {
       <div className={styles.card}>
         <div className={styles.imageMetadata}>
           <ul>
-            <li><strong>{imageTitle}</strong></li>
-            <li>{timestamp}</li> {/*XXX (wdn): Do I wanna update the timestamp?*/}
-
+            <li>
+              <strong>{imageTitle}</strong>
+            </li>
+            <li>{timestamp}</li>{" "}
+            {/*XXX (wdn): Do I wanna update the timestamp?*/}
             <Select
               {...register("category")}
               placeholder={category}
-              defaultValue={selectCategoryOptions.find(
-                (option) =>
-                  option.value.toLowerCase() === category.toLowerCase(),
-              ).value}
+              defaultValue={
+                selectCategoryOptions.find(
+                  (option) =>
+                    option.value.toLowerCase() === category.toLowerCase(),
+                ).value
+              }
               className={styles.drop}
               required
               onChange={handleUpdateCategory}
@@ -176,28 +176,33 @@ function handleUpdateCategory(event) {
           </ul>
         </div>
         <div className={styles.imageActions}>
-          <a href={imageURL}><img src="/download_icon.png" width={24}/></a>
-          <a onClick={handleClickReplaceImage}><img src="/edit_icon.png" width={24}/></a>
+          <a href={imageURL}>
+            <img src="/download_icon.png" width={24} />
+          </a>
+          <a onClick={handleClickReplaceImage}>
+            <img src="/edit_icon.png" width={24} />
+          </a>
         </div>
         <div className={styles.image}>
           <div hidden={isReplaceImageDropzoneOpen}>
-          <img src={imageURL} />
+            <img src={imageURL} />
           </div>
-        <div hidden={!isReplaceImageDropzoneOpen}>
-        <div {...getRootProps({ className: styles.dropzone })}>
-          <input {...getInputProps()} />
-          <p>
-            Drag and drop panoramas here;
-            <br />
-            Or click to open the file dialog
-          </p>
-        </div>
-        </div>
+          <div hidden={!isReplaceImageDropzoneOpen}>
+            <div {...getRootProps({ className: styles.dropzone })}>
+              <input {...getInputProps()} />
+              <p>
+                Drag and drop panoramas here;
+                <br />
+                Or click to open the file dialog
+              </p>
+            </div>
+          </div>
         </div>
         <div hidden={!isLoading}>
-        <div id={styles.loading}>
-          <CircularProgress />
-        </div></div>
+          <div id={styles.loading}>
+            <CircularProgress />
+          </div>
+        </div>
       </div>
       <div className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />

@@ -7,7 +7,9 @@ import "react-toastify/dist/ReactToastify.css";
 import PanoramaDropzone from "./PanoramaDropzone";
 import { Button, CircularProgress } from "@mui/material";
 import styles from "./PanoramaUpload.module.scss";
-import PanoramaDuplicateDialog, { PossibleDuplicate } from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
+import PanoramaDuplicateDialog, {
+  PossibleDuplicate,
+} from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
 
 type FormValues = {
   installNumber: number;
@@ -89,7 +91,10 @@ function PanoramaUploader() {
   function attemptUpload(trustMeBro: boolean = false) {
     let formData = new FormData();
 
-    if (formSubmission === undefined || formSubmission.dropzoneImages.length === 0) {
+    if (
+      formSubmission === undefined ||
+      formSubmission.dropzoneImages.length === 0
+    ) {
       return;
     }
 
@@ -121,31 +126,39 @@ function PanoramaUploader() {
         }
         if (response.status == 409) {
           const j = await response.json();
-          
+
           // Pano has just returned us a map of uploaded files to
           // duplicate files. Not all the info in the uploaded file is useful,
           // because it hasn't made it into the database yet (like the ID or the order)
           // Use the names to locate the uploaded Files
           // that match.
           let pds: Array<PossibleDuplicate> = [];
-          j.possible_duplicates.forEach((dupe: {uploaded_file: Image, existing_file: Image}) => {
-            // Use the name of the uploaded file to find 
-            const matchedFile: File | undefined = formSubmission.dropzoneImages.find((file: File) => file.name === dupe.uploaded_file.original_filename);
+          j.possible_duplicates.forEach(
+            (dupe: { uploaded_file: Image; existing_file: Image }) => {
+              // Use the name of the uploaded file to find
+              const matchedFile: File | undefined =
+                formSubmission.dropzoneImages.find(
+                  (file: File) =>
+                    file.name === dupe.uploaded_file.original_filename,
+                );
 
-            if (matchedFile === undefined) {
-              // Sanity check. This should never happen.
-              console.error(`Did not find a matched file for ${dupe.uploaded_file.original_filename}`);
-              // Skip this iteration if we didn't find a file.
-              return;
-            }
+              if (matchedFile === undefined) {
+                // Sanity check. This should never happen.
+                console.error(
+                  `Did not find a matched file for ${dupe.uploaded_file.original_filename}`,
+                );
+                // Skip this iteration if we didn't find a file.
+                return;
+              }
 
-            const pd: PossibleDuplicate = {
-              fileName: dupe.existing_file.original_filename,
-              existingFileURL: dupe.existing_file.url,
-              uploadedFile: matchedFile,
-            }
-            pds.push(pd);
-          });
+              const pd: PossibleDuplicate = {
+                fileName: dupe.existing_file.original_filename,
+                existingFileURL: dupe.existing_file.url,
+                uploadedFile: matchedFile,
+              };
+              pds.push(pd);
+            },
+          );
           //console.log(pds);
           setPossibleDuplicates(pds);
           return;

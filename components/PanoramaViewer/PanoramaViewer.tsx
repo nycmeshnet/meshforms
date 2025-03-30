@@ -14,12 +14,10 @@ type FormValues = {
 export type { FormValues };
 
 interface PanoramaViewerProps {
-  installNumber: number,
+  installNumber: number;
 }
 
-export default function PanoramaViewer({
-  installNumber,
-}: PanoramaViewerProps) {
+export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
   const {
     register,
     handleSubmit,
@@ -37,20 +35,21 @@ export default function PanoramaViewer({
         token:
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
       },
-    }).then(async (response) => {
-      if (!response.ok) {
-        throw response;
-      }
-      const images = await response.json();
-      console.log(images);
-      setImages(images);
-      setIsLoading(false);
     })
-    .catch(async (error) => {
-      const msg = `File upload error: ${error}`;
-      toast.error(msg);
-      setIsLoading(false);
-    });
+      .then(async (response) => {
+        if (!response.ok) {
+          throw response;
+        }
+        const images = await response.json();
+        console.log(images);
+        setImages(images);
+        setIsLoading(false);
+      })
+      .catch(async (error) => {
+        const msg = `File upload error: ${error}`;
+        toast.error(msg);
+        setIsLoading(false);
+      });
   }
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
@@ -58,10 +57,13 @@ export default function PanoramaViewer({
     setIsLoading(true);
     //setFormSubmission(data); // Side Effect: Submits the form
     getImages(data.installNumber);
-    window.history.pushState("View images on Pano", "", `/pano/view/${data.installNumber}`);
-
+    window.history.pushState(
+      "View images on Pano",
+      "",
+      `/pano/view/${data.installNumber}`,
+    );
   };
- 
+
   useEffect(() => {
     if (installNumber !== undefined) {
       getImages(installNumber);
@@ -71,49 +73,47 @@ export default function PanoramaViewer({
   return (
     <>
       <div className={styles.panoNavBar}>
-      <h1>Pano</h1>
-        <div style={{display:"flex", flexDirection:"row"}}>
-      <Button
-        href="/pano/upload"
-        variant="outlined"
-      >
-          ➕
-        </Button>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={styles.formBody}>
-          <input
-            {...register("installNumber")}
-            type="number"
-            placeholder="Install Number"
-            required
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            size="large"
-            disabled={isLoading}
-          >
-            {isLoading ? "Loading..." : "Search"}
+        <h1>Pano</h1>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <Button href="/pano/upload" variant="outlined">
+            ➕
           </Button>
-          <div hidden={!isLoading}>
-            <CircularProgress />
-          </div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className={styles.formBody}>
+              <input
+                {...register("installNumber")}
+                type="number"
+                placeholder="Install Number"
+                required
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                disabled={isLoading}
+              >
+                {isLoading ? "Loading..." : "Search"}
+              </Button>
+              <div hidden={!isLoading}>
+                <CircularProgress />
+              </div>
+            </div>
+          </form>
         </div>
-      </form>
-      </div>
       </div>
       <div className={styles.panoramaList}>
-        {images.length > 0 && images.map((image, index) => (
-          <div>
-            <PanoramaViewerCard
-              id={image.id}
-              originalFilename={image.original_filename}
-              timestamp={image.timestamp}
-              category={image.category}
-              url={image.url}
-            />
-          </div>
-        ))}
+        {images.length > 0 &&
+          images.map((image, index) => (
+            <div>
+              <PanoramaViewerCard
+                id={image.id}
+                originalFilename={image.original_filename}
+                timestamp={image.timestamp}
+                category={image.category}
+                url={image.url}
+              />
+            </div>
+          ))}
       </div>
       <div className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
@@ -121,4 +121,3 @@ export default function PanoramaViewer({
     </>
   );
 }
-

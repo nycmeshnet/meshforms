@@ -15,7 +15,7 @@ export type PossibleDuplicate = {
 };
 
 interface PanoramaDuplicateDialogProps {
-  installNumber: number,
+  installNumber: number;
   possibleDuplicates: Array<PossibleDuplicate>;
   isDialogOpened: boolean;
   handleClickUpload: () => void;
@@ -47,8 +47,8 @@ export default function PanoramaDuplicateDialog({
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             The following images submitted seem to be duplicates of existing
-            images for Install #{installNumber}. Would you like
-            to upload these anyway?
+            images for Install #{installNumber}. Would you like to upload these
+            anyway?
             <br />
             <div className={styles.alertTable}>
               <table>
@@ -95,9 +95,7 @@ export default function PanoramaDuplicateDialog({
                             height: "100px",
                           }}
                         />
-                        <a href={dupe.existingFileURL}>
-                          {dupe.fileName}
-                        </a>
+                        <a href={dupe.existingFileURL}>{dupe.fileName}</a>
                       </div>
                     </td>
                   </tr>
