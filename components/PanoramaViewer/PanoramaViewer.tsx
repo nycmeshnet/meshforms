@@ -74,10 +74,10 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
     <>
       <div className={styles.panoNavBar}>
         <a href="/pano/view" style={{textDecoration: "none", color: "black"}}><h1>Pano</h1></a>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <Button href="/pano/upload" variant="outlined">
-            ➕
-          </Button>
+        <div style={{ display: "flex", flexDirection: "row"}}>
+          <a href={"/pano/upload"} style={{padding: "10px"}}>
+          <img src="/upload_icon.png" width={24} />
+          </a>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.formBody}>
               <input
@@ -114,6 +114,9 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
               />
             </div>
           ))}
+        {images.length === 0 &&
+          <p>img show up here :) IDK what to put on this screen.</p>
+        }
       </div>
       <div className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />

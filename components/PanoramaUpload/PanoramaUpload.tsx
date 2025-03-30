@@ -112,9 +112,6 @@ function PanoramaUploader() {
     fetch("http://127.0.0.1:8081/api/v1/upload", {
       method: "POST",
       credentials: "include",
-      headers: {
-        token: process.env.NEXT_PUBLIC_PANO_TOKEN,
-      },
       body: formData,
     })
       .then(async (response) => {
@@ -197,6 +194,9 @@ function PanoramaUploader() {
       <p>
         Upload panoramas and other relevant install photos here. This form is
         backed by Pano, our panorama hosting solution.
+        <br/>
+        The <strong>maximum content size is 100MB</strong>.
+        If you are running into issues, try uploading your images in smaller batches.
       </p>
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
