@@ -61,7 +61,7 @@ export default function PanoramaViewer({
   };
  
   useEffect(() => {
-    if (installNumber !== null) {
+    if (installNumber !== undefined) {
       getImages(installNumber);
     }
   }, []);
