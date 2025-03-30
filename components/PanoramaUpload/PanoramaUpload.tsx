@@ -169,7 +169,8 @@ function PanoramaUploader() {
         throw response;
       })
       .catch(async (error) => {
-        const msg = `File upload error: ${error}`;
+        const j = await error.json();
+        const msg = `File upload error: ${j.detail}`;
         console.error(msg);
         toast.error(msg);
         setIsLoading(false);
