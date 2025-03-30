@@ -26,7 +26,8 @@ function PanoramaViewer() {
   const [images, setImages] = React.useState([]);
 
   function getImages(installNumber: number) {
-    fetch(`http://127.0.0.1:8001/api/v1/install/${installNumber}`, {
+    fetch(`http://127.0.0.1:8081/api/v1/install/${installNumber}`, {
+      credentials: "include",
       headers: {
         token:
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
@@ -41,8 +42,7 @@ function PanoramaViewer() {
       setIsLoading(false);
     })
     .catch(async (error) => {
-      const j = await error.json();
-      const msg = `File upload error: ${j.detail}`;
+      const msg = `File upload error: ${error}`;
       toast.error(msg);
       setIsLoading(false);
     });

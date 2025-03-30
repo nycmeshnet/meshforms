@@ -104,11 +104,11 @@ function PanoramaUploader() {
     // Upload possibly duplicate images
     formData.append("trustMeBro", trustMeBro ? "true" : "false");
 
-    fetch("http://127.0.0.1:8001/api/v1/upload", {
+    fetch("http://127.0.0.1:8081/api/v1/upload", {
       method: "POST",
+      credentials: "include",
       headers: {
-        token:
-          process.env.NEXT_PUBLIC_PANO_TOKEN,
+        token: process.env.NEXT_PUBLIC_PANO_TOKEN,
       },
       body: formData,
     })
@@ -160,8 +160,7 @@ function PanoramaUploader() {
         throw response;
       })
       .catch(async (error) => {
-        const j = await error.json();
-        const msg = `File upload error: ${j.detail}`;
+        const msg = `File upload error: ${error}`;
         console.error(msg);
         toast.error(msg);
         setIsLoading(false);

@@ -60,8 +60,9 @@ function handleUpdateCategory(event) {
     formData.append("id", id);
     formData.append("new_category", newCategory);
   console.log(event.target.value);
-  fetch(`http://127.0.0.1:8001/api/v1/update`, {
+  fetch(`http://127.0.0.1:8081/api/v1/update`, {
       method: "POST",
+      credentials: "include",
       headers: {
         token:
           process.env.NEXT_PUBLIC_PANO_TOKEN,
@@ -94,8 +95,9 @@ function handleUpdateCategory(event) {
       formData.append("dropzoneImages[]", dropzoneImages[x]);
     }
 
-    fetch("http://127.0.0.1:8001/api/v1/update", {
+    fetch("http://127.0.0.1:8081/api/v1/update", {
       method: "POST",
+      credentials: "include",
       headers: {
         token:
           process.env.NEXT_PUBLIC_PANO_TOKEN,
@@ -107,7 +109,7 @@ function handleUpdateCategory(event) {
           console.log("Files uploaded successfully");
           toast.success("Upload Successful!");
 
-          fetch(`http://127.0.0.1:8001/api/v1/image/${id}`)
+          fetch(`http://127.0.0.1:8081/api/v1/image/${id}`, {credentials: "include"})
           .then(async (response) => {
             if (!response.ok) {
                 throw response;
@@ -116,9 +118,7 @@ function handleUpdateCategory(event) {
               setImageTitle(j.original_filename);
           })
           .catch(async (error) => {
-
-          const j = await error.json();
-          const msg = `Could not update image: ${j.detail}`;
+          const msg = `Could not update image: ${error}`;
           toast.error(msg);
             });
 
@@ -131,8 +131,7 @@ function handleUpdateCategory(event) {
         throw response;
       })
       .catch(async (error) => {
-        const j = await error.json();
-        const msg = `File upload error: ${j.detail}`;
+        const msg = `File upload error: ${error}`;
         toast.error(msg);
         // Not closing the dropzone to invite another attempt at uploading an image
         setIsLoading(false);
