@@ -130,36 +130,31 @@ function PanoramaUploader() {
           // Use the names to locate the uploaded Files
           // that match.
           let pds: Array<PossibleDuplicate> = [];
-          Object.entries(j).forEach(
-            (file) => {
-              const fileName = file[0];
-              const existingObjectURL = file[1];
-              // Use the name of the uploaded file to find
-              const matchedFile: File | undefined =
-                formSubmission.dropzoneImages.find(
-                  (file: File) =>
-                    file.name === fileName,
-                );
+          Object.entries(j).forEach((file) => {
+            const fileName = file[0];
+            const existingObjectURL = file[1];
+            // Use the name of the uploaded file to find
+            const matchedFile: File | undefined =
+              formSubmission.dropzoneImages.find(
+                (file: File) => file.name === fileName,
+              );
 
-              if (matchedFile === undefined) {
-                // Sanity check. This should never happen.
-                const msg = 
-                  `Did not find a matched file for ${fileName}`;
-                console.error(msg
-                );
-                toast.error(msg);
-                // Skip this iteration if we didn't find a file.
-                return;
-              }
+            if (matchedFile === undefined) {
+              // Sanity check. This should never happen.
+              const msg = `Did not find a matched file for ${fileName}`;
+              console.error(msg);
+              toast.error(msg);
+              // Skip this iteration if we didn't find a file.
+              return;
+            }
 
-              const pd: PossibleDuplicate = {
-                fileName: fileName,
-                existingFileURL: existingObjectURL,
-                uploadedFile: matchedFile,
-              };
-              pds.push(pd);
-            },
-          );
+            const pd: PossibleDuplicate = {
+              fileName: fileName,
+              existingFileURL: existingObjectURL,
+              uploadedFile: matchedFile,
+            };
+            pds.push(pd);
+          });
           //console.log(pds);
           setPossibleDuplicates(pds);
           return;
@@ -189,14 +184,16 @@ function PanoramaUploader() {
 
   return (
     <>
-      <a href="/pano/view" style={{textDecoration: "none", color: "black"}}><h1>Pano</h1></a>
+      <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
+        <h1>Pano</h1>
+      </a>
       <h2>Image Upload</h2>
       <p>
         Upload panoramas and other relevant install photos here. This form is
         backed by Pano, our panorama hosting solution.
-        <br/>
-        The <strong>maximum content size is 100MB</strong>.
-        If you are running into issues, try uploading your images in smaller batches.
+        <br />
+        The <strong>maximum content size is 100MB</strong>. If you are running
+        into issues, try uploading your images in smaller batches.
       </p>
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>

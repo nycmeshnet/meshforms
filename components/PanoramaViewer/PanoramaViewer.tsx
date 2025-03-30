@@ -27,6 +27,7 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
 
   const [isLoading, setIsLoading] = React.useState(false);
   const [images, setImages] = React.useState([]);
+  const [currentInstallNumber, setCurrentInstallNumber] = React.useState(-1);
 
   function getImages(installNumber: number) {
     fetch(`http://127.0.0.1:8081/api/v1/install/${installNumber}`, {
@@ -60,23 +61,30 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
     window.history.pushState(
       "View images on Pano",
       "",
-      `/pano/view/${data.installNumber}`,
+      `/pano/view/install/${data.installNumber}`,
     );
+    installNumber = data.installNumber;
   };
 
   useEffect(() => {
-    if (installNumber !== undefined) {
-      getImages(installNumber);
-    }
+    if (installNumber !== undefined) setCurrentInstallNumber(installNumber);
   }, []);
+
+  useEffect(() => {
+    if (currentInstallNumber !== -1) {
+      getImages(currentInstallNumber);
+    }
+  }, [currentInstallNumber]);
 
   return (
     <>
       <div className={styles.panoNavBar}>
-        <a href="/pano/view" style={{textDecoration: "none", color: "black"}}><h1>Pano</h1></a>
-        <div style={{ display: "flex", flexDirection: "row"}}>
-          <a href={"/pano/upload"} style={{padding: "10px"}}>
-          <img src="/upload_icon.png" width={24} />
+        <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
+          <h1>Pano</h1>
+        </a>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <a href={"/pano/upload"} style={{ padding: "10px" }}>
+            <img src="/upload_icon.png" width={24} />
           </a>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.formBody}>
@@ -114,10 +122,13 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
               />
             </div>
           ))}
-        {images.length === 0 &&
-          <p>img show up here :) IDK what to put on this screen.</p>
-        }
       </div>
+      {images.length === 0 && currentInstallNumber !== -1 && (
+        <p>Found no images for this Install Number. Try uploading some.</p>
+      )}
+      {images.length === 0 && currentInstallNumber === -1 && (
+        <p>To get started, search for an Install Number or click the upload icon.</p>
+      )}
       <div className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>

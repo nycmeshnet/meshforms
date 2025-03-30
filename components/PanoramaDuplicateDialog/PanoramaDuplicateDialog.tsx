@@ -50,15 +50,15 @@ export default function PanoramaDuplicateDialog({
             images for Install #{installNumber}. Would you like to upload these
             anyway?
           </DialogContentText>
-            <div className={styles.alertTable}>
-              <table>
-                <thead>
+          <div className={styles.alertTable}>
+            <table>
+              <thead>
                 <tr>
                   <th>Uploaded</th>
                   <th>Existing Image</th>
                 </tr>
-                </thead>
-                <tbody>
+              </thead>
+              <tbody>
                 {possibleDuplicates.map((dupe: PossibleDuplicate) => (
                   <tr key={dupe.uploadedFile.name}>
                     <td>
@@ -103,9 +103,9 @@ export default function PanoramaDuplicateDialog({
                     </td>
                   </tr>
                 ))}
-                </tbody>
-              </table>
-            </div>
+              </tbody>
+            </table>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClickCancel}>Cancel</Button>
