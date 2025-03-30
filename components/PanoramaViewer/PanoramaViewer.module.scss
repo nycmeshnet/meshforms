@@ -28,8 +28,19 @@
   cursor: not-allowed;
 }
 
+.panoNavBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.panoNavBar h1 {
+  margin: 0px;
+}
+
 .panoramaList {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 items per row */
   gap: 10px; /* Optional: add gap between items */
+  min-height:100vh;
 }

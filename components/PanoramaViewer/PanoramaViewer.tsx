@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./PanoramaViewer.module.scss";
 import { Button, CircularProgress } from "@mui/material";
@@ -13,8 +13,13 @@ type FormValues = {
 
 export type { FormValues };
 
-function PanoramaViewer() {
-  // React hook form stuff
+interface PanoramaViewerProps {
+  installNumber: number,
+}
+
+export default function PanoramaViewer({
+  installNumber,
+}: PanoramaViewerProps) {
   const {
     register,
     handleSubmit,
@@ -54,14 +59,17 @@ function PanoramaViewer() {
     //setFormSubmission(data); // Side Effect: Submits the form
     getImages(data.installNumber);
   };
+ 
+  useEffect(() => {
+    if (installNumber !== null) {
+      getImages(installNumber);
+    }
+  }, []);
 
   return (
     <>
-      <h2>Image Viewer</h2>
-      <p>
-        Enter an install number, and Pano will fetch all relevant images for
-        you.
-      </p>
+      <div className={styles.panoNavBar}>
+      <h1>Pano</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formBody}>
           <input
@@ -76,13 +84,14 @@ function PanoramaViewer() {
             size="large"
             disabled={isLoading}
           >
-            {isLoading ? "Loading..." : "Submit"}
+            {isLoading ? "Loading..." : "Search"}
           </Button>
           <div hidden={!isLoading}>
             <CircularProgress />
           </div>
         </div>
       </form>
+      </div>
       <div className={styles.panoramaList}>
         {images.length > 0 && images.map((image, index) => (
           <div>
@@ -103,4 +112,3 @@ function PanoramaViewer() {
   );
 }
 
-export default PanoramaViewer;
