@@ -133,27 +133,31 @@ function PanoramaUploader() {
           // Use the names to locate the uploaded Files
           // that match.
           let pds: Array<PossibleDuplicate> = [];
-          j.possible_duplicates.forEach(
-            (dupe: { uploaded_file: Image; existing_file: Image }) => {
+          Object.entries(j).forEach(
+            (file) => {
+              const fileName = file[0];
+              const existingObjectURL = file[1];
               // Use the name of the uploaded file to find
               const matchedFile: File | undefined =
                 formSubmission.dropzoneImages.find(
                   (file: File) =>
-                    file.name === dupe.uploaded_file.original_filename,
+                    file.name === fileName,
                 );
 
               if (matchedFile === undefined) {
                 // Sanity check. This should never happen.
-                console.error(
-                  `Did not find a matched file for ${dupe.uploaded_file.original_filename}`,
+                const msg = 
+                  `Did not find a matched file for ${fileName}`;
+                console.error(msg
                 );
+                toast.error(msg);
                 // Skip this iteration if we didn't find a file.
                 return;
               }
 
               const pd: PossibleDuplicate = {
-                fileName: dupe.existing_file.original_filename,
-                existingFileURL: dupe.existing_file.url,
+                fileName: fileName,
+                existingFileURL: existingObjectURL,
                 uploadedFile: matchedFile,
               };
               pds.push(pd);
@@ -188,6 +192,7 @@ function PanoramaUploader() {
 
   return (
     <>
+      <a href="/pano/view" style={{textDecoration: "none", color: "black"}}><h1>Pano</h1></a>
       <h2>Image Upload</h2>
       <p>
         Upload panoramas and other relevant install photos here. This form is

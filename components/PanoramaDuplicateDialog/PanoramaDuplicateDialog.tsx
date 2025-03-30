@@ -49,15 +49,18 @@ export default function PanoramaDuplicateDialog({
             The following images submitted seem to be duplicates of existing
             images for Install #{installNumber}. Would you like to upload these
             anyway?
-            <br />
+          </DialogContentText>
             <div className={styles.alertTable}>
               <table>
+                <thead>
                 <tr>
                   <th>Uploaded</th>
                   <th>Existing Image</th>
                 </tr>
+                </thead>
+                <tbody>
                 {possibleDuplicates.map((dupe: PossibleDuplicate) => (
-                  <tr>
+                  <tr key={dupe.uploadedFile.name}>
                     <td>
                       <div
                         style={{
@@ -100,9 +103,9 @@ export default function PanoramaDuplicateDialog({
                     </td>
                   </tr>
                 ))}
+                </tbody>
               </table>
             </div>
-          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClickCancel}>Cancel</Button>

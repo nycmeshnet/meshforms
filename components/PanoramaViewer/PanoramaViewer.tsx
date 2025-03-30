@@ -73,7 +73,7 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
   return (
     <>
       <div className={styles.panoNavBar}>
-        <h1>Pano</h1>
+        <a href="/pano/view" style={{textDecoration: "none", color: "black"}}><h1>Pano</h1></a>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <Button href="/pano/upload" variant="outlined">
             ➕
