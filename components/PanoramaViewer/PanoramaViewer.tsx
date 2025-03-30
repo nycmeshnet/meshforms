@@ -58,6 +58,8 @@ export default function PanoramaViewer({
     setIsLoading(true);
     //setFormSubmission(data); // Side Effect: Submits the form
     getImages(data.installNumber);
+    window.history.pushState("View images on Pano", "", `/pano/view/${data.installNumber}`);
+
   };
  
   useEffect(() => {
@@ -70,6 +72,13 @@ export default function PanoramaViewer({
     <>
       <div className={styles.panoNavBar}>
       <h1>Pano</h1>
+        <div style={{display:"flex", flexDirection:"row"}}>
+      <Button
+        href="/pano/upload"
+        variant="outlined"
+      >
+          ➕
+        </Button>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={styles.formBody}>
           <input
@@ -91,6 +100,7 @@ export default function PanoramaViewer({
           </div>
         </div>
       </form>
+      </div>
       </div>
       <div className={styles.panoramaList}>
         {images.length > 0 && images.map((image, index) => (

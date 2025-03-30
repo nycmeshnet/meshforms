@@ -89,7 +89,7 @@ function PanoramaUploader() {
   function attemptUpload(trustMeBro: boolean = false) {
     let formData = new FormData();
 
-    if (formSubmission === undefined) {
+    if (formSubmission === undefined || formSubmission.dropzoneImages.length === 0) {
       return;
     }
 
