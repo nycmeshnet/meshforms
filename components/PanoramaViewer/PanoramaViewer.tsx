@@ -24,10 +24,12 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
     setValue,
     formState: { errors },
   } = useForm<FormValues>();
-
+  cursorEvents: "none";
   const [isLoading, setIsLoading] = React.useState(false);
   const [images, setImages] = React.useState([]);
   const [currentInstallNumber, setCurrentInstallNumber] = React.useState(-1);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [user, setUser] = React.useState("");
 
   function getImages(installNumber: number) {
     fetch(`http://127.0.0.1:8081/api/v1/install/${installNumber}`, {
@@ -68,6 +70,21 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
 
   useEffect(() => {
     if (installNumber !== undefined) setCurrentInstallNumber(installNumber);
+
+    // Check if we're logged into pano
+    fetch(`http://127.0.0.1:8081/userinfo`, {
+      credentials: "include",
+    }).then(async (response) => {
+      const j = await response.json();
+      if (response.status === 200) {
+        console.log("You're logged in");
+        setUser(j.name);
+        setIsLoggedIn(true);
+        return;
+      }
+      setUser("");
+      setIsLoggedIn(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -78,14 +95,23 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
 
   return (
     <>
+      <div style={{ display: "flex", flexDirection: "row-reverse" }}>
+        {isLoggedIn && <p>Welcome, {user}</p>}
+        {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google">Log In</a>}
+      </div>
       <div className={styles.panoNavBar}>
         <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
           <h1>Pano</h1>
         </a>
         <div style={{ display: "flex", flexDirection: "row" }}>
-          <a href={"/pano/upload"} style={{ padding: "10px" }}>
+          <a
+            href={"/pano/upload"}
+            style={{ padding: "10px" }}
+            className={`${!isLoggedIn ? styles.disabled : ""}`}
+          >
             <img src="/upload_icon.png" width={24} />
           </a>
+          {/*TODO (wdn): The search bar should probably be its own component.*/}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.formBody}>
               <input
@@ -127,7 +153,9 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
         <p>Found no images for this Install Number. Try uploading some.</p>
       )}
       {images.length === 0 && currentInstallNumber === -1 && (
-        <p>To get started, search for an Install Number or click the upload icon.</p>
+        <p>
+          To get started, search for an Install Number or click the upload icon.
+        </p>
       )}
       <div className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />

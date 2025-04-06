@@ -30,6 +30,28 @@ interface Image {
 export type { FormValues };
 
 function PanoramaUploader() {
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [user, setUser] = React.useState("");
+
+  // TODO (wdn): The login element should probably be its own component
+  useEffect(() => {
+    // Check if we're logged into pano
+    fetch(`http://127.0.0.1:8081/userinfo`, {
+      credentials: "include",
+    }).then(async (response) => {
+      const j = await response.json();
+      if (response.status === 200) {
+        console.log("You're logged in");
+        setUser(j.name);
+        setIsLoggedIn(true);
+        return;
+      }
+      window.location.replace("http://127.0.0.1:8081/login/google");
+    });
+
+  }, []);
+
+
   // React hook form stuff
   const {
     register,
@@ -38,7 +60,7 @@ function PanoramaUploader() {
     formState: { errors },
   } = useForm<FormValues>();
 
-  // Mostrecently submitted user form
+  // Most recently submitted user form
   const [formSubmission, setFormSubmission] = React.useState<FormValues>({
     installNumber: 0,
     dropzoneImages: [],
@@ -183,11 +205,26 @@ function PanoramaUploader() {
     setFormSubmission(data); // Side Effect: Submits the form
   };
 
-  return (
-    <>
+  if (!isLoggedIn) {
+    return (
+      <>
       <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
         <h1>Pano</h1>
       </a>
+      <p>Loading...</p>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div style={{display:"flex", justifyContent: "space-between", alignItems:"center"}}>
+      <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
+        <h1>Pano</h1>
+      </a>
+      {isLoggedIn && <p>Welcome, {user}</p>}
+      {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google">Log In</a>}
+      </div>
       <h2>Image Upload</h2>
       <p>
         Upload panoramas and other relevant install photos here. This form is

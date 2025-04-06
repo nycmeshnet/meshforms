@@ -28,6 +28,12 @@
   cursor: not-allowed;
 }
 
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.2;
+}
+
 .panoNavBar {
   display: flex;
   flex-direction: row;
