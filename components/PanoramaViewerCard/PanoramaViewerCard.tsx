@@ -154,6 +154,7 @@ export default function PanoramaViewerCard({
             </li>
             <li>{timestamp}</li>{" "}
             {/*XXX (wdn): Do I wanna update the timestamp?*/}
+            {/*
             <Select
               {...register("category")}
               placeholder={category}
@@ -173,6 +174,7 @@ export default function PanoramaViewerCard({
                 </MenuItem>
               ))}
             </Select>
+            */}
           </ul>
         </div>
         <div className={styles.imageActions}>
