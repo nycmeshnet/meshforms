@@ -48,9 +48,7 @@ function PanoramaUploader() {
       }
       window.location.replace("http://127.0.0.1:8081/login/google");
     });
-
   }, []);
-
 
   // React hook form stuff
   const {
@@ -208,22 +206,28 @@ function PanoramaUploader() {
   if (!isLoggedIn) {
     return (
       <>
-      <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
-        <h1>Pano</h1>
-      </a>
-      <p>Loading...</p>
+        <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
+          <h1>Pano</h1>
+        </a>
+        <p>Loading...</p>
       </>
     );
   }
 
   return (
     <>
-      <div style={{display:"flex", justifyContent: "space-between", alignItems:"center"}}>
-      <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
-        <h1>Pano</h1>
-      </a>
-      {isLoggedIn && <p>Welcome, {user}</p>}
-      {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google">Log In</a>}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
+          <h1>Pano</h1>
+        </a>
+        {isLoggedIn && <p>Welcome, {user}</p>}
+        {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google">Log In</a>}
       </div>
       <h2>Image Upload</h2>
       <p>
