@@ -93,9 +93,6 @@ export default function PanoramaViewerCard({
     fetch("http://127.0.0.1:8081/api/v1/update", {
       method: "POST",
       credentials: "include",
-      headers: {
-        token: process.env.NEXT_PUBLIC_PANO_TOKEN,
-      },
       body: formData,
     })
       .then(async (response) => {
