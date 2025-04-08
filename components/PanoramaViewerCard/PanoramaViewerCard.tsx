@@ -100,6 +100,7 @@ export default function PanoramaViewerCard({
           console.log("Files uploaded successfully");
           toast.success("Upload Successful!");
 
+          // todo: don't sort by date?
           fetch(`http://127.0.0.1:8081/api/v1/image/${id}`, {
             credentials: "include",
           })
