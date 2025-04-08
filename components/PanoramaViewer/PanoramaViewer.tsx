@@ -34,10 +34,6 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
   function getImages(installNumber: number) {
     fetch(`http://127.0.0.1:8081/api/v1/install/${installNumber}`, {
       credentials: "include",
-      headers: {
-        token:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGllbnQiOiJteV9jbGllbnQifQ.zYN1PK0ZRYXg5Md-8Cr8svubDmm1SRQ5SZnwgUAMJGA",
-      },
     })
       .then(async (response) => {
         if (!response.ok) {

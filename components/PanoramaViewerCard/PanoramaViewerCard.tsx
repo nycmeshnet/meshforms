@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import styles from "./PanoramaViewerCard.module.scss";
 import { CircularProgress, MenuItem, Select } from "@mui/material";
@@ -109,14 +109,12 @@ export default function PanoramaViewerCard({
               }
               const j = await response.json();
               setImageTitle(j.original_filename);
+              setImageURL(j.url);
             })
             .catch(async (error) => {
               const msg = `Could not update image: ${error}`;
               toast.error(msg);
             });
-
-          // Refresh the image by adding a random hash
-          setImageURL(`${url}?${Math.random().toString(36)}`);
           setIsReplaceImageDropzoneOpen(false);
           setIsLoading(false);
           return;
