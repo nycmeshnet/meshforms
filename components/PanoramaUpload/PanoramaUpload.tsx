@@ -226,7 +226,7 @@ function PanoramaUploader() {
         <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
           <h1>Pano</h1>
         </a>
-        {isLoggedIn && <p>Welcome, {user}</p>}
+        {isLoggedIn && <p>Welcome, {user} (<a href="http://127.0.0.1:8081/logout">Logout</a>)</p>}
         {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google">Log In</a>}
       </div>
       <h2>Image Upload</h2>
@@ -241,6 +241,12 @@ function PanoramaUploader() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <PanoramaDropzone onFileDrop={onFileDrop} />
           <div className={styles.formBody}>
+            <input
+              {...register("networkNumber")}
+              type="number"
+              placeholder="Network Number"
+              required
+            />
             <input
               {...register("installNumber")}
               type="number"

@@ -92,7 +92,7 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
   return (
     <>
       <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-        {isLoggedIn && <p>Welcome, {user}</p>}
+        {isLoggedIn && <p>Welcome, {user} (<a href="http://127.0.0.1:8081/logout">Logout</a>)</p>}
         {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google">Log In</a>}
       </div>
       <div className={styles.panoNavBar}>
