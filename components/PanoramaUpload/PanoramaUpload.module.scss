@@ -1,7 +1,7 @@
 .formBody {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 0 10px;
   justify-content: center;
 }
 
@@ -10,7 +10,7 @@
   padding: 10px;
   font-size: 16px;
   box-sizing: border-box;
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
   border-radius: 4px;
   outline-offset: 4px;
 }
@@ -27,3 +27,10 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.drop {
+  font-size: 16px;
+  box-sizing: border-box;
+  /*margin-bottom: 10px;*/
+}
+

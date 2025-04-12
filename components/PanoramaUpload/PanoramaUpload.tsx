@@ -6,13 +6,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PanoramaDropzone from "./PanoramaDropzone";
 import { Button, CircularProgress } from "@mui/material";
+import Select from "react-select";
 import styles from "./PanoramaUpload.module.scss";
 import PanoramaDuplicateDialog, {
   PossibleDuplicate,
 } from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
 
 type FormValues = {
-  installNumber: number;
+  modelNumber: number;
   dropzoneImages: File[];
 };
 
@@ -29,9 +30,18 @@ interface Image {
 
 export type { FormValues };
 
+const modelSelectOptions = [
+  { value: "installNumber", label: "Install #" },
+  { value: "networkNumber", label: "Network Number" },
+];
+
 function PanoramaUploader() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
+
+  // This feels cursed but not sure what to do about it
+  const [selectedModelLabel, setSelectedModelLabel] = React.useState("Install #");
+  const [selectedModel, setSelectedModel] = React.useState("installNumber");
 
   // TODO (wdn): The login element should probably be its own component
   useEffect(() => {
@@ -60,7 +70,7 @@ function PanoramaUploader() {
 
   // Most recently submitted user form
   const [formSubmission, setFormSubmission] = React.useState<FormValues>({
-    installNumber: 0,
+    modelNumber: -1,
     dropzoneImages: [],
   });
 
@@ -113,13 +123,22 @@ function PanoramaUploader() {
 
     if (
       formSubmission === undefined ||
-      formSubmission.dropzoneImages.length === 0
+      formSubmission.dropzoneImages.length === 0 ||
+      selectedModel === null
     ) {
       return;
     }
 
-    // Set the install number
-    formData.append("installNumber", formSubmission.installNumber.toString());
+    // Set the install number, or the network number.
+    switch (selectedModel) {
+      case "installNumber":
+      case "networkNumber":
+        formData.append(selectedModel, formSubmission.modelNumber.toString());
+        break;
+      default:
+        // Should never happen
+        return;
+    }
 
     // Upload images
     for (var x = 0; x < formSubmission.dropzoneImages.length; x++) {
@@ -226,7 +245,11 @@ function PanoramaUploader() {
         <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
           <h1>Pano</h1>
         </a>
-        {isLoggedIn && <p>Welcome, {user} (<a href="http://127.0.0.1:8081/logout">Logout</a>)</p>}
+        {isLoggedIn && (
+          <p>
+            Welcome, {user} (<a href="http://127.0.0.1:8081/logout">Logout</a>)
+          </p>
+        )}
         {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google">Log In</a>}
       </div>
       <h2>Image Upload</h2>
@@ -241,16 +264,21 @@ function PanoramaUploader() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <PanoramaDropzone onFileDrop={onFileDrop} />
           <div className={styles.formBody}>
-            <input
-              {...register("networkNumber")}
-              type="number"
-              placeholder="Network Number"
-              required
+            <Select
+              name="modelSelect"
+              placeholder="Select NN or Install #"
+              options={modelSelectOptions}
+              defaultValue={modelSelectOptions[0]}
+              onChange={(selected) => {
+                selected ? setSelectedModel(selected.value) : null;
+                selected ? setSelectedModelLabel(selected.label) : null;
+              }}
+              className={styles.drop}
             />
             <input
-              {...register("installNumber")}
+              {...register("modelNumber")}
               type="number"
-              placeholder="Install Number"
+              placeholder={selectedModelLabel}
               required
             />
             <Button
