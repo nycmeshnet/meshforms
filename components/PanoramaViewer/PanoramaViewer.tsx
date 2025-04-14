@@ -6,66 +6,45 @@ import { Button, CircularProgress } from "@mui/material";
 import { useForm } from "react-hook-form";
 import PanoramaViewerCard from "../PanoramaViewerCard/PanoramaViewerCard";
 import { ToastContainer, toast } from "react-toastify";
+import Select from "react-select";
+import { ModelType } from "@/app/types";
 
 type FormValues = {
-  installNumber: number;
+  modelNumber: number;
 };
 
 export type { FormValues };
 
 interface PanoramaViewerProps {
-  installNumber: number;
+  urlModelNumber: string;
+  urlModelType: ModelType;
 }
 
-export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<FormValues>();
-  cursorEvents: "none";
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [images, setImages] = React.useState([]);
-  const [currentInstallNumber, setCurrentInstallNumber] = React.useState(-1);
+const modelSelectOptions = [
+  { value: ModelType.InstallNumber, label: "Install #" },
+  { value: ModelType.NetworkNumber, label: "Network Number" },
+];
+
+const modelTypeToAPIRouteMap = new Map<ModelType, string>([
+  [ModelType.InstallNumber, "install"],
+  [ModelType.NetworkNumber, "nn"],
+]);
+
+const modelTypeToLabelMap = new Map<ModelType, string>([
+  [ModelType.InstallNumber, "Install #"],
+  [ModelType.NetworkNumber, "Network Number"],
+]);
+
+export default function PanoramaViewer({
+  urlModelNumber,
+  urlModelType,
+}: PanoramaViewerProps) {
+  // Auth stuff
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
-
-  function getImages(installNumber: number) {
-    fetch(`http://127.0.0.1:8081/api/v1/install/${installNumber}`, {
-      credentials: "include",
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          throw response;
-        }
-        const images = await response.json();
-        console.log(images);
-        setImages(images);
-        setIsLoading(false);
-      })
-      .catch(async (error) => {
-        const msg = `File upload error: ${error}`;
-        toast.error(msg);
-        setIsLoading(false);
-      });
-  }
-
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.debug(data);
-    setIsLoading(true);
-    //setFormSubmission(data); // Side Effect: Submits the form
-    getImages(data.installNumber);
-    window.history.pushState(
-      "View images on Pano",
-      "",
-      `/pano/view/install/${data.installNumber}`,
-    );
-    installNumber = data.installNumber;
-  };
-
   useEffect(() => {
-    if (installNumber !== undefined) setCurrentInstallNumber(installNumber);
+    console.debug(`Page loaded. Querying for ${urlModelType}: ${urlModelNumber}.`);
+    getImages(urlModelNumber, urlModelType);
 
     // Check if we're logged into pano
     fetch(`http://127.0.0.1:8081/userinfo`, {
@@ -83,11 +62,62 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
     });
   }, []);
 
-  useEffect(() => {
-    if (currentInstallNumber !== -1) {
-      getImages(currentInstallNumber);
-    }
-  }, [currentInstallNumber]);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [images, setImages] = React.useState([]);
+
+  // Model passed in via URL or set in search bar
+  const [selectedModel, setSelectedModel] = React.useState(
+    urlModelType,
+  );
+
+  // Number passed in via URL or set in search bar
+  const [modelNumber, setModelNumber] = React.useState(urlModelNumber);
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.debug(`Search button clicked. Querying for ${selectedModel}: ${JSON.stringify(data)}.`);
+    setIsLoading(true);
+    setModelNumber(data.modelNumber);
+
+    // Query for the images and update the URL
+    window.history.pushState(
+      "View images on Pano",
+      "",
+      `/pano/view/${modelTypeToAPIRouteMap.get(selectedModel)}/${data.modelNumber}`,
+    );
+    getImages(data.modelNumber, selectedModel);
+  };
+
+  function getImages(modelNumber: number, modelType: ModelType) {
+    console.log(`Querying for ${modelType}, ${modelNumber}`);
+    fetch(
+      `http://127.0.0.1:8081/api/v1/${modelTypeToAPIRouteMap.get(modelType)}/${modelNumber}`,
+      {
+        credentials: "include",
+      },
+    )
+      .then(async (response) => {
+        if (!response.ok) {
+          throw response;
+        }
+        const images = await response.json();
+        console.log(`Got Images: ${JSON.stringify(images)}`);
+        setImages(images);
+      })
+      .catch(async (error) => {
+        console.error(error);
+        const j = await error.json();
+        const msg = `Could not get images: ${j.detail}`;
+        toast.error(msg);
+      });
+      setIsLoading(false);
+  }
+
 
   return (
     <>
@@ -114,10 +144,20 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
           {/*TODO (wdn): The search bar should probably be its own component.*/}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className={styles.formBody}>
+              <Select
+                name="modelSelect"
+                placeholder="Select NN or Install #"
+                options={modelSelectOptions}
+                onChange={(selected) => {
+                  selected ? setSelectedModel(selected.value) : null;
+                }}
+                className={styles.drop}
+                isSearchable={false}
+              />
               <input
-                {...register("installNumber")}
+                {...register("modelNumber")}
                 type="number"
-                placeholder="Install Number"
+                placeholder={modelTypeToLabelMap.get(selectedModel)}
                 required
               />
               <Button
@@ -149,10 +189,10 @@ export default function PanoramaViewer({ installNumber }: PanoramaViewerProps) {
             </div>
           ))}
       </div>
-      {images.length === 0 && currentInstallNumber !== -1 && (
-        <p>Found no images for this Install Number. Try uploading some.</p>
+      {images.length === 0 && modelNumber !== "" && (
+        <h2 style={{color:"gray"}}>Found no images.</h2>
       )}
-      {images.length === 0 && currentInstallNumber === -1 && (
+      {images.length === 0 && modelNumber === "" && (
         <p>
           To get started, search for an Install Number or click the upload icon.
         </p>

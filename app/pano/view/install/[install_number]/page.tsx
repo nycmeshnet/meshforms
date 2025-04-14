@@ -1,5 +1,6 @@
-import PanoramaViewer from "@/components/PanoramaViewer/PanoramaViewer";
-import { useRouter } from "next/router";
+import { ModelType } from "@/app/types";
+import PanoramaViewer, {
+} from "@/components/PanoramaViewer/PanoramaViewer";
 
 export const metadata = {
   title: "View Images on pano",
@@ -9,29 +10,18 @@ export const metadata = {
 export default async function ViewByInstallNumber({
   params,
 }: {
-  params: Promise<{ installNumber: number }>;
-}) {
-  const { installNumber } = await params;
-  return (
-    <>
-      <main>
-        <PanoramaViewer installNumber={installNumber} />
-      </main>
-    </>
-  );
-}
-
-export default async function Page({
-  params,
-}: {
   params: Promise<{ install_number: string }>;
 }) {
   const { install_number } = await params;
   return (
     <>
       <main>
-        <PanoramaViewer installNumber={install_number} />
+        <PanoramaViewer
+          urlModelNumber={install_number}
+          urlModelType={ModelType.InstallNumber}
+        />
       </main>
     </>
   );
 }
+

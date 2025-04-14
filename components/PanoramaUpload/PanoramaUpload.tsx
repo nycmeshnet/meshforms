@@ -40,7 +40,8 @@ function PanoramaUploader() {
   const [user, setUser] = React.useState("");
 
   // This feels cursed but not sure what to do about it
-  const [selectedModelLabel, setSelectedModelLabel] = React.useState("Install #");
+  const [selectedModelLabel, setSelectedModelLabel] =
+    React.useState("Install #");
   const [selectedModel, setSelectedModel] = React.useState("installNumber");
 
   // TODO (wdn): The login element should probably be its own component
