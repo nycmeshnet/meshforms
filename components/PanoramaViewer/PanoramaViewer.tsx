@@ -39,12 +39,15 @@ export default function PanoramaViewer({
   urlModelNumber,
   urlModelType,
 }: PanoramaViewerProps) {
-  // Auth stuff
+  // Authentication
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
   useEffect(() => {
-    console.debug(`Page loaded. Querying for ${urlModelType}: ${urlModelNumber}.`);
-    getImages(urlModelNumber, urlModelType);
+    // Query for images if we have a number
+    if (urlModelNumber !== undefined) {
+      console.debug(`Page loaded. Querying for ${urlModelType}: ${urlModelNumber}.`);
+      getImages(Number(urlModelNumber), urlModelType);
+    }
 
     // Check if we're logged into pano
     fetch(`http://127.0.0.1:8081/userinfo`, {
@@ -79,6 +82,7 @@ export default function PanoramaViewer({
   // Number passed in via URL or set in search bar
   const [modelNumber, setModelNumber] = React.useState(urlModelNumber);
 
+  // Runs when you click "Search" on the search bar
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.debug(`Search button clicked. Querying for ${selectedModel}: ${JSON.stringify(data)}.`);
     setIsLoading(true);
@@ -93,6 +97,7 @@ export default function PanoramaViewer({
     getImages(data.modelNumber, selectedModel);
   };
 
+  // Retrieves images from the Pano API
   function getImages(modelNumber: number, modelType: ModelType) {
     console.log(`Querying for ${modelType}, ${modelNumber}`);
     fetch(
@@ -131,7 +136,10 @@ export default function PanoramaViewer({
       </div>
       <div className={styles.panoNavBar}>
         <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
+          <div style={{display:"flex", flexDirection:"row"}}>
           <h1>Pano</h1>
+          <h2 style={{color:"gray"}}>{modelTypeToAPIRouteMap.get(selectedModel)} {modelNumber}</h2>
+          </div>
         </a>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <a

@@ -265,6 +265,7 @@ function PanoramaUploader() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <PanoramaDropzone onFileDrop={onFileDrop} />
           <div className={styles.formBody}>
+            {/*TODO: We should probs redirect to the viewer when we are done submitting*/}
             <Select
               name="modelSelect"
               placeholder="Select NN or Install #"
@@ -275,6 +276,7 @@ function PanoramaUploader() {
                 selected ? setSelectedModelLabel(selected.label) : null;
               }}
               className={styles.drop}
+              isSearchable={false}
             />
             <input
               {...register("modelNumber")}
