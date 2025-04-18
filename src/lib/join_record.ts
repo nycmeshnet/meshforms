@@ -60,8 +60,12 @@ class JoinRecordS3 {
 
     try {
       const response = await this.s3Client.send(command);
+      console.log(
+        `Sent Join Record for ${joinRecord.email_address} to S3 bucket: ${this.BUCKET_NAME}`,
+      );
       console.log(response);
     } catch (err) {
+      console.error("Error sending Join Record to S3");
       // Oof, guess we'll drop this on the floor.
       console.error(err);
       throw err;
