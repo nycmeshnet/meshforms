@@ -112,6 +112,7 @@ export default function PanoramaViewer({
         }
         const images = await response.json();
         console.log(`Got Images: ${JSON.stringify(images)}`);
+        setImages([]);
         setImages(images);
       })
       .catch(async (error) => {
@@ -188,7 +189,7 @@ export default function PanoramaViewer({
           images.map((image, index) => (
             <div>
               <PanoramaViewerCard
-                id={image.id}
+                key={image.id}
                 originalFilename={image.original_filename}
                 timestamp={image.timestamp}
                 category={image.category}
