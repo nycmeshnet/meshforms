@@ -11,6 +11,7 @@ import styles from "./PanoramaUpload.module.scss";
 import PanoramaDuplicateDialog, {
   PossibleDuplicate,
 } from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
+import { ModelType, modelTypeToAPIFieldMap, modelTypeToAPIRouteMap, modelTypeToLabelMap } from "@/app/types";
 
 type FormValues = {
   modelNumber: number;
@@ -31,18 +32,17 @@ interface Image {
 export type { FormValues };
 
 const modelSelectOptions = [
-  { value: "installNumber", label: "Install #" },
-  { value: "networkNumber", label: "Network Number" },
+  { value: ModelType.InstallNumber, label: "Install #" },
+  { value: ModelType.NetworkNumber, label: "Network Number" },
 ];
 
 function PanoramaUploader() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
 
-  // This feels cursed but not sure what to do about it
-  const [selectedModelLabel, setSelectedModelLabel] =
-    React.useState("Install #");
-  const [selectedModel, setSelectedModel] = React.useState("installNumber");
+  const [selectedModel, setSelectedModel] = React.useState(ModelType.InstallNumber);
+
+  const [linkToViewUploadedFiles, setLinkToViewUploadedFiles] = React.useState("");
 
   // TODO (wdn): The login element should probably be its own component
   useEffect(() => {
@@ -131,16 +131,8 @@ function PanoramaUploader() {
     }
 
     // Set the install number, or the network number.
-    switch (selectedModel) {
-      case "installNumber":
-      case "networkNumber":
-        formData.append(selectedModel, formSubmission.modelNumber.toString());
-        break;
-      default:
-        // Should never happen
-        return;
-    }
-
+    formData.append(modelTypeToAPIFieldMap.get(selectedModel), formSubmission.modelNumber.toString());
+  
     // Upload images
     for (var x = 0; x < formSubmission.dropzoneImages.length; x++) {
       formData.append("dropzoneImages[]", formSubmission.dropzoneImages[x]);
@@ -159,6 +151,7 @@ function PanoramaUploader() {
           console.log("Files uploaded successfully");
           toast.success("Upload Successful!");
           setIsLoading(false);
+          setLinkToViewUploadedFiles(`http://127.0.0.1:3000/pano/view/${modelTypeToAPIRouteMap.get(selectedModel)}/${formSubmission.modelNumber}/`);
           return;
         }
         if (response.status == 409) {
@@ -224,6 +217,7 @@ function PanoramaUploader() {
   };
 
   if (!isLoggedIn) {
+    // While the app decides whether or not you're logged in it'll hide the view from you.
     return (
       <>
         <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
@@ -273,7 +267,6 @@ function PanoramaUploader() {
               defaultValue={modelSelectOptions[0]}
               onChange={(selected) => {
                 selected ? setSelectedModel(selected.value) : null;
-                selected ? setSelectedModelLabel(selected.label) : null;
               }}
               className={styles.drop}
               isSearchable={false}
@@ -281,7 +274,7 @@ function PanoramaUploader() {
             <input
               {...register("modelNumber")}
               type="number"
-              placeholder={selectedModelLabel}
+              placeholder={modelTypeToLabelMap.get(selectedModel)}
               required
             />
             <Button
@@ -308,6 +301,11 @@ function PanoramaUploader() {
         handleClickUpload={handleClickUpload}
         handleClickCancel={handleClickCancel}
       />
+      <h1 hidden={linkToViewUploadedFiles === ""}>
+        <a href={linkToViewUploadedFiles}>
+          {linkToViewUploadedFiles}
+        </a>
+      </h1>
     </>
   );
 }

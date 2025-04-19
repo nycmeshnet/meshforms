@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import PanoramaViewerCard from "../PanoramaViewerCard/PanoramaViewerCard";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { ModelType } from "@/app/types";
+import { ModelType, modelTypeToAPIRouteMap, modelTypeToLabelMap } from "@/app/types";
 
 type FormValues = {
   modelNumber: number;
@@ -25,6 +25,7 @@ const modelSelectOptions = [
   { value: ModelType.NetworkNumber, label: "Network Number" },
 ];
 
+/*
 const modelTypeToAPIRouteMap = new Map<ModelType, string>([
   [ModelType.InstallNumber, "install"],
   [ModelType.NetworkNumber, "nn"],
@@ -34,6 +35,7 @@ const modelTypeToLabelMap = new Map<ModelType, string>([
   [ModelType.InstallNumber, "Install #"],
   [ModelType.NetworkNumber, "Network Number"],
 ]);
+*/
 
 export default function PanoramaViewer({
   urlModelNumber,
@@ -112,7 +114,6 @@ export default function PanoramaViewer({
         }
         const images = await response.json();
         console.log(`Got Images: ${JSON.stringify(images)}`);
-        setImages([]);
         setImages(images);
       })
       .catch(async (error) => {
