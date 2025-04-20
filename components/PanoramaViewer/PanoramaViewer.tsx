@@ -184,7 +184,7 @@ export default function PanoramaViewer({
           </form>
         </div>
       </div>
-      <div className={styles.panoramaLiskeyt}>
+      <div className={styles.panoramaList}>
         {images.length > 0 &&
           images.map((image: Image, index) => (
             <div>
