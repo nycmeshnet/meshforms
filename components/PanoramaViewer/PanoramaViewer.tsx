@@ -121,24 +121,12 @@ export default function PanoramaViewer({
 
   return (
     <>
-      <div style={{display: "flex", justifyContent: "space-between", alignItems:"center"}}>
-        <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
-          <h1>Pano</h1>
+      <div className={styles.panoHeader}>
+        <a href="/pano/view" style={{ display: "flex", flexDirection:"row", textDecoration: "none", color: "black" }}>
+          <img src="/pano.png" height={72} />
+          <p style={{fontSize:"1.5rem", fontWeight: "bold"}}>Pano</p>
         </a>
-        <div>
-          {isLoggedIn && (
-            <h3>
-              {user} (<a href="http://127.0.0.1:8081/logout">Logout</a>)
-            </h3>
-          )}
-          {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google"><h3>Log In</h3></a>}
-        </div>
-      </div>
-      <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between", alignItems:"center"}}>
-      <h2 style={{ color: "gray" }}>
-        {modelTypeToLabelMap.get(selectedModel)} {modelNumber}
-      </h2>
-      <div className={styles.panoNavBar}>
+        <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
         <a
           href={"/pano/upload"}
           style={{ padding: "10px" }}
@@ -146,6 +134,19 @@ export default function PanoramaViewer({
         >
           <img src="/upload_icon.png" width={24} />
         </a>
+          {isLoggedIn && (
+            <p>
+              {user} (<a href="http://127.0.0.1:8081/logout">Logout</a>)
+            </p>
+          )}
+          {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google"><p>Log In</p></a>}
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between", alignItems:"center"}}>
+      <h2 style={{ color: "gray" }}>
+        {modelTypeToLabelMap.get(selectedModel)} {modelNumber}
+      </h2>
+      <div className={styles.panoNavBar}>
         {/*TODO (wdn): The search bar should probably be its own component.*/}
         <form onSubmit={handleSubmit(onSubmit)} className={styles.formBody}>
           <Select

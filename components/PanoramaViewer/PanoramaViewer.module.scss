@@ -1,3 +1,16 @@
+.panoHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-style: solid;
+  border-width: 0 0 1px 0;
+}
+
+.panoHeader p {
+  margin: auto;
+}
+
 .panoNavBar {
   display: flex;
   flex-direction: row;
