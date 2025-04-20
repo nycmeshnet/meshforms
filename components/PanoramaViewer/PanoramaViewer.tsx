@@ -7,7 +7,11 @@ import { useForm } from "react-hook-form";
 import PanoramaViewerCard from "../PanoramaViewerCard/PanoramaViewerCard";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
-import { ModelType, modelTypeToAPIRouteMap, modelTypeToLabelMap } from "@/app/types";
+import {
+  ModelType,
+  modelTypeToAPIRouteMap,
+  modelTypeToLabelMap,
+} from "@/app/types";
 
 type FormValues = {
   modelNumber: number;
@@ -20,22 +24,10 @@ interface PanoramaViewerProps {
   urlModelType: ModelType;
 }
 
-const modelSelectOptions = [
-  { value: ModelType.InstallNumber, label: "Install #" },
-  { value: ModelType.NetworkNumber, label: "Network Number" },
+export const modelSelectOptions = [
+  { value: ModelType.InstallNumber, label: modelTypeToLabelMap.get(ModelType.InstallNumber) },
+  { value: ModelType.NetworkNumber, label: modelTypeToLabelMap.get(ModelType.NetworkNumber) },
 ];
-
-/*
-const modelTypeToAPIRouteMap = new Map<ModelType, string>([
-  [ModelType.InstallNumber, "install"],
-  [ModelType.NetworkNumber, "nn"],
-]);
-
-const modelTypeToLabelMap = new Map<ModelType, string>([
-  [ModelType.InstallNumber, "Install #"],
-  [ModelType.NetworkNumber, "Network Number"],
-]);
-*/
 
 export default function PanoramaViewer({
   urlModelNumber,
@@ -47,7 +39,9 @@ export default function PanoramaViewer({
   useEffect(() => {
     // Query for images if we have a number
     if (urlModelNumber !== undefined) {
-      console.debug(`Page loaded. Querying for ${urlModelType}: ${urlModelNumber}.`);
+      console.debug(
+        `Page loaded. Querying for ${urlModelType}: ${urlModelNumber}.`,
+      );
       getImages(Number(urlModelNumber), urlModelType);
     }
 
@@ -77,16 +71,16 @@ export default function PanoramaViewer({
   const [images, setImages] = React.useState([]);
 
   // Model passed in via URL or set in search bar
-  const [selectedModel, setSelectedModel] = React.useState(
-    urlModelType,
-  );
+  const [selectedModel, setSelectedModel] = React.useState(urlModelType ?? ModelType.InstallNumber);
 
   // Number passed in via URL or set in search bar
   const [modelNumber, setModelNumber] = React.useState(urlModelNumber);
 
   // Runs when you click "Search" on the search bar
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.debug(`Search button clicked. Querying for ${selectedModel}: ${JSON.stringify(data)}.`);
+    console.debug(
+      `Search button clicked. Querying for ${selectedModel}: ${JSON.stringify(data)}.`,
+    );
     setIsLoading(true);
     setModelNumber(data.modelNumber);
 
@@ -122,68 +116,68 @@ export default function PanoramaViewer({
         const msg = `Could not get images: ${j.detail}`;
         toast.error(msg);
       });
-      setIsLoading(false);
+    setIsLoading(false);
   }
-
 
   return (
     <>
-      <div style={{ display: "flex", flexDirection: "row-reverse" }}>
-        {isLoggedIn && (
-          <p>
-            Welcome, {user} (<a href="http://127.0.0.1:8081/logout">Logout</a>)
-          </p>
-        )}
-        {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google">Log In</a>}
-      </div>
-      <div className={styles.panoNavBar}>
+      <div style={{display: "flex", justifyContent: "space-between", alignItems:"center"}}>
         <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
-          <div style={{display:"flex", flexDirection:"row"}}>
           <h1>Pano</h1>
-          <h2 style={{color:"gray"}}>{modelTypeToAPIRouteMap.get(selectedModel)} {modelNumber}</h2>
-          </div>
         </a>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <a
-            href={"/pano/upload"}
-            style={{ padding: "10px" }}
-            className={`${!isLoggedIn ? styles.disabled : ""}`}
-          >
-            <img src="/upload_icon.png" width={24} />
-          </a>
-          {/*TODO (wdn): The search bar should probably be its own component.*/}
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className={styles.formBody}>
-              <Select
-                name="modelSelect"
-                placeholder="Select NN or Install #"
-                options={modelSelectOptions}
-                onChange={(selected) => {
-                  selected ? setSelectedModel(selected.value) : null;
-                }}
-                className={styles.drop}
-                isSearchable={false}
-              />
-              <input
-                {...register("modelNumber")}
-                type="number"
-                placeholder={modelTypeToLabelMap.get(selectedModel)}
-                required
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                size="large"
-                disabled={isLoading}
-              >
-                {isLoading ? "Loading..." : "Search"}
-              </Button>
-              <div hidden={!isLoading}>
-                <CircularProgress />
-              </div>
-            </div>
-          </form>
+        <div>
+          {isLoggedIn && (
+            <h3>
+              {user} (<a href="http://127.0.0.1:8081/logout">Logout</a>)
+            </h3>
+          )}
+          {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google"><h3>Log In</h3></a>}
         </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between", alignItems:"center"}}>
+      <h2 style={{ color: "gray" }}>
+        {modelTypeToLabelMap.get(selectedModel)} {modelNumber}
+      </h2>
+      <div className={styles.panoNavBar}>
+        <a
+          href={"/pano/upload"}
+          style={{ padding: "10px" }}
+          className={`${!isLoggedIn ? styles.disabled : ""}`}
+        >
+          <img src="/upload_icon.png" width={24} />
+        </a>
+        {/*TODO (wdn): The search bar should probably be its own component.*/}
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.formBody}>
+          <Select
+            name="modelSelect"
+            placeholder={modelTypeToLabelMap.get(selectedModel)}
+            options={modelSelectOptions}
+            onChange={(selected) => {
+              selected ? setSelectedModel(selected.value) : null;
+            }}
+            className={styles.modelSelectDropdown}
+            isSearchable={false}
+          />
+          <input
+            {...register("modelNumber")}
+            type="number"
+            placeholder={modelTypeToLabelMap.get(selectedModel)}
+            required
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            size="large"
+            disabled={isLoading}
+            style={{margin: 0, height: "2.4em"}}
+          >
+            {isLoading ? "Loading..." : "Search"}
+          </Button>
+          <div hidden={!isLoading}>
+            <CircularProgress />
+          </div>
+        </form>
+      </div>
       </div>
       <div className={styles.panoramaList}>
         {images.length > 0 &&
@@ -200,7 +194,7 @@ export default function PanoramaViewer({
           ))}
       </div>
       {images.length === 0 && modelNumber !== "" && (
-        <h2 style={{color:"gray"}}>Found no images.</h2>
+        <h2 style={{ color: "gray" }}>Found no images.</h2>
       )}
       {images.length === 0 && modelNumber === "" && (
         <p>

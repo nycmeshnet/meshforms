@@ -118,7 +118,7 @@ export function Footer() {
 
   return (
     <>
-      <footer>
+      <footer style={{marginTop: "auto", flexGrow:0}}>
         <Box
           sx={{
             backgroundColor: "#f4f4f4",
@@ -126,10 +126,12 @@ export function Footer() {
             padding: "none",
             width: "100%",
             display: "flex",
+            marginTop: "auto",
+            flexGrow: 0
           }}
           id="full-width-box"
         >
-          <Container maxWidth="lg" id="container" sx={{}}>
+          <Container disableGutters maxWidth="lg" id="container" sx={{}}>
             <Grid
               container
               sx={{ py: "2rem", flex: 1, justifyContent: "space-between" }}

@@ -1,18 +1,34 @@
+.panoNavBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  margin: 0px;
+}
+
 .formBody {
   display: flex;
   flex-direction: row;
   gap: 10px;
   justify-content: center;
+  align-items: center;
+  margin:0;
 }
 
 .formBody input[type="number"] {
   border: 1px solid #ccc;
-  padding: 10px;
+  /*padding: 10px;*/
   font-size: 16px;
   box-sizing: border-box;
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
   border-radius: 4px;
   outline-offset: 4px;
+  height: 2.4em;
+}
+
+.modelSelectDropdown {
+  font-size: 16px;
+  width: 120px;
 }
 
 .formBody button {
@@ -32,16 +48,6 @@
   pointer-events: none;
   cursor: default;
   opacity: 0.2;
-}
-
-.panoNavBar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.panoNavBar h1 {
-  margin: 0px;
 }
 
 .panoramaList {

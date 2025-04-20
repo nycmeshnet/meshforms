@@ -23,8 +23,8 @@ export default function RootLayout({
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             <Header />
-            <Box sx={{ width: "100%", backgroundColor: "white" }}>
-              <Container maxWidth="lg" sx={{ py: { md: "3rem", sm: "1rem" } }}>
+            <Box sx={{ width: "100%", backgroundColor: "white", flexGrow: 1000 }}>
+              <Container disableGutters maxWidth="lg">
                 {children}
               </Container>
             </Box>

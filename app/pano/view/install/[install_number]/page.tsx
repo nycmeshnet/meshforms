@@ -1,6 +1,5 @@
 import { ModelType } from "@/app/types";
-import PanoramaViewer, {
-} from "@/components/PanoramaViewer/PanoramaViewer";
+import PanoramaViewer from "@/components/PanoramaViewer/PanoramaViewer";
 
 export const metadata = {
   title: "View Images on pano",
@@ -24,4 +23,3 @@ export default async function ViewByInstallNumber({
     </>
   );
 }
-

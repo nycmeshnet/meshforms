@@ -10,7 +10,7 @@ export const modelTypeToAPIRouteMap = new Map<ModelType, string>([
 
 export const modelTypeToLabelMap = new Map<ModelType, string>([
   [ModelType.InstallNumber, "Install #"],
-  [ModelType.NetworkNumber, "Network Number"],
+  [ModelType.NetworkNumber, "NN"],
 ]);
 
 export const modelTypeToAPIFieldMap = new Map<ModelType, string>([

@@ -111,7 +111,6 @@ export function Header(props: Props) {
                 }}
               >
                 <span style={{ fontWeight: 600 }}>NYC Mesh</span>{" "}
-                <span style={{ fontWeight: 400 }}>| Forms</span>
               </Typography>
             </a>
             <Box sx={{ display: { xs: "none", md: "block" } }}>
