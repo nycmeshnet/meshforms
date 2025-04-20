@@ -5,6 +5,7 @@ import { CircularProgress, MenuItem, Select } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import { ToastContainer, toast } from "react-toastify";
+import ModalImage from "react-modal-image";
 
 type FormValues = {
   category: string;
@@ -183,7 +184,7 @@ export default function PanoramaViewerCard({
         </div>
         <div className={styles.image}>
           <div hidden={isReplaceImageDropzoneOpen}>
-            <img src={imageURL} />
+            <ModalImage small={imageURL} large={imageURL}/>
           </div>
           <div hidden={!isReplaceImageDropzoneOpen}>
             <div {...getRootProps({ className: styles.dropzone })}>

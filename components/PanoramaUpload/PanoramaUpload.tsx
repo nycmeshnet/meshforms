@@ -8,6 +8,7 @@ import PanoramaDropzone from "./PanoramaDropzone";
 import { Alert, Button, CircularProgress } from "@mui/material";
 import Select from "react-select";
 import styles from "./PanoramaUpload.module.scss";
+import searchBarStyles from "../Pano/SearchBar/PanoSearchBar.module.scss";
 import PanoramaDuplicateDialog, {
   PossibleDuplicate,
 } from "../PanoramaDuplicateDialog/PanoramaDuplicateDialog";
@@ -252,8 +253,7 @@ function PanoramaUploader() {
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <PanoramaDropzone onFileDrop={onFileDrop} />
-          <div className={styles.formBody}>
-            {/*TODO: We should probs redirect to the viewer when we are done submitting*/}
+          <div className={searchBarStyles.formBody}>
             <Select
               name="modelSelect"
               placeholder="Select NN or Install #"
