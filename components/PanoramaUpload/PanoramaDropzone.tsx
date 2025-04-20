@@ -52,8 +52,8 @@ const PanoramaDropzone: React.FC<PanoramaDropzoneProps> = ({ onFileDrop }) => {
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   const filenames = files.map((file) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
+    <li key={file.name}>
+      {file.name} - {file.size / 1000} KB 
     </li>
   ));
 
@@ -67,7 +67,7 @@ const PanoramaDropzone: React.FC<PanoramaDropzoneProps> = ({ onFileDrop }) => {
           onLoad={() => {
             URL.revokeObjectURL(file.preview);
           }}
-          name={file.path}
+          key={file.name}
         />
       </div>
     </div>

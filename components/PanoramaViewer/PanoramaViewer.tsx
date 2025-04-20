@@ -22,7 +22,7 @@ export type { FormValues };
 
 interface PanoramaViewerProps {
   urlModelNumber: string;
-  urlModelType: ModelType;
+  urlModelType: ModelType | undefined;
 }
 
 export const modelSelectOptions = [
@@ -45,7 +45,7 @@ export default function PanoramaViewer({
   const [user, setUser] = React.useState("");
   useEffect(() => {
     // Query for images if we have a number
-    if (urlModelNumber !== undefined) {
+    if (!!urlModelNumber) {
       console.debug(
         `Page loaded. Querying for ${urlModelType}: ${urlModelNumber}.`,
       );
