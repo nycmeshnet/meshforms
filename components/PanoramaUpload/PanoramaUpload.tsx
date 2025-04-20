@@ -138,7 +138,7 @@ function PanoramaUploader() {
 
     // Set the install number, or the network number.
     formData.append(
-      modelTypeToAPIFieldMap.get(selectedModel),
+      modelTypeToAPIFieldMap.get(selectedModel) ?? "install", // Sanity check: Default to install
       formSubmission.modelNumber.toString(),
     );
 
@@ -167,6 +167,7 @@ function PanoramaUploader() {
         }
         if (response.status == 409) {
           const j = await response.json();
+          console.warn(`Got possible dupes:\n${j}`);
 
           // Pano has just returned us a map of uploaded files to
           // duplicate files. Not all the info in the uploaded file is useful,
@@ -177,6 +178,9 @@ function PanoramaUploader() {
           Object.entries(j).forEach((file) => {
             const fileName = file[0];
             const existingObjectURL = file[1];
+            if (typeof fileName !== 'string' || typeof existingObjectURL !== 'string') {
+              throw new Error("Unexpected server response");
+            }
             // Use the name of the uploaded file to find
             const matchedFile: File | undefined =
               formSubmission.dropzoneImages.find(
@@ -297,7 +301,7 @@ function PanoramaUploader() {
         <ToastContainer hideProgressBar={true} theme={"colored"} />
       </div>
       <PanoramaDuplicateDialog
-        installNumber={formSubmission.installNumber}
+        installNumber={formSubmission.modelNumber}
         possibleDuplicates={possibleDuplicates}
         isDialogOpened={isDuplicateDialogOpen}
         handleClickUpload={handleClickUpload}

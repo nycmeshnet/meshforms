@@ -184,7 +184,7 @@ export default function PanoramaViewerCard({
         </div>
         <div className={styles.image}>
           <div hidden={isReplaceImageDropzoneOpen}>
-            <ModalImage small={imageURL} large={imageURL}/>
+            <ModalImage small={imageURL} large={imageURL} />
           </div>
           <div hidden={!isReplaceImageDropzoneOpen}>
             <div {...getRootProps({ className: styles.dropzone })}>

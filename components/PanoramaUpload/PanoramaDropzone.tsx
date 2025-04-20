@@ -3,24 +3,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styles from "./PanoramaDropzone.module.scss";
 
-const thumbsContainer = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  marginTop: 16,
-};
-
-const thumb = {
-  display: "inline-flex",
-  borderRadius: 2,
-  border: "1px solid #eaeaea",
-  marginBottom: 8,
-  marginRight: 8,
-  width: 100,
-  height: 100,
-  padding: 4,
-  boxSizing: "border-box",
-};
+interface PreviewFile extends File {
+  preview?: string;
+}
 
 const thumbInner = {
   display: "flex",
@@ -35,14 +20,17 @@ const img = {
 };
 
 interface PanoramaDropzoneProps {
-  onFileDrop: (dropzoneImages: File[]) => void;
+  onFileDrop: (dropzoneImages: PreviewFile[]) => void;
 }
 
 const PanoramaDropzone: React.FC<PanoramaDropzoneProps> = ({ onFileDrop }) => {
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<PreviewFile[]>([]);
 
   const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
+    (acceptedFiles: PreviewFile[]) => {
+      acceptedFiles.forEach((file) => {
+        file.preview = URL.createObjectURL(file);
+      });
       setFiles(acceptedFiles); // Store files locally
       onFileDrop(acceptedFiles); // Pass files to main form via callback
     },
@@ -53,19 +41,34 @@ const PanoramaDropzone: React.FC<PanoramaDropzoneProps> = ({ onFileDrop }) => {
 
   const filenames = files.map((file) => (
     <li key={file.name}>
-      {file.name} - {file.size / 1000} KB 
+      {file.name} - {file.size / 1000} KB
     </li>
   ));
 
   const thumbs = files.map((file) => (
-    <div style={thumb} key={file.name}>
+    <div
+      style={{
+        display: "inline-flex",
+        borderRadius: 2,
+        border: "1px solid #eaeaea",
+        marginBottom: 8,
+        marginRight: 8,
+        width: 100,
+        height: 100,
+        padding: 4,
+        boxSizing: "border-box",
+      }}
+      key={file.name}
+    >
       <div style={thumbInner}>
         <img
-          src={URL.createObjectURL(file)}
+          src={file.preview}
           style={img}
           // Revoke data uri after image is loaded
           onLoad={() => {
-            URL.revokeObjectURL(file.preview);
+            if (file.preview !== undefined) {
+              URL.revokeObjectURL(file.preview);
+            }
           }}
           key={file.name}
         />
@@ -75,7 +78,7 @@ const PanoramaDropzone: React.FC<PanoramaDropzoneProps> = ({ onFileDrop }) => {
 
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
+    return () => files.forEach((file) => { if (file.preview !== undefined) {URL.revokeObjectURL(file.preview)}});
   }, [files]);
 
   return (

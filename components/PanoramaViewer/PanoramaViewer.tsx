@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "./PanoramaViewer.module.scss";
 import { Button, CircularProgress } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import PanoramaViewerCard from "../PanoramaViewerCard/PanoramaViewerCard";
 import { ToastContainer, toast } from "react-toastify";
 import Select from "react-select";
@@ -19,6 +19,14 @@ type FormValues = {
 };
 
 export type { FormValues };
+
+export type Image = {
+  id: string;
+  original_filename: string;
+  timestamp: string;
+  category: string;
+  url: string;
+}
 
 interface PanoramaViewerProps {
   urlModelNumber: string;
@@ -45,7 +53,7 @@ export default function PanoramaViewer({
   const [user, setUser] = React.useState("");
   useEffect(() => {
     // Query for images if we have a number
-    if (!!urlModelNumber) {
+    if (!!urlModelNumber && !!urlModelType) {
       console.debug(
         `Page loaded. Querying for ${urlModelType}: ${urlModelNumber}.`,
       );
@@ -75,7 +83,7 @@ export default function PanoramaViewer({
     formState: { errors },
   } = useForm<FormValues>();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [images, setImages] = React.useState([]);
+  const [images, setImages] = React.useState<Image[]>([]);
 
   // Model passed in via URL or set in search bar
   const [selectedModel, setSelectedModel] = React.useState(
@@ -86,12 +94,12 @@ export default function PanoramaViewer({
   const [modelNumber, setModelNumber] = React.useState(urlModelNumber);
 
   // Runs when you click "Search" on the search bar
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = (data: FormValues) => {
     console.debug(
       `Search button clicked. Querying for ${selectedModel}: ${JSON.stringify(data)}.`,
     );
     setIsLoading(true);
-    setModelNumber(data.modelNumber);
+    setModelNumber(String(data.modelNumber));
 
     // Query for the images and update the URL
     window.history.pushState(
@@ -176,12 +184,12 @@ export default function PanoramaViewer({
           </form>
         </div>
       </div>
-      <div className={styles.panoramaList}>
+      <div className={styles.panoramaLiskeyt}>
         {images.length > 0 &&
-          images.map((image, index) => (
+          images.map((image: Image, index) => (
             <div>
               <PanoramaViewerCard
-                key={image.id}
+                id={image.id}
                 originalFilename={image.original_filename}
                 timestamp={image.timestamp}
                 category={image.category}

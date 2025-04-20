@@ -24,7 +24,7 @@ interface PanoramaDuplicateDialogProps {
 
 // https://mui.com/material-ui/react-dialog/#alerts
 export default function PanoramaDuplicateDialog({
-  installNumber,
+  installNumber, // FIXME (wdn): This should be model number and specify install/nn
   possibleDuplicates,
   isDialogOpened,
   handleClickUpload,
