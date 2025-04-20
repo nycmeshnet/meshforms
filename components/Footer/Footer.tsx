@@ -118,7 +118,7 @@ export function Footer() {
 
   return (
     <>
-      <footer style={{marginTop: "auto", flexGrow:0}}>
+      <footer style={{ marginTop: "auto", flexGrow: 0 }}>
         <Box
           sx={{
             backgroundColor: "#f4f4f4",
@@ -127,7 +127,7 @@ export function Footer() {
             width: "100%",
             display: "flex",
             marginTop: "auto",
-            flexGrow: 0
+            flexGrow: 0,
           }}
           id="full-width-box"
         >

@@ -12,6 +12,7 @@ import {
   modelTypeToAPIRouteMap,
   modelTypeToLabelMap,
 } from "@/app/types";
+import PanoHeader from "../Pano/Header/PanoHeader";
 
 type FormValues = {
   modelNumber: number;
@@ -25,8 +26,14 @@ interface PanoramaViewerProps {
 }
 
 export const modelSelectOptions = [
-  { value: ModelType.InstallNumber, label: modelTypeToLabelMap.get(ModelType.InstallNumber) },
-  { value: ModelType.NetworkNumber, label: modelTypeToLabelMap.get(ModelType.NetworkNumber) },
+  {
+    value: ModelType.InstallNumber,
+    label: modelTypeToLabelMap.get(ModelType.InstallNumber),
+  },
+  {
+    value: ModelType.NetworkNumber,
+    label: modelTypeToLabelMap.get(ModelType.NetworkNumber),
+  },
 ];
 
 export default function PanoramaViewer({
@@ -71,7 +78,9 @@ export default function PanoramaViewer({
   const [images, setImages] = React.useState([]);
 
   // Model passed in via URL or set in search bar
-  const [selectedModel, setSelectedModel] = React.useState(urlModelType ?? ModelType.InstallNumber);
+  const [selectedModel, setSelectedModel] = React.useState(
+    urlModelType ?? ModelType.InstallNumber,
+  );
 
   // Number passed in via URL or set in search bar
   const [modelNumber, setModelNumber] = React.useState(urlModelNumber);
@@ -121,64 +130,51 @@ export default function PanoramaViewer({
 
   return (
     <>
-      <div className={styles.panoHeader}>
-        <a href="/pano/view" style={{ display: "flex", flexDirection:"row", textDecoration: "none", color: "black" }}>
-          <img src="/pano.png" height={72} />
-          <p style={{fontSize:"1.5rem", fontWeight: "bold"}}>Pano</p>
-        </a>
-        <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-        <a
-          href={"/pano/upload"}
-          style={{ padding: "10px" }}
-          className={`${!isLoggedIn ? styles.disabled : ""}`}
-        >
-          <img src="/upload_icon.png" width={24} />
-        </a>
-          {isLoggedIn && (
-            <p>
-              {user} (<a href="http://127.0.0.1:8081/logout">Logout</a>)
-            </p>
-          )}
-          {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google"><p>Log In</p></a>}
+      <PanoHeader />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <h2 style={{ color: "gray" }}>
+          {modelTypeToLabelMap.get(selectedModel)} {modelNumber}
+        </h2>
+        <div className={styles.panoNavBar}>
+          {/*TODO (wdn): The search bar should probably be its own component.*/}
+          <form onSubmit={handleSubmit(onSubmit)} className={styles.formBody}>
+            <Select
+              name="modelSelect"
+              placeholder={modelTypeToLabelMap.get(selectedModel)}
+              options={modelSelectOptions}
+              onChange={(selected) => {
+                selected ? setSelectedModel(selected.value) : null;
+              }}
+              className={styles.modelSelectDropdown}
+              isSearchable={false}
+            />
+            <input
+              {...register("modelNumber")}
+              type="number"
+              placeholder={modelTypeToLabelMap.get(selectedModel)}
+              required
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              disabled={isLoading}
+              style={{ margin: 0, height: "2.4em" }}
+            >
+              {isLoading ? "Loading..." : "Search"}
+            </Button>
+            <div hidden={!isLoading}>
+              <CircularProgress />
+            </div>
+          </form>
         </div>
-      </div>
-      <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between", alignItems:"center"}}>
-      <h2 style={{ color: "gray" }}>
-        {modelTypeToLabelMap.get(selectedModel)} {modelNumber}
-      </h2>
-      <div className={styles.panoNavBar}>
-        {/*TODO (wdn): The search bar should probably be its own component.*/}
-        <form onSubmit={handleSubmit(onSubmit)} className={styles.formBody}>
-          <Select
-            name="modelSelect"
-            placeholder={modelTypeToLabelMap.get(selectedModel)}
-            options={modelSelectOptions}
-            onChange={(selected) => {
-              selected ? setSelectedModel(selected.value) : null;
-            }}
-            className={styles.modelSelectDropdown}
-            isSearchable={false}
-          />
-          <input
-            {...register("modelNumber")}
-            type="number"
-            placeholder={modelTypeToLabelMap.get(selectedModel)}
-            required
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            size="large"
-            disabled={isLoading}
-            style={{margin: 0, height: "2.4em"}}
-          >
-            {isLoading ? "Loading..." : "Search"}
-          </Button>
-          <div hidden={!isLoading}>
-            <CircularProgress />
-          </div>
-        </form>
-      </div>
       </div>
       <div className={styles.panoramaList}>
         {images.length > 0 &&

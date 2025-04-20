@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PanoramaDropzone from "./PanoramaDropzone";
-import { Button, CircularProgress } from "@mui/material";
+import { Alert, Button, CircularProgress } from "@mui/material";
 import Select from "react-select";
 import styles from "./PanoramaUpload.module.scss";
 import PanoramaDuplicateDialog, {
@@ -18,6 +18,7 @@ import {
   modelTypeToLabelMap,
 } from "@/app/types";
 import { modelSelectOptions } from "../PanoramaViewer/PanoramaViewer";
+import PanoHeader from "../Pano/Header/PanoHeader";
 
 type FormValues = {
   modelNumber: number;
@@ -239,23 +240,7 @@ function PanoramaUploader() {
 
   return (
     <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <a href="/pano/view" style={{ textDecoration: "none", color: "black" }}>
-          <h1>Pano</h1>
-        </a>
-        {isLoggedIn && (
-          <p>
-            Welcome, {user} (<a href="http://127.0.0.1:8081/logout">Logout</a>)
-          </p>
-        )}
-        {!isLoggedIn && <a href="http://127.0.0.1:8081/login/google">Log In</a>}
-      </div>
+      <PanoHeader />
       <h2>Image Upload</h2>
       <p>
         Upload panoramas and other relevant install photos here. This form is
@@ -299,6 +284,14 @@ function PanoramaUploader() {
             </div>
           </div>
         </form>
+        <div hidden={linkToViewUploadedFiles === ""}>
+          <Alert className={styles.uploadSuccessLink}>
+            <p>Upload successful. View or share your files at:</p>
+            <a href={linkToViewUploadedFiles}>
+              <p>{linkToViewUploadedFiles}</p>
+            </a>
+          </Alert>
+        </div>
       </div>
       <div className="toasty">
         <ToastContainer hideProgressBar={true} theme={"colored"} />
@@ -310,9 +303,6 @@ function PanoramaUploader() {
         handleClickUpload={handleClickUpload}
         handleClickCancel={handleClickCancel}
       />
-      <h1 hidden={linkToViewUploadedFiles === ""}>
-        <a href={linkToViewUploadedFiles}>{linkToViewUploadedFiles}</a>
-      </h1>
     </>
   );
 }
