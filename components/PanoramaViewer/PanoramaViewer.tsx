@@ -53,7 +53,7 @@ export default function PanoramaViewer({
   const [user, setUser] = React.useState("");
   useEffect(() => {
     // Query for images if we have a number
-    if (!!urlModelNumber && !!urlModelType) {
+    if (urlModelType !== undefined) {
       console.debug(
         `Page loaded. Querying for ${urlModelType}: ${urlModelNumber}.`,
       );
