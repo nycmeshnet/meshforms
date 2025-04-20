@@ -189,6 +189,7 @@ export default function PanoramaViewer({
           images.map((image: Image, index) => (
             <div>
               <PanoramaViewerCard
+                key={image.id}
                 id={image.id}
                 originalFilename={image.original_filename}
                 timestamp={image.timestamp}
