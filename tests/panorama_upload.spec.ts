@@ -5,7 +5,7 @@ const unitTestTimeout = 5000;
 
 test("happy panorama form", async ({ page }) => {
   test.setTimeout(joinFormTimeout);
-  await page.goto("/panorama");
+  await page.goto("/pano/view/");
 
   // Is the page title correct?
   await expect(page).toHaveTitle(/Upload Panoramas and other Install Photos/);

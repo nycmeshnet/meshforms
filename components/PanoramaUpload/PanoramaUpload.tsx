@@ -39,12 +39,13 @@ interface Image {
 
 export type { FormValues };
 
-function PanoramaUploader() {
-  const [panoEndpoint, setPanoEndpoint] = React.useState("");
-  useEffect(() => {
-    setPanoEndpoint(fetchPanoEndpointFromBackend());
-  }, []);
+interface PanoramaUploaderProps {
+  panoEndpoint: string;
+}
 
+function PanoramaUploader({
+  panoEndpoint
+}: PanoramaUploaderProps) {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
 
