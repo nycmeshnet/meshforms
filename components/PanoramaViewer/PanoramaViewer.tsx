@@ -13,6 +13,7 @@ import {
   modelTypeToLabelMap,
 } from "@/app/types";
 import PanoHeader from "../Pano/Header/PanoHeader";
+import { getPanoEndpoint } from "@/app/endpoint";
 
 type FormValues = {
   modelNumber: number;
@@ -28,11 +29,6 @@ export type Image = {
   url: string;
 }
 
-interface PanoramaViewerProps {
-  urlModelNumber: string;
-  urlModelType: ModelType | undefined;
-}
-
 export const modelSelectOptions = [
   {
     value: ModelType.InstallNumber,
@@ -44,13 +40,31 @@ export const modelSelectOptions = [
   },
 ];
 
+export function fetchPanoEndpointFromBackend(): string {
+  getPanoEndpoint().then(async (endpoint) => {
+    console.log(`Pano endpoint: ${endpoint}`);
+    return endpoint;
+  }).catch(async (e) => {
+    console.error("Could not get Pano endpoint from backend.");
+  });
+  return "";
+}
+
+interface PanoramaViewerProps {
+  urlModelNumber: string;
+  urlModelType: ModelType | undefined;
+  panoEndpoint: string;
+}
+
 export default function PanoramaViewer({
   urlModelNumber,
   urlModelType,
+  panoEndpoint,
 }: PanoramaViewerProps) {
   // Authentication
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
+
   useEffect(() => {
     // Query for images if we have a number
     if (urlModelType !== undefined) {
@@ -61,7 +75,7 @@ export default function PanoramaViewer({
     }
 
     // Check if we're logged into pano
-    fetch(`http://127.0.0.1:8081/userinfo`, {
+    fetch(`${panoEndpoint}/userinfo`, {
       credentials: "include",
     }).then(async (response) => {
       const j = await response.json();
@@ -74,7 +88,7 @@ export default function PanoramaViewer({
       setUser("");
       setIsLoggedIn(false);
     });
-  }, []);
+  }, [panoEndpoint]);
 
   const {
     register,
@@ -114,7 +128,7 @@ export default function PanoramaViewer({
   function getImages(modelNumber: number, modelType: ModelType) {
     console.log(`Querying for ${modelType}, ${modelNumber}`);
     fetch(
-      `http://127.0.0.1:8081/api/v1/${modelTypeToAPIRouteMap.get(modelType)}/${modelNumber}`,
+      `${panoEndpoint}/api/v1/${modelTypeToAPIRouteMap.get(modelType)}/${modelNumber}`,
       {
         credentials: "include",
       },
@@ -138,7 +152,10 @@ export default function PanoramaViewer({
 
   return (
     <>
-      <PanoHeader />
+      <PanoHeader
+        user={user}
+        panoEndpoint={panoEndpoint}
+      />
       <div
         style={{
           display: "flex",
@@ -195,6 +212,7 @@ export default function PanoramaViewer({
                 timestamp={image.timestamp}
                 category={image.category}
                 url={image.url}
+                panoEndpoint={panoEndpoint}
               />
             </div>
           ))}

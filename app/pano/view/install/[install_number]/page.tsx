@@ -1,3 +1,4 @@
+import { getPanoEndpoint } from "@/app/endpoint";
 import { ModelType } from "@/app/types";
 import PanoramaViewer from "@/components/PanoramaViewer/PanoramaViewer";
 
@@ -12,12 +13,14 @@ export default async function ViewByInstallNumber({
   params: Promise<{ install_number: string }>;
 }) {
   const { install_number } = await params;
+  const panoEndpoint = await getPanoEndpoint();
   return (
     <>
       <main>
         <PanoramaViewer
           urlModelNumber={install_number}
           urlModelType={ModelType.InstallNumber}
+          panoEndpoint={panoEndpoint}
         />
       </main>
     </>

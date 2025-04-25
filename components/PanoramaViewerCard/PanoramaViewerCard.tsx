@@ -6,6 +6,15 @@ import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import { ToastContainer, toast } from "react-toastify";
 import ModalImage from "react-modal-image";
+import { fetchPanoEndpointFromBackend } from "../PanoramaViewer/PanoramaViewer";
+
+//const selectCategoryOptions = [
+//  { value: "PANORAMA", label: "Panorama" },
+//  { value: "EQUIPMENT", label: "Equipment" },
+//  { value: "DETAIL", label: "Detail" },
+//  { value: "MISCELLANEOUS", label: "Miscellaneous" },
+//  { value: "UNCATEGORIZED", label: "Uncategorized" },
+//];
 
 type FormValues = {
   category: string;
@@ -19,6 +28,7 @@ interface PanoramaViewerCardProps {
   timestamp: string;
   category: string;
   url: string;
+  panoEndpoint: string;
 }
 
 export default function PanoramaViewerCard({
@@ -27,6 +37,7 @@ export default function PanoramaViewerCard({
   timestamp,
   category = "",
   url,
+  panoEndpoint,
 }: PanoramaViewerCardProps) {
   // React hook form stuff
   const {
@@ -36,14 +47,6 @@ export default function PanoramaViewerCard({
     formState: { errors },
   } = useForm<FormValues>();
 
-  const selectCategoryOptions = [
-    { value: "PANORAMA", label: "Panorama" },
-    { value: "EQUIPMENT", label: "Equipment" },
-    { value: "DETAIL", label: "Detail" },
-    { value: "MISCELLANEOUS", label: "Miscellaneous" },
-    { value: "UNCATEGORIZED", label: "Uncategorized" },
-  ];
-
   const [imageURL, setImageURL] = React.useState(url);
 
   // FIXME (wdn): I should just pass in an Image object instead of passing each
@@ -51,14 +54,14 @@ export default function PanoramaViewerCard({
   const [imageTitle, setImageTitle] = React.useState(originalFilename);
 
   // FIXME (wdn): Any OK here?
-  function handleUpdateCategory(event: any) {
+  async function handleUpdateCategory(event: any) {
     const newCategory = event.target.value;
 
     let formData = new FormData();
     formData.append("id", id);
     formData.append("new_category", newCategory);
     console.log(event.target.value);
-    fetch(`http://127.0.0.1:8081/api/v1/update`, {
+    fetch(`${panoEndpoint}/api/v1/update`, {
       method: "POST",
       credentials: "include",
       body: formData,
@@ -78,7 +81,7 @@ export default function PanoramaViewerCard({
 
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const onFileDrop = (dropzoneImages: File[]) => {
+  const onFileDrop = async (dropzoneImages: File[]) => {
     console.log(dropzoneImages[0].name);
     let formData = new FormData();
 
@@ -89,7 +92,7 @@ export default function PanoramaViewerCard({
       formData.append("dropzoneImages[]", dropzoneImages[x]);
     }
 
-    fetch("http://127.0.0.1:8081/api/v1/update", {
+    fetch(`${panoEndpoint}/api/v1/update`, {
       method: "POST",
       credentials: "include",
       body: formData,
@@ -100,7 +103,7 @@ export default function PanoramaViewerCard({
           toast.success("Upload Successful!");
 
           // todo: don't sort by date?
-          fetch(`http://127.0.0.1:8081/api/v1/image/${id}`, {
+          fetch(`${panoEndpoint}/api/v1/image/${id}`, {
             credentials: "include",
           })
             .then(async (response) => {

@@ -11,3 +11,10 @@
 .panoHeader p {
   margin: auto;
 }
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.2;
+}
+

@@ -1,3 +1,4 @@
+import { getPanoEndpoint } from "@/app/endpoint";
 import { ModelType } from "@/app/types";
 import PanoramaViewer from "@/components/PanoramaViewer/PanoramaViewer";
 
@@ -12,12 +13,14 @@ export default async function ViewByNetworkNumber({
   params: Promise<{ network_number: string }>;
 }) {
   const { network_number } = await params;
+  const panoEndpoint = await getPanoEndpoint();
   return (
     <>
       <main>
         <PanoramaViewer
           urlModelNumber={network_number}
           urlModelType={ModelType.NetworkNumber}
+          panoEndpoint={panoEndpoint}
         />
       </main>
     </>

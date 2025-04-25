@@ -18,7 +18,7 @@ import {
   modelTypeToAPIRouteMap,
   modelTypeToLabelMap,
 } from "@/app/types";
-import { modelSelectOptions } from "../PanoramaViewer/PanoramaViewer";
+import { fetchPanoEndpointFromBackend, modelSelectOptions } from "../PanoramaViewer/PanoramaViewer";
 import PanoHeader from "../Pano/Header/PanoHeader";
 
 type FormValues = {
@@ -40,6 +40,11 @@ interface Image {
 export type { FormValues };
 
 function PanoramaUploader() {
+  const [panoEndpoint, setPanoEndpoint] = React.useState("");
+  useEffect(() => {
+    setPanoEndpoint(fetchPanoEndpointFromBackend());
+  }, []);
+
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
 
@@ -53,7 +58,7 @@ function PanoramaUploader() {
   // TODO (wdn): The login element should probably be its own component
   useEffect(() => {
     // Check if we're logged into pano
-    fetch(`http://127.0.0.1:8081/userinfo`, {
+    fetch(`${panoEndpoint}/userinfo`, {
       credentials: "include",
     }).then(async (response) => {
       const j = await response.json();
@@ -63,7 +68,7 @@ function PanoramaUploader() {
         setIsLoggedIn(true);
         return;
       }
-      window.location.replace("http://127.0.0.1:8081/login/google");
+      window.location.replace(`${panoEndpoint}/login/google`);
     });
   }, []);
 
@@ -150,7 +155,7 @@ function PanoramaUploader() {
     // Upload possibly duplicate images
     formData.append("trustMeBro", trustMeBro ? "true" : "false");
 
-    fetch("http://127.0.0.1:8081/api/v1/upload", {
+    fetch(`${panoEndpoint}/api/v1/upload`, {
       method: "POST",
       credentials: "include",
       body: formData,
@@ -161,7 +166,7 @@ function PanoramaUploader() {
           toast.success("Upload Successful!");
           setIsLoading(false);
           setLinkToViewUploadedFiles(
-            `http://127.0.0.1:3000/pano/view/${modelTypeToAPIRouteMap.get(selectedModel)}/${formSubmission.modelNumber}/`,
+            `${window.location.origin}/pano/view/${modelTypeToAPIRouteMap.get(selectedModel)}/${formSubmission.modelNumber}/`,
           );
           return;
         }
