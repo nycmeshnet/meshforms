@@ -6,8 +6,8 @@ export const metadata = {
   description: "View photos taken from rooftops or other install documentation",
 };
 
-export default async function PanoramaUpload() {
-  if (process.env.ENABLE_PANO_UI === "true") {
+export default async function Page() {
+  if (process.env.ENABLE_PANO_UI !== "true") {
     console.warn("Pano is disabled.");
     return null;
   }
