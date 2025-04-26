@@ -19,7 +19,6 @@ import {
   modelTypeToLabelMap,
 } from "@/app/types";
 import {
-  fetchPanoEndpointFromBackend,
   modelSelectOptions,
 } from "../PanoramaViewer/PanoramaViewer";
 import PanoHeader from "../Pano/Header/PanoHeader";

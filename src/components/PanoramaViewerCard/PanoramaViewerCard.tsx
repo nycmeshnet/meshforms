@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { useDropzone } from "react-dropzone";
 import { ToastContainer, toast } from "react-toastify";
 import ModalImage from "react-modal-image";
-import { fetchPanoEndpointFromBackend } from "../PanoramaViewer/PanoramaViewer";
 
 //const selectCategoryOptions = [
 //  { value: "PANORAMA", label: "Panorama" },

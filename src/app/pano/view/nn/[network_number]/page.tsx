@@ -12,7 +12,7 @@ export default async function ViewByNetworkNumber({
 }: {
   params: Promise<{ network_number: string }>;
 }) {
-  if (!process.env.ENABLE_PANO_UI) {
+  if (process.env.ENABLE_PANO_UI === "true") {
     return null;
   }
 

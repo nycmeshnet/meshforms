@@ -10,10 +10,13 @@ export async function getMeshDBAPIEndpoint() {
 
 // Ask the server where Pano lives
 export async function getPanoEndpoint() {
-  if (process.env.PANO_URL === undefined) {
-    throw new Error("Expected PANO_URL environment variable");
+  const panoEndpoint = process.env.PANO_URL;
+  console.log(`Pano Endpoint is ${panoEndpoint}`);
+  if (panoEndpoint === undefined) {
+    //throw new Error("Expected PANO_URL environment variable");
+    return ""
   }
-  return process.env.PANO_URL;
+  return panoEndpoint;
 }
 
 // Ask the server what captcha keys to use

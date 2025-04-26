@@ -7,11 +7,13 @@ export const metadata = {
 };
 
 export default async function PanoramaUpload() {
-  if (!process.env.ENABLE_PANO_UI) {
+  if (process.env.ENABLE_PANO_UI === "true") {
+    console.warn("Pano is disabled.");
     return null;
   }
 
   const panoEndpoint = await getPanoEndpoint();
+  console.log(`Got endpoint: ${panoEndpoint}`);
   return (
     <>
       <main>

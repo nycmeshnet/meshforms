@@ -9,7 +9,7 @@ export const metadata = {
 };
 
 export default async function PanoramaUpload() {
-  if (!process.env.ENABLE_PANO_UI) {
+  if (process.env.ENABLE_PANO_UI === "true") {
     return null;
   }
 

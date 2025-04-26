@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styles from "./PanoHeader.module.scss";
-import { fetchPanoEndpointFromBackend } from "@/components/PanoramaViewer/PanoramaViewer";
 
 interface PanoHeaderProps {
   user: string;

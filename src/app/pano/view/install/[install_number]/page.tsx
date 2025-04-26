@@ -12,7 +12,8 @@ export default async function ViewByInstallNumber({
 }: {
   params: Promise<{ install_number: string }>;
 }) {
-  if (!process.env.ENABLE_PANO_UI) {
+  if (process.env.ENABLE_PANO_UI === "true") {
+    console.warn("Pano is disabled");
     return null;
   }
 

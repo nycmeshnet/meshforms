@@ -40,18 +40,6 @@ export const modelSelectOptions = [
   },
 ];
 
-export function fetchPanoEndpointFromBackend(): string {
-  getPanoEndpoint()
-    .then(async (endpoint) => {
-      console.log(`Pano endpoint: ${endpoint}`);
-      return endpoint;
-    })
-    .catch(async (e) => {
-      console.error("Could not get Pano endpoint from backend.");
-    });
-  return "";
-}
-
 interface PanoramaViewerProps {
   urlModelNumber: string;
   urlModelType: ModelType | undefined;

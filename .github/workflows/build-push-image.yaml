@@ -37,3 +37,5 @@ jobs:
           push: true
           tags: willnilges/meshforms:${{ inputs.environment }}
           labels: ${{ steps.meta.outputs.labels }}
+        env:
+          PANO_URL: http://127.0.0.1:8081/
