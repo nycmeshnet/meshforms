@@ -1,5 +1,4 @@
-import { getPanoEndpoint } from "@/app/endpoint";
-import { ModelType } from "@/app/types";
+import { getPanoEndpoint } from "@/lib/endpoint";
 import PanoramaViewer from "@/components/PanoramaViewer/PanoramaViewer";
 
 export const metadata = {

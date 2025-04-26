@@ -1,6 +1,6 @@
 // Idea: Have people validate their panoramas with their email?
 
-import { getPanoEndpoint } from "@/app/endpoint";
+import { getPanoEndpoint } from "@/lib/endpoint";
 import PanoramaUploader from "@/components/PanoramaUpload/PanoramaUpload";
 
 export const metadata = {

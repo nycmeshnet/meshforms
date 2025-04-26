@@ -1,4 +1,4 @@
-import { getPanoEndpoint } from "@/app/endpoint";
+import { getPanoEndpoint } from "@/lib/endpoint";
 import { ModelType } from "@/app/types";
 import PanoramaViewer from "@/components/PanoramaViewer/PanoramaViewer";
 

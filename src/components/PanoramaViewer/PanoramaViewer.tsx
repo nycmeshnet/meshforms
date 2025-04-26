@@ -13,7 +13,7 @@ import {
   modelTypeToLabelMap,
 } from "@/app/types";
 import PanoHeader from "../Pano/Header/PanoHeader";
-import { getPanoEndpoint } from "@/app/endpoint";
+import { getPanoEndpoint } from "@/lib/endpoint";
 
 type FormValues = {
   modelNumber: number;
