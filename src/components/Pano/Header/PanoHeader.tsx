@@ -7,10 +7,7 @@ interface PanoHeaderProps {
   panoEndpoint: string;
 }
 
-export default function PanoHeader({
-  user,
-  panoEndpoint,
-}: PanoHeaderProps) {
+export default function PanoHeader({ user, panoEndpoint }: PanoHeaderProps) {
   return (
     <>
       <div className={styles.panoHeader}>

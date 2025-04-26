@@ -27,7 +27,7 @@ export type Image = {
   timestamp: string;
   category: string;
   url: string;
-}
+};
 
 export const modelSelectOptions = [
   {
@@ -41,12 +41,14 @@ export const modelSelectOptions = [
 ];
 
 export function fetchPanoEndpointFromBackend(): string {
-  getPanoEndpoint().then(async (endpoint) => {
-    console.log(`Pano endpoint: ${endpoint}`);
-    return endpoint;
-  }).catch(async (e) => {
-    console.error("Could not get Pano endpoint from backend.");
-  });
+  getPanoEndpoint()
+    .then(async (endpoint) => {
+      console.log(`Pano endpoint: ${endpoint}`);
+      return endpoint;
+    })
+    .catch(async (e) => {
+      console.error("Could not get Pano endpoint from backend.");
+    });
   return "";
 }
 
@@ -152,10 +154,7 @@ export default function PanoramaViewer({
 
   return (
     <>
-      <PanoHeader
-        user={user}
-        panoEndpoint={panoEndpoint}
-      />
+      <PanoHeader user={user} panoEndpoint={panoEndpoint} />
       <div
         style={{
           display: "flex",

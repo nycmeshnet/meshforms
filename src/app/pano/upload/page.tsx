@@ -17,7 +17,7 @@ export default async function PanoramaUpload() {
   return (
     <>
       <main>
-        <PanoramaUploader panoEndpoint={panoEndpoint}/>
+        <PanoramaUploader panoEndpoint={panoEndpoint} />
       </main>
     </>
   );

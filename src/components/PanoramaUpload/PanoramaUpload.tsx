@@ -18,7 +18,10 @@ import {
   modelTypeToAPIRouteMap,
   modelTypeToLabelMap,
 } from "@/app/types";
-import { fetchPanoEndpointFromBackend, modelSelectOptions } from "../PanoramaViewer/PanoramaViewer";
+import {
+  fetchPanoEndpointFromBackend,
+  modelSelectOptions,
+} from "../PanoramaViewer/PanoramaViewer";
 import PanoHeader from "../Pano/Header/PanoHeader";
 
 type FormValues = {
@@ -43,9 +46,7 @@ interface PanoramaUploaderProps {
   panoEndpoint: string;
 }
 
-function PanoramaUploader({
-  panoEndpoint
-}: PanoramaUploaderProps) {
+function PanoramaUploader({ panoEndpoint }: PanoramaUploaderProps) {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
 
@@ -184,7 +185,10 @@ function PanoramaUploader({
           Object.entries(j).forEach((file) => {
             const fileName = file[0];
             const existingObjectURL = file[1];
-            if (typeof fileName !== 'string' || typeof existingObjectURL !== 'string') {
+            if (
+              typeof fileName !== "string" ||
+              typeof existingObjectURL !== "string"
+            ) {
               throw new Error("Unexpected server response");
             }
             // Use the name of the uploaded file to find
@@ -251,7 +255,7 @@ function PanoramaUploader({
 
   return (
     <>
-      <PanoHeader />
+      <PanoHeader panoEndpoint={panoEndpoint} user={user} />
       <h2>Image Upload</h2>
       <p>
         Upload panoramas and other relevant install photos here. This form is

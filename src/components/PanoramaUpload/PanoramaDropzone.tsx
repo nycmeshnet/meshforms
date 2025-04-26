@@ -78,7 +78,12 @@ const PanoramaDropzone: React.FC<PanoramaDropzoneProps> = ({ onFileDrop }) => {
 
   useEffect(() => {
     // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-    return () => files.forEach((file) => { if (file.preview !== undefined) {URL.revokeObjectURL(file.preview)}});
+    return () =>
+      files.forEach((file) => {
+        if (file.preview !== undefined) {
+          URL.revokeObjectURL(file.preview);
+        }
+      });
   }, [files]);
 
   return (
