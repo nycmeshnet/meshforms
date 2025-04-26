@@ -10,7 +10,7 @@ const Landing = () => {
     { text: "Join Form", link: "/join" },
     { text: "NN Assign Form", link: "/nn-assign" },
     { text: "Query Form", link: "/query" },
-    { text: "Pano", link: "/pano/view/" },
+    /*{ text: "Pano", link: "/pano/view/" },*/
     {
       text: "MeshDB Admin",
       link: process.env.MESHDB_URL + "/admin/",

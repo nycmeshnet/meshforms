@@ -12,6 +12,10 @@ export default async function ViewByNetworkNumber({
 }: {
   params: Promise<{ network_number: string }>;
 }) {
+  if (!process.env.ENABLE_PANO_UI) {
+    return null;
+  }
+
   const { network_number } = await params;
   const panoEndpoint = await getPanoEndpoint();
   return (

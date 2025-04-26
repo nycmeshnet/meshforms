@@ -12,6 +12,10 @@ export default async function ViewByInstallNumber({
 }: {
   params: Promise<{ install_number: string }>;
 }) {
+  if (!process.env.ENABLE_PANO_UI) {
+    return null;
+  }
+
   const { install_number } = await params;
   const panoEndpoint = await getPanoEndpoint();
   return (
