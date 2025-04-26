@@ -61,7 +61,7 @@ export function NNAssignForm() {
   }
 
   const onSubmit: SubmitHandler<NNAssignRequestValues> = (data) => {
-    console.log(data);
+    console.log(`NNAssignRequest: ${data}`);
     submitNNAssignRequest(data);
   };
 

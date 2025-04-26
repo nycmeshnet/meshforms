@@ -341,7 +341,7 @@ export default function JoinForm() {
           setIsLoading(false);
           setIsSubmitted(true);
           // Log the error to the console
-          console.error(error.detail);
+          console.error(`Join Form Error: ${error.detail}`);
           return;
         }
 

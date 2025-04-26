@@ -85,15 +85,14 @@ export function QueryForm() {
           route = "installs";
           break;
       }
-      console.log(queryForm);
+      console.log(`query $queryForm}`);
       let resp = await submitQueryForm(
         route,
         queryForm.query_type,
         queryForm.data,
         queryForm.password,
       );
-      console.log("response is:");
-      console.log(resp);
+      console.log(`response is: ${resp}`);
 
       // If the query was empty, complain and bail
       if (resp.results.length === 0) {
@@ -128,8 +127,7 @@ export function QueryForm() {
       });
       setIsLoading(false);
     } catch (e) {
-      console.log("Could not submit Query Form: ");
-      console.log(e);
+      console.log(`Could not submit Query Form: ${e}`);
       toastErrorMessage(e);
       setIsLoading(false);
       return;

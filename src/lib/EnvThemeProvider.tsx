@@ -13,7 +13,7 @@ export const EnvThemeProvider: React.FC<EnvThemeProviderProps> = ({
 }) => {
   const env = useEnvContext();
 
-  console.log(env);
+  console.log(`Environment is ${env}`);
 
   let theme = localTheme;
   if (env === undefined) {

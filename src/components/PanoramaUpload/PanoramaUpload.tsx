@@ -235,7 +235,7 @@ function PanoramaUploader({ panoEndpoint }: PanoramaUploaderProps) {
   }
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.debug(data);
+    console.debug(`Submitting: ${data}`);
     setIsLoading(true);
     setFormSubmission(data); // Side Effect: Submits the form
   };

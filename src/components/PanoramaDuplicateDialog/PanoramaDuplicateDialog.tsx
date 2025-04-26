@@ -31,7 +31,7 @@ export default function PanoramaDuplicateDialog({
   handleClickCancel,
 }: PanoramaDuplicateDialogProps) {
   possibleDuplicates.forEach((dupe: PossibleDuplicate) => {
-    console.log(dupe);
+    console.log(`Found possible duplicate: ${dupe}`);
   });
   return (
     <React.Fragment>

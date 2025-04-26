@@ -140,6 +140,8 @@ export default function PanoramaViewer({
     setIsLoading(false);
   }
 
+  console.log(`panoEndpoint is: ${panoEndpoint}`);
+
   return (
     <>
       <PanoHeader user={user} panoEndpoint={panoEndpoint} />
