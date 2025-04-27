@@ -6,21 +6,19 @@ export const metadata = {
   description: "View photos taken from rooftops or other install documentation",
 };
 
-export default async function Page() {
-  if (!panoEnabled()) {
-    console.warn("Pano is disabled.");
-    return null;
-  }
+async function chom() {
+  "use server";
+  console.log(process.env.PANO_URL);
+  return process.env.PANO_URL;
+}
 
-  const panoEndpoint = await getPanoEndpoint();
-  console.log(`Got endpoint: ${panoEndpoint}`);
+export default async function Page() {
   return (
     <>
       <main>
         <PanoramaViewer
           urlModelNumber={""}
           urlModelType={undefined}
-          panoEndpoint={panoEndpoint}
         />
       </main>
     </>

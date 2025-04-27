@@ -25,7 +25,6 @@ export default async function ViewByInstallNumber({
         <PanoramaViewer
           urlModelNumber={install_number}
           urlModelType={ModelType.InstallNumber}
-          panoEndpoint={panoEndpoint}
         />
       </main>
     </>

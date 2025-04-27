@@ -18,10 +18,9 @@ import {
   modelTypeToAPIRouteMap,
   modelTypeToLabelMap,
 } from "@/app/types";
-import {
-  modelSelectOptions,
-} from "../PanoramaViewer/PanoramaViewer";
+import { modelSelectOptions } from "../PanoramaViewer/PanoramaViewer";
 import PanoHeader from "../Pano/Header/PanoHeader";
+import { getPanoEndpoint } from "@/lib/endpoint";
 
 type FormValues = {
   modelNumber: number;
@@ -41,11 +40,15 @@ interface Image {
 
 export type { FormValues };
 
-interface PanoramaUploaderProps {
-  panoEndpoint: string;
-}
 
-function PanoramaUploader({ panoEndpoint }: PanoramaUploaderProps) {
+function PanoramaUploader() {
+  const [panoEndpoint, setPanoEndpoint] = React.useState("notset");
+  useEffect(() => {
+    getPanoEndpoint().then((endpoint) => {
+      setPanoEndpoint(endpoint);
+    });
+  }, []);
+
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
 

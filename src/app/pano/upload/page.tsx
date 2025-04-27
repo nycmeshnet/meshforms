@@ -9,15 +9,10 @@ export const metadata = {
 };
 
 export default async function PanoramaUpload() {
-  if (process.env.ENABLE_PANO_UI === "true") {
-    return null;
-  }
-
-  const panoEndpoint = await getPanoEndpoint();
   return (
     <>
       <main>
-        <PanoramaUploader panoEndpoint={panoEndpoint} />
+        <PanoramaUploader/>
       </main>
     </>
   );

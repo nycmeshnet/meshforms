@@ -24,7 +24,6 @@ export default async function ViewByNetworkNumber({
         <PanoramaViewer
           urlModelNumber={network_number}
           urlModelType={ModelType.NetworkNumber}
-          panoEndpoint={panoEndpoint}
         />
       </main>
     </>

@@ -24,7 +24,7 @@ export async function getPanoEndpoint() {
   console.log(`Pano Endpoint is ${panoEndpoint}`);
   if (panoEndpoint === undefined) {
     //throw new Error("Expected PANO_URL environment variable");
-    return ""
+    return "";
   }
   return panoEndpoint;
 }

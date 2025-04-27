@@ -43,17 +43,22 @@ export const modelSelectOptions = [
 interface PanoramaViewerProps {
   urlModelNumber: string;
   urlModelType: ModelType | undefined;
-  panoEndpoint: string;
 }
 
 export default function PanoramaViewer({
   urlModelNumber,
   urlModelType,
-  panoEndpoint,
 }: PanoramaViewerProps) {
   // Authentication
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
+  const [panoEndpoint, setPanoEndpoint] = React.useState("notset");
+
+  useEffect(() => {
+    getPanoEndpoint().then((endpoint) => {
+      setPanoEndpoint(endpoint);
+    });
+  }, []);
 
   useEffect(() => {
     // Query for images if we have a number
