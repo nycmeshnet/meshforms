@@ -8,6 +8,16 @@ export async function getMeshDBAPIEndpoint() {
   return process.env.MESHDB_URL;
 }
 
+// Sue me
+export async function panoEnabled() {
+  const enabled = process.env.ENABLE_PANO_UI;
+  console.log(`Pano enabled: ${enabled}`);
+  if (enabled !== "true") {
+    return false;
+  }
+  return true;
+}
+
 // Ask the server where Pano lives
 export async function getPanoEndpoint() {
   const panoEndpoint = process.env.PANO_URL;

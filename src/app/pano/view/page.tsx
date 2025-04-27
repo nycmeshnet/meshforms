@@ -1,4 +1,4 @@
-import { getPanoEndpoint } from "@/lib/endpoint";
+import { getPanoEndpoint, panoEnabled } from "@/lib/endpoint";
 import PanoramaViewer from "@/components/PanoramaViewer/PanoramaViewer";
 
 export const metadata = {
@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 export default async function Page() {
-  if (process.env.ENABLE_PANO_UI !== "true") {
+  if (!panoEnabled()) {
     console.warn("Pano is disabled.");
     return null;
   }
