@@ -1,4 +1,4 @@
-import { getPanoEndpoint } from "@/lib/endpoint";
+import { getPanoEndpoint, panoEnabled } from "@/lib/endpoint";
 import { ModelType } from "@/app/types";
 import PanoramaViewer from "@/components/PanoramaViewer/PanoramaViewer";
 
@@ -12,13 +12,14 @@ export default async function ViewByInstallNumber({
 }: {
   params: Promise<{ install_number: string }>;
 }) {
-  if (process.env.ENABLE_PANO_UI === "true") {
+  if (await panoEnabled()) {
     console.warn("Pano is disabled");
     return null;
   }
 
   const { install_number } = await params;
   const panoEndpoint = await getPanoEndpoint();
+  console.log(`Where I want it, endpoint is ${panoEndpoint}`);
   return (
     <>
       <main>

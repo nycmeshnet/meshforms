@@ -40,17 +40,30 @@ interface Image {
 
 export type { FormValues };
 
-
 function PanoramaUploader() {
-  const [panoEndpoint, setPanoEndpoint] = React.useState("notset");
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [user, setUser] = React.useState("");
+  const [panoEndpoint, setPanoEndpoint] = React.useState("");
   useEffect(() => {
     getPanoEndpoint().then((endpoint) => {
       setPanoEndpoint(endpoint);
+
+      // TODO (wdn): The login element should probably be its own component
+      // Check if we're logged into pano
+      fetch(`${endpoint}/userinfo`, {
+        credentials: "include",
+      }).then(async (response) => {
+        const j = await response.json();
+        if (response.status === 200) {
+          console.log("You're logged in");
+          setUser(j.name);
+          setIsLoggedIn(true);
+          return;
+        }
+        window.location.replace(`${endpoint}/login/google`);
+      });
     });
   }, []);
-
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
-  const [user, setUser] = React.useState("");
 
   const [selectedModel, setSelectedModel] = React.useState(
     ModelType.InstallNumber,
@@ -58,23 +71,6 @@ function PanoramaUploader() {
 
   const [linkToViewUploadedFiles, setLinkToViewUploadedFiles] =
     React.useState("");
-
-  // TODO (wdn): The login element should probably be its own component
-  useEffect(() => {
-    // Check if we're logged into pano
-    fetch(`${panoEndpoint}/userinfo`, {
-      credentials: "include",
-    }).then(async (response) => {
-      const j = await response.json();
-      if (response.status === 200) {
-        console.log("You're logged in");
-        setUser(j.name);
-        setIsLoggedIn(true);
-        return;
-      }
-      window.location.replace(`${panoEndpoint}/login/google`);
-    });
-  }, []);
 
   // React hook form stuff
   const {

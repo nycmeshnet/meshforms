@@ -12,7 +12,7 @@ export default async function PanoramaUpload() {
   return (
     <>
       <main>
-        <PanoramaUploader/>
+        <PanoramaUploader />
       </main>
     </>
   );

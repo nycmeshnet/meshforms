@@ -52,8 +52,8 @@ export default function PanoramaViewer({
   // Authentication
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [user, setUser] = React.useState("");
-  const [panoEndpoint, setPanoEndpoint] = React.useState("notset");
 
+  const [panoEndpoint, setPanoEndpoint] = React.useState("");
   useEffect(() => {
     getPanoEndpoint().then((endpoint) => {
       setPanoEndpoint(endpoint);
@@ -61,6 +61,10 @@ export default function PanoramaViewer({
   }, []);
 
   useEffect(() => {
+    if (panoEndpoint === "") {
+      console.warn("Pano Endpoint not set");
+      return;
+    }
     // Query for images if we have a number
     if (urlModelType !== undefined) {
       console.debug(

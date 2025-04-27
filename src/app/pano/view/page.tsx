@@ -16,10 +16,7 @@ export default async function Page() {
   return (
     <>
       <main>
-        <PanoramaViewer
-          urlModelNumber={""}
-          urlModelType={undefined}
-        />
+        <PanoramaViewer urlModelNumber={""} urlModelType={undefined} />
       </main>
     </>
   );

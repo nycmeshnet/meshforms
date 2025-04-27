@@ -12,7 +12,7 @@ export async function getMeshDBAPIEndpoint() {
 export async function panoEnabled() {
   const enabled = process.env.ENABLE_PANO_UI;
   console.log(`Pano enabled: ${enabled}`);
-  if (enabled !== "true") {
+  if (enabled) {
     return false;
   }
   return true;
