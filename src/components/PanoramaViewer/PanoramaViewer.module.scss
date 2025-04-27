@@ -1,0 +1,57 @@
+.panoNavBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  margin: 0px;
+}
+
+.formBody {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.formBody input[type="number"] {
+  border: 1px solid #ccc;
+  /*padding: 10px;*/
+  font-size: 16px;
+  box-sizing: border-box;
+  /*margin-bottom: 10px;*/
+  border-radius: 4px;
+  outline-offset: 4px;
+  height: 2.4em;
+}
+
+.modelSelectDropdown {
+  font-size: 16px;
+  width: 120px;
+}
+
+.formBody button {
+  margin-top: 2px; /* Graphic Design Is My Passion */
+}
+
+.formBody button:hover {
+  opacity: 0.8;
+}
+
+.formBody button[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.2;
+}
+
+.panoramaList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+  gap: 10px; /* Optional: add gap between items */
+}

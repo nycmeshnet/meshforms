@@ -63,11 +63,10 @@ class JoinRecordS3 {
       console.log(
         `Sent Join Record for ${joinRecord.email_address} to S3 bucket: ${this.BUCKET_NAME}`,
       );
-      console.log(response);
+      console.log(`S3 Response is ${response}`);
     } catch (err) {
-      console.error("Error sending Join Record to S3");
       // Oof, guess we'll drop this on the floor.
-      console.error(err);
+      console.error(`Error sending Join Record to S3: ${err}`);
       throw err;
     }
 

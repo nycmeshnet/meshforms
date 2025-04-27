@@ -28,9 +28,11 @@
     "postgres": "^3.4.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.9",
     "react-error-boundary": "^4.0.12",
     "react-google-recaptcha": "^3.1.0",
     "react-hook-form": "^7.53.0",
+    "react-modal-image": "^2.6.0",
     "react-phone-number-input": "^3.3.9",
     "react-select": "^5.8.0",
     "react-toastify": "^10.0.1",
@@ -42,6 +44,7 @@
     "@playwright/test": "^1.45.3",
     "@types/react": "^18.2.48",
     "@types/react-google-recaptcha": "^2.1.9",
+    "@types/react-modal-image": "^2.6.4",
     "dotenv": "^16.4.5"
   }
 }

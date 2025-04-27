@@ -38,10 +38,14 @@ export default async function RootLayout({
           <IsDeveloperProvider>
             <CssBaseline />
             <Header />
-            <Box sx={{ width: "100%", backgroundColor: "background.default" }}>
-              <Container maxWidth="lg" sx={{ py: { md: "3rem", sm: "1rem" } }}>
-                {children}
-              </Container>
+            <Box
+              sx={{
+                width: "100%",
+                backgroundColor: "background.default",
+                flexGrow: 1000,
+              }}
+            >
+              <Container maxWidth="lg">{children}</Container>
             </Box>
             <Footer />
           </IsDeveloperProvider>
