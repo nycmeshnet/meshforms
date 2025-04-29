@@ -2,7 +2,7 @@ replicaCount: 3
 
 image:
   repository: docker.io/willnilges/meshforms
-  pullPolicy: Always
+  pullPolicy: IfNotPresent
 
 imageCredentials:
   registry: docker.io
