@@ -1,11 +1,5 @@
-import Landing from "@/components/Landing/Landing";
-import { setRequestLocale } from "next-intl/server";
-import { redirect } from "next/dist/server/api-utils";
-
-type Props = {
-  params: { locale: string };
-};
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  redirect("/en/join/");
+  redirect("/join");
 }
