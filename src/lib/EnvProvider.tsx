@@ -15,6 +15,9 @@ interface EnvProviderProps {
   children: ReactNode;
 }
 
+// FIXME (wdn): I think there is a minor race condition here where the state is
+// briefly undefined the first time it's evaluated on a page. This is because
+// when you call set on a useState, it does not _immediately_ update.
 export const EnvProvider: React.FC<EnvProviderProps> = ({ children }) => {
   const [env, setEnv] = useState<string | undefined>(undefined);
   useEffect(() => {
