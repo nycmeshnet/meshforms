@@ -13,7 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.7",
     "@mui/material": "^5.15.7",
-    "@mui/material-nextjs": "^5.15.7",
+    "@mui/material-nextjs": "^5.16.14",
     "@types/node": "20.10.6",
     "@types/react-dom": "18.2.18",
     "ag-grid-react": "^32.1.0",
