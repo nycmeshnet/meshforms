@@ -43,7 +43,7 @@ export function Footer() {
       },
       {
         text: "Peering",
-        link: "https://docs.nycmesh.net/networking/peering/",
+        link: "https://wiki.nycmesh.net/books/5-networking/page/peering#bkmrk-page-title",
       },
       {
         text: "Sponsors",
@@ -60,8 +60,8 @@ export function Footer() {
         link: "https://www.nycmesh.net/faq",
       },
       {
-        text: "Docs",
-        link: "https://docs.nycmesh.net",
+        text: "Wiki",
+        link: "https://wiki.nycmesh.net",
       },
       {
         text: "Line of Sight",
@@ -73,7 +73,7 @@ export function Footer() {
       },
       {
         text: "Outreach",
-        link: "https://docs.nycmesh.net/organization/outreach/",
+        link: "https://wiki.nycmesh.net/link/123#bkmrk-page-title",
       },
       {
         text: "Install Payment",
@@ -81,7 +81,7 @@ export function Footer() {
       },
       {
         text: "GitHub",
-        link: "https://github.com/WillNilges/cursed-status-page",
+        link: "https://github.com/nycmeshnet/meshforms",
       },
     ],
     [
