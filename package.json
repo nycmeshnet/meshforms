@@ -22,7 +22,7 @@
     "deepmerge": "^4.3.1",
     "libphonenumber-js": "^1.11.11",
     "msw": "^2.3.5",
-    "next": "^14.2.25",
+    "next": "^15.2.2",
     "next-intl": "^3.24.0",
     "playwright-msw": "^3.0.1",
     "postgres": "^3.4.3",
