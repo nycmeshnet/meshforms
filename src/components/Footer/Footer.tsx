@@ -118,7 +118,7 @@ export function Footer() {
 
   return (
     <>
-      <footer>
+      <footer style={{ marginTop: "auto", flexGrow: 0 }}>
         <Box
           sx={{
             backgroundColor: "secondary.main",
