@@ -33,7 +33,7 @@ const drawerWidth = 240;
 const navItems = [
   { text: "Map", link: "https://nycmesh.net/map" },
   { text: "FAQ", link: "https://nycmesh.net/faq" },
-  { text: "Docs", link: "https://nycmesh.net/docs" },
+  { text: "Wiki", link: "https://wiki.nycmesh.net" },
   { text: "Blog", link: "https://nycmesh.net/blog" },
   { text: "Get Support", link: "https://nycmesh.net/support" },
   { text: "Donate", link: "https://nycmesh.net/donate" },
