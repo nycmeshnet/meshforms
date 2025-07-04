@@ -22,7 +22,6 @@ updates:
     interval: "cron"
     cronjob: "44 8 * * *"
   assignees:
-   - "WillNilges"
    - "james-otten"
 - package-ecosystem: "npm"
   directory: "/"
