@@ -1,5 +1,5 @@
 # node:24-alpine
-FROM node@sha256:sha256:49e45bf002728e35c3a466737d8bcfe12c29731c7c2f3e223f9a7c794fff19a4 AS base
+FROM node@sha256:49e45bf002728e35c3a466737d8bcfe12c29731c7c2f3e223f9a7c794fff19a4 AS base
 
 # Install dependencies only when needed
 FROM base AS deps
