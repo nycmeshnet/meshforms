@@ -38,6 +38,10 @@ export function Footer() {
         link: "",
       },
       {
+        text: "Status",
+        link: "https://status.nycmesh.net",
+      },
+      {
         text: "Stats",
         link: "https://stats.nycmesh.net",
       },
@@ -48,6 +52,10 @@ export function Footer() {
       {
         text: "Sponsors",
         link: "https://www.nycmesh.net/sponsors",
+      },
+      {
+        text: "Network Commoncs License",
+        link: "https://nycmesh.net/ncl.pdf",
       },
     ],
     [
@@ -80,8 +88,12 @@ export function Footer() {
         link: "https://www.nycmesh.net/pay",
       },
       {
-        text: "GitHub",
-        link: "https://github.com/nycmeshnet/meshforms",
+        text: "Public Records",
+        link: "https://nycmesh.net/orgdocs",
+      },
+      {
+        text: "Privacy Policy",
+        link: "https://nycmesh.net/privacy-policy",
       },
     ],
     [
@@ -112,6 +124,10 @@ export function Footer() {
       {
         text: "Instagram",
         link: "https://www.instagram.com/nycmesh",
+      },
+      {
+        text: "Github",
+        link: "https://www.github.com/nycmeshnet",
       },
     ],
   ];
